@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  sfs-discord-server:
+    # SFSをghcr.ioにアップロードし参照する
+    image: gcr.io/distroless/base
+
+  minecraft-bedrock-server:
+    image: itzg/minecraft-bedrock-server
+    environment:
+      EULA: "TRUE"
+      VERSION: LATEST
+      GAMEMODE: survival
+      DIFFICULTY: normal
+    ports:
+      - 19132:19132/udp
+    volumes:
+      - /opt/minecraft/bedrock/data:/data
+    stdin_open: true
+    tty: true
+
+  minecraft-bedrock-backup:
+    image: kaiede/minecraft-bedrock-backup
+    restart: always
+    depends_on:
+      - minecraft-bedrock-server
+    environment:
+      TZ: "Asia/Tokyo"
+    tty: true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /opt/minecraft/bedrock/backups:/backups
+      - /opt/minecraft/bedrock/server:/server
+
+  ansible:
+    build: .
