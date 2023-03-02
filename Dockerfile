@@ -1,5 +1,7 @@
 FROM python:3
 
-RUN pip install ansible
+# 開発用環境のためバージョン固定を行わない
+# hadolint ignore=DL3013
+RUN pip install --no-cache-dir ansible
 
-WORKDIR /usr/src/ansible
+CMD [ "echo", "hoge" ]

@@ -1,11 +1,12 @@
 version: '3.8'
 services:
-  sfs-discord-server:
-    # SFSをghcr.ioにアップロードし参照する
-    image: gcr.io/distroless/base
+  # sfs-discord-server:
+  #   # SFSをghcr.ioにアップロードし参照する
+  #   image: anything
 
-  minecraft-bedrock-server:
+  minecraft-bedrock-server-1:
     image: itzg/minecraft-bedrock-server
+    restart: always
     environment:
       EULA: "TRUE"
       VERSION: LATEST
@@ -14,22 +15,34 @@ services:
     ports:
       - 19132:19132/udp
     volumes:
-      - /opt/minecraft/bedrock/data:/data
+      - minecraft-bedrock-server-1-data-volume:/data
     stdin_open: true
     tty: true
+    networks:
+      - minecraft-network
 
-  minecraft-bedrock-backup:
+  minecraft-bedrock-backup-1:
     image: kaiede/minecraft-bedrock-backup
     restart: always
     depends_on:
-      - minecraft-bedrock-server
+      - minecraft-bedrock-server-1
     environment:
       TZ: "Asia/Tokyo"
     tty: true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /opt/minecraft/bedrock/backups:/backups
-      - /opt/minecraft/bedrock/server:/server
+      - minecraft-bedrock-backup-1-backups-volume:/backups
+      - minecraft-bedrock-backup-1-server-volume:/server
+    networks:
+      - minecraft-network
 
   ansible:
     build: .
+
+volumes:
+  minecraft-bedrock-server-1-data-volume: {}
+  minecraft-bedrock-backup-1-backups-volume: {}
+  minecraft-bedrock-backup-1-server-volume: {}
+
+networks:
+  minecraft-network:
