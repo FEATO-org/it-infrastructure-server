@@ -6,12 +6,17 @@ services:
 
   minecraft-bedrock-server-1:
     image: itzg/minecraft-bedrock-server
+    container_name: mc-bedrock-server-1
     restart: always
     environment:
       EULA: "TRUE"
       VERSION: LATEST
       GAMEMODE: survival
       DIFFICULTY: normal
+      SERVER_NAME: FEATO
+      MAX_THREADS: 0
+      VIEW_DISTANCE: 20
+      CONTENT_LOG_FILE_ENABLED: true
     ports:
       - 19132:19132/udp
     volumes:
@@ -23,6 +28,7 @@ services:
 
   minecraft-bedrock-backup-1:
     image: kaiede/minecraft-bedrock-backup
+    container_name: mc-bedrock-backup-1
     restart: always
     depends_on:
       - minecraft-bedrock-server-1
@@ -32,17 +38,13 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - minecraft-bedrock-backup-1-backups-volume:/backups
-      - minecraft-bedrock-backup-1-server-volume:/server
+      - minecraft-bedrock-server-1-data-volume:/server
     networks:
       - minecraft-network
-
-  ansible:
-    build: .
 
 volumes:
   minecraft-bedrock-server-1-data-volume: {}
   minecraft-bedrock-backup-1-backups-volume: {}
-  minecraft-bedrock-backup-1-server-volume: {}
 
 networks:
   minecraft-network:
