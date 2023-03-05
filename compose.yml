@@ -25,6 +25,10 @@ services:
     tty: true
     networks:
       - minecraft-network
+    deploy:
+      resources:
+        limits:
+          memory: 3G
 
 volumes:
   minecraft-bedrock-server-1-data-volume: {}
