@@ -26,22 +26,6 @@ services:
     networks:
       - minecraft-network
 
-  minecraft-bedrock-backup-1:
-    image: kaiede/minecraft-bedrock-backup
-    container_name: mc-bedrock-backup-1
-    restart: always
-    depends_on:
-      - minecraft-bedrock-server-1
-    environment:
-      TZ: "Asia/Tokyo"
-    tty: true
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - minecraft-bedrock-backup-1-backups-volume:/backups
-      - minecraft-bedrock-server-1-data-volume:/server
-    networks:
-      - minecraft-network
-
 volumes:
   minecraft-bedrock-server-1-data-volume: {}
   minecraft-bedrock-backup-1-backups-volume: {}
