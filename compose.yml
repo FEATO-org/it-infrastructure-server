@@ -15,7 +15,7 @@ services:
       SERVER_NAME: FEATO
       MAX_THREADS: 0
       VIEW_DISTANCE: 20
-      CONTENT_LOG_FILE_ENABLED: true
+      CONTENT_LOG_FILE_ENABLED: "TRUE"
     ports:
       - 19132:19132/udp
     volumes:
