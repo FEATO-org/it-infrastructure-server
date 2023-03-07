@@ -7,7 +7,6 @@ services:
   minecraft-bedrock-server-1:
     image: itzg/minecraft-bedrock-server
     container_name: mc-bedrock-server-1
-    restart: always
     environment:
       EULA: "TRUE"
       VERSION: LATEST
