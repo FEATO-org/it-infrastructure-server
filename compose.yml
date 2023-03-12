@@ -34,7 +34,7 @@ services:
     logging:
       driver: fluentd
       options:
-        tag: "minecraft-server"
+        tag: "minecraft_server_log"
 
   fluent-bit:
     image: fluent/fluent-bit
