@@ -40,6 +40,11 @@ services:
     env_file: .env
     volumes:
       - ./fluentbit:/fluent-bit/etc/
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
     ports:
       - "24224:24224"
     stdin_open: true
@@ -56,6 +61,42 @@ services:
       options:
         max-size: 10m
 
+  minecraft-monitor:
+    image: itzg/mc-monitor
+    command: export-for-prometheus
+    environment:
+      EXPORT_BEDROCK_SERVERS: minecraft-bedrock-server-1
+      DEBUG: "true"
+    networks:
+      - minecraft-network
+    depends_on:
+      - minecraft-bedrock-server-1
+    deploy:
+      resources:
+        limits:
+          memory: 80M
+    logging:
+      options:
+        max-size: 10m
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - minecraft-network
+    depends_on:
+      - fluent-bit
+    deploy:
+      resources:
+        limits:
+          memory: 80M
+    logging:
+      options:
+        max-size: 10m
 
 volumes:
   minecraft-bedrock-server-1-data-volume: {}
