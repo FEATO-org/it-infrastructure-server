@@ -17,7 +17,7 @@ services:
       VIEW_DISTANCE: 20
       CONTENT_LOG_FILE_ENABLED: "TRUE"
     ports:
-      - 19132:19132/udp
+      - "19132:19132/udp"
     volumes:
       - minecraft-bedrock-server-1-data-volume:/data
     stdin_open: true
