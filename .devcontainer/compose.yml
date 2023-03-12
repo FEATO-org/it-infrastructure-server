@@ -14,6 +14,7 @@ services:
     volumes:
       # Update this to wherever you want VS Code to mount the folder of your project
       - .:/usr/src/ansible:cached
+      - vscode-server-volume:/root/.vscode-server
 
     # Uncomment the next four lines if you will use a ptrace-based debugger like C++, Go, and Rust.
     # cap_add:
@@ -25,3 +26,6 @@ services:
     command: /bin/sh -c "while sleep 1000; do :; done"
     stdin_open: true
     tty: true
+
+volumes:
+  vscode-server-volume: {}
