@@ -9,7 +9,7 @@ services:
     container_name: mc-bedrock-server-1
     environment:
       EULA: "TRUE"
-      VERSION: PREVIOUS
+      VERSION: LATEST
       GAMEMODE: survival
       DIFFICULTY: normal
       SERVER_NAME: FEATO
