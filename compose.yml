@@ -30,7 +30,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 3.5G
+          memory: 3.7G
     logging:
       driver: fluentd
       options:
@@ -55,7 +55,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 150M
+          memory: 70M
       update_config:
         delay: 20s
     logging:
@@ -75,7 +75,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 15M
     logging:
       options:
         max-size: 10m
@@ -94,7 +94,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 80M
+          memory: 70M
     logging:
       options:
         max-size: 10m
