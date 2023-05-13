@@ -1,8 +1,12 @@
 version: '3.8'
 services:
-  # sfs-discord-server:
-  #   # SFSをghcr.ioにアップロードし参照する
-  #   image: anything
+  sfs-discord-server:
+    image: ghcr.io/feato-org/support-feato-system:main
+    env_file: .env
+    deploy:
+      resources:
+        limits:
+          memory: 100M
 
   minecraft-bedrock-server-1:
     image: itzg/minecraft-bedrock-server
@@ -30,7 +34,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 3.7G
+          memory: 3.6G
     logging:
       driver: fluentd
       options:
