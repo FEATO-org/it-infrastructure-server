@@ -3,6 +3,8 @@ services:
   sfs-discord-server:
     image: ghcr.io/feato-org/support-feato-system:main
     env_file: .env
+    networks:
+      - sfs-network
     deploy:
       resources:
         limits:
@@ -11,37 +13,65 @@ services:
       options:
         max-size: 10m
 
-  minecraft-bedrock-server-1:
-    image: itzg/minecraft-bedrock-server
-    container_name: mc-bedrock-server-1
+  minecraft-server-1:
+    image: itzg/minecraft-server
     environment:
+      MEMORY: 3G
+      TYPE: SPIGOT
+      USE_AIKAR_FLAGS: "TRUE"
       EULA: "TRUE"
       VERSION: LATEST
       GAMEMODE: survival
       DIFFICULTY: normal
       SERVER_NAME: FEATO
-      MAX_THREADS: 0
-      VIEW_DISTANCE: 20
-      CONTENT_LOG_FILE_ENABLED: "TRUE"
       PLAYER_IDLE_TIMEOUT: 90
+      TZ: Asia/Tokyo
+      SPIGET_RESOURCES: 67436
+      MODS_FILE: /extras/mods.txt
+      LOG_TIMESTAMP: "TRUE"
+      VIRTUAL_HOST: ${MINECRAFT_HOST}
+      VIRTUAL_PORT: 25565
+      LETSENCRYPT_HOST: ${MINECRAFT_HOST}
+      LETSENCRYPT_EMAIL: ${DEFAULT_EMAIL}
     ports:
+      - "25565:25565"
       - "19132:19132/udp"
+      - "127.0.0.1:25575:25575"
+      - "8123:8123"
     volumes:
-      - minecraft-bedrock-server-1-data-volume:/data
+      - minecraft-server-1-data-volume:/data
+      - ./minecraft/mods.txt:/extras/mods.txt:ro
+      - ./minecraft/plugins/Dynmap-3.6-beta-1-spigot.jar:/data/plugins/Dynmap-3.6-beta-1-spigot.jar
+      - ./minecraft/plugins/Geyser-Spigot/config.yml:/data/plugins/Geyser-Spigot/config.yml
+      - ./minecraft/plugins/floodgate/config.yml:/data/plugins/floodgate/config.yml
+      - ./minecraft/plugins/GeyserSkinManager/config.yml:/data/plugins/GeyserSkinManager/config.yml
     stdin_open: true
     tty: true
     networks:
       - minecraft-network
+      - nginx-network
     depends_on:
       - fluent-bit
     deploy:
       resources:
         limits:
-          memory: 3.6G
+          memory: 3G
     logging:
       driver: fluentd
       options:
         tag: "minecraft_server_log"
+
+  # minecraft-backups-1:
+  #   image: itzg/mc-backup
+  #   env_file: .env
+  #   environment:
+  #     BACKUP_INTERVAL: "2h"
+  #     RCON_HOST: minecraft-server-1
+  #   volumes:
+  #     - minecraft-server-1-data-volume:/data:ro
+  #     - minecraft-backup-1-backups-volume:/backups
+  #   networks:
+  #     - minecraft-network
 
   fluent-bit:
     image: fluent/fluent-bit
@@ -59,6 +89,7 @@ services:
     tty: true
     networks:
       - minecraft-network
+      - sfs-network
     deploy:
       resources:
         limits:
@@ -73,12 +104,12 @@ services:
     image: itzg/mc-monitor
     command: export-for-prometheus
     environment:
-      EXPORT_BEDROCK_SERVERS: minecraft-bedrock-server-1
+      EXPORT_SERVERS: minecraft-server-1
       DEBUG: "true"
     networks:
       - minecraft-network
     depends_on:
-      - minecraft-bedrock-server-1
+      - minecraft-server-1
     deploy:
       resources:
         limits:
@@ -96,6 +127,7 @@ services:
       - /var/lib/docker/:/var/lib/docker:ro
     networks:
       - minecraft-network
+      - sfs-network
     depends_on:
       - fluent-bit
     deploy:
@@ -106,9 +138,88 @@ services:
       options:
         max-size: 10m
 
+  portainer-agent:
+    image: portainer/agent:2.18.3
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    networks:
+      - portainer-network
+    deploy:
+      mode: global
+      placement:
+        constraints: [ node.platform.os == linux ]
+    logging:
+      options:
+        max-size: 10m
+
+  portainer-host:
+    image: portainer/portainer-ce:2.18.3
+    command: -H tcp://tasks.agent:9001 --tlsskipverify
+    environment:
+      - VIRTUAL_HOST=${PORTAINER_HOST}
+      - VIRTUAL_PORT=9443
+      - LETSENCRYPT_HOST=${PORTAINER_HOST}
+      - LETSENCRYPT_EMAIL=${DEFAULT_EMAIL}
+    ports:
+      - "9443:9443"
+      - "9000:9000"
+    volumes:
+      - portainer_data:/data
+    networks:
+      - portainer-network
+      - nginx-network
+    depends_on:
+      - nginx-proxy
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [ node.role == manager ]
+    logging:
+      options:
+        max-size: 10m
+
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - nginx-network
+
+  nginx-proxy-acme:
+    image: nginxproxy/acme-companion
+    environment:
+      - ACME_CA_URI=${ACME_CA_URI}
+    volumes_from:
+      - "nginx-proxy"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - acme:/etc/acme.sh
+    networks:
+      - nginx-network
+
 volumes:
   minecraft-bedrock-server-1-data-volume: {}
-  minecraft-bedrock-backup-1-backups-volume: {}
+  minecraft-server-1-data-volume: {}
+  minecraft-backup-1-backups-volume: {}
+  portainer_data: {}
+  certs: {}
+  vhost: {}
+  html: {}
+  acme: {}
 
 networks:
   minecraft-network:
+  sfs-network:
+  portainer-network:
+    driver: overlay
+    attachable: true
+  nginx-network:
+    driver: bridge
