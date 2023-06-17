@@ -36,7 +36,6 @@ services:
     ports:
       - "25565:25565"
       - "19132:19132/udp"
-      - "127.0.0.1:25575:25575"
       - "8123:8123"
     volumes:
       - minecraft-server-1-data-volume:/data
@@ -56,6 +55,8 @@ services:
       resources:
         limits:
           memory: 3G
+      restart_policy:
+        delay: 15s
     logging:
       driver: fluentd
       options:
@@ -108,8 +109,6 @@ services:
       DEBUG: "true"
     networks:
       - minecraft-network
-    depends_on:
-      - minecraft-server-1
     deploy:
       resources:
         limits:
@@ -153,32 +152,33 @@ services:
       options:
         max-size: 10m
 
-  portainer-host:
-    image: portainer/portainer-ce:2.18.3
-    command: -H tcp://tasks.agent:9001 --tlsskipverify
-    environment:
-      - VIRTUAL_HOST=${PORTAINER_HOST}
-      - VIRTUAL_PORT=9443
-      - LETSENCRYPT_HOST=${PORTAINER_HOST}
-      - LETSENCRYPT_EMAIL=${DEFAULT_EMAIL}
-    ports:
-      - "9443:9443"
-      - "9000:9000"
-    volumes:
-      - portainer_data:/data
-    networks:
-      - portainer-network
-      - nginx-network
-    depends_on:
-      - nginx-proxy
-    deploy:
-      mode: replicated
-      replicas: 1
-      placement:
-        constraints: [ node.role == manager ]
-    logging:
-      options:
-        max-size: 10m
+  # portainer-host:
+  #   image: portainer/portainer-ce:2.18.3
+  #   command: -H tcp://tasks.agent:9001 --tlsskipverify
+  #   environment:
+  #     - VIRTUAL_HOST=${PORTAINER_HOST}
+  #     - VIRTUAL_PORT=9443
+  #     - LETSENCRYPT_HOST=${PORTAINER_HOST}
+  #     - LETSENCRYPT_EMAIL=${DEFAULT_EMAIL}
+  #   ports:
+  #     - "9443:9443"
+  #     - "9000:9000"
+  #     - "8000:8000"
+  #   volumes:
+  #     - portainer_data:/data
+  #   networks:
+  #     - portainer-network
+  #     - nginx-network
+  #   depends_on:
+  #     - nginx-proxy
+  #   deploy:
+  #     mode: replicated
+  #     replicas: 1
+  #     placement:
+  #       constraints: [ node.role == manager ]
+  #   logging:
+  #     options:
+  #       max-size: 10m
 
   nginx-proxy:
     image: nginxproxy/nginx-proxy
@@ -186,7 +186,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - certs:/etc/nginx/certs
+      - certs:/etc/nginx/certs:ro
       - vhost:/etc/nginx/vhost.d
       - html:/usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
@@ -197,9 +197,12 @@ services:
     image: nginxproxy/acme-companion
     environment:
       - ACME_CA_URI=${ACME_CA_URI}
-    volumes_from:
-      - "nginx-proxy"
+      - NGINX_PROXY_CONTAINER=nginx-proxy
+      - NGINX_DOCKER_GEN_CONTAINER=nginx-proxy
     volumes:
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - acme:/etc/acme.sh
     networks:
@@ -222,4 +225,3 @@ networks:
     driver: overlay
     attachable: true
   nginx-network:
-    driver: bridge
