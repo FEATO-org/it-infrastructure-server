@@ -3,5 +3,4 @@ https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/lates
 https://github.com/Camotoy/GeyserSkinManager/releases/download/1.6/GeyserSkinManager-Spigot.jar
 https://dev.bukkit.org/projects/worldedit/files/latest
 https://dev.bukkit.org/projects/craftbook/files/latest
-https://dev.bukkit.org/projects/chests-plus-plus/files/latest
 https://dev.bukkit.org/projects/simply-farming/files/latest
