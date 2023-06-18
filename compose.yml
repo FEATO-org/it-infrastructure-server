@@ -17,7 +17,7 @@ services:
     image: itzg/minecraft-server
     environment:
       MEMORY: 3G
-      TYPE: SPIGOT
+      TYPE: PAPER
       USE_AIKAR_FLAGS: "TRUE"
       EULA: "TRUE"
       VERSION: LATEST
