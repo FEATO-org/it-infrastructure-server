@@ -44,6 +44,7 @@ services:
       - ./minecraft/plugins/downloads/SimplyFarming-1.19.4-1.2.0.jar:/data/plugins/SimplyFarming-1.19.4-1.2.0.jar
       - ./minecraft/plugins/downloads/worldedit-bukkit-7.2.15.jar:/data/plugins/worldedit-bukkit-7.2.15.jar
       - ./minecraft/plugins/downloads/ChuzItems.zip:/data/plugins/ChuzItems.zip
+      - ./minecraft/plugins/downloads/Minepacks.jar:/data/plugins/Minepacks.jar
       - ./minecraft/plugins/Geyser-Spigot/config.yml:/data/plugins/Geyser-Spigot/config.yml
       - ./minecraft/plugins/floodgate/config.yml:/data/plugins/floodgate/config.yml
       - ./minecraft/plugins/GeyserSkinManager/config.yml:/data/plugins/GeyserSkinManager/config.yml
