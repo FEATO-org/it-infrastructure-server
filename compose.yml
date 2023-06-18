@@ -50,8 +50,8 @@ services:
       - ./minecraft/plugins/GeyserSkinManager/config.yml:/data/plugins/GeyserSkinManager/config.yml
       - ./minecraft/plugins/SimplyFarming/config.yml:/data/plugins/SimplyFarming/config.yml
       - ./minecraft/plugins/CraftBook/config.yml:/data/plugins/CraftBook/config.yml
-      - ./minecraft/packs/Chuzumes_Resources_test_BE.zip:/data/packs/Chuzumes_Resources_test_BE.zip
-      - ./minecraft/packs/GeyserOptionalPack.mcpack:/data/packs/GeyserOptionalPack.mcpack
+      - ./minecraft/packs/Chuzumes_Resources_test_BE.zip:/data/plugins/Geyser-Spigot/packs/Chuzumes_Resources_test_BE.zip
+      - ./minecraft/packs/GeyserOptionalPack.mcpack:/data/plugins/Geyser-Spigot/packs/GeyserOptionalPack.mcpack
     stdin_open: true
     tty: true
     networks:
