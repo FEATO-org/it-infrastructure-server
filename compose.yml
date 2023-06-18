@@ -43,12 +43,12 @@ services:
       - ./minecraft/plugins/downloads/Dynmap-3.6-beta-1-spigot.jar:/data/plugins/Dynmap-3.6-beta-1-spigot.jar
       - ./minecraft/plugins/downloads/SimplyFarming-1.19.4-1.2.0.jar:/data/plugins/SimplyFarming-1.19.4-1.2.0.jar
       - ./minecraft/plugins/downloads/worldedit-bukkit-7.2.15.jar:/data/plugins/worldedit-bukkit-7.2.15.jar
+      - ./minecraft/plugins/downloads/ChuzItems.zip:/data/plugins/ChuzItems.zip
       - ./minecraft/plugins/Geyser-Spigot/config.yml:/data/plugins/Geyser-Spigot/config.yml
       - ./minecraft/plugins/floodgate/config.yml:/data/plugins/floodgate/config.yml
       - ./minecraft/plugins/GeyserSkinManager/config.yml:/data/plugins/GeyserSkinManager/config.yml
       - ./minecraft/plugins/SimplyFarming/config.yml:/data/plugins/SimplyFarming/config.yml
       - ./minecraft/plugins/CraftBook/config.yml:/data/plugins/CraftBook/config.yml
-      - ./minecraft/plugins/ChuzItems/ChuzItems.zip:/data/plugins/ChuzItems.zip
       - ./minecraft/packs/Chuzumes_Resources_test_BE.zip:/data/packs/Chuzumes_Resources_test_BE.zip
       - ./minecraft/packs/GeyserOptionalPack.mcpack:/data/packs/GeyserOptionalPack.mcpack
     stdin_open: true
