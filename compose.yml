@@ -40,7 +40,7 @@ services:
     volumes:
       - minecraft-server-1-data-volume:/data
       - ./minecraft/mods.txt:/extras/mods.txt:ro
-      - ./minecraft/plugins/Dynmap-3.6-beta-1-spigot.jar:/data/plugins/Dynmap-3.6-beta-1-spigot.jar
+      - ./minecraft/plugins/downloads:/data/plugins
       - ./minecraft/plugins/Geyser-Spigot/config.yml:/data/plugins/Geyser-Spigot/config.yml
       - ./minecraft/plugins/floodgate/config.yml:/data/plugins/floodgate/config.yml
       - ./minecraft/plugins/GeyserSkinManager/config.yml:/data/plugins/GeyserSkinManager/config.yml
