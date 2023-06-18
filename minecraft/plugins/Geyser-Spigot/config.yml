@@ -138,7 +138,7 @@ disable-bedrock-scaffolding: false
 emote-offhand-workaround: "emotes-and-offhand"
 
 # The default locale if we dont have the one the client requested. Uncomment to not use the default system language.
-# default-locale: en_us
+default-locale: ja_jp
 
 # Specify how many days images will be cached to disk to save downloading them from the internet.
 # A value of 0 is disabled. (Default: 0)
@@ -161,7 +161,7 @@ custom-skull-render-distance: 32
 add-non-bedrock-items: true
 
 # Bedrock prevents building and displaying blocks above Y127 in the Nether.
-# This config option works around that by changing the Nether dimension ID to the End ID. 
+# This config option works around that by changing the Nether dimension ID to the End ID.
 # The main downside to this is that the entire Nether will have the same red fog rather than having different fog for each biome.
 above-bedrock-nether-building: false
 
