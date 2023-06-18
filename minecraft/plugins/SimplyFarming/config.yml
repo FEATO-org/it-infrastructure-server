@@ -1,15 +1,15 @@
-use-permission-nodes: true
+use-permission-nodes: false
 
-permission nodes:
-  # simplyfarming.reload
-  # simplyfarming.toggle.permission-nodes
-  # simplyfarming.replant.beetroots
-  # simplyfarming.replant.carrots
-  # simplyfarming.replant.nether_wart
-  # simplyfarming.replant.potatoes
-  # simplyfarming.replant.wheat
-  # simplyfarming.replant.*
-  simplyfarming.*
+# permission nodes:
+# simplyfarming.reload
+# simplyfarming.toggle.permission-nodes
+# simplyfarming.replant.beetroots
+# simplyfarming.replant.carrots
+# simplyfarming.replant.nether_wart
+# simplyfarming.replant.potatoes
+# simplyfarming.replant.wheat
+# simplyfarming.replant.*
+# simplyfarming.*
 
 messages:
   command-no-permission: "&cYou do not have permission to use this command."
