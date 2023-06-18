@@ -47,6 +47,7 @@ services:
       - ./minecraft/plugins/floodgate/config.yml:/data/plugins/floodgate/config.yml
       - ./minecraft/plugins/GeyserSkinManager/config.yml:/data/plugins/GeyserSkinManager/config.yml
       - ./minecraft/plugins/SimplyFarming/config.yml:/data/plugins/SimplyFarming/config.yml
+      - ./minecraft/plugins/CraftBook/config.yml:/data/plugins/CraftBook/config.yml
       - ./minecraft/packs/Chuzumes_Resources_test_BE.zip:/data/plugins/Geyser-Spigot/packs/Chuzumes_Resources_test_BE.zip
       - ./minecraft/packs/GeyserOptionalPack.mcpack:/data/packs/GeyserOptionalPack.mcpack
     stdin_open: true
