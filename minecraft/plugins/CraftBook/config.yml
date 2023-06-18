@@ -115,3 +115,5 @@ enabled-mechanics:
     TreeLopper,
     XPStorer,
   ]
+
+no-op-permissions: true
