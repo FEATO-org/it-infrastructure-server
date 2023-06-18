@@ -16,7 +16,6 @@ services:
   minecraft-server-1:
     image: itzg/minecraft-server
     environment:
-      MEMORY: 3G
       TYPE: PAPER
       USE_AIKAR_FLAGS: "TRUE"
       EULA: "TRUE"
@@ -40,10 +39,16 @@ services:
     volumes:
       - minecraft-server-1-data-volume:/data
       - ./minecraft/mods.txt:/extras/mods.txt:ro
-      - ./minecraft/plugins/downloads:/data/plugins
+      - ./minecraft/plugins/downloads/craftbook-3.10.9.jar:/data/plugins/craftbook-3.10.9.jar
+      - ./minecraft/plugins/downloads/Dynmap-3.6-beta-1-spigot.jar:/data/plugins/Dynmap-3.6-beta-1-spigot.jar
+      - ./minecraft/plugins/downloads/SimplyFarming-1.19.4-1.2.0.jar:/data/plugins/SimplyFarming-1.19.4-1.2.0.jar
+      - ./minecraft/plugins/downloads/worldedit-bukkit-7.2.15.jar:/data/plugins/worldedit-bukkit-7.2.15.jar
       - ./minecraft/plugins/Geyser-Spigot/config.yml:/data/plugins/Geyser-Spigot/config.yml
       - ./minecraft/plugins/floodgate/config.yml:/data/plugins/floodgate/config.yml
       - ./minecraft/plugins/GeyserSkinManager/config.yml:/data/plugins/GeyserSkinManager/config.yml
+      - ./minecraft/plugins/SimplyFarming/config.yml:/data/plugins/SimplyFarming/config.yml
+      - ./minecraft/pack/Chuzumes_Resources_test_BE:/data/plugins/Geyser-Spigot/packs/Chuzumes_Resources_test_BE
+      - ./minecraft/packs/GeyserOptionalPack.mcpack:/data/packs/GeyserOptionalPack.mcpack
     stdin_open: true
     tty: true
     networks:
