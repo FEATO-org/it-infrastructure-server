@@ -1,3 +1,4 @@
 https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
 https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot
 https://github.com/Camotoy/GeyserSkinManager/releases/download/1.6/GeyserSkinManager-Spigot.jar
+https://dev.bukkit.org/projects/zenchantments/files/4577678
