@@ -52,7 +52,9 @@ services:
       - ./minecraft/plugins/CraftBook/config.yml:/data/plugins/CraftBook/config.yml
       - ./minecraft/packs/Chuzumes_Resources_test_BE.zip:/data/plugins/Geyser-Spigot/packs/Chuzumes_Resources_test_BE.zip
       - ./minecraft/packs/GeyserOptionalPack.mcpack:/data/plugins/Geyser-Spigot/packs/GeyserOptionalPack.mcpack
+      - ./minecraft/packs/Musket_RP_converted_MConverter.eu.zip:/data/plugins/Geyser-Spigot/packs/Musket_RP_converted_MConverter.eu.zip
       - ./minecraft/datapacks/ChuzItems.zip:/data/world/datapacks/ChuzItems.zip
+      - ./minecraft/datapacks/Musket DP.zip:/data/world/datapacks/Musket DP.zip
     stdin_open: true
     tty: true
     networks:
