@@ -5,3 +5,4 @@ cd "$(dirname "$0")"
 
 scp ../minecraft/plugins/downloads/* vps:~/src/it-infrastructure-server/minecraft/plugins/downloads
 scp ../minecraft/packs/* vps:~/src/it-infrastructure-server/minecraft/packs
+scp ../minecraft/datapacks/* vps:~/src/it-infrastructure-server/minecraft/datapacks
