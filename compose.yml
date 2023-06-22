@@ -8,7 +8,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 20M
+          memory: 12M
     logging:
       options:
         max-size: 10m
@@ -68,7 +68,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 3G
+          memory: 3.5G
       restart_policy:
         delay: 15s
     logging:
@@ -206,6 +206,13 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
     networks:
       - nginx-network
+    deploy:
+      resources:
+        limits:
+          memory: 42M
+    logging:
+      options:
+        max-size: 10m
 
   nginx-proxy-acme:
     image: nginxproxy/acme-companion
@@ -221,6 +228,13 @@ services:
       - acme:/etc/acme.sh
     networks:
       - nginx-network
+    deploy:
+      resources:
+        limits:
+          memory: 32M
+    logging:
+      options:
+        max-size: 10m
 
 volumes:
   minecraft-bedrock-server-1-data-volume: {}
