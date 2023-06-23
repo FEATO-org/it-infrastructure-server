@@ -38,6 +38,7 @@ services:
       TUNE_VIRTUALIZED: "TRUE"
       TUNE_NURSERY_SIZES: "TRUE"
       GUI: "FALSE"
+      ICON: https://photo.feato.jp/_data/i/upload/2023/06/04/20230604103150-032ec272-me.png
     ports:
       - "25565:25565"
       - "19132:19132/udp"
