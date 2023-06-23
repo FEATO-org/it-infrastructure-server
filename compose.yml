@@ -36,6 +36,7 @@ services:
       LETSENCRYPT_EMAIL: ${DEFAULT_EMAIL}
       TUNE_VIRTUALIZED: "TRUE"
       TUNE_NURSERY_SIZES: "TRUE"
+      GUI: "FALSE"
     ports:
       - "25565:25565"
       - "19132:19132/udp"
