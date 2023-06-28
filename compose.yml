@@ -8,7 +8,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 12M
+          memory: 20M
     logging:
       options:
         max-size: 10m
@@ -120,7 +120,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 10M
+          memory: 15M
     logging:
       options:
         max-size: 10m
