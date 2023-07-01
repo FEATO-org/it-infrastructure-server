@@ -40,6 +40,7 @@ services:
       GUI: "FALSE"
       ICON: https://photo.feato.jp/_data/i/upload/2023/06/24/20230624012009-7add3e01-xl.png
       SEED: "-5038674336359152754"
+      ENFORCE_SECURE_PROFILE: "FALSE"
     ports:
       - "25565:25565"
       - "19132:19132/udp"
