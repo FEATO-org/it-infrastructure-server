@@ -26,6 +26,7 @@ services:
       DIFFICULTY: normal
       SERVER_NAME: FEATO
       PLAYER_IDLE_TIMEOUT: 90
+      VIEW_DISTANCE: 14
       TZ: Asia/Tokyo
       SPIGET_RESOURCES: 67436,110400,19286
       MODS_FILE: /extras/mods.txt
