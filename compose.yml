@@ -31,6 +31,7 @@ services:
       SPIGET_RESOURCES: 67436,110400,19286
       MODS_FILE: /extras/mods.txt
       DATAPACKS: /extras/datapacks
+      RESOURCE_PACK: /extras/resourcepack
       LOG_TIMESTAMP: "TRUE"
       VIRTUAL_HOST: ${MINECRAFT_HOST}
       VIRTUAL_PORT: 25565
@@ -52,8 +53,10 @@ services:
       # plugins download
       - ./minecraft/mods.txt:/extras/mods.txt:ro
       - ./minecraft/plugins:/plugins
-      # resourcepack & datapack
+      # datapack
       - ./minecraft/datapacks:/extras/datapacks
+      # Java only resourcepack
+      - ./minecraft/resourcepacks:/extras/resourcepacks
       # config
       - ./minecraft/config:/config
     stdin_open: true
