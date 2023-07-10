@@ -12,6 +12,7 @@ language: en_US
 # A list of languages supported by craftbook, if a user requests a language not listed... They will see default.
 languages:
   - en_US
+  - ja_jp
 
 # If enabled, CraftBook will scan messages sent to players for localizable text, instead of just checking if the entire message is localizable.
 scan-text-for-localization: false
@@ -29,7 +30,7 @@ debug-flags: []
 easter-eggs: false
 
 # Random numbers are much more random, with a small cost to CPU usage.
-realistic-randoms: false
+realistic-randoms: true
 
 # Show messages when a player does not have permission to do something.
 show-permission-messages: true
@@ -40,95 +41,89 @@ persistent-storage-type: YAML
 # Causes mechanics to attempt to convert names to use CBIDs. This can and should be disabled after you believe your servers transition to UUIDs v Names is complete.
 convert-names-to-cbids: false
 
-# List of mechanics to enable! If they aren't in this list, the server won't load them!
-# enabled-mechanics:
-# - AI
-# - Ammeter
-# - BetterLeads
-# - BetterPhysics
-# - BetterPistons
-# - BetterPlants
-# - BoatDecay
-# - BoatDrops
-# - BoatExitRemover
-# - BoatRemoveEntities
-# - BoatSpeedModifiers
-# - BoatUncrashable
-# - BoatWaterPlaceOnly
-# - Bookcase
-# - BounceBlocks
-# - Bridge
-# - Cauldron
-# - Chairs
-# - ChunkAnchor
-# - CommandItems
-# - CommandSigns
-# - CookingPot
-# - CustomCrafting
-# - CustomDrops
-# - DispenserRecipes
-# - Door
-# - Elevator
-# - Footprints
-# - Gate
-# - Glowstone
-# - HeadDrops
-# - HiddenSwitch
-# - ICs
-# - JackOLantern
-# - Jukebox
-# - LandBoats
-# - LegacyCauldron
-# - LegacyCustomDrops
-# - LightStone
-# - LightSwitch
-# - MapChanger
-# - Marquee
-# - MinecartBooster
-# - MinecartCollisionEntry
-# - MinecartConstantSpeed
-# - MinecartDecay
-# - MinecartDeposit
-# - MinecartDispenser
-# - MinecartEjector
-# - MinecartElevator
-# - MinecartEmptySlowdown
-# - MinecartExitRemover
-# - MinecartFallModifier
-# - MinecartItemPickup
-# - MinecartMaxSpeed
-# - MinecartMessenger
-# - MinecartMobBlocker
-# - MinecartMoreRails
-# - MinecartNoCollide
-# - MinecartPlaceAnywhere
-# - MinecartRailPlacer
-# - MinecartRemoveEntities
-# - MinecartReverser
-# - MinecartSorter
-# - MinecartSpeedModifiers
-# - MinecartStation
-# - MinecartTeleporter
-# - MinecartTemporaryCart
-# - MinecartVisionSteering
-# - Netherrack
-# - PaintingSwitcher
-# - Pay
-# - Pipes
-# - SignCopier
-# - Snow
-# - Sponge
-# - Teleporter
-# - ToggleArea
-# - TreeLopper
-# - XPStorer
-
 # If on, OP's will not default to have access to everything.
 no-op-permissions: true
 
 # A list of CraftBook mechanics that are disabled, for easy copy/pastability to the enabled list.
 disabled-mechanics:
-  - Variables
+  - Ammeter
+  - BetterLeads
+  - BetterPhysics
+  - BetterPistons
+  - BetterPlants
+  - BoatDecay
+  - BoatDrops
+  - BoatExitRemover
+  - BoatRemoveEntities
+  - BoatSpeedModifiers
+  - BoatUncrashable
+  - BoatWaterPlaceOnly
+  - Bookcase
+  - BounceBlocks
+  - Bridge
+  - Cauldron
+  - Chairs
+  - ChunkAnchor
+  - CommandItems
+  - CommandSigns
+  - CookingPot
+  - CustomCrafting
+  - CustomDrops
+  - DispenserRecipes
+  - Door
+  - Elevator
+  - Gate
+  - Glowstone
+  - HeadDrops
+  - HiddenSwitch
+  - ICs
+  - JackOLantern
+  - Jukebox
+  - LandBoats
+  - LegacyCauldron
+  - LegacyCustomDrops
+  - LightStone
+  - LightSwitch
+  - MapChanger
+  - Marquee
+  - MinecartBooster
+  - MinecartCollisionEntry
+  - MinecartConstantSpeed
+  - MinecartDecay
+  - MinecartDeposit
+  - MinecartDispenser
+  - MinecartEjector
+  - MinecartElevator
+  - MinecartEmptySlowdown
+  - MinecartExitRemover
+  - MinecartFallModifier
+  - MinecartItemPickup
+  - MinecartMaxSpeed
+  - MinecartMessenger
+  - MinecartMobBlocker
+  - MinecartMoreRails
+  - MinecartNoCollide
+  - MinecartPlaceAnywhere
+  - MinecartRailPlacer
+  - MinecartRemoveEntities
+  - MinecartReverser
+  - MinecartSorter
+  - MinecartSpeedModifiers
+  - MinecartStation
+  - MinecartTeleporter
+  - MinecartTemporaryCart
+  - MinecartVisionSteering
+  - Netherrack
+  - PaintingSwitcher
+  - Pay
+  - Pipes
+  - SignCopier
+  - Snow
+  - Sponge
+  - Teleporter
+  - ToggleArea
+  - TreeLopper
+  - XPStorer
 
 # WARNING! Changing this can result in all ST mechanics acting very weirdly, only change this if you know what you are doing!
 st-think-ticks: 2
@@ -153,3 +148,8 @@ pedantic-block-checks: false
 
 # Make sure a player can only press signs so often.
 sign-click-timeout: 10
+
+# List of mechanics to enable! If they aren't in this list, the server won't load them!
+enabled-mechanics:
+  - Variables
+  - AI
