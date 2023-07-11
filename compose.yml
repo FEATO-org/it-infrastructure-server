@@ -9,6 +9,8 @@ services:
       resources:
         limits:
           memory: 20M
+      restart_policy:
+        delay: 15s
     logging:
       options:
         max-size: 10m
