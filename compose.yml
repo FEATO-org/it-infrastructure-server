@@ -59,8 +59,6 @@ services:
       - ./minecraft/plugins:/plugins
       # datapack
       - ./minecraft/datapacks:/extras/datapacks
-      # Java only resourcepack
-      - ./minecraft/resourcepacks:/extras/resourcepacks
       # config
       - ./minecraft/config:/config
     stdin_open: true
