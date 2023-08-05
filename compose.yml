@@ -32,6 +32,8 @@ services:
       - minecraft-proxy-server-volume:/server
       - minecraft-proxy-plguins-volume:/plguins
       - ./minecraft-proxy/config.yml:/config/config.yml
+    networks:
+      - minecraft-network
 
   minecraft-server-1:
     image: itzg/minecraft-server:java17-openj9
