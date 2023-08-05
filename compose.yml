@@ -30,7 +30,7 @@ services:
       - "19132:19132/udp"
     volumes:
       - minecraft-proxy-server-volume:/server
-      - minecraft-proxy-plguins-volume:/plguins
+      - ./minecraft-proxy/plugins:/plguins
       - ./minecraft-proxy/config.yml:/config/config.yml
     networks:
       - minecraft-network
@@ -280,7 +280,6 @@ volumes:
   html: {}
   acme: {}
   minecraft-proxy-server-volume: {}
-  minecraft-proxy-plguins-volume: {}
 
 networks:
   minecraft-network:
