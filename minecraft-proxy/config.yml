@@ -45,6 +45,6 @@ disabled_commands:
 - disabledcommandhere
 servers:
   lobby:
-    address: minecraft-server-1:25565
+    address: minecraft-server-1:25565,minecraft-server-1:19132
     restricted: false
     motd: ""
