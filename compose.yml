@@ -14,7 +14,6 @@ services:
     logging:
       driver: fluentd
       options:
-        max-size: 10m
         tag: "sfs_discord_server_log"
 
   minecraft-proxy:
