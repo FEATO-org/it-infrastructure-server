@@ -34,6 +34,16 @@ services:
       - ./minecraft-proxy/config.yml:/config/config.yml
     networks:
       - minecraft-network
+    deploy:
+      resources:
+        limits:
+          memory: 800M
+      restart_policy:
+        delay: 15s
+    logging:
+      driver: fluentd
+      options:
+        tag: "minecraft_proxy_log"
 
   minecraft-server-1:
     image: itzg/minecraft-server:java17-openj9
@@ -92,7 +102,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 7G
+          memory: 6G
       restart_policy:
         delay: 15s
     logging:
