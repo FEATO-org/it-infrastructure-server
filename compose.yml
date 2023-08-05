@@ -31,7 +31,7 @@ services:
     volumes:
       - minecraft-proxy-server-volume:/server
       - ./minecraft-proxy/plugins:/plguins
-      - ./minecraft-proxy/config.yml:/config/config.yml
+      - ./minecraft-proxy/config:/config
     networks:
       - minecraft-network
     deploy:
