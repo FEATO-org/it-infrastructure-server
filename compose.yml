@@ -184,48 +184,46 @@ services:
       options:
         max-size: 10m
 
-  # portainer-agent:
-  #   image: portainer/agent:2.18.3
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock
-  #     - /var/lib/docker/volumes:/var/lib/docker/volumes
-  #   networks:
-  #     - portainer-network
-  #   deploy:
-  #     mode: global
-  #     placement:
-  #       constraints: [ node.platform.os == linux ]
-  #   logging:
-  #     options:
-  #       max-size: 10m
+  portainer-agent:
+    image: portainer/agent:2.19.4
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    networks:
+      - portainer-network
+    deploy:
+      mode: global
+      placement:
+        constraints: [ node.platform.os == linux ]
+    logging:
+      options:
+        max-size: 10m
 
-  # portainer-host:
-  #   image: portainer/portainer-ce:2.18.3
-  #   command: -H tcp://tasks.agent:9001 --tlsskipverify
-  #   environment:
-  #     - VIRTUAL_HOST=${PORTAINER_HOST}
-  #     - VIRTUAL_PORT=9443
-  #     - LETSENCRYPT_HOST=${PORTAINER_HOST}
-  #     - LETSENCRYPT_EMAIL=${DEFAULT_EMAIL}
-  #   ports:
-  #     - "9443:9443"
-  #     - "9000:9000"
-  #     - "8000:8000"
-  #   volumes:
-  #     - portainer_data:/data
-  #   networks:
-  #     - portainer-network
-  #     - nginx-network
-  #   depends_on:
-  #     - nginx-proxy
-  #   deploy:
-  #     mode: replicated
-  #     replicas: 1
-  #     placement:
-  #       constraints: [ node.role == manager ]
-  #   logging:
-  #     options:
-  #       max-size: 10m
+  portainer-host:
+    image: portainer/portainer-ee:2.19.4
+    command: -H tcp://tasks.agent:9001 --tlsskipverify
+    # environment:
+      # - VIRTUAL_HOST=${PORTAINER_HOST}
+      # - VIRTUAL_PORT=9443
+      # - LETSENCRYPT_HOST=${PORTAINER_HOST}
+      # - LETSENCRYPT_EMAIL=${DEFAULT_EMAIL}
+    ports:
+      - "9443:9443"
+      - "9000:9000"
+      - "8000:8000"
+    volumes:
+      - portainer_data:/data
+    networks:
+      - portainer-network
+      - nginx-network
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [ node.role == manager ]
+    logging:
+      options:
+        max-size: 10m
 
   nginx-proxy:
     image: nginxproxy/nginx-proxy
