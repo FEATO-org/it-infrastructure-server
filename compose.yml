@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 services:
   sfs-discord-server:
     image: ghcr.io/feato-org/support-feato-system:main
@@ -16,111 +16,6 @@ services:
       options:
         tag: "sfs_discord_server_log"
 
-  # minecraft-proxy:
-  #   image: itzg/bungeecord
-  #   environment:
-  #     TYPE: VELOCITY
-  #     MEMORY: ""
-  #     JVM_XX_OPTS: "-XX:MaxRAMPercentage=75"
-  #     ICON: https://photo.feato.jp/_data/i/upload/2023/06/24/20230624012009-7add3e01-xl.png
-  #     PLUGINS: https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity,https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity
-  #   ports:
-  #     - "25565:25577"
-  #     - "19132:19132/udp"
-  #   volumes:
-  #     - minecraft-proxy-server-volume:/server
-  #     - ./minecraft-proxy/plugins:/plguins
-  #     - ./minecraft-proxy/config:/config
-  #   networks:
-  #     - minecraft-network
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: 800M
-  #     restart_policy:
-  #       delay: 15s
-  #   logging:
-  #     driver: fluentd
-  #     options:
-  #       tag: "minecraft_proxy_log"
-
-  # minecraft-server-1:
-  #   image: itzg/minecraft-server:java17-openj9
-  #   environment:
-  #     ONLINE_MODE: "FALSE"
-  #     MEMORY: ""
-  #     JVM_XX_OPTS: "-XX:MaxRAMPercentage=75"
-  #     TYPE: PAPER
-  #     USE_AIKAR_FLAGS: "TRUE"
-  #     EULA: "TRUE"
-  #     VERSION: LATEST
-  #     GAMEMODE: survival
-  #     DIFFICULTY: normal
-  #     SERVER_NAME: FEATO
-  #     SPAWN_PROTECTION: 0
-  #     PLAYER_IDLE_TIMEOUT: 90
-  #     VIEW_DISTANCE: 14
-  #     SIMULATION_DISTANCE: 8
-  #     TZ: Asia/Tokyo
-  #     SPIGET_RESOURCES: 67436,110400,19286
-  #     MODS_FILE: /extras/mods.txt
-  #     DATAPACKS: /extras/datapacks
-  #     RESOURCE_PACK: /extras/resourcepack
-  #     LOG_TIMESTAMP: "TRUE"
-  #     TUNE_VIRTUALIZED: "TRUE"
-  #     TUNE_NURSERY_SIZES: "TRUE"
-  #     GUI: "FALSE"
-  #     ICON: https://photo.feato.jp/_data/i/upload/2023/06/24/20230624012009-7add3e01-xl.png
-  #     SEED: "-5038674336359152754"
-  #     RESOURCE_PACK_ENFORCE: "TRUE"
-  #     ENFORCE_SECURE_PROFILE: "FALSE"
-  #     VIRTUAL_HOST: ${MINECRAFT_MAP_HOST}
-  #     VIRTUAL_PORT: 8123
-  #     LETSENCRYPT_HOST: ${MINECRAFT_MAP_HOST}
-  #     LETSENCRYPT_EMAIL: ${DEFAULT_EMAIL}
-  #   ports:
-  #     # - "25565:25565"
-  #     # - "19132:19132/udp"
-  #     - "8123:8123"
-  #   volumes:
-  #     - minecraft-server-1-data-volume:/data
-  #     # plugins download
-  #     - ./minecraft/mods.txt:/extras/mods.txt:ro
-  #     - ./minecraft/plugins:/plugins
-  #     # datapack
-  #     - ./minecraft/datapacks:/extras/datapacks
-  #     # config
-  #     - ./minecraft/config:/config
-  #   stdin_open: true
-  #   tty: true
-  #   networks:
-  #     - minecraft-network
-  #     - nginx-network
-  #   depends_on:
-  #     - fluent-bit
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: 6G
-  #     restart_policy:
-  #       delay: 15s
-  #   logging:
-  #     driver: fluentd
-  #     options:
-  #       tag: "minecraft_server_log"
-
-  # minecraft-backups-1:
-  #   image: itzg/mc-backup
-  #   env_file: .env
-  #   environment:
-  #     BACKUP_INTERVAL: "2h"
-  #     RCON_HOST: minecraft-server-1
-  #   volumes:
-  #     - minecraft-server-1-data-volume:/data:ro
-  #     - minecraft-backup-1-backups-volume:/backups
-  #   networks:
-  #     - minecraft-network
-
   fluent-bit:
     image: fluent/fluent-bit
     env_file: .env
@@ -136,7 +31,6 @@ services:
     stdin_open: true
     tty: true
     networks:
-      # - minecraft-network
       - sfs-network
     deploy:
       resources:
@@ -147,22 +41,6 @@ services:
     logging:
       options:
         max-size: 10m
-
-  # minecraft-monitor:
-  #   image: itzg/mc-monitor
-  #   command: export-for-prometheus
-  #   environment:
-  #     EXPORT_SERVERS: minecraft-server-1
-  #     DEBUG: "true"
-  #   networks:
-  #     - minecraft-network
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: 15M
-  #   logging:
-  #     options:
-  #       max-size: 10m
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor
@@ -195,7 +73,7 @@ services:
     deploy:
       mode: global
       placement:
-        constraints: [ node.platform.os == linux ]
+        constraints: [node.platform.os == linux]
     logging:
       options:
         max-size: 10m
@@ -204,10 +82,10 @@ services:
     image: portainer/portainer-ee:2.19.4
     command: -H tcp://tasks.agent:9001 --tlsskipverify
     # environment:
-      # - VIRTUAL_HOST=${PORTAINER_HOST}
-      # - VIRTUAL_PORT=9443
-      # - LETSENCRYPT_HOST=${PORTAINER_HOST}
-      # - LETSENCRYPT_EMAIL=${DEFAULT_EMAIL}
+    # - VIRTUAL_HOST=${PORTAINER_HOST}
+    # - VIRTUAL_PORT=9443
+    # - LETSENCRYPT_HOST=${PORTAINER_HOST}
+    # - LETSENCRYPT_EMAIL=${DEFAULT_EMAIL}
     ports:
       - "9443:9443"
       - "9000:9000"
@@ -221,7 +99,7 @@ services:
       mode: replicated
       replicas: 1
       placement:
-        constraints: [ node.role == manager ]
+        constraints: [node.role == manager]
     logging:
       options:
         max-size: 10m
@@ -280,7 +158,6 @@ volumes:
   minecraft-proxy-server-volume: {}
 
 networks:
-  minecraft-network:
   sfs-network:
   portainer-network:
     driver: overlay
