@@ -5,6 +5,8 @@ services:
     env_file: .env
     networks:
       - fluent-network
+    depends_on:
+      - fluent-bit
     deploy:
       resources:
         limits:
@@ -91,6 +93,8 @@ services:
       - portainer-network
       - nginx-network
       - fluent-network
+    depends_on:
+      - fluent-bit
     deploy:
       mode: replicated
       replicas: 1
@@ -115,6 +119,8 @@ services:
     networks:
       - nginx-network
       - fluent-network
+    depends_on:
+      - fluent-bit
     deploy:
       resources:
         limits:
