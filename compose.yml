@@ -15,7 +15,7 @@ services:
       driver: fluentd
       options:
         tag: "sfs_discord_server_log"
-        fluentd-address: fluent-bit:24224
+        fluentd-address: localhost:24224
 
   fluent-bit:
     image: fluent/fluent-bit:2.2.2
@@ -100,7 +100,7 @@ services:
       driver: fluentd
       options:
         tag: "portainer_host__log"
-        fluentd-address: fluent-bit:24224
+        fluentd-address: localhost:24224
 
   nginx-proxy:
     image: nginxproxy/nginx-proxy
@@ -123,7 +123,7 @@ services:
       driver: fluentd
       options:
         tag: "nginx_proxy_log"
-        fluentd-address: fluent-bit:24224
+        fluentd-address: localhost:24224
 
   nginx-proxy-acme:
     image: nginxproxy/acme-companion
