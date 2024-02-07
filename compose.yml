@@ -99,7 +99,7 @@ services:
     logging:
       driver: fluentd
       options:
-        tag: "portainer_host__log"
+        tag: "portainer_host_log"
         fluentd-address: localhost:24224
 
   nginx-proxy:
