@@ -4,7 +4,7 @@ services:
     image: ghcr.io/feato-org/support-feato-system:main
     env_file: .env
     networks:
-      - sfs-network
+      - fluent-network
     deploy:
       resources:
         limits:
@@ -15,9 +15,10 @@ services:
       driver: fluentd
       options:
         tag: "sfs_discord_server_log"
+        fluentd-address: fluent-bit:24224
 
   fluent-bit:
-    image: fluent/fluent-bit
+    image: fluent/fluent-bit:2.2.2
     env_file: .env
     volumes:
       - ./fluentbit:/fluent-bit/etc/
@@ -26,12 +27,10 @@ services:
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
-    ports:
-      - "24224:24224"
     stdin_open: true
     tty: true
     networks:
-      - sfs-network
+      - fluent-network
     deploy:
       resources:
         limits:
@@ -43,14 +42,14 @@ services:
         max-size: 10m
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor
+    image: gcr.io/cadvisor/cadvisor:0.47.2
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     networks:
-      - sfs-network
+      - fluent-network
     depends_on:
       - fluent-bit
     deploy:
@@ -91,14 +90,17 @@ services:
     networks:
       - portainer-network
       - nginx-network
+      - fluent-network
     deploy:
       mode: replicated
       replicas: 1
       placement:
         constraints: [node.role == manager]
     logging:
+      driver: fluentd
       options:
-        max-size: 10m
+        tag: "portainer_host__log"
+        fluentd-address: fluent-bit:24224
 
   nginx-proxy:
     image: nginxproxy/nginx-proxy
@@ -112,13 +114,16 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
     networks:
       - nginx-network
+      - fluent-network
     deploy:
       resources:
         limits:
           memory: 60M
     logging:
+      driver: fluentd
       options:
-        max-size: 10m
+        tag: "nginx_proxy_log"
+        fluentd-address: fluent-bit:24224
 
   nginx-proxy-acme:
     image: nginxproxy/acme-companion
@@ -154,7 +159,7 @@ volumes:
   minecraft-proxy-server-volume: {}
 
 networks:
-  sfs-network:
+  fluent-network:
   portainer-network:
     driver: overlay
     attachable: true
