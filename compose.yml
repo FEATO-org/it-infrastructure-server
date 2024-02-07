@@ -42,7 +42,7 @@ services:
         max-size: 10m
 
   cadvisor:
-    image: gcr.io/cadvisor/cadvisor:0.47.2
+    image: gcr.io/cadvisor/cadvisor
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
