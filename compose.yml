@@ -79,13 +79,12 @@ services:
   portainer-host:
     image: portainer/portainer-ee:2.19.4
     command: -H tcp://portainer-agent:9001 --tlsskipverify
-    # environment:
-    # - VIRTUAL_HOST=${PORTAINER_HOST}
-    # - VIRTUAL_PORT=9443
-    # - LETSENCRYPT_HOST=${PORTAINER_HOST}
-    # - LETSENCRYPT_EMAIL=${DEFAULT_EMAIL}
+    environment:
+    - VIRTUAL_HOST=${PORTAINER_HOST}
+    - VIRTUAL_PORT=9000
+    - LETSENCRYPT_HOST=${PORTAINER_HOST}
+    - LETSENCRYPT_EMAIL=${DEFAULT_EMAIL}
     ports:
-      - "9443:9443"
       - "8000:8000"
     volumes:
       - portainer_data:/data
