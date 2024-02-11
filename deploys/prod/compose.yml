@@ -1,7 +1,11 @@
 services:
   sfs-discord-server:
     image: ghcr.io/feato-org/support-feato-system:main
-    env_file: .env
+    environment:
+      - DISCORD_TOKEN
+      - GUILD_IDS
+      - APP_MODE
+      - NOTIFY_CHANNEL_ID
     networks:
       - fluent-network
     depends_on:
@@ -20,7 +24,12 @@ services:
 
   fluent-bit:
     image: fluent/fluent-bit:2.2.2
-    env_file: .env
+    environment:
+      - NOTIFY_WEBHOOK_URL
+      - ERROR_WEBHOOK_URL
+      - PROM_USER_ID
+      - LOKI_USER_ID
+      - GRAFANA_API_KEY
     # ports:
     #   - target: 24224
     #     mode: host
