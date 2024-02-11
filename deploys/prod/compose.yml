@@ -31,6 +31,7 @@ services:
       - PROM_USER_ID
       - LOKI_USER_ID
       - GRAFANA_API_KEY
+      - APP_MODE
     # ports:
     #   - target: 24224
     #     mode: host
