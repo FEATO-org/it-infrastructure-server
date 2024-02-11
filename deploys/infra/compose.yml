@@ -8,27 +8,30 @@ services:
     volumes:
       - portainer_data:/data
       - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - fluent-network
-      - nginx-network
+    # networks:
+    #   - fluent-network
+    #   - nginx-network
     deploy:
       restart_policy:
         condition: on-failure
         delay: 5s
         max_attempts: 5
     logging:
-      driver: fluentd
       options:
-        tag: "portainer_host_log"
-        fluentd-async: "true"
+        max-size: 10m
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     tag: "portainer_host_log"
+    #     fluentd-async: "true"
 
 volumes:
   portainer_data:
 
-networks:
-  fluent-network:
-    attachable: true
-    external: true
-  nginx-network:
-    attachable: true
-    external: true
+# networks:
+#   fluent-network:
+#     attachable: true
+#     external: true
+#   nginx-network:
+#     attachable: true
+#     external: true
