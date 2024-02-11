@@ -136,7 +136,5 @@ volumes:
 networks:
   fluent-network:
     attachable: true
-    external: true
   nginx-network:
     attachable: true
-    external: true
