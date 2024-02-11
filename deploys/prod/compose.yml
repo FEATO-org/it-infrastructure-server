@@ -36,7 +36,9 @@ services:
     #     mode: host
     #     published: 24224
     volumes:
-      - ../../fluentbit:/fluent-bit/etc/
+      - type: bind
+        source: ../../fluentbit/
+        target: /fluent-bit/etc/
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /:/rootfs:ro
       - /var/run:/var/run:rw
