@@ -36,7 +36,7 @@ services:
     #     mode: host
     #     published: 24224
     volumes:
-      - ./fluentbit:/fluent-bit/etc/
+      - ../../fluentbit:/fluent-bit/etc/
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /:/rootfs:ro
       - /var/run:/var/run:rw
