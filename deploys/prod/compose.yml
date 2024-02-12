@@ -117,6 +117,8 @@ services:
       - acme:/etc/acme.sh
     networks:
       - nginx-network
+    depends_on:
+      - nginx-proxy
     deploy:
       resources:
         limits:
