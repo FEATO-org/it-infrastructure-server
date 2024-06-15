@@ -3,6 +3,8 @@ version: "3.8"
 services:
   fluent-bit:
     image: fluent/fluent-bit:2.2.2
+    expose:
+      - "24224"
     environment:
       - NOTIFY_WEBHOOK_URL
       - ERROR_WEBHOOK_URL
