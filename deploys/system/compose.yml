@@ -52,5 +52,5 @@ services:
         fluentd-async: "false"
 
 networks:
-  fluent-network:
-    attachable: true
+  system_fluent-network:
+    external: true
