@@ -34,6 +34,8 @@ services:
         max-size: 10m
   cadvisor:
     image: gcr.io/cadvisor/cadvisor
+    expose:
+      - "8080"
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
