@@ -20,7 +20,7 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     networks:
-      - fluent-network
+      - system_fluent-network
     deploy:
       resources:
         limits:
@@ -38,7 +38,7 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     networks:
-      - fluent-network
+      - system_fluent-network
     depends_on:
       - fluent-bit
     deploy:
