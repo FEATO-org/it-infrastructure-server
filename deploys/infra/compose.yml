@@ -14,6 +14,9 @@ services:
       mode: global
       placement:
         constraints: [node.platform.os == linux]
+    logging:
+      options:
+        max-size: 10m
   portainer-host:
     image: portainer/portainer-ee:2.20.3
     command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify
@@ -24,8 +27,8 @@ services:
       - portainer_data:/data
     networks:
       - agent_network
-      - fluent-network
-      - nginx-network
+      - system_fluent-network
+      - system_nginx-network
     deploy:
       mode: replicated
       replicas: 1
@@ -41,8 +44,8 @@ volumes:
   portainer_data:
 
 networks:
-  fluent-network:
+  system_fluent-network:
     external: true
-  nginx-network:
+  system_nginx-network:
     external: true
   portainer_agent:

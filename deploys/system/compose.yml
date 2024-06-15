@@ -54,5 +54,3 @@ services:
 networks:
   fluent-network:
     attachable: true
-  app_nginx-network:
-    external: true
