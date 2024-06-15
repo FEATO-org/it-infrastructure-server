@@ -1,0 +1,73 @@
+# app stack
+version: "3.8"
+services:
+  sfs-discord-server:
+    image: ghcr.io/feato-org/support-feato-system:main
+    environment:
+      - DISCORD_TOKEN
+      - GUILD_IDS
+      - APP_MODE
+      - NOTIFY_CHANNEL_ID
+    networks:
+      - system_fluent-network
+    deploy:
+      resources:
+        limits:
+          memory: 20M
+      restart_policy:
+        delay: 15s
+    logging:
+      driver: fluentd
+      options:
+        tag: "sfs_discord_server_log"
+        fluentd-async: "true"
+
+  nginx:
+    image: nginx:1.27.0
+    command: '/bin/sh -c ''while :; do sleep 20d & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
+    ports:
+      - 80:80
+      - 443:443
+    environment:
+      TZ: Asia/Tokyo
+      PORTAINER_URL:
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/templates:/etc/nginx/templates
+      - ./nginx/sites-available:/etc/nginx/sites-available:ro
+      - ./nginx/sites-enabled:/etc/nginx/sites-enabled:ro
+      - ./nginx/html:/usr/share/nginx/html:ro
+      - certs:/etc/letsencrypt:ro
+    networks:
+      - nginx-network
+      - cert-network
+      - system_fluent-network
+    logging:
+      driver: fluentd
+      options:
+        tag: "nginx_log"
+        fluentd-async: "true"
+  certbot:
+    image: certbot/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 10d & wait $${!}; done;'"
+    volumes:
+      - certs:/etc/letsencrypt
+    networks:
+      - cert-network
+      - system_fluent-network
+    logging:
+      driver: fluentd
+      options:
+        tag: "certbot_log"
+        fluentd-async: "true"
+
+volumes:
+  certs: {}
+
+networks:
+  system_fluent-network:
+    external: true
+  nginx-network:
+    attachable: true
+  cert-network:
+    attachable: false

@@ -1,0 +1,58 @@
+# system stack
+version: "3.8"
+services:
+  fluent-bit:
+    image: fluent/fluent-bit:2.2.2
+    environment:
+      - NOTIFY_WEBHOOK_URL
+      - ERROR_WEBHOOK_URL
+      - PROM_USER_ID
+      - LOKI_USER_ID
+      - GRAFANA_API_KEY
+      - APP_MODE
+    volumes:
+      - type: bind
+        source: ../../fluentbit/
+        target: /fluent-bit/etc/
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - fluent-network
+    deploy:
+      resources:
+        limits:
+          memory: 70M
+      update_config:
+        delay: 20s
+    logging:
+      options:
+        max-size: 10m
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - fluent-network
+    depends_on:
+      - fluent-bit
+    deploy:
+      resources:
+        limits:
+          memory: 70M
+    logging:
+      driver: fluentd
+      options:
+        tag: "cadvisor_log"
+        fluentd-async: "false"
+
+networks:
+  fluent-network:
+    attachable: true
+  app_nginx-network:
+    external: true
