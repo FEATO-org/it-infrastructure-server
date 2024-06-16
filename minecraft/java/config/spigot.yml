@@ -33,7 +33,8 @@ settings:
   timeout-time: 60
   restart-on-crash: true
   restart-script: ./start.sh
-  bungeecord: false
+  # paperではfalseにする
+  bungeecord: true
   netty-threads: 4
   sample-count: 12
   player-shuffle: 0
