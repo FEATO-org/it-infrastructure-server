@@ -153,8 +153,16 @@ services:
     # ports:
     #   - "8123:8123"
     volumes:
+      - ../../minecraft/java/data:/data
+      # plugins download
+      - ../../minecraft/java/mods.txt:/extras/mods.txt:ro
+      - ../../minecraft/java/plugins:/plugins
+      # datapack
+      - ../../minecraft/java/datapacks:/extras/datapacks
       # resourcepack
       - ../../minecraft/java/resourcepack:/extras/resourcepack
+      # config
+      - ../../minecraft/java/config:/config
     networks:
       - minecraft-network
       - nginx-network
@@ -199,6 +207,7 @@ services:
           memory: 6G
       restart_policy:
         delay: 15s
+      replicas: 0
     logging:
       options:
         max-size: 10m
