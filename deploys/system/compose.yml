@@ -53,7 +53,7 @@ services:
       driver: fluentd
       options:
         tag: "cadvisor_log"
-        fluentd-address: "tasks.fluent-bit:24224"
+        fluentd-address: "fluent-bit:24224"
         fluentd-async: "false"
 
 networks:
