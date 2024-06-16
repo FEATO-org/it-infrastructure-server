@@ -153,11 +153,6 @@ services:
       SPIGOT_DOWNLOAD_URL: https://storage.feato.jp/index.php/s/MkLFA4XBnfcs5ic/download/spigot-1.21.jar
     expose:
       - "25565"
-    ports:
-      - target: 30066
-        published: 25565
-        protocol: tcp
-        mode: host
     volumes:
       - ../../minecraft/java/data:/data
       # plugins download
