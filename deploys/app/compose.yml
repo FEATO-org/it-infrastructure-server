@@ -87,8 +87,8 @@ services:
       SEED: ""
       RESOURCE_PACK_ENFORCE: "TRUE"
       ENFORCE_SECURE_PROFILE: "FALSE"
-    ports:
-      - "8123:8123"
+    # ports:
+    #   - "8123:8123"
     volumes:
       - ../../minecraft/java/data:/data
       # plugins download
@@ -150,8 +150,8 @@ services:
       SEED: ""
       RESOURCE_PACK_ENFORCE: "TRUE"
       ENFORCE_SECURE_PROFILE: "FALSE"
-    ports:
-      - "8123:8123"
+    # ports:
+    #   - "8123:8123"
     volumes:
       # resourcepack
       - ../../minecraft/java/resourcepack:/extras/resourcepack
