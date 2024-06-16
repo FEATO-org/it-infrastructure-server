@@ -36,9 +36,9 @@ services:
       - "25565:25577"
       - "19132:19132/udp"
     volumes:
-      - ../../minecraft-proxy/server:/server
+      # - ../../minecraft-proxy/server:/server
       - ../../minecraft-proxy/plugins:/plguins
-      - ../../minecraft-proxy/config:/config
+      # - ../../minecraft-proxy/config:/config
     networks:
       - minecraft-network
       - system_fluent-network
@@ -150,6 +150,7 @@ services:
       SEED: ""
       RESOURCE_PACK_ENFORCE: "TRUE"
       ENFORCE_SECURE_PROFILE: "FALSE"
+      SPIGOT_DOWNLOAD_URL: https://storage.feato.jp/index.php/s/MkLFA4XBnfcs5ic/download/spigot-1.21.jar
     # ports:
     #   - "8123:8123"
     volumes:
