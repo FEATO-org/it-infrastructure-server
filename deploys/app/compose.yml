@@ -61,7 +61,7 @@ services:
     image: itzg/minecraft-server:java21
     environment:
       ONLINE_MODE: "FALSE"
-      MEMORY: "6G"
+      MEMORY:
       JVM_XX_OPTS: "-XX:MaxRAMPercentage=75"
       TYPE: PAPER
       USE_AIKAR_FLAGS: "TRUE"
@@ -76,9 +76,9 @@ services:
       SIMULATION_DISTANCE: 8
       TZ: Asia/Tokyo
       SPIGET_RESOURCES: ""
-      MODS_FILE: /extras/mods.txt
-      DATAPACKS: /extras/datapacks
-      RESOURCE_PACK: /extras/resourcepack
+      # MODS_FILE: /extras/mods.txt
+      # DATAPACKS: /extras/datapacks
+      # RESOURCE_PACK: /extras/resourcepack
       LOG_TIMESTAMP: "TRUE"
       TUNE_VIRTUALIZED: "TRUE"
       TUNE_NURSERY_SIZES: "TRUE"
@@ -124,7 +124,7 @@ services:
     image: itzg/minecraft-server:java21
     environment:
       ONLINE_MODE: "FALSE"
-      MEMORY: "6G"
+      MEMORY:
       JVM_XX_OPTS: "-XX:MaxRAMPercentage=75"
       TYPE: SPIGOT
       USE_AIKAR_FLAGS: "TRUE"
@@ -139,9 +139,9 @@ services:
       SIMULATION_DISTANCE: 8
       TZ: Asia/Tokyo
       SPIGET_RESOURCES: ""
-      MODS_FILE: /extras/mods.txt
-      DATAPACKS: /extras/datapacks
-      RESOURCE_PACK: /extras/resourcepack
+      # MODS_FILE: /extras/mods.txt
+      # DATAPACKS: /extras/datapacks
+      # RESOURCE_PACK: /extras/resourcepack
       LOG_TIMESTAMP: "TRUE"
       TUNE_VIRTUALIZED: "TRUE"
       TUNE_NURSERY_SIZES: "TRUE"
