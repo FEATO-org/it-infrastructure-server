@@ -32,11 +32,11 @@ services:
       TZ: Asia/Tokyo
       PORTAINER_URL:
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./nginx/templates:/etc/nginx/templates
-      - ./nginx/sites-available:/etc/nginx/sites-available:ro
-      - ./nginx/sites-enabled:/etc/nginx/sites-enabled:ro
-      - ./nginx/html:/usr/share/nginx/html:ro
+      - ../../nginx/conf.d:/etc/nginx/conf.d:ro
+      - ../../nginx/templates:/etc/nginx/templates
+      - ../../nginx/sites-available:/etc/nginx/sites-available:ro
+      - ../../nginx/sites-enabled:/etc/nginx/sites-enabled:ro
+      - ../../nginx/html:/usr/share/nginx/html:ro
       - certs:/etc/letsencrypt:ro
     networks:
       - nginx-network
