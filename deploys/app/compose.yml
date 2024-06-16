@@ -189,7 +189,7 @@ services:
     # ports:
     # - "19132:19132/udp"
     volumes:
-      - minecraft-bedrock-server-1-data-volume:/data
+      - ../../minecraft/bedrock/data:/data
     networks:
       - minecraft-network
       - nginx-network
