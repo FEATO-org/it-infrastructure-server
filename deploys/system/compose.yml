@@ -50,11 +50,14 @@ services:
         limits:
           memory: 70M
     logging:
-      driver: fluentd
       options:
-        tag: "cadvisor_log"
-        fluentd-address: fluent-bit:24224
-        fluentd-async: "false"
+        max-size: 10m
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     tag: "cadvisor_log"
+    #     fluentd-address: fluent-bit:24224
+    #     fluentd-async: "false"
 
 networks:
   fluent-network:

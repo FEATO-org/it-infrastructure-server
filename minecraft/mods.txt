@@ -1,3 +1,0 @@
-https://download.luckperms.net/1512/bukkit/loader/LuckPerms-Bukkit-5.4.98.jar
-# 1.20サポートを待つ
-# https://github.com/Camotoy/GeyserSkinManager/releases/download/1.6/GeyserSkinManager-Spigot.jar

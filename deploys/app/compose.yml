@@ -1,6 +1,7 @@
 # app stack
 version: "3.8"
 services:
+  # discord
   sfs-discord-server:
     image: ghcr.io/feato-org/support-feato-system:main
     environment:
@@ -22,6 +23,187 @@ services:
         tag: "sfs_discord_server_log"
         fluentd-async: "true"
 
+  # minecraft
+  minecraft-proxy:
+    image: itzg/bungeecord
+    environment:
+      TYPE: VELOCITY
+      MEMORY: ""
+      JVM_XX_OPTS: "-XX:MaxRAMPercentage=75"
+      ICON: https://photo.feato.jp/_data/i/upload/2023/06/24/20230624012009-7add3e01-xl.png
+      PLUGINS: https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity,https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity
+    ports:
+      - "25565:25577"
+      - "19132:19132/udp"
+    volumes:
+      - ../../minecraft-proxy/server:/server
+      - ../../minecraft-proxy/plugins:/plguins
+      - ../../minecraft-proxy/config:/config
+    networks:
+      - minecraft-network
+      - system_fluent-network
+    deploy:
+      resources:
+        limits:
+          memory: 6G
+      restart_policy:
+        delay: 15s
+    logging:
+      options:
+        max-size: 10m
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     fluentd-address: "fluent-bit:24224"
+    #     tag: "minecraft_proxy_log"
+
+  minecraft-paper-server:
+    image: itzg/minecraft-server:java21
+    environment:
+      ONLINE_MODE: "FALSE"
+      MEMORY: "6G"
+      JVM_XX_OPTS: "-XX:MaxRAMPercentage=75"
+      TYPE: PAPER
+      USE_AIKAR_FLAGS: "TRUE"
+      EULA: "TRUE"
+      VERSION: LATEST
+      GAMEMODE: survival
+      DIFFICULTY: normal
+      SERVER_NAME: FEATO
+      SPAWN_PROTECTION: 0
+      PLAYER_IDLE_TIMEOUT: 90
+      VIEW_DISTANCE: 14
+      SIMULATION_DISTANCE: 8
+      TZ: Asia/Tokyo
+      SPIGET_RESOURCES: ""
+      MODS_FILE: /extras/mods.txt
+      DATAPACKS: /extras/datapacks
+      RESOURCE_PACK: /extras/resourcepack
+      LOG_TIMESTAMP: "TRUE"
+      TUNE_VIRTUALIZED: "TRUE"
+      TUNE_NURSERY_SIZES: "TRUE"
+      GUI: "FALSE"
+      ICON: https://photo.feato.jp/_data/i/upload/2023/06/24/20230624012009-7add3e01-xl.png
+      SEED: ""
+      RESOURCE_PACK_ENFORCE: "TRUE"
+      ENFORCE_SECURE_PROFILE: "FALSE"
+    ports:
+      - "8123:8123"
+    volumes:
+      - ../../minecraft/java/data:/data
+      # plugins download
+      - ../../minecraft/java/mods.txt:/extras/mods.txt:ro
+      - ../../minecraft/java/plugins:/plugins
+      # datapack
+      - ../../minecraft/java/datapacks:/extras/datapacks
+      # resourcepack
+      - ../../minecraft/java/resourcepack:/extras/resourcepack
+      # config
+      - ../../minecraft/java/config:/config
+    networks:
+      - minecraft-network
+      - nginx-network
+    depends_on:
+      - fluent-bit
+    deploy:
+      resources:
+        limits:
+          memory: 6G
+      restart_policy:
+        delay: 15s
+      replicas: 0
+    logging:
+      options:
+        max-size: 10m
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     tag: "minecraft_server_log"
+
+  minecraft-spigot-server:
+    image: itzg/minecraft-server:java21
+    environment:
+      ONLINE_MODE: "FALSE"
+      MEMORY: "6G"
+      JVM_XX_OPTS: "-XX:MaxRAMPercentage=75"
+      TYPE: SPIGOT
+      USE_AIKAR_FLAGS: "TRUE"
+      EULA: "TRUE"
+      VERSION: LATEST
+      GAMEMODE: survival
+      DIFFICULTY: normal
+      SERVER_NAME: FEATO
+      SPAWN_PROTECTION: 0
+      PLAYER_IDLE_TIMEOUT: 90
+      VIEW_DISTANCE: 14
+      SIMULATION_DISTANCE: 8
+      TZ: Asia/Tokyo
+      SPIGET_RESOURCES: ""
+      MODS_FILE: /extras/mods.txt
+      DATAPACKS: /extras/datapacks
+      RESOURCE_PACK: /extras/resourcepack
+      LOG_TIMESTAMP: "TRUE"
+      TUNE_VIRTUALIZED: "TRUE"
+      TUNE_NURSERY_SIZES: "TRUE"
+      GUI: "FALSE"
+      ICON: https://photo.feato.jp/_data/i/upload/2023/06/24/20230624012009-7add3e01-xl.png
+      SEED: ""
+      RESOURCE_PACK_ENFORCE: "TRUE"
+      ENFORCE_SECURE_PROFILE: "FALSE"
+    ports:
+      - "8123:8123"
+    volumes:
+      # resourcepack
+      - ../../minecraft/java/resourcepack:/extras/resourcepack
+    networks:
+      - minecraft-network
+      - nginx-network
+    depends_on:
+      - fluent-bit
+    deploy:
+      resources:
+        limits:
+          memory: 6G
+      restart_policy:
+        delay: 15s
+    logging:
+      options:
+        max-size: 10m
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     tag: "minecraft_server_log"
+
+  minecraft-bedrock-server:
+    image: itzg/minecraft-bedrock-server
+    environment:
+      EULA: "TRUE"
+      VERSION: LATEST
+      GAMEMODE: survival
+      DIFFICULTY: normal
+      SERVER_NAME: FEATO
+      MAX_THREADS: 0
+      VIEW_DISTANCE: 20
+      CONTENT_LOG_FILE_ENABLED: "TRUE"
+      PLAYER_IDLE_TIMEOUT: 90
+    # ports:
+    # - "19132:19132/udp"
+    volumes:
+      - minecraft-bedrock-server-1-data-volume:/data
+    networks:
+      - minecraft-network
+      - nginx-network
+    deploy:
+      resources:
+        limits:
+          memory: 6G
+      restart_policy:
+        delay: 15s
+    logging:
+      options:
+        max-size: 10m
+
+  # Web系
   nginx:
     image: nginx:1.27.0
     command: '/bin/sh -c ''while :; do sleep 20d & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
@@ -85,4 +267,6 @@ networks:
   nginx-network:
     attachable: true
   cert-network:
+    attachable: false
+  minecraft-network:
     attachable: false

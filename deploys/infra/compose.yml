@@ -37,10 +37,13 @@ services:
       placement:
         constraints: [node.role == manager]
     logging:
-      driver: fluentd
       options:
-        tag: "portainer_host_log"
-        fluentd-async: "true"
+        max-size: 10m
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     tag: "portainer_host_log"
+    #     fluentd-async: "true"
 
 volumes:
   portainer_data:
