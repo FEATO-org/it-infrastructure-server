@@ -13,11 +13,13 @@ services:
     ports:
       - "25560:25577"
       - "19130:19132/udp"
+    secrets:
+      - forwarding_secret
     volumes:
       - ../../minecraft-proxy/server:/server
       - ../../minecraft-proxy/plugins:/plguins
       - ../../minecraft-proxy/config:/config
-      - ../../minecraft-proxy/forwarding.secret:/server/forwarding.secret
+      - /run/secrets/forwarding_secret:/server/forwarding.secret
     networks:
       - minecraft-network
     deploy:
@@ -94,6 +96,10 @@ services:
     #   driver: fluentd
     #   options:
     #     tag: "minecraft_server_log"
+
+secrets:
+  forwarding_secret:
+    file: ../../secrets/forwarding.secret
 
 networks:
   minecraft-network:
