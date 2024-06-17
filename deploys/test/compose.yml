@@ -16,8 +16,6 @@ services:
     volumes:
       - ../../minecraft-proxy/server:/server
       - ../../minecraft-proxy/plugins:/plguins
-      - ../../minecraft-proxy/config:/config
-      - ../../minecraft-proxy/forwarding.secret:/server/forwarding.secret
     networks:
       - minecraft-network
     deploy:
