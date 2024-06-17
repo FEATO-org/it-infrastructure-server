@@ -17,6 +17,7 @@ services:
       - ../../minecraft-proxy/server:/server
       - ../../minecraft-proxy/plugins:/plguins
       - ../../minecraft-proxy/config:/config
+      - secret_file:/server/forwarding.secret
     networks:
       - minecraft-network
     deploy:
@@ -93,6 +94,9 @@ services:
     #   driver: fluentd
     #   options:
     #     tag: "minecraft_server_log"
+
+volumes:
+  secrets_file:
 
 networks:
   minecraft-network:
