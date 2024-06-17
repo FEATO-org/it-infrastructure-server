@@ -13,8 +13,6 @@ services:
     ports:
       - "25560:25577"
       - "19130:19132/udp"
-    secrets:
-      - forwarding_secret
     volumes:
       - ../../minecraft-proxy/server:/server
       - ../../minecraft-proxy/plugins:/plguins
