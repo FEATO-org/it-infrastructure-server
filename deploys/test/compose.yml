@@ -17,7 +17,7 @@ services:
       - ../../minecraft-proxy/server:/server
       - ../../minecraft-proxy/plugins:/plguins
       - ../../minecraft-proxy/config:/config
-      - secret_file:/server/forwarding.secret
+      - secrets_file:/server/forwarding.secret
     networks:
       - minecraft-network
     deploy:
