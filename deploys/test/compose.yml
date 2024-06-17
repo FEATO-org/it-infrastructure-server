@@ -97,10 +97,6 @@ services:
     #   options:
     #     tag: "minecraft_server_log"
 
-secrets:
-  forwarding_secret:
-    file: ../../secrets/forwarding.secret
-
 networks:
   minecraft-network:
     attachable: false
