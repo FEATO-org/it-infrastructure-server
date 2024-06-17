@@ -1,0 +1,99 @@
+# app stack
+version: "3.8"
+services:
+  # minecraft
+  minecraft-proxy:
+    image: itzg/bungeecord
+    environment:
+      TYPE: VELOCITY
+      MEMORY: ""
+      JVM_XX_OPTS: "-XX:MaxRAMPercentage=75"
+      ICON: https://photo.feato.jp/_data/i/upload/2023/06/24/20230624012009-7add3e01-xl.png
+      PLUGINS: https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity,https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity
+    ports:
+      - "25560:25577"
+      - "19130:19132/udp"
+    volumes:
+      - ../../minecraft-proxy/server:/server
+      - ../../minecraft-proxy/plugins:/plguins
+      - ../../minecraft-proxy/config:/config
+    networks:
+      - minecraft-network
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+      restart_policy:
+        delay: 15s
+    logging:
+      options:
+        max-size: 10m
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     fluentd-address: "fluent-bit:24224"
+    #     tag: "minecraft_proxy_log"
+
+  minecraft-spigot-server:
+    image: itzg/minecraft-server:java21
+    environment:
+      ONLINE_MODE: "FALSE"
+      MEMORY:
+      JVM_XX_OPTS: "-XX:MaxRAMPercentage=75"
+      TYPE: SPIGOT
+      USE_AIKAR_FLAGS: "TRUE"
+      EULA: "TRUE"
+      VERSION: LATEST
+      GAMEMODE: survival
+      DIFFICULTY: normal
+      SERVER_NAME: FEATO
+      SPAWN_PROTECTION: 0
+      PLAYER_IDLE_TIMEOUT: 90
+      VIEW_DISTANCE: 14
+      SIMULATION_DISTANCE: 8
+      TZ: Asia/Tokyo
+      SPIGET_RESOURCES: ""
+      # MODS_FILE: /extras/mods.txt
+      # DATAPACKS: /extras/datapacks
+      # RESOURCE_PACK: /extras/resourcepack
+      LOG_TIMESTAMP: "TRUE"
+      TUNE_VIRTUALIZED: "TRUE"
+      TUNE_NURSERY_SIZES: "TRUE"
+      GUI: "FALSE"
+      ICON: https://photo.feato.jp/_data/i/upload/2023/06/24/20230624012009-7add3e01-xl.png
+      SEED: ""
+      RESOURCE_PACK_ENFORCE: "TRUE"
+      ENFORCE_SECURE_PROFILE: "FALSE"
+      SPIGOT_DOWNLOAD_URL: https://storage.feato.jp/index.php/s/MkLFA4XBnfcs5ic/download/spigot-1.21.jar
+    expose:
+      - "25565"
+    volumes:
+      - ../../minecraft/java/data:/data
+      # plugins download
+      - ../../minecraft/java/mods.txt:/extras/mods.txt:ro
+      - ../../minecraft/java/plugins:/plugins
+      # datapack
+      - ../../minecraft/java/datapacks:/extras/datapacks
+      # resourcepack
+      - ../../minecraft/java/resourcepack:/extras/resourcepack
+      # config
+      - ../../minecraft/java/config:/config
+    networks:
+      - minecraft-network
+    deploy:
+      resources:
+        limits:
+          memory: 3G
+      restart_policy:
+        delay: 15s
+    logging:
+      options:
+        max-size: 10m
+    # logging:
+    #   driver: fluentd
+    #   options:
+    #     tag: "minecraft_server_log"
+
+networks:
+  minecraft-network:
+    attachable: false
