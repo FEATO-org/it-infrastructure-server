@@ -99,7 +99,6 @@ services:
 
 secrets:
   forwarding_secret:
-    file: ../../secrets/forwarding.secret
 
 networks:
   minecraft-network:
