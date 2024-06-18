@@ -17,7 +17,9 @@ services:
       - ../../minecraft-proxy/server:/server
       - ../../minecraft-proxy/plugins:/plguins
       - ../../minecraft-proxy/config:/config
-      - /run/secrets/forwarding_secret:/server/forwarding.secret
+      - type: bind
+        source: /run/secrets/forwarding_secret
+        target: /server/forwarding.secret
     networks:
       - minecraft-network
     deploy:
