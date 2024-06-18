@@ -35,10 +35,12 @@ services:
     ports:
       - "25565:25577"
       - "19132:19132/udp"
+    secrets:
+      - forwarding_secret
     volumes:
       - ../../minecraft-proxy/server:/server
       - ../../minecraft-proxy/plugins:/plguins
-      # - ../../minecraft-proxy/config:/config
+      - ../../minecraft-proxy/config:/config
     networks:
       - minecraft-network
       - system_fluent-network
@@ -270,6 +272,10 @@ services:
 
 volumes:
   certs: {}
+
+secrets:
+  forwarding_secret:
+    external: true
 
 networks:
   system_fluent-network:
