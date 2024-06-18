@@ -97,7 +97,7 @@ services:
 
 secrets:
   forwarding_secret:
-    file: ../../secrets/forwarding.secret
+    external: true
 
 networks:
   minecraft-network:
