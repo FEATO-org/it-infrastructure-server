@@ -40,6 +40,7 @@ services:
     volumes:
       - ../../minecraft-proxy/server:/server
       - ../../minecraft-proxy/plugins:/plguins
+      - /extras/texturepacks:/plguins/Geyser-Spigot/packs
       - ../../minecraft-proxy/config:/config
     networks:
       - minecraft-network
@@ -77,9 +78,10 @@ services:
       VIEW_DISTANCE: 14
       SIMULATION_DISTANCE: 8
       TZ: Asia/Tokyo
-      SPIGET_RESOURCES: ""
-      # MODS_FILE: /extras/mods.txt
-      # DATAPACKS: /extras/datapacks
+      # TreeAssist,Simply Farming,FarmProtect,BetterChairs Remastered,new-new-gods,DualHorse
+      SPIGET_RESOURCES: "67436,110400,87480,84809,89188,99663"
+      PLUGINS_FILE: /extras/plugins.txt
+      DATAPACKS: /extras/datapacks
       # RESOURCE_PACK: /extras/resourcepack
       LOG_TIMESTAMP: "TRUE"
       TUNE_VIRTUALIZED: "TRUE"
@@ -96,11 +98,11 @@ services:
       - ../../minecraft/java/data:/data
       # plugins download
       - ../../minecraft/java/mods.txt:/extras/mods.txt:ro
-      - ../../minecraft/java/plugins:/plugins
+      # - /extras/plugins:/plugins
       # datapack
-      - ../../minecraft/java/datapacks:/extras/datapacks
+      - /extras/datapacks:/extras/datapacks
       # resourcepack
-      - ../../minecraft/java/resourcepack:/extras/resourcepack
+      # - /extras/resourcepack:/extras/resourcepack
       # config
       - ../../minecraft/java/config:/config
     networks:

@@ -3,6 +3,7 @@ set -euxo pipefail
 WORKDIR=$(pwd)
 cd "$(dirname "$0")"
 
-scp ../minecraft/plugins/*.jar vps:~/src/it-infrastructure-server/minecraft/plugins
-scp ../minecraft-proxy/plugins/Geyser-Spigot/packs/* vps:~/src/it-infrastructure-server/minecraft-proxy/plugins/Geyser-Spigot/packs
-scp ../minecraft/datapacks/* vps:~/src/it-infrastructure-server/minecraft/datapacks
+# scp ../resources/minecraft/plugins/* root@vps:/extras/plugins
+scp ../resources/minecraft/datapacks/* root@vps:/extras/datapacks
+# scp ../resources/minecraft/resourcepacks/* root@vps:/extras/resourcepacks
+scp ../resources/minecraft/texturepacks/* root@vps:/extras/texturepacks
