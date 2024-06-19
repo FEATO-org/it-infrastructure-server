@@ -97,7 +97,7 @@ services:
     volumes:
       - ../../minecraft/java/data:/data
       # plugins download
-      - ../../minecraft/java/mods.txt:/extras/mods.txt:ro
+      - ../../minecraft/java/plugins.txt:/extras/plugins.txt:ro
       # - /extras/plugins:/plugins
       # datapack
       - /extras/datapacks:/extras/datapacks
