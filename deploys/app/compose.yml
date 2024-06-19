@@ -40,7 +40,7 @@ services:
     volumes:
       - ../../minecraft-proxy/server:/server
       - ../../minecraft-proxy/plugins:/plguins
-      - /extras/texturepacks:/plguins/Geyser-Spigot/packs
+      - /extras/texturepacks:/plguins/Geyser-Velocity/packs
       - ../../minecraft-proxy/config:/config
     networks:
       - minecraft-network
