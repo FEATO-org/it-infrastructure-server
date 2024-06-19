@@ -124,6 +124,14 @@ services:
     #   options:
     #     tag: "minecraft_server_log"
 
+  minecraft-monitor:
+    image: itzg/mc-monitor
+    command: export-for-prometheus
+    environment:
+      EXPORT_SERVERS: minecraft-spigot-server
+    depends_on:
+      - minecraft-spigot-server
+
   # Web系
   nginx:
     image: nginx:1.27.0
