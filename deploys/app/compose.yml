@@ -83,6 +83,8 @@ services:
       PLUGINS_FILE: /extras/plugins.txt
       DATAPACKS: /extras/datapacks
       # RESOURCE_PACK: /extras/resourcepack
+      # spigot用
+      COPY_CONFIG_DEST: /data
       LOG_TIMESTAMP: "TRUE"
       TUNE_VIRTUALIZED: "TRUE"
       TUNE_NURSERY_SIZES: "TRUE"
