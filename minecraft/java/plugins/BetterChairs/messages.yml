@@ -1,0 +1,35 @@
+# BetterChairs Remastered
+# 
+# Support: https://Sprax.me/Discord
+# Updates and Information:
+# Statistics: https://bstats.org/plugin/bukkit/BetterChairs%20Remastered/8214
+# Information for developers: https://github.com/SpraxDev/BetterChairs/wiki
+
+
+# You shouldn't make any changes to this
+version: 0
+General:
+
+  # The prefix that can be used in all other messages
+  Prefix: '&7[&2BetterChairs&7]'
+
+  # What should we tell players that are not allowed to use an command?
+  NoPermission: ${Prefix} &cYou do not have permission to use this command!
+
+# What should we tell players when they enable or disable chairs for themselves
+ToggleChairs:
+  Enabled: ${Prefix} &eYou can now use chairs again
+  Disabled: ${Prefix} &eChairs are now disabled for you
+  Status:
+    Enabled: ${Prefix} &eYou currently have chairs&a enabled
+    Disabled: ${Prefix} &eYou currently have chairs &4disabled
+ChairUse:
+
+  # What should we tell players when an chair is already occupied
+  AlreadyOccupied: ${Prefix} &cThis chair is already occupied
+
+  # What should we tell players when an chair is missing signs on both sides
+  NeedsSignsOnBothSides: ${Prefix} &cA chair needs a sign attached to it on both sides
+
+  # What should we tell players when he/she is now sitting
+  NowSitting: ${Prefix} &cYou are taking a break now
