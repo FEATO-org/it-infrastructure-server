@@ -38,7 +38,7 @@ services:
     secrets:
       - forwarding_secret
     volumes:
-      - ../../minecraft-proxy/server:/server
+      - minecraft_proxy_data:/server
       - ../../minecraft-proxy/plugins:/plguins
       - /extras/texturepacks:/plguins/Geyser-Velocity/packs
       - ../../minecraft-proxy/config:/config
@@ -97,7 +97,7 @@ services:
     expose:
       - "25565"
     volumes:
-      - ../../minecraft/java/data:/data
+      - minecraft_server_data:/data
       # plugins download
       - ../../minecraft/java/plugins.txt:/extras/plugins.txt:ro
       # - /extras/plugins:/plugins
@@ -191,6 +191,8 @@ services:
 
 volumes:
   certs: {}
+  minecraft_server_data: {}
+  minecraft_proxy_data: {}
 
 secrets:
   forwarding_secret:
