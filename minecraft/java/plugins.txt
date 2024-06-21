@@ -1,3 +1,3 @@
 https://cdn.modrinth.com/data/lJFOpcEj/versions/EElCXQh4/ImageFrame-1.7.9.0.jar
 https://github.com/Nevakanezah/HorseEnhancer/releases/download/v2.1.3/HorseEnhancer.jar
-https://cdn.modrinth.com/data/fRQREgAc/versions/QtTWJjW6/Dynmap-3.7-beta-6-spigot.jar
+# https://cdn.modrinth.com/data/fRQREgAc/versions/QtTWJjW6/Dynmap-3.7-beta-6-spigot.jar
