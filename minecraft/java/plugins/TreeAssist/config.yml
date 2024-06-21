@@ -15,7 +15,7 @@ General:
   Prevent Log Breaking With Breaking Tool: false
 
   # For the toggling command, should players start with TreeAssist active?
-  Toggle Default: true
+  Toggle Default: false
 
   # Should the plugin remember the toggle states on restart?
   Toggle Remember: true
