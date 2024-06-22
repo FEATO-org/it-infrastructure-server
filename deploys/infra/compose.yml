@@ -29,7 +29,7 @@ services:
         tag: "logs.docker.portainer-agent"
         fluentd-address: "127.0.0.1:24224"
         fluentd-async: "true"
-        fluentd-retry-wait: 5
+        fluentd-retry-wait: 5s
 
   portainer-host:
     image: portainer/portainer-ee:2.20.3
@@ -61,7 +61,7 @@ services:
         tag: "logs.docker.portainer-host"
         fluentd-address: "127.0.0.1:24224"
         fluentd-async: "true"
-        fluentd-retry-wait: 5
+        fluentd-retry-wait: 5s
 
 volumes:
   portainer_data:
