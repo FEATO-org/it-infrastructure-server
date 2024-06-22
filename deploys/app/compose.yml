@@ -155,10 +155,6 @@ services:
       PORTAINER_URL:
     volumes:
       - type: bind
-        source: ../../nginx/conf.d
-        target: /etc/nginx/conf.d
-        read_only: true
-      - type: bind
         source: ../../nginx/templates
         target: /etc/nginx/templates
         read_only: true
