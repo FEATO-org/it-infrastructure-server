@@ -67,6 +67,7 @@ services:
     environment:
       ONLINE_MODE: "FALSE"
       MEMORY: 4G
+      JVM_XX_OPTS: "-XX:MaxRAMPercentage=75"
       TYPE: SPIGOT
       USE_AIKAR_FLAGS: "TRUE"
       EULA: "TRUE"
