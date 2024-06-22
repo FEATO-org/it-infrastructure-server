@@ -30,8 +30,6 @@ services:
         fluentd-address: "127.0.0.1:24224"
         fluentd-async: "true"
         fluentd-retry-wait: 5
-        fluentd-buffer-limit: 2000
-        fluentd-max-retries: 100
 
   portainer-host:
     image: portainer/portainer-ee:2.20.3
@@ -62,7 +60,8 @@ services:
       options:
         tag: "docker.portainer-host"
         fluentd-address: "127.0.0.1:24224"
-        fluentd-async: "false"
+        fluentd-async: "true"
+        fluentd-retry-wait: 5
 
 volumes:
   portainer_data:
