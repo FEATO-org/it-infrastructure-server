@@ -20,8 +20,9 @@ services:
     logging:
       driver: fluentd
       options:
-        tag: "sfs_discord_server_log"
-        fluentd-async: "true"
+        tag: "docker.sfs-discord-server"
+        fluentd-address: "127.0.0.1:24224"
+        fluentd-async: "false"
 
   # minecraft
   minecraft-proxy:
@@ -52,13 +53,11 @@ services:
       restart_policy:
         delay: 15s
     logging:
+      driver: fluentd
       options:
-        max-size: 10m
-    # logging:
-    #   driver: fluentd
-    #   options:
-    #     fluentd-address: "fluent-bit:24224"
-    #     tag: "minecraft_proxy_log"
+        tag: "docker.minecraft-proxy"
+        fluentd-address: "127.0.0.1:24224"
+        fluentd-async: "false"
 
   minecraft-spigot-server:
     image: itzg/minecraft-server:java21
@@ -121,12 +120,11 @@ services:
       restart_policy:
         delay: 15s
     logging:
+      driver: fluentd
       options:
-        max-size: 10m
-    # logging:
-    #   driver: fluentd
-    #   options:
-    #     tag: "minecraft_server_log"
+        tag: "docker.minecraft-server"
+        fluentd-address: "127.0.0.1:24224"
+        fluentd-async: "false"
 
   minecraft-monitor:
     image: itzg/mc-monitor
@@ -135,6 +133,15 @@ services:
       EXPORT_SERVERS: minecraft-spigot-server
     depends_on:
       - minecraft-spigot-server
+    logging:
+      driver: fluentd
+      options:
+        tag: "docker.minecraft-monitor"
+        fluentd-address: "127.0.0.1:24224"
+        fluentd-async: "true"
+        fluentd-retry-wait: 5
+        fluentd-buffer-limit: 2000
+        fluentd-max-retries: 100
 
   # Web系
   nginx:
@@ -175,8 +182,10 @@ services:
     logging:
       driver: fluentd
       options:
-        tag: "nginx_log"
-        fluentd-async: "true"
+        tag: "docker.nginx"
+        fluentd-address: "127.0.0.1:24224"
+        fluentd-async: "false"
+
   certbot:
     image: certbot/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 10d & wait $${!}; done;'"
@@ -188,8 +197,12 @@ services:
     logging:
       driver: fluentd
       options:
-        tag: "certbot_log"
+        tag: "docker.certbot"
+        fluentd-address: "127.0.0.1:24224"
         fluentd-async: "true"
+        fluentd-retry-wait: 5
+        fluentd-buffer-limit: 2000
+        fluentd-max-retries: 100
 
 volumes:
   certs: {}

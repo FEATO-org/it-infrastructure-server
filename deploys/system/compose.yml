@@ -3,8 +3,8 @@ version: "3.8"
 services:
   fluent-bit:
     image: fluent/fluent-bit:2.2.2
-    expose:
-      - "24224"
+    ports:
+      - "127.0.0.1:24224:24224"
     environment:
       - NOTIFY_WEBHOOK_URL
       - ERROR_WEBHOOK_URL
@@ -32,6 +32,7 @@ services:
     logging:
       options:
         max-size: 10m
+
   cadvisor:
     image: gcr.io/cadvisor/cadvisor
     expose:
@@ -50,14 +51,13 @@ services:
         limits:
           memory: 70M
     logging:
+      driver: fluentd
       options:
-        max-size: 10m
-    # logging:
-    #   driver: fluentd
-    #   options:
-    #     tag: "cadvisor_log"
-    #     fluentd-address: fluent-bit:24224
-    #     fluentd-async: "false"
+        tag: "docker.cadvisor"
+        fluentd-address: "127.0.0.1:24224"
+        fluentd-async: "true"
+        fluentd-buffer-limit: 1000
+        fluentd-max-retries: 300
 
 networks:
   fluent-network:

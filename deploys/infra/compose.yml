@@ -17,8 +17,15 @@ services:
       placement:
         constraints: [node.platform.os == linux]
     logging:
+      driver: fluentd
       options:
-        max-size: 10m
+        tag: "docker.portainer-agent"
+        fluentd-address: "127.0.0.1:24224"
+        fluentd-async: "true"
+        fluentd-retry-wait: 5
+        fluentd-buffer-limit: 2000
+        fluentd-max-retries: 100
+
   portainer-host:
     image: portainer/portainer-ee:2.20.3
     command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify
@@ -37,13 +44,11 @@ services:
       placement:
         constraints: [node.role == manager]
     logging:
+      driver: fluentd
       options:
-        max-size: 10m
-    # logging:
-    #   driver: fluentd
-    #   options:
-    #     tag: "portainer_host_log"
-    #     fluentd-async: "true"
+        tag: "docker.portainer-host"
+        fluentd-address: "127.0.0.1:24224"
+        fluentd-async: "false"
 
 volumes:
   portainer_data:
