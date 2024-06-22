@@ -1,0 +1,25 @@
+# When set to true, only players with the appropriate permission nodes will have access to the plugin features.
+# If set to false, all players can use the player features regardless of their permission nodes.
+use-permission-nodes: false
+
+# commands
+# /simplyfarming reload
+# /simplyfarming use-permission-nodes (true/false)
+
+# permission nodes:
+# simplyfarming.reload
+# simplyfarming.toggle.permission-nodes
+# simplyfarming.replant.beetroots
+# simplyfarming.replant.carrots
+# simplyfarming.replant.nether_wart
+# simplyfarming.replant.potatoes
+# simplyfarming.replant.wheat
+# simplyfarming.replant.*
+# simplyfarming.*
+
+messages:
+  command-no-permission: '&cYou do not have permission to use this command.'
+  missing-argument: '&cMissing argument! &fUsage: /simplyfarming &euse-permission-nodes
+    &f(&atrue&f/&cfalse&f)'
+  toggle-permission-nodes: '[SimplyFarming] &euse-permission-nodes &fset to '
+  config-reload: '[SimplyFarming] &aConfiguration reloaded successfully.'
