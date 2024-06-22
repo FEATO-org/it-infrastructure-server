@@ -26,9 +26,11 @@ services:
     deploy:
       resources:
         limits:
-          memory: 70M
+          memory: 100M
+      rollback_config:
+        order: start-first
       update_config:
-        delay: 20s
+        order: start-first
     logging:
       options:
         max-size: 10m

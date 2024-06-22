@@ -16,6 +16,13 @@ services:
       mode: global
       placement:
         constraints: [node.platform.os == linux]
+      resources:
+        limits:
+          memory: 100M
+      rollback_config:
+        order: start-first
+      update_config:
+        order: start-first
     logging:
       driver: fluentd
       options:
@@ -43,6 +50,13 @@ services:
       replicas: 1
       placement:
         constraints: [node.role == manager]
+      resources:
+        limits:
+          memory: 150M
+      rollback_config:
+        order: start-first
+      update_config:
+        order: start-first
     logging:
       driver: fluentd
       options:

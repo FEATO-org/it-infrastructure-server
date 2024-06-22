@@ -16,6 +16,7 @@ services:
         limits:
           memory: 20M
       restart_policy:
+        # DiscordAPIを叩きすぎないようにするため
         delay: 15s
     logging:
       driver: fluentd
@@ -50,8 +51,10 @@ services:
       resources:
         limits:
           memory: 6G
-      restart_policy:
-        delay: 15s
+      rollback_config:
+        order: start-first
+      update_config:
+        order: start-first
     logging:
       driver: fluentd
       options:
@@ -116,8 +119,6 @@ services:
       resources:
         limits:
           memory: 6G
-      restart_policy:
-        delay: 15s
     logging:
       driver: fluentd
       options:
@@ -132,6 +133,10 @@ services:
       EXPORT_SERVERS: minecraft-spigot-server
     depends_on:
       - minecraft-spigot-server
+    deploy:
+      resources:
+        limits:
+          memory: 500M
     logging:
       driver: fluentd
       options:
@@ -174,6 +179,14 @@ services:
       - nginx-network
       - cert-network
       - system_fluent-network
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+      rollback_config:
+        order: start-first
+      update_config:
+        order: start-first
     logging:
       driver: fluentd
       options:
@@ -189,6 +202,10 @@ services:
     networks:
       - cert-network
       - system_fluent-network
+    deploy:
+      resources:
+        limits:
+          memory: 100M
     logging:
       driver: fluentd
       options:
