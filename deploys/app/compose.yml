@@ -21,7 +21,7 @@ services:
     logging:
       driver: fluentd
       options:
-        tag: "docker.sfs-discord-server"
+        tag: "logs.docker.sfs-discord-server"
         fluentd-address: "127.0.0.1:24224"
         fluentd-async: "false"
 
@@ -58,7 +58,7 @@ services:
     logging:
       driver: fluentd
       options:
-        tag: "docker.minecraft-proxy"
+        tag: "logs.docker.minecraft-proxy"
         fluentd-address: "127.0.0.1:24224"
         fluentd-async: "false"
 
@@ -122,7 +122,7 @@ services:
     logging:
       driver: fluentd
       options:
-        tag: "docker.minecraft-server"
+        tag: "logs.docker.minecraft-server"
         fluentd-address: "127.0.0.1:24224"
         fluentd-async: "false"
 
@@ -140,7 +140,7 @@ services:
     logging:
       driver: fluentd
       options:
-        tag: "docker.minecraft-monitor"
+        tag: "logs.docker.minecraft-monitor"
         fluentd-address: "127.0.0.1:24224"
         fluentd-async: "true"
         fluentd-retry-wait: 5
@@ -190,7 +190,7 @@ services:
     logging:
       driver: fluentd
       options:
-        tag: "docker.nginx"
+        tag: "logs.docker.nginx"
         fluentd-address: "127.0.0.1:24224"
         fluentd-async: "false"
 
@@ -209,7 +209,7 @@ services:
     logging:
       driver: fluentd
       options:
-        tag: "docker.certbot"
+        tag: "logs.docker.certbot"
         fluentd-address: "127.0.0.1:24224"
         fluentd-async: "true"
         fluentd-retry-wait: 5

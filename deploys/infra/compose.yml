@@ -26,7 +26,7 @@ services:
     logging:
       driver: fluentd
       options:
-        tag: "docker.portainer-agent"
+        tag: "logs.docker.portainer-agent"
         fluentd-address: "127.0.0.1:24224"
         fluentd-async: "true"
         fluentd-retry-wait: 5
@@ -58,7 +58,7 @@ services:
     logging:
       driver: fluentd
       options:
-        tag: "docker.portainer-host"
+        tag: "logs.docker.portainer-host"
         fluentd-address: "127.0.0.1:24224"
         fluentd-async: "true"
         fluentd-retry-wait: 5

@@ -55,7 +55,7 @@ services:
     logging:
       driver: fluentd
       options:
-        tag: "docker.cadvisor"
+        tag: "logs.docker.cadvisor"
         fluentd-address: "127.0.0.1:24224"
         fluentd-async: "true"
         fluentd-buffer-limit: 1000
