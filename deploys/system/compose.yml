@@ -64,6 +64,8 @@ services:
   minecraft-monitor:
     image: itzg/mc-monitor
     command: export-for-prometheus
+    expose:
+      - "8080"
     environment:
       EXPORT_SERVERS: app_minecraft-spigot-server
     depends_on:

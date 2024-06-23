@@ -126,27 +126,6 @@ services:
         fluentd-address: "127.0.0.1:24224"
         fluentd-async: "false"
 
-  minecraft-monitor:
-    image: itzg/mc-monitor
-    command: export-for-prometheus
-    environment:
-      EXPORT_SERVERS: minecraft-spigot-server
-    depends_on:
-      - minecraft-spigot-server
-    deploy:
-      resources:
-        limits:
-          memory: 100M
-    logging:
-      driver: fluentd
-      options:
-        tag: "logs.docker.minecraft-monitor"
-        fluentd-address: "127.0.0.1:24224"
-        fluentd-async: "true"
-        fluentd-retry-wait: 5s
-        fluentd-buffer-limit: 2000
-        fluentd-max-retries: 100
-
   # Web系
   nginx:
     image: nginx:1.27.0
