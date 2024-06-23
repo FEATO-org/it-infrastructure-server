@@ -68,6 +68,9 @@ services:
       - "8080"
     environment:
       EXPORT_SERVERS: app_minecraft-spigot-server
+    networks:
+      - fluent-network
+      - app_minecraft-network
     depends_on:
       - fluent-bit
     deploy:
@@ -87,3 +90,5 @@ services:
 networks:
   fluent-network:
     attachable: true
+  nginx-network:
+    external: true

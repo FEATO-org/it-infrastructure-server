@@ -212,4 +212,4 @@ networks:
   cert-network:
     attachable: false
   minecraft-network:
-    attachable: false
+    attachable: true
