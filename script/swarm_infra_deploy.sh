@@ -11,7 +11,7 @@ fi
 
 if [ "${ARG}" == "prune" ]
 then
-  docker stack deploy -c ../compose.yml --prune stack
+  docker stack deploy -c ../deploys/infra/compose.yml --prune infra
 else
- docker stack deploy -c ../compose.yml stack
+ docker stack deploy -c ../deploys/infra/compose.yml infra
 fi
