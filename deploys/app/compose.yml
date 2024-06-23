@@ -129,7 +129,7 @@ services:
   # Web系
   nginx:
     image: nginx:1.27.0
-    command: 'nginx -g "daemon off;" & while :; do sleep 20d & wait $${!}; nginx -s reload; done'
+    command: 'nginx -g "daemon off;"'
     ports:
       - 80:80
       - 443:443
