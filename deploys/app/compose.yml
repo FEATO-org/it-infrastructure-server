@@ -83,7 +83,7 @@ services:
       SPIGET_RESOURCES: "67436,110400,87480,84809,89188,99663,109630"
       PLUGINS_FILE: /extras/plugins.txt
       DATAPACKS: /extras/datapacks
-      # RESOURCE_PACK: /extras/resourcepack
+      RESOURCE_PACK: /extras/resourcepack
       # spigot用
       COPY_CONFIG_DEST: /data
       LOG_TIMESTAMP: "TRUE"
@@ -107,7 +107,7 @@ services:
       # datapack
       - /extras/datapacks:/extras/datapacks
       # resourcepack
-      # - /extras/resourcepack:/extras/resourcepack
+      - /extras/resourcepack:/extras/resourcepack
       # config
       - ../../minecraft/java/config:/config
     networks:
