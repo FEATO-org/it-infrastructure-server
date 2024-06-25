@@ -70,7 +70,7 @@ services:
       EXPORT_SERVERS: app_minecraft-spigot-server
     networks:
       - fluent-network
-      - app_minecraft-network
+      # - app_minecraft-network
     depends_on:
       - fluent-bit
     deploy:
@@ -92,3 +92,5 @@ networks:
     attachable: true
   nginx-network:
     external: true
+  app_minecraft-network:
+    external: false
