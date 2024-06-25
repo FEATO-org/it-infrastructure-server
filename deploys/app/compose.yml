@@ -84,11 +84,10 @@ services:
       PLUGINS_FILE: /extras/plugins.txt
       DATAPACKS: /extras/datapacks
       RESOURCE_PACK: /extras/resourcepack
+      ENABLE_COMMAND_BLOCK: "TRUE"
       # spigot用
       COPY_CONFIG_DEST: /data
       LOG_TIMESTAMP: "TRUE"
-      TUNE_VIRTUALIZED: "TRUE"
-      TUNE_NURSERY_SIZES: "TRUE"
       GUI: "FALSE"
       ICON: https://photo.feato.jp/_data/i/upload/2023/06/24/20230624012009-7add3e01-xl.png
       SEED: ""
