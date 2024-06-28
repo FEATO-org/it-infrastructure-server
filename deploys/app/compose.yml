@@ -107,7 +107,7 @@ services:
       # datapack
       - /extras/datapacks:/extras/datapacks
       # resourcepack
-      - /extras/resourcepack:/extras/resourcepack
+      # - /extras/resourcepack:/extras/resourcepack
       # config
       - ../../minecraft/java/config:/config
     networks:
