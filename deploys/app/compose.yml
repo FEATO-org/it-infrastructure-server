@@ -69,7 +69,7 @@ services:
       # proxy向け設定
       ONLINE_MODE: "FALSE"
       NETWORK_COMPRESSION_THRESHOLD: -1
-      MEMORY: 4.5G
+      MEMORY: 4500M
       TYPE: SPIGOT
       USE_AIKAR_FLAGS: "TRUE"
       EULA: "TRUE"
