@@ -84,7 +84,7 @@ try = ["lobby"]
 [advanced]
 # How large a Minecraft packet has to be before we compress it. Setting this to zero will
 # compress all packets, and setting it to -1 will disable compression entirely.
-compression-threshold = 128
+compression-threshold = 64
 
 # How much compression should be done (from 0-9). The default is -1, which uses the
 # default level of 6.
