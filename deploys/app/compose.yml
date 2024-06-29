@@ -51,7 +51,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1.5G
+          memory: 1.25G
       rollback_config:
         order: start-first
       update_config:
@@ -69,7 +69,7 @@ services:
       # proxy向け設定
       ONLINE_MODE: "FALSE"
       NETWORK_COMPRESSION_THRESHOLD: -1
-      MEMORY: 4G
+      MEMORY: 4.5G
       TYPE: SPIGOT
       USE_AIKAR_FLAGS: "TRUE"
       EULA: "TRUE"
@@ -119,7 +119,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 5.5G
+          memory: 5.8G
     logging:
       driver: fluentd
       options:
