@@ -51,7 +51,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1.25G
+          memory: 1G
       rollback_config:
         order: start-first
       update_config:
