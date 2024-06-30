@@ -3,16 +3,17 @@ version: "3.8"
 services:
   # minecraft
   minecraft-proxy:
-    image: itzg/bungeecord
+    image: itzg/bungeecord:java21
     environment:
       TYPE: VELOCITY
       MEMORY: ""
-      JVM_XX_OPTS: "-XX:MaxRAMPercentage=75"
+      TZ: Asia/Tokyo
+      JVM_XX_OPTS: "-XX:MaxRAMPercentage=75 -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15"
       ICON: https://photo.feato.jp/_data/i/upload/2023/06/24/20230624012009-7add3e01-xl.png
       PLUGINS: https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity,https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity
     ports:
-      - "25560:25577"
-      - "19130:19132/udp"
+      - "25565:25577"
+      - "19132:19132/udp"
     secrets:
       - forwarding_secret
     volumes:
@@ -25,12 +26,11 @@ services:
     deploy:
       resources:
         limits:
-          memory: 3G
-      restart_policy:
-        delay: 15s
-    logging:
-      options:
-        max-size: 10m
+          memory: 1G
+      rollback_config:
+        order: start-first
+      update_config:
+        order: start-first
     # logging:
     #   driver: fluentd
     #   options:
@@ -40,9 +40,10 @@ services:
   minecraft-spigot-server:
     image: itzg/minecraft-server:java21
     environment:
+      # proxy向け設定
       ONLINE_MODE: "FALSE"
-      MEMORY:
-      JVM_XX_OPTS: "-XX:MaxRAMPercentage=75"
+      NETWORK_COMPRESSION_THRESHOLD: -1
+      MEMORY: 4500M
       TYPE: SPIGOT
       USE_AIKAR_FLAGS: "TRUE"
       EULA: "TRUE"
@@ -55,19 +56,23 @@ services:
       VIEW_DISTANCE: 14
       SIMULATION_DISTANCE: 8
       TZ: Asia/Tokyo
-      SPIGET_RESOURCES: ""
+      # TreeAssist,Simply Farming,FarmProtect,BetterChairs Remastered,new-new-gods,DualHorse,backpack-plus
+      SPIGET_RESOURCES: "67436,110400,87480,84809,89188,99663,109630"
       PLUGINS_FILE: /extras/plugins.txt
-      # DATAPACKS: /extras/datapacks
-      # RESOURCE_PACK: /extras/resourcepack
+      DATAPACKS: /extras/datapacks
+      # RESOURCE_PACK: /extras/resourcepacks
+      ENABLE_COMMAND_BLOCK: "TRUE"
+      # spigot用
+      COPY_CONFIG_DEST: /data
       LOG_TIMESTAMP: "TRUE"
-      TUNE_VIRTUALIZED: "TRUE"
-      TUNE_NURSERY_SIZES: "TRUE"
       GUI: "FALSE"
       ICON: https://photo.feato.jp/_data/i/upload/2023/06/24/20230624012009-7add3e01-xl.png
       SEED: ""
       RESOURCE_PACK_ENFORCE: "TRUE"
       ENFORCE_SECURE_PROFILE: "FALSE"
       SPIGOT_DOWNLOAD_URL: https://storage.feato.jp/index.php/s/MkLFA4XBnfcs5ic/download/spigot-1.21.jar
+    ports:
+      - "8123:8123"
     expose:
       - "25565"
     volumes:
@@ -76,9 +81,9 @@ services:
       - ../../minecraft/java/plugins.txt:/extras/plugins.txt:ro
       # - /extras/plugins:/plugins
       # datapack
-      # - /extras/datapacks:/extras/datapacks
+      - /extras/datapacks:/extras/datapacks
       # resourcepack
-      # - /extras/resourcepack:/extras/resourcepack
+      # - /extras/resourcepacks:/extras/resourcepacks
       # config
       - ../../minecraft/java/config:/config
     networks:
