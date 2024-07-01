@@ -69,7 +69,7 @@ services:
       # proxy向け設定
       ONLINE_MODE: "FALSE"
       NETWORK_COMPRESSION_THRESHOLD: -1
-      MEMORY: 4500M
+      MEMORY: 4800M
       TYPE: SPIGOT
       USE_AIKAR_FLAGS: "TRUE"
       EULA: "TRUE"
@@ -120,7 +120,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 5.8G
+          memory: 6G
     logging:
       driver: fluentd
       options:
