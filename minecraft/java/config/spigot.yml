@@ -89,8 +89,8 @@ world-settings:
       glowberry-modifier: 100
       pitcherplant-modifier: 100
     merge-radius:
-      item: 2.5
-      exp: 3.0
+      item: 3.0
+      exp: 0.0
     view-distance: default
     simulation-distance: default
     mob-spawn-range: 8
