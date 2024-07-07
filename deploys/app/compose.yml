@@ -82,8 +82,8 @@ services:
       VIEW_DISTANCE: 14
       SIMULATION_DISTANCE: 8
       TZ: Asia/Tokyo
-      # TreeAssist,Simply Farming,FarmProtect,BetterChairs Remastered,new-new-gods,DualHorse,backpack-plus
-      SPIGET_RESOURCES: "67436,110400,87480,84809,89188,99663,109630"
+      # TreeAssist,Simply Farming,FarmProtect,BetterChairs Remastered,new-new-gods,DualHorse,backpack-plus,spark
+      SPIGET_RESOURCES: "67436,110400,87480,84809,89188,99663,109630,57242"
       PLUGINS_FILE: /extras/plugins.txt
       DATAPACKS: /extras/datapacks
       # RESOURCE_PACK: /extras/resourcepacks
