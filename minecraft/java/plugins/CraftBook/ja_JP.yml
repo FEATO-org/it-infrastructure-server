@@ -1,0 +1,153 @@
+mech:
+  gate:
+    create: "ゲートが作成されました！"
+    toggle: "ゲートが切り替わりました！"
+    not-found: "ゲートが見つかりませんでした！"
+    valid-item: "行1は有効なブロックIDである必要があります。"
+  cauldron:
+    permissions: "このレシピを調理する権限がありません。"
+    leaky: "大釜に漏れがあります！"
+    create: "大釜が作成されました！"
+    legacy-not-a-recipe: "うーん、これは何も作れないようです..."
+    cook: "レシピを調理しました："
+    stir: "大釜をかき混ぜましたが、何も起こりません。"
+    legacy-not-in-group: "その能力があるようには見えません..."
+    too-small: "大釜が小さすぎます！"
+    no-lava: "大釜に溶岩がありません！"
+    legacy-create: "煙がぽっぽっと立ち上り、あなたは作りました"
+  area:
+    create: "エリアが切り替えられました！"
+    missing: "エリアまたは名前空間が存在しません。"
+  bridge:
+    end-create: "ブリッジの終端が作成されました！"
+    other-sign: "反対側にブリッジの看板が必要です（または遠すぎました）。"
+    create: "ブリッジが作成されました！"
+    material: "ブリッジは同じ材料で完全に作られている必要があります！"
+    unusable: "ブリッジに使用できない材料です！"
+    toggle: "ブリッジが切り替わりました！"
+  door:
+    unusable: "ドアに使用できない材料です！"
+    material: "ドアは同じ材料で完全に作られている必要があります！"
+    other-sign: "反対側にドアの看板が必要です（または遠すぎました）。"
+    create: "ドアが作成されました！"
+    toggle: "ドアが切り替わりました！"
+  map:
+    create: "地図変更機が作成されました！"
+    invalid: "無効な地図IDです！"
+  chairs:
+    sit: "あなたは今座っています！"
+    stand: "あなたはもう座っていません！"
+    floating: "この椅子の下には何もありません！"
+    obstructed: "この椅子は妨害されています！"
+    in-use: "この椅子は使用中です！"
+    too-far: "この椅子は遠すぎます！"
+  hiddenswitch:
+    toggle: "スイッチのこもったクリック音が聞こえます！"
+    key: "鍵が合いませんでした！"
+  painting:
+    editing: "この絵画を編集しています！"
+    used: "この絵画はすでに編集されています"
+    range: "この絵画から遠すぎます！"
+    stop: "もうこの絵画を編集していません！"
+  pay:
+    create: "支払いが作成されました！"
+    success: "支払いが成功しました！ 支払った金額："
+    failed-to-pay: "支払いに失敗しました！ お金の交換に失敗しました。"
+    not-enough-money: "支払いに失敗しました！ 十分なお金がありません。"
+  pistons:
+    supersticky:
+      created: "ピストンスーパースティッキーメカニズムが作成されました！"
+    superpush:
+      created: "ピストンスーパープッシュメカニズムが作成されました！"
+    bounce:
+      created: "ピストンバウンスメカニズムが作成されました！"
+    crush:
+      created: "ピストンクラッシュメカニズムが作成されました！"
+  group: "必要なグループに所属していません！"
+  bounceblocks:
+    create: "バウンスブロックが作成されました！"
+    invalid-velocity: "3行目に有効な速度を入力する必要があります！"
+  command:
+    create: "コマンドサインが作成されました！"
+  command-items:
+    out-of-sync: "コマンドアイテムの使用中にインベントリが同期しませんでした！"
+    need: "このコマンドを使用するには%item%が必要です！"
+    wait: "再度使用するには%time%秒待つ必要があります！"
+  teleport:
+    create: "テレポーターが作成されました！"
+    alert: "テレポートしました！"
+    invalidcoords: "入力された座標が無効です！"
+    sign: "目的地に看板がありません！"
+    obstruct: "目的地が妨害されています！"
+    arriveonly: "このテレポーターには到着のみ可能です！"
+    range: "範囲外です！"
+  lightswitch:
+    create: "ライトスイッチが作成されました！"
+  bookcase:
+    read-line: "本を取り出しました..."
+    fail-file: "本のファイルの読み取りに失敗しました。"
+    fail-line: "本のファイルから行を取得することに失敗しました。"
+  cook:
+    create: "調理鍋が作成されました！"
+    ouch: "痛い！ 熱かったです！"
+    add-fuel: "燃料を調理鍋に追加し、火が燃え上がるのを見ます！"
+  restock: "メカニズムが補充されました！"
+  lift:
+    no-depart: "このリフトから出発できません（到着のみ可能です）。"
+    leave: "エレベーターを降りました！"
+    floor: "階"
+    obstruct: "目的地が妨害されています！"
+    up: "階を上がりました！"
+    busy: "エレベーターが使用中です！"
+    up-sign-created: "エレベーターの上昇サインが作成されました。"
+    target-sign-created: "エレベーターのターゲットサインが作成されました。"
+    no-floor: "目的地には階がありません！"
+    no-destination: "このリフトには目的地がありません。"
+    down-sign-created: "エレベーターの下降サインが作成されました。"
+    down: "階を下りました！"
+  anchor:
+    create: "チャンクアンカーが作成されました！"
+    already-anchored: "このチャンクはすでにアンカーされています！"
+  headdrops:
+    click-message: "これは切断された頭部です。"
+    break-permission: "頭を壊す権限がありません！"
+  xp-storer:
+    bottle: "この機構を使用するにはボトルが必要です！"
+    not-enough-xp: "ボトルを満たすのに十分な経験値がありません！"
+    success: "経験値をボトルに詰めました！"
+    create: "XPストレージが作成されました！"
+  signcopy:
+    paste: "サインを貼り付けました！"
+    copy: "サインをコピーしました！"
+  use-permission: "この機構を使用する権限がありません。"
+  ic:
+    create: "作成しました"
+  lightstone:
+    lightstone: "ライトストーン："
+  create-permission: "この機構を作成する権限がありません。"
+  dgate:
+    create: "小さなゲートが作成されました！"
+  not-enough-blocks: "機構をトリガーするのに十分なブロックがありません！"
+  restock-permission: "この機構を補充する権限がありません。"
+  ammeter:
+    ammeter: "電流計"
+  custom-crafting:
+    recipe-permission: "このレシピを作成する権限がありません。"
+worldedit:
+  ic:
+    unsupported: "現在、ICのWorldEdit選択タイプはサポートされていません！"
+    notfound: "WorldEditが見つかりません！"
+    noselection: "選択が見つかりませんでした！"
+variable:
+  missing: "この変数が見つかりません！"
+  use-permissions: "その変数を使用する権限がありません！"
+area:
+  break-permissions: "このエリアでそれを壊す権限がありません！"
+  permissions: "このエリアでそれを行う権限がありません！"
+  use-permissions: "このエリアでそれを使用する権限がありません！"
+circuits:
+  pipes:
+    create: "パイプが作成されました！"
+    pipe-not-found: "パイプが見つかりませんでした！"
+vehicles:
+  create-permission: "この車両機構を作成する権限がありません！"

@@ -125,10 +125,11 @@ pedantic-block-checks: false
 sign-click-timeout: 10
 
 # The default language for CraftBook. Note: This language needs to be in the 'languages' field for this to work.
-language: en_US
+language: ja_JP
 
 # A list of languages supported by craftbook, if a user requests a language not listed... They will see default.
 languages:
+- ja_JP
 - en_US
 
 # If enabled, CraftBook will scan messages sent to players for localizable text, instead of just checking if the entire message is localizable.
