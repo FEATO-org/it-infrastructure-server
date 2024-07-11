@@ -42,7 +42,7 @@ services:
     networks:
       - portainer_agent-network
       - system_fluent-network
-      - system_nginx-network
+      - app_nginx-network
     deploy:
       mode: replicated
       replicas: 1
@@ -69,6 +69,6 @@ volumes:
 networks:
   system_fluent-network:
     external: true
-  system_nginx-network:
+  app_nginx-network:
     external: true
   portainer_agent-network:
