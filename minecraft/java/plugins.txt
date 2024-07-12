@@ -4,3 +4,4 @@ https://github.com/Nevakanezah/HorseEnhancer/releases/download/v2.1.3/HorseEnhan
 https://dev.bukkit.org/projects/dead-chest/files/5382232/download
 https://dev.bukkit.org/projects/worldedit/files/5400331/download
 https://dev.bukkit.org/projects/craftbook/files/5485417/download
+https://www.spigotmc.org/resources/new-new-gods.89188/download?version=488195
