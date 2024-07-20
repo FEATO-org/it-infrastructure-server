@@ -6,96 +6,96 @@
 #
 # NOTE! NOTHING IS ENABLED BY DEFAULT! ENABLE FEATURES TO USE THEM!
 
-
 # List of mechanics to enable! If they aren't in this list, the server won't load them!
 enabled-mechanics:
-- Variables
-- AI
-- HeadDrops
-- BetterPlants
+  - Variables
+  - AI
+  - HeadDrops
+  - BetterPlants
+  - TreeLopper
 
 # A list of CraftBook mechanics that are disabled, for easy copy/pastability to the enabled list.
 disabled-mechanics:
-# - Variables
-# - AI
-- Ammeter
-- BetterLeads
-- BetterPhysics
-- BetterPistons
-# - BetterPlants
-- BoatDecay
-- BoatDrops
-- BoatExitRemover
-- BoatRemoveEntities
-- BoatSpeedModifiers
-- BoatUncrashable
-- BoatWaterPlaceOnly
-- Bookcase
-- BounceBlocks
-- Bridge
-- Cauldron
-- Chairs
-- ChunkAnchor
-- CommandItems
-- CommandSigns
-- CookingPot
-- CustomCrafting
-- CustomDrops
-- DispenserRecipes
-- Door
-- Elevator
-- Gate
-- Glowstone
-# - HeadDrops
-- HiddenSwitch
-- ICs
-- JackOLantern
-- Jukebox
-- LandBoats
-- LegacyCauldron
-- LegacyCustomDrops
-- LightStone
-- LightSwitch
-- MapChanger
-- Marquee
-- MinecartBooster
-- MinecartCollisionEntry
-- MinecartConstantSpeed
-- MinecartDecay
-- MinecartDeposit
-- MinecartDispenser
-- MinecartEjector
-- MinecartElevator
-- MinecartEmptySlowdown
-- MinecartExitRemover
-- MinecartFallModifier
-- MinecartItemPickup
-- MinecartMaxSpeed
-- MinecartMessenger
-- MinecartMobBlocker
-- MinecartMoreRails
-- MinecartNoCollide
-- MinecartPlaceAnywhere
-- MinecartRailPlacer
-- MinecartRemoveEntities
-- MinecartReverser
-- MinecartSorter
-- MinecartSpeedModifiers
-- MinecartStation
-- MinecartTeleporter
-- MinecartTemporaryCart
-- MinecartVisionSteering
-- Netherrack
-- PaintingSwitcher
-- Pay
-- Pipes
-- SignCopier
-- Snow
-- Sponge
-- Teleporter
-- ToggleArea
-- TreeLopper
-- XPStorer
+  # - Variables
+  # - AI
+  - Ammeter
+  - BetterLeads
+  - BetterPhysics
+  - BetterPistons
+  # - BetterPlants
+  - BoatDecay
+  - BoatDrops
+  - BoatExitRemover
+  - BoatRemoveEntities
+  - BoatSpeedModifiers
+  - BoatUncrashable
+  - BoatWaterPlaceOnly
+  - Bookcase
+  - BounceBlocks
+  - Bridge
+  - Cauldron
+  - Chairs
+  - ChunkAnchor
+  - CommandItems
+  - CommandSigns
+  - CookingPot
+  - CustomCrafting
+  - CustomDrops
+  - DispenserRecipes
+  - Door
+  - Elevator
+  - Gate
+  - Glowstone
+  # - HeadDrops
+  - HiddenSwitch
+  - ICs
+  - JackOLantern
+  - Jukebox
+  - LandBoats
+  - LegacyCauldron
+  - LegacyCustomDrops
+  - LightStone
+  - LightSwitch
+  - MapChanger
+  - Marquee
+  - MinecartBooster
+  - MinecartCollisionEntry
+  - MinecartConstantSpeed
+  - MinecartDecay
+  - MinecartDeposit
+  - MinecartDispenser
+  - MinecartEjector
+  - MinecartElevator
+  - MinecartEmptySlowdown
+  - MinecartExitRemover
+  - MinecartFallModifier
+  - MinecartItemPickup
+  - MinecartMaxSpeed
+  - MinecartMessenger
+  - MinecartMobBlocker
+  - MinecartMoreRails
+  - MinecartNoCollide
+  - MinecartPlaceAnywhere
+  - MinecartRailPlacer
+  - MinecartRemoveEntities
+  - MinecartReverser
+  - MinecartSorter
+  - MinecartSpeedModifiers
+  - MinecartStation
+  - MinecartTeleporter
+  - MinecartTemporaryCart
+  - MinecartVisionSteering
+  - Netherrack
+  - PaintingSwitcher
+  - Pay
+  - Pipes
+  - SignCopier
+  - Snow
+  - Sponge
+  - Teleporter
+  - ToggleArea
+  # - TreeLopper
+  - XPStorer
 
 # WARNING! Changing this can result in all ST mechanics acting very weirdly, only change this if you know what you are doing!
 st-think-ticks: 2
@@ -129,8 +129,8 @@ language: ja_JP
 
 # A list of languages supported by craftbook, if a user requests a language not listed... They will see default.
 languages:
-- ja_JP
-- en_US
+  - ja_JP
+  - en_US
 
 # If enabled, CraftBook will scan messages sent to players for localizable text, instead of just checking if the entire message is localizable.
 scan-text-for-localization: false
