@@ -31,7 +31,7 @@ messages:
   restart: Server is restarting
 settings:
   timeout-time: 120
-  restart-on-crash: true
+  restart-on-crash: false
   restart-script: ./start.sh
   # paperではfalseにする
   bungeecord: true
