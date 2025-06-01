@@ -35,7 +35,7 @@ services:
     command: -H tcp://tasks.portainer-agent:9001 --tlsskipverify
     ports:
       - "9443:9443"
-      - "8000:8000"
+      - "8000:8010"
     volumes:
       - portainer_data:/data
     networks:
