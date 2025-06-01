@@ -71,4 +71,3 @@ networks:
   app_nginx-network:
     external: true
   portainer_agent-network:
-    external: true
