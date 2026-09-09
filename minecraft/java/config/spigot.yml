@@ -34,7 +34,7 @@ settings:
   restart-on-crash: false
   restart-script: ./start.sh
   # paperではfalseにする
-  bungeecord: true
+  bungeecord: false
   netty-threads: 4
   sample-count: 12
   player-shuffle: 0
