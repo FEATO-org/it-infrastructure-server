@@ -1,0 +1,11 @@
+[Unit]
+Description=Renew DNS-01 certificate and rotate nginx Swarm secrets
+After=docker.service network-online.target
+Wants=network-online.target
+Requires=docker.service
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/swarm/certbot.env
+ExecStart=/opt/it-infrastructure-server/script/certbot_renew.sh
+TimeoutStartSec=30min

@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily certificate renewal check for nginx Swarm service
+
+[Timer]
+OnCalendar=daily
+RandomizedDelaySec=6h
+Persistent=true
+Unit=swarm-certbot-renew.service
+
+[Install]
+WantedBy=timers.target
