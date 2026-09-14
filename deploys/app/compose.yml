@@ -1,217 +1,183 @@
-# app stack
 version: "3.8"
+
+x-default-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
-  # discord
   sfs-discord-server:
     image: ghcr.io/feato-org/support-feato-system:main
     environment:
-      - DISCORD_TOKEN
-      - GUILD_IDS
-      - APP_MODE
-      - NOTIFY_CHANNEL_ID
+      DISCORD_TOKEN: ${DISCORD_TOKEN}
+      GUILD_IDS: ${GUILD_IDS}
+      APP_MODE: ${APP_MODE}
+      NOTIFY_CHANNEL_ID: ${NOTIFY_CHANNEL_ID}
     networks:
-      - system_fluent-network
+      - app-internal-network
     deploy:
-      resources:
-        limits:
-          memory: 20M
+      replicas: 1
+      update_config:
+        parallelism: 1
+        order: start-first
+        failure_action: rollback
+      rollback_config:
+        parallelism: 1
       restart_policy:
-        # DiscordAPIを叩きすぎないようにするため
-        delay: 15s
-    logging:
-      driver: fluentd
-      options:
-        tag: "logs.docker.sfs-discord-server"
-        fluentd-address: "127.0.0.1:24224"
-        fluentd-async: "false"
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+        window: 120s
+      resources:
+        reservations:
+          memory: 16M
+        limits:
+          memory: 64M
+    logging: *default-logging
 
-  # minecraft
   minecraft-proxy:
-    image: itzg/bungeecord:java21
+    image: itzg/mc-proxy:java21
     environment:
       TYPE: VELOCITY
-      MEMORY: ""
-      TZ: Asia/Tokyo
-      JVM_XX_OPTS: "-XX:MaxRAMPercentage=75 -XX:+UseG1GC -XX:G1HeapRegionSize=4M -XX:+UnlockExperimentalVMOptions -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:MaxInlineLevel=15"
-      ICON: https://photo.feato.jp/_data/i/upload/2023/06/24/20230624012009-7add3e01-xl.png
-      PLUGINS: https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity,https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity
-    ports:
-      - "25565:25577"
-      - "19132:19132/udp"
+      MINECRAFT_VERSION: ${MINECRAFT_VERSION:-1.21.5}
+      MEMORY: 1G
+      PLUGINS: |-
+        https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity
+        https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity
     secrets:
-      - forwarding_secret
+      - source: forwarding_secret
+        target: forwarding_secret
     volumes:
       - minecraft_proxy_data:/server
-      - ../../minecraft-proxy/plugins:/plguins
-      - /extras/texturepacks:/plguins/Geyser-Velocity/packs
-      - ../../minecraft-proxy/config:/config
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/config:/config:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/plugins:/plugins
+      - ${MINECRAFT_ASSET_ROOT:-/opt/it-infrastructure-server/resources/minecraft}/texturepacks:/plugins/Geyser-Velocity/packs:ro
     networks:
-      - minecraft-network
-      - system_fluent-network
+      - minecraft-ingress-network
+      - minecraft-backend-network
+    stop_grace_period: 60s
     deploy:
-      resources:
-        limits:
-          memory: 1G
-      rollback_config:
-        order: start-first
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.minecraft-data == true
       update_config:
-        order: start-first
-    logging:
-      driver: fluentd
-      options:
-        tag: "logs.docker.minecraft-proxy"
-        fluentd-address: "127.0.0.1:24224"
-        fluentd-async: "false"
+        parallelism: 1
+        order: stop-first
+        failure_action: rollback
+      rollback_config:
+        parallelism: 1
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        window: 180s
+      resources:
+        reservations:
+          memory: 512M
+        limits:
+          memory: 1536M
+    logging: *default-logging
 
   minecraft-spigot-server:
     image: itzg/minecraft-server:java21
     environment:
-      # proxy向け設定
-      ONLINE_MODE: "FALSE"
-      NETWORK_COMPRESSION_THRESHOLD: -1
-      MEMORY: 5G
-      TYPE: SPIGOT
-      USE_AIKAR_FLAGS: "TRUE"
       EULA: "TRUE"
-      VERSION: LATEST
+      ONLINE_MODE: "FALSE"
+      NETWORK_COMPRESSION_THRESHOLD: "-1"
+      MEMORY: 5G
+      VERSION: ${MINECRAFT_VERSION:-1.21.5}
+      TYPE: PAPER
       GAMEMODE: survival
       DIFFICULTY: normal
       SERVER_NAME: FEATO
-      SPAWN_PROTECTION: 0
-      PLAYER_IDLE_TIMEOUT: 90
-      VIEW_DISTANCE: 14
-      SIMULATION_DISTANCE: 8
-      TZ: Asia/Tokyo
-      # Simply Farming,FarmProtect,BetterChairs Remastered,new-new-gods,DualHorse,backpack-plus,spark
+      SPAWN_PROTECTION: "0"
+      PLAYER_IDLE_TIMEOUT: "90"
+      VIEW_DISTANCE: "14"
+      SIMULATION_DISTANCE: "8"
       SPIGET_RESOURCES: "110400,87480,84809,89188,99663,109630,57242"
       PLUGINS_FILE: /extras/plugins.txt
       DATAPACKS: /extras/datapacks
-      # RESOURCE_PACK: /extras/resourcepacks
       ENABLE_COMMAND_BLOCK: "TRUE"
-      # spigot用
       COPY_CONFIG_DEST: /data
-      LOG_TIMESTAMP: "TRUE"
-      GUI: "FALSE"
-      ICON: https://photo.feato.jp/_data/i/upload/2023/06/24/20230624012009-7add3e01-xl.png
-      SEED: ""
+      REPLACE_ENV_VARIABLES: "TRUE"
+      REPLACE_ENV_DURING_SYNC: "TRUE"
+      REPLACE_ENV_VARIABLE_PREFIX: CFG_
+      CFG_FORWARDING_SECRET_FILE: /run/secrets/forwarding_secret
       RESOURCE_PACK_ENFORCE: "TRUE"
       ENFORCE_SECURE_PROFILE: "FALSE"
-      SPIGOT_DOWNLOAD_URL: https://storage.feato.jp/index.php/s/MkLFA4XBnfcs5ic/download/spigot-1.21.jar
-    ports:
-      - "8123:8123"
-    expose:
-      - "25565"
+      GUI: "FALSE"
+      ENABLE_RCON: "true"
+      RCON_PASSWORD_FILE: /run/secrets/rcon_password
+      UID: "1000"
+      GID: "1000"
+      TZ: Asia/Tokyo
+      LOG_TIMESTAMP: "true"
+      ENABLE_ROLLING_LOGS: "true"
+      USE_AIKAR_FLAGS: "true"
+      INIT_MEMORY: 1G
+      MAX_MEMORY: 5G
+      MAX_TICK_TIME: "60000"
+    secrets:
+      - source: forwarding_secret
+        target: forwarding_secret
+      - source: rcon_password
+        target: rcon_password
     volumes:
       - minecraft_server_data:/data
-      # plugins download
-      - ../../minecraft/java/plugins.txt:/extras/plugins.txt:ro
-      - ../../minecraft/java/plugins:/plugins
-      # datapack
-      - /extras/datapacks:/extras/datapacks
-      # resourcepack
-      # - /extras/resourcepacks:/extras/resourcepacks
-      # config
-      - ../../minecraft/java/config:/config
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/plugins.txt:/extras/plugins.txt:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/plugins:/plugins
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/bukkit.yml:/config/bukkit.yml:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/spigot.yml:/config/spigot.yml:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/paper-global.yml:/config/config/paper-global.yml:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/paper-world-defaults.yml:/config/config/paper-world-defaults.yml:ro
+      - ${MINECRAFT_ASSET_ROOT:-/opt/it-infrastructure-server/resources/minecraft}/datapacks:/extras/datapacks:ro
     networks:
-      - minecraft-network
-      - nginx-network
-    depends_on:
-      - fluent-bit
+      - minecraft-backend-network
+      - web-ingress-network
+    stop_grace_period: 2m
     deploy:
-      resources:
-        limits:
-          memory: 6.3G
-    logging:
-      driver: fluentd
-      options:
-        tag: "logs.docker.minecraft-server"
-        fluentd-address: "127.0.0.1:24224"
-        fluentd-async: "false"
-
-  # Web系
-  nginx:
-    image: nginx:1.27.0
-    command: 'nginx -g "daemon off;"'
-    ports:
-      - 80:80
-      - 443:443
-    environment:
-      TZ: Asia/Tokyo
-      PORTAINER_URL:
-    volumes:
-      - type: bind
-        source: ../../nginx/templates
-        target: /etc/nginx/templates
-        read_only: true
-      - type: bind
-        source: ../../nginx/sites-available
-        target: /etc/nginx/sites-available
-        read_only: true
-      - type: bind
-        source: ../../nginx/sites-enabled
-        target: /etc/nginx/sites-enabled
-        read_only: true
-      # - type: bind
-      #   source: ../../nginx/html
-      #   target: /usr/share/nginx/html
-      #   read_only: true
-      - certs:/etc/letsencrypt:ro
-    networks:
-      - nginx-network
-      - cert-network
-      - system_fluent-network
-    deploy:
-      resources:
-        limits:
-          memory: 100M
-      rollback_config:
-        order: start-first
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.minecraft-data == true
       update_config:
-        order: start-first
-    logging:
-      driver: fluentd
-      options:
-        tag: "logs.docker.nginx"
-        fluentd-address: "127.0.0.1:24224"
-        fluentd-async: "false"
-
-  certbot:
-    image: certbot/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 10d & wait $${!}; done;'"
-    volumes:
-      - certs:/etc/letsencrypt
-    networks:
-      - cert-network
-      - system_fluent-network
-    deploy:
+        parallelism: 1
+        order: stop-first
+        failure_action: rollback
+      rollback_config:
+        parallelism: 1
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        window: 180s
       resources:
+        reservations:
+          memory: 2G
         limits:
-          memory: 100M
-    logging:
-      driver: fluentd
-      options:
-        tag: "logs.docker.certbot"
-        fluentd-address: "127.0.0.1:24224"
-        fluentd-async: "true"
-        fluentd-retry-wait: 5s
-        fluentd-buffer-limit: 2000
-        fluentd-max-retries: 100
+          memory: 6G
+    logging: *default-logging
+
+networks:
+  app-internal-network:
+    driver: overlay
+    driver_opts:
+      encrypted: "true"
+  minecraft-ingress-network:
+    external: true
+  minecraft-backend-network:
+    external: true
+  web-ingress-network:
+    external: true
 
 volumes:
-  certs: {}
-  minecraft_server_data: {}
-  minecraft_proxy_data: {}
+  minecraft_proxy_data:
+  minecraft_server_data:
 
 secrets:
   forwarding_secret:
     external: true
-
-networks:
-  system_fluent-network:
+  rcon_password:
     external: true
-  nginx-network:
-    attachable: true
-  cert-network:
-    attachable: false
-  minecraft-network:
-    attachable: true
