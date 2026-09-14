@@ -96,7 +96,7 @@ proxies:
   velocity:
     enabled: true
     online-mode: true
-    secret: ""
+    secret: "${CFG_FORWARDING_SECRET}"
 scoreboards:
   save-empty-scoreboard-teams: false
   track-plugin-scoreboards: false
