@@ -130,7 +130,7 @@ services:
     command:
       - export-for-prometheus
     environment:
-      EXPORT_SERVERS: app_minecraft-spigot-server
+      EXPORT_SERVERS: app_minecraft-server
       DEBUG: "false"
     networks:
       - monitoring-network

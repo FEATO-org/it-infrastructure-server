@@ -80,7 +80,7 @@ services:
           memory: 1536M
     logging: *default-logging
 
-  minecraft-spigot-server:
+  minecraft-server:
     image: itzg/minecraft-server:java21
     environment:
       EULA: "TRUE"
