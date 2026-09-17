@@ -110,7 +110,7 @@ secret作成もしません。旧secretはロールバック用に自動削除�
 
 ## 4. 環境変数とデプロイ
 
-既存の`.env-production`をmanagerだけに配置し、最低でもスクリプトが検査する
+既存の`.env`をmanagerだけに配置し、最低でもスクリプトが検査する
 変数を設定します。repositoryの絶対パスは全ての`minecraft-data`ノードで同じに
 してください。外部アセットを別の場所へ置く場合は`MINECRAFT_ASSET_ROOT`を設定
 します。

@@ -4,7 +4,7 @@ set -Eeuo pipefail
 readonly SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 readonly REPO_ROOT="$(cd -- "${SCRIPT_DIR}/.." && pwd)"
 
-ENV_FILE="${ENV_FILE:-${REPO_ROOT}/.env-production}"
+ENV_FILE="${ENV_FILE:-${REPO_ROOT}/.env}"
 TLS_STATE_FILE="${TLS_STATE_FILE:-/var/lib/swarm-certbot/swarm-secrets.env}"
 
 if [[ -f "${ENV_FILE}" ]]; then
