@@ -5,17 +5,16 @@
 ```mermaid
 flowchart TB
 
+OU0[Admin]
 OU1[User]
 OU2[Discord]
-DNS{{value domain dns}}
+DNS{{value domain DNS \n feato.jp}}
 subgraph S1[indigo]
   MC["host machine"]
   subgraph DC[Docker]
-    subgraph NOT["未構築"]
-      C1[Nginx]
-      C2[certbot]
-      C9[Swarmpit]
-    end
+    C1[Nginx]
+    C2[certbot]
+    C9[Swarmpit]
     C3[MineCraft]
     C8[mc-backup]
     C4[fluent-bit]
@@ -25,6 +24,7 @@ subgraph S1[indigo]
   end
 end
 subgraph S2[CORESERVER]
+  SS0[Reverse Proxy]
   SS1[Wordpress]
   SS2[Piwigo]
   SS3[NextCloud]
@@ -37,11 +37,10 @@ end
 OU1-->OU2
 OU2-->C7
 OU1-->DNS
-DNS-->S2
+DNS-->SS0
 DNS-->C1
-DNS-->C3
 C1--証明書取得-->C2
-C1-->C3
+C1--minecraft.feato.jp-->C3
 C1-->C9
 C8-.->C3
 C5-.->C3
@@ -49,5 +48,10 @@ C4-.->C5
 C4-.->C6
 C4-.->MC
 C4-->OSS1
-C9-.->MC
+C9-->MC
+SS0--www.feato.jp-->SS1
+SS0--photo.feato.jp-->SS2
+SS0--storage.feato.jp-->SS3
+OU0-->C1-->C9
+OU0-->OSS1
 ```
