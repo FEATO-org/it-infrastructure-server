@@ -86,7 +86,7 @@ services:
       EULA: "TRUE"
       ONLINE_MODE: "FALSE"
       NETWORK_COMPRESSION_THRESHOLD: "-1"
-      MEMORY: 5G
+      MEMORY: 6G
       VERSION: ${MINECRAFT_VERSION:-1.21.5}
       TYPE: PAPER
       GAMEMODE: survival
@@ -117,7 +117,7 @@ services:
       ENABLE_ROLLING_LOGS: "true"
       USE_AIKAR_FLAGS: "true"
       INIT_MEMORY: 1G
-      MAX_MEMORY: 5G
+      MAX_MEMORY: 6G
       MAX_TICK_TIME: "60000"
     secrets:
       - source: forwarding_secret
@@ -157,7 +157,7 @@ services:
         reservations:
           memory: 2G
         limits:
-          memory: 6G
+          memory: 7G
     logging: *default-logging
 
 networks:
