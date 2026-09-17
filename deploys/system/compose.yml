@@ -8,7 +8,7 @@ x-default-logging: &default-logging
 
 services:
   mariadb:
-    image: mariadb:11.4
+    image: mariadb:13.0.2
     environment:
       MARIADB_DATABASE: ${MARIADB_DATABASE:-app}
       MARIADB_USER: ${MARIADB_USER:-app}
@@ -53,7 +53,7 @@ services:
     logging: *default-logging
 
   fluent-bit:
-    image: cr.fluentbit.io/fluent/fluent-bit:5.0.9
+    image: cr.fluentbit.io/fluent/fluent-bit:5.1.2
     command:
       - /fluent-bit/bin/fluent-bit
       - -c
@@ -126,7 +126,7 @@ services:
     logging: *default-logging
 
   minecraft-monitor:
-    image: itzg/mc-monitor:0.15.6
+    image: itzg/mc-monitor:0.17.1
     command:
       - export-for-prometheus
     environment:
@@ -156,7 +156,7 @@ services:
     logging: *default-logging
 
   nginx:
-    image: nginx:1.28.0
+    image: nginx:1.30.5
     ports:
       - target: 80
         published: 80

@@ -12,7 +12,9 @@ overlay network内だけで通信します。
 
 UbuntuにはDocker Engine 25以降とCompose pluginを導入してください。cAdvisorの
 現行版は古いDocker Engineをサポートしません。MinecraftバックエンドはVelocity
-modern forwardingを利用するためPaper 1.21.5を既定にしています。
+modern forwardingを利用するためPaper 26.2（Java 25）を既定にしています。
+
+採用バージョンと確認先は[versions.md](versions.md)を参照してください。
 
 ## 1. Swarmノード
 

@@ -37,10 +37,10 @@ services:
     logging: *default-logging
 
   minecraft-proxy:
-    image: itzg/mc-proxy:java21
+    image: itzg/mc-proxy:2026.9.1-java25
     environment:
       TYPE: VELOCITY
-      MINECRAFT_VERSION: ${MINECRAFT_VERSION:-1.21.5}
+      MINECRAFT_VERSION: ${MINECRAFT_VERSION:-26.2}
       MEMORY: 1G
       PLUGINS: |-
         https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity
@@ -81,13 +81,13 @@ services:
     logging: *default-logging
 
   minecraft-server:
-    image: itzg/minecraft-server:java21
+    image: itzg/minecraft-server:2026.9.1-java25
     environment:
       EULA: "TRUE"
       ONLINE_MODE: "FALSE"
       NETWORK_COMPRESSION_THRESHOLD: "-1"
       MEMORY: 6G
-      VERSION: ${MINECRAFT_VERSION:-1.21.5}
+      VERSION: ${MINECRAFT_VERSION:-26.2}
       TYPE: PAPER
       GAMEMODE: survival
       DIFFICULTY: normal
