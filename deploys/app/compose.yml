@@ -37,7 +37,7 @@ services:
     logging: *default-logging
 
   minecraft-proxy:
-    image: itzg/mc-proxy:2026.9.1-java25
+    image: itzg/mc-proxy:java25
     environment:
       TYPE: VELOCITY
       MINECRAFT_VERSION: ${MINECRAFT_VERSION:-26.2}
@@ -81,7 +81,7 @@ services:
     logging: *default-logging
 
   minecraft-server:
-    image: itzg/minecraft-server:2026.9.1-java25
+    image: itzg/minecraft-server:java25
     environment:
       EULA: "TRUE"
       ONLINE_MODE: "FALSE"

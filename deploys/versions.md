@@ -1,6 +1,6 @@
 # バージョン確認（2026-09-18）
 
-公式リリース一覧・APIで安定版を確認し、コンテナは固定タグを指定しています。
+公式リリース一覧・APIで安定版を確認し、Minecraft本体・プロキシ以外のコンテナは固定タグを指定しています。
 nginxはMainlineではなくStable系列です。
 
 | 対象 | 採用版 | 確認先 |
@@ -13,8 +13,8 @@ nginxはMainlineではなくStable系列です。
 | Portainer Server / Agent | 2.45.1 | https://github.com/portainer/portainer/releases/tag/2.45.1 |
 | cloudflared | 2026.9.1 | https://github.com/cloudflare/cloudflared/releases/tag/2026.9.1 |
 | Certbot / DNS Cloudflare | 5.8.0（変更なし） | https://github.com/certbot/certbot/releases/tag/v5.8.0 |
-| Minecraft server image | 2026.9.1-java25 | https://github.com/itzg/docker-minecraft-server/releases/tag/2026.9.1 |
-| Minecraft proxy image | 2026.9.1-java25 | https://github.com/itzg/docker-mc-proxy/releases/tag/2026.9.1 |
+| Minecraft server image | java25（Javaメジャーのみ指定） | https://docker-minecraft-server.readthedocs.io/en/latest/versions/java/ |
+| Minecraft proxy image | java25（Javaメジャーのみ指定） | https://github.com/itzg/docker-mc-proxy/blob/main/README.md |
 | Paper / Minecraft | 26.2、Java 25 | https://papermc.io/downloads/paper/ |
 | ImageFrame | 2026.1.4 | https://modrinth.com/plugin/imageframe/versions |
 | WorldEdit | 7.4.5（Bukkit） | https://modrinth.com/plugin/worldedit/versions |
@@ -40,3 +40,5 @@ Paper 26.2での起動・動作確認が必要です。安定版という分類�
 既存DBを11.4から更新する場合はバックアップと公式アップグレード手順が必要です。
 既存ワールドも26.2への更新前にバックアップしてください。コンテナのロールバックだけでは
 更新済みのDB・ワールドのデータ形式は元に戻りません。
+
+Minecraftのjava25タグは更新されるため、再取得時にイメージの内容が変わります。
