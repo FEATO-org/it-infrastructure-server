@@ -37,11 +37,23 @@ services:
     logging: *default-logging
 
   minecraft-proxy:
-    image: itzg/mc-proxy:java25
+    image: ${MINECRAFT_PROXY_IMAGE:-it-infrastructure/mc-proxy:java25-graalvm}
     environment:
       TYPE: VELOCITY
       MINECRAFT_VERSION: ${MINECRAFT_VERSION:-26.2}
       MEMORY: 1G
+      # Proxy has no USE_MEOWICE_* support; retain automatic G1 region sizing.
+      JVM_XX_OPTS: >-
+        -XX:+UseG1GC
+        -XX:+ParallelRefProcEnabled
+        -XX:+AlwaysPreTouch
+        -XX:+DisableExplicitGC
+        -XX:MaxGCPauseMillis=200
+      JVM_OPTS: >-
+        --enable-native-access=ALL-UNNAMED
+        -Djdk.graal.CompilerConfiguration=enterprise
+        -Djdk.graal.UsePriorityInlining=true
+        -Djdk.nio.maxCachedBufferSize=262144
       PLUGINS: |-
         https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity
         https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity
@@ -81,7 +93,7 @@ services:
     logging: *default-logging
 
   minecraft-server:
-    image: itzg/minecraft-server:java25
+    image: ${MINECRAFT_SERVER_IMAGE:-it-infrastructure/minecraft-server:java25-graalvm}
     environment:
       EULA: "TRUE"
       ONLINE_MODE: "FALSE"
@@ -115,7 +127,11 @@ services:
       TZ: Asia/Tokyo
       LOG_TIMESTAMP: "true"
       ENABLE_ROLLING_LOGS: "true"
-      USE_AIKAR_FLAGS: "true"
+      USE_AIKAR_FLAGS: "false"
+      USE_MEOWICE_FLAGS: "true"
+      USE_MEOWICE_GRAALVM_FLAGS: "true"
+      # VPS may not expose invariant TSC or a NUMA topology.
+      JVM_OPTS: -XX:-UseFastUnorderedTimeStamps -XX:-UseNUMA
       INIT_MEMORY: 1G
       MAX_MEMORY: 6G
       MAX_TICK_TIME: "60000"

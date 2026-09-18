@@ -13,8 +13,8 @@ nginxはMainlineではなくStable系列です。
 | Portainer Server / Agent | 2.45.1 | https://github.com/portainer/portainer/releases/tag/2.45.1 |
 | cloudflared | 2026.9.1 | https://github.com/cloudflare/cloudflared/releases/tag/2026.9.1 |
 | Certbot / DNS Cloudflare | 5.8.0（変更なし） | https://github.com/certbot/certbot/releases/tag/v5.8.0 |
-| Minecraft server image | java25（Javaメジャーのみ指定） | https://docker-minecraft-server.readthedocs.io/en/latest/versions/java/ |
-| Minecraft proxy image | java25（Javaメジャーのみ指定） | https://github.com/itzg/docker-mc-proxy/blob/main/README.md |
+| Minecraft server image | itzg java25 + Oracle GraalVM 25（ローカルビルド） | https://docker-minecraft-server.readthedocs.io/en/latest/versions/java/ |
+| Minecraft proxy image | itzg java25 + Oracle GraalVM 25（ローカルビルド） | https://github.com/itzg/docker-mc-proxy/blob/main/README.md |
 | Paper / Minecraft | 26.2、Java 25 | https://papermc.io/downloads/paper/ |
 | ImageFrame | 2026.1.4 | https://modrinth.com/plugin/imageframe/versions |
 | WorldEdit | 7.4.5（Bukkit） | https://modrinth.com/plugin/worldedit/versions |
@@ -42,3 +42,36 @@ Paper 26.2での起動・動作確認が必要です。安定版という分類�
 更新済みのDB・ワールドのデータ形式は元に戻りません。
 
 Minecraftのjava25タグは更新されるため、再取得時にイメージの内容が変わります。
+
+## GraalVM設定
+
+公式mc-proxyにGraalVMタグはなく、minecraft-serverのjava25-graalvmは
+images.json上deprecatedです。そのため`minecraft/Dockerfile.graalvm`で
+最新のitzg java25イメージにOracle GraalVM 25の最新更新版を導入します。
+Oracle版を使うのはMeowIceのGraalVMフラグがenterpriseコンパイラ設定を要求するためです。
+https://www.graalvm.org/jdk25/getting-started/
+https://raw.githubusercontent.com/itzg/docker-minecraft-server/master/images.json
+
+単一ノードではデプロイ前に`./script/build_minecraft_graalvm.sh`を実行します。
+複数ノードでは`.env`の`MINECRAFT_SERVER_IMAGE`と`MINECRAFT_PROXY_IMAGE`に
+各ノードからpullできるレジストリのイメージ名を指定してビルドし、両方をpushしてください。
+ビルドスクリプトは自動push・デプロイしません。
+
+本体はAikarを無効にし、`USE_MEOWICE_FLAGS`と`USE_MEOWICE_GRAALVM_FLAGS`を有効化。
+プロキシはこれらの変数をサポートしないため、`JVM_XX_OPTS`でG1GC、並列参照処理、
+ヒープの事前確保、明示的GCの抑制、GC停止時間の目標200msを指定します。
+プロキシにもGraalのenterpriseコンパイラ・優先インライン化を指定し、キャッシュする
+NIOバッファの最大サイズを256KiBに制限します。
+小さい1Gヒープには本体用の16Mリージョン設定を流用せず、JVMの自動調整を使います。
+両方ともメモリ上限とヒープの上限は従来値を維持します。
+https://docker-minecraft-server.readthedocs.io/en/latest/configuration/jvm-options/#enable-meowices-flags
+https://github.com/itzg/docker-mc-proxy/blob/main/README.md
+
+更新時はビルドを再実行してください。性能向上は未計測のため、デプロイ後に
+TPS/MSPT、GC停止時間、コンテナメモリとOOMの有無を比較してください。
+
+本体のMeowIce設定に含まれるUseFastUnorderedTimeStampsとUseNUMAは、
+VPSのハードウェア特性に依存するためJVM_OPTSで無効化します。
+ローカル検証では両イメージのビルド、GraalVM 25.0.4、Graal Enterpriseコンパイラ、
+本体のイメージ内スクリプトが生成するMeowIce/GraalVMフラグでのJVM起動を確認しました。
+ローカルDockerではcgroupのメモリ制限を適用できないため、上限内の実負荷検証はVPSで行います。
