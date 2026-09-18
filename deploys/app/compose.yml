@@ -37,7 +37,7 @@ services:
     logging: *default-logging
 
   minecraft-proxy:
-    image: ${MINECRAFT_PROXY_IMAGE:-it-infrastructure/mc-proxy:java25-graalvm}
+    image: itzg/mc-proxy:java25
     environment:
       TYPE: VELOCITY
       MINECRAFT_VERSION: ${MINECRAFT_VERSION:-26.2}
@@ -49,11 +49,7 @@ services:
         -XX:+AlwaysPreTouch
         -XX:+DisableExplicitGC
         -XX:MaxGCPauseMillis=200
-      JVM_OPTS: >-
-        --enable-native-access=ALL-UNNAMED
-        -Djdk.graal.CompilerConfiguration=enterprise
-        -Djdk.graal.UsePriorityInlining=true
-        -Djdk.nio.maxCachedBufferSize=262144
+      JVM_OPTS: --enable-native-access=ALL-UNNAMED
       PLUGINS: |-
         https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity
         https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity
