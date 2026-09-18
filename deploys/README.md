@@ -129,9 +129,9 @@ sudo -E TLS_STATE_FILE=/var/lib/swarm-certbot/swarm-secrets.env \
 
 ## 5. DNSとファイアウォール
 
-- `api.feato.jp`と`minecraft.feato.jp`（Web map）はCloudflare Proxyを有効化
-- Minecraft Java/Bedrock用の`play.feato.jp`はDNS Only
-- `play.feato.jp`はedgeノードIPへ向け、必要ならJava用SRVも設定
+- `api.feato.jp`と`dynmap.feato.jp`（Web map）はCloudflare Proxyを有効化
+- Minecraft Java/Bedrock用の`minecraft.feato.jp`はDNS Only
+- `minecraft.feato.jp`はedgeノードIPへ向け、必要ならJava用SRVも設定
 
 Cloudflare通常ProxyはMinecraft TCP/UDPを中継しません（Spectrumを契約する場合を
 除く）ので、ゲーム用hostnameをWeb用hostnameと分けます。
