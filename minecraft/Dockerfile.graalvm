@@ -1,0 +1,13 @@
+# Preserve itzg entrypoint, helpers and healthcheck; replace only the JVM.
+ARG BASE_IMAGE=itzg/minecraft-server:java25
+FROM ${BASE_IMAGE}
+ARG TARGETARCH
+RUN set -eu; \
+    case "${TARGETARCH}" in amd64) arch=x64 ;; arm64) arch=aarch64 ;; *) exit 1 ;; esac; \
+    curl --retry 3 --connect-timeout 20 --max-time 600 -fsSL "https://download.oracle.com/graalvm/25/latest/graalvm-jdk-25_linux-${arch}_bin.tar.gz" -o /tmp/graalvm.tar.gz; \
+    mkdir -p /opt/graalvm; \
+    tar -xzf /tmp/graalvm.tar.gz -C /opt/graalvm --strip-components=1; \
+    rm /tmp/graalvm.tar.gz
+ENV JAVA_HOME=/opt/graalvm
+ENV PATH="/opt/graalvm/bin:${PATH}"
+RUN java -version
