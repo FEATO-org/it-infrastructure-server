@@ -1,0 +1,14 @@
+# NOT MOUNTED: MySQL protocol works with MariaDB without an extra DatabaseDrivers plugin.
+Settings:
+  storage-type: MySQL
+MySQL:
+  host: system_mariadb
+  port: 3306
+  user: xconomy
+  pass: '${CFG_XCONOMY_PASSWORD}'
+  database: xconomy
+  table-suffix: ''
+  property:
+    usessl: false
+    encoding: utf8
+    allowPublicKeyRetrieval: false

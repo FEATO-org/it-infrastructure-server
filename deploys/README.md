@@ -15,6 +15,9 @@ UbuntuにはDocker Engine 25以降とCompose pluginを導入してください�
 modern forwardingを利用するためPaper 26.2（Java 25）を既定にしています。
 
 採用バージョンと確認先は[versions.md](versions.md)を参照してください。
+Minecraftの移行・専用DB作成・対応版待機・実機確認は
+[Minecraft運用](../minecraft/README.md)に記載しています。
+初回はsystemを先に更新してLuckPerms DBを準備してからappを更新してください。
 
 ## 1. Swarmノード
 
@@ -55,6 +58,7 @@ manager上で一度だけ作成します。値をコマンドライン引数へ�
 ```bash
 openssl rand -base64 48 | docker secret create mariadb_root_password -
 openssl rand -base64 48 | docker secret create mariadb_app_password -
+openssl rand -base64 48 | docker secret create luckperms_db_password -
 openssl rand -hex 32 | docker secret create forwarding_secret -
 openssl rand -base64 32 | docker secret create rcon_password -
 docker secret create cloudflare_tunnel_token /secure/path/cloudflare-tunnel-token

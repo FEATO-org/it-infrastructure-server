@@ -1,0 +1,14 @@
+# NOT MOUNTED: enable only after stable Paper 26.2 / Java 25 compatibility is confirmed.
+# Keep Floodgate's existing b- username prefix and forwarded UUIDs.
+UUID-mode: Default
+Importdata-mode: false
+Settings:
+  language: English
+  initial-bal: 200
+  payment-tax: 0
+Currency:
+  singular-name: G
+  plural-name: G
+  display-format: '%balance%%currencyname%'
+SyncData:
+  enable: false

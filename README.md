@@ -55,3 +55,8 @@ SS0--storage.feato.jp-->SS3
 OU0-->C1-->C9
 OU0-->OSS1
 ```
+
+
+現在のSwarm運用は [deploys/README.md](deploys/README.md)、
+Minecraft確定構成と移行手順は [minecraft/README.md](minecraft/README.md) を参照してください。
+上の図は旧構成です。
