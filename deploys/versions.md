@@ -13,7 +13,7 @@ nginxはMainlineではなくStable系列です。
 | Portainer Server / Agent | 2.45.1 | https://github.com/portainer/portainer/releases/tag/2.45.1 |
 | cloudflared | 2026.9.1 | https://github.com/cloudflare/cloudflared/releases/tag/2026.9.1 |
 | Certbot / DNS Cloudflare | 5.8.0（変更なし） | https://github.com/certbot/certbot/releases/tag/v5.8.0 |
-| Minecraft server image | itzg java25 + Oracle GraalVM 25（ローカルビルド） | https://docker-minecraft-server.readthedocs.io/en/latest/versions/java/ |
+| Minecraft server image | itzg/minecraft-server:java25-graalvm（公式イメージ） | https://docker-minecraft-server.readthedocs.io/en/latest/versions/java/ |
 | Minecraft proxy image | itzg/mc-proxy:java25（公式HotSpotイメージ） | https://github.com/itzg/docker-mc-proxy/blob/main/README.md |
 | Paper / Minecraft | 26.2、Java 25 | https://papermc.io/downloads/paper/ |
 | ImageFrame | 2026.1.4 | https://modrinth.com/plugin/imageframe/versions |
@@ -45,18 +45,22 @@ Minecraftのjava25タグは更新されるため、再取得時にイメージ�
 
 ## GraalVM設定
 
-公式mc-proxyにGraalVMタグはなく、minecraft-serverのjava25-graalvmは
-images.json上deprecatedです。そのため`minecraft/Dockerfile.graalvm`で
-本体のitzg java25イメージにOracle GraalVM 25の最新更新版を導入します。
-プロキシは公式のitzg/mc-proxy:java25とG1GC最適化を使います。
+本体は公式の`itzg/minecraft-server:java25-graalvm`を既定にし、自前ビルドは不要です。
+プロキシは公式の`itzg/mc-proxy:java25`とG1GC最適化を使います。
 Oracle版を使うのはMeowIceのGraalVMフラグがenterpriseコンパイラ設定を要求するためです。
 https://www.graalvm.org/jdk25/getting-started/
+
+公式のJavaバージョン表にはjava25-graalvmが掲載されていますが、images.jsonでは
+`deprecated: true`です。タグの存在と継続的な更新は別のため、取得したイメージの
+JavaバージョンとJVMフラグの動作をデプロイ前に確認してください。
+https://docker-minecraft-server.readthedocs.io/en/latest/versions/java/
 https://raw.githubusercontent.com/itzg/docker-minecraft-server/master/images.json
 
-単一ノードではデプロイ前に`./script/build_minecraft_graalvm.sh`を実行します。
-複数ノードでは`.env`の`MINECRAFT_SERVER_IMAGE`に各ノードからpullできる
-レジストリのイメージ名を指定してビルドし、本体のイメージをpushしてください。
-ビルドスクリプトは自動push・デプロイしません。
+自前で更新版GraalVMを導入する必要がある場合だけ、`.env`に
+`MINECRAFT_SERVER_IMAGE=it-infrastructure/minecraft-server:java25-graalvm`を指定し、
+`./script/build_minecraft_graalvm.sh`を実行します。
+複数ノードでは各ノードからpullできるレジストリのイメージ名を指定してビルドし、
+本体のイメージをpushしてください。ビルドスクリプトは自動push・デプロイしません。
 
 本体はAikarを無効にし、`USE_MEOWICE_FLAGS`と`USE_MEOWICE_GRAALVM_FLAGS`を有効化。
 プロキシはこれらの変数をサポートしないため、`JVM_XX_OPTS`でG1GC、並列参照処理、
@@ -66,14 +70,14 @@ https://raw.githubusercontent.com/itzg/docker-minecraft-server/master/images.jso
 https://docker-minecraft-server.readthedocs.io/en/latest/configuration/jvm-options/#enable-meowices-flags
 https://github.com/itzg/docker-mc-proxy/blob/main/README.md
 
-更新時はビルドを再実行してください。性能向上は未計測のため、デプロイ後に
+公式イメージの更新時は再取得してください。性能向上は未計測のため、デプロイ後に
 TPS/MSPT、GC停止時間、コンテナメモリとOOMの有無を比較してください。
 
 本体のMeowIce設定に含まれるUseFastUnorderedTimeStampsとUseNUMAは、
 VPSのハードウェア特性に依存するためJVM_OPTSで無効化します。
-ローカル検証では本体のビルド、GraalVM 25.0.4、Graal Enterpriseコンパイラ、
+以前のローカル検証は自前ビルド（GraalVM 25.0.4、Graal Enterpriseコンパイラ）を対象とし、
 本体のイメージ内スクリプトが生成するMeowIce/GraalVMフラグでのJVM起動を確認しました。
-ローカルDockerではcgroupのメモリ制限を適用できないため、上限内の実負荷検証はVPSで行います。
+公式イメージでの起動確認と、上限内の実負荷検証はVPSで行います。
 
 ## プロキシのJava 25メモリ最適化
 

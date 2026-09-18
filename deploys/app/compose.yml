@@ -90,7 +90,7 @@ services:
     logging: *default-logging
 
   minecraft-server:
-    image: ${MINECRAFT_SERVER_IMAGE:-it-infrastructure/minecraft-server:java25-graalvm}
+    image: ${MINECRAFT_SERVER_IMAGE:-itzg/minecraft-server:java25-graalvm}
     environment:
       EULA: "TRUE"
       ONLINE_MODE: "FALSE"

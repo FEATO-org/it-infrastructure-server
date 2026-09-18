@@ -118,8 +118,7 @@ secret作成もしません。旧secretはロールバック用に自動削除�
 します。
 
 ```bash
-# 単一ノードでは配置先ノード上で先にGraalVMイメージを作成
-./script/build_minecraft_graalvm.sh
+# 既定では公式GraalVMイメージを使用（自前ビルド不要）
 sudo -E TLS_STATE_FILE=/var/lib/swarm-certbot/swarm-secrets.env \
   ./script/deploy_swarm.sh
 ```
