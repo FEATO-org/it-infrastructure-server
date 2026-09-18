@@ -44,6 +44,10 @@ services:
       VELOCITY_BUILD_ID: "30"
       MINECRAFT_VERSION: ${MINECRAFT_VERSION:-26.2}
       MEMORY: 1G
+      REPLACE_ENV_VARIABLES: "TRUE"
+      REPLACE_ENV_DURING_SYNC: "TRUE"
+      REPLACE_ENV_VARIABLE_PREFIX: CFG_
+      CFG_LUCKPERMS_PASSWORD_FILE: /run/secrets/luckperms_db_password
       # Java 25 compact headers; retain automatic G1 region sizing for 1G heap.
       JVM_XX_OPTS: >-
         -XX:+UseG1GC
@@ -56,9 +60,12 @@ services:
       PLUGINS: |-
         https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity
         https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity
+        https://cdn.modrinth.com/data/Vebnzrzj/versions/tamnmXad/LuckPerms-Velocity-5.5.71.jar
     secrets:
       - source: forwarding_secret
         target: forwarding_secret
+      - source: luckperms_db_password
+        target: luckperms_db_password
     volumes:
       - minecraft_proxy_data:/server
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/config:/config:ro
@@ -67,6 +74,7 @@ services:
     networks:
       - minecraft-ingress-network
       - minecraft-backend-network
+      - database-network
     stop_grace_period: 60s
     deploy:
       replicas: 1
@@ -120,6 +128,7 @@ services:
       REPLACE_ENV_DURING_SYNC: "TRUE"
       REPLACE_ENV_VARIABLE_PREFIX: CFG_
       CFG_FORWARDING_SECRET_FILE: /run/secrets/forwarding_secret
+      CFG_LUCKPERMS_PASSWORD_FILE: /run/secrets/luckperms_db_password
       RESOURCE_PACK_ENFORCE: "TRUE"
       ENFORCE_SECURE_PROFILE: "FALSE"
       GUI: "FALSE"
@@ -141,6 +150,8 @@ services:
     secrets:
       - source: forwarding_secret
         target: forwarding_secret
+      - source: luckperms_db_password
+        target: luckperms_db_password
       - source: rcon_password
         target: rcon_password
     volumes:
@@ -154,6 +165,7 @@ services:
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/datapacks:/extras/datapacks:ro
     networks:
       - minecraft-backend-network
+      - database-network
       - web-ingress-network
     stop_grace_period: 2m
     deploy:
@@ -190,6 +202,8 @@ networks:
     external: true
   web-ingress-network:
     external: true
+  database-network:
+    external: true
 
 volumes:
   minecraft_proxy_data:
@@ -199,4 +213,6 @@ secrets:
   forwarding_secret:
     external: true
   rcon_password:
+    external: true
+  luckperms_db_password:
     external: true

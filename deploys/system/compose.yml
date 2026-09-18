@@ -17,8 +17,10 @@ services:
     secrets:
       - mariadb_root_password
       - mariadb_app_password
+      - luckperms_db_password
     volumes:
       - mariadb_data:/var/lib/mysql
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/deploys/system/mariadb/init-luckperms.sh:/docker-entrypoint-initdb.d/20-luckperms.sh:ro
     networks:
       - database-network
     healthcheck:
@@ -271,3 +273,5 @@ secrets:
   tls_private_key:
     external: true
     name: ${TLS_PRIVATE_KEY_SECRET}
+  luckperms_db_password:
+    external: true

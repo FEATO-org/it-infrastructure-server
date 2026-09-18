@@ -87,6 +87,7 @@ required_secrets=(
   mariadb_app_password
   forwarding_secret
   rcon_password
+  luckperms_db_password
   cloudflare_tunnel_token
   "${TLS_FULLCHAIN_SECRET}"
   "${TLS_PRIVATE_KEY_SECRET}"
@@ -104,6 +105,7 @@ for stack_file in \
   "${REPO_ROOT}/deploys/system/compose.yml" \
   "${REPO_ROOT}/deploys/infra/compose.yml"; do
   docker compose --file "${stack_file}" config --quiet
+  docker stack config --compose-file "${stack_file}" >/dev/null
 done
 
 docker stack deploy \

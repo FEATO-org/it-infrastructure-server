@@ -1,0 +1,18 @@
+server: velocity
+storage-method: mariadb
+data:
+  address: system_mariadb:3306
+  database: luckperms
+  username: luckperms
+  password: '${CFG_LUCKPERMS_PASSWORD}'
+  table-prefix: luckperms_
+  pool-settings:
+    maximum-pool-size: 5
+    minimum-idle: 2
+    properties:
+      useUnicode: true
+      characterEncoding: utf8
+      useSSL: false
+# SQL messaging reuses the encrypted database overlay; Redis is unnecessary.
+messaging-service: sql
+auto-push-updates: true
