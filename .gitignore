@@ -5,3 +5,22 @@ behavior_packs
 secrets
 backup
 .env-production
+
+# Minecraft runtime state; operational configuration templates stay tracked
+*.jar
+*.sqlite
+*.sqlite3
+*.db
+*.mv.db
+**/logs/
+**/cache/
+**/backups/
+**/playerdata/
+**/stats/
+**/advancements/
+**/tiles/
+**/world/
+**/world_nether/
+**/world_the_end/
+**/key.pem
+**/saved-refresh-tokens.json

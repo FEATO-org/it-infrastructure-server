@@ -40,6 +40,8 @@ services:
     image: itzg/mc-proxy:java25
     environment:
       TYPE: VELOCITY
+      VELOCITY_VERSION: "4.2.0"
+      VELOCITY_BUILD_ID: "30"
       MINECRAFT_VERSION: ${MINECRAFT_VERSION:-26.2}
       MEMORY: 1G
       # Java 25 compact headers; retain automatic G1 region sizing for 1G heap.
@@ -60,7 +62,7 @@ services:
     volumes:
       - minecraft_proxy_data:/server
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/config:/config:ro
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/plugins:/plugins
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/plugins:/plugins:ro
       - ${MINECRAFT_ASSET_ROOT:-/opt/it-infrastructure-server/resources/minecraft}/texturepacks:/plugins/Geyser-Velocity/packs:ro
     networks:
       - minecraft-ingress-network
@@ -105,9 +107,13 @@ services:
       PLAYER_IDLE_TIMEOUT: "90"
       VIEW_DISTANCE: "14"
       SIMULATION_DISTANCE: "8"
-      SPIGET_RESOURCES: "110400,87480,84809,89188,99663,109630,57242"
+      # Keep disabled until the author distribution is reachable and its JAR is verified.
+      SPIGET_RESOURCES: ${BETTER_HORSES_SPIGET_RESOURCE:-}
       PLUGINS_FILE: /extras/plugins.txt
-      DATAPACKS: /extras/datapacks
+      DATAPACKS: |-
+        https://cdn.modrinth.com/data/N72bKhby/versions/oeMySJjE/Enchants%2B%20v1.6%201.21%20-%201.21.11.zip
+        https://cdn.modrinth.com/data/bYcfmIoG/versions/KL6JT1nQ/graves-v2.4.zip
+        /extras/datapacks
       ENABLE_COMMAND_BLOCK: "TRUE"
       COPY_CONFIG_DEST: /data
       REPLACE_ENV_VARIABLES: "TRUE"
@@ -140,12 +146,12 @@ services:
     volumes:
       - minecraft_server_data:/data
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/plugins.txt:/extras/plugins.txt:ro
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/plugins:/plugins
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/plugins:/plugins:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/bukkit.yml:/config/bukkit.yml:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/spigot.yml:/config/spigot.yml:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/paper-global.yml:/config/config/paper-global.yml:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/paper-world-defaults.yml:/config/config/paper-world-defaults.yml:ro
-      - ${MINECRAFT_ASSET_ROOT:-/opt/it-infrastructure-server/resources/minecraft}/datapacks:/extras/datapacks:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/datapacks:/extras/datapacks:ro
     networks:
       - minecraft-backend-network
       - web-ingress-network
