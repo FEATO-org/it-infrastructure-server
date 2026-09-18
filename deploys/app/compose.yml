@@ -42,13 +42,14 @@ services:
       TYPE: VELOCITY
       MINECRAFT_VERSION: ${MINECRAFT_VERSION:-26.2}
       MEMORY: 1G
-      # Proxy has no USE_MEOWICE_* support; retain automatic G1 region sizing.
+      # Java 25 compact headers; retain automatic G1 region sizing for 1G heap.
       JVM_XX_OPTS: >-
         -XX:+UseG1GC
         -XX:+ParallelRefProcEnabled
         -XX:+AlwaysPreTouch
         -XX:+DisableExplicitGC
         -XX:MaxGCPauseMillis=200
+        -XX:+UseCompactObjectHeaders
       JVM_OPTS: --enable-native-access=ALL-UNNAMED
       PLUGINS: |-
         https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity

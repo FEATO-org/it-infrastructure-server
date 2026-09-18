@@ -74,3 +74,19 @@ VPSのハードウェア特性に依存するためJVM_OPTSで無効化します
 ローカル検証では本体のビルド、GraalVM 25.0.4、Graal Enterpriseコンパイラ、
 本体のイメージ内スクリプトが生成するMeowIce/GraalVMフラグでのJVM起動を確認しました。
 ローカルDockerではcgroupのメモリ制限を適用できないため、上限内の実負荷検証はVPSで行います。
+
+## プロキシのJava 25メモリ最適化
+
+MeowIceの資料にはVelocity専用の設定はありません。
+そのうち標準HotSpotのJava 25で使える`-XX:+UseCompactObjectHeaders`を追加し、
+オブジェクトヘッダーのメモリ使用量を削減します。1Gヒープと自動リージョンサイズは維持します。
+実際の削減量と処理速度はオブジェクトの構成・負荷に依存します。
+Graal専用設定、400Mのコードキャッシュ、16Mリージョン、NUMA、HugePages、
+CPU命令の強制指定はこのプロキシには適用しません。
+
+https://github.com/MeowIce/meowice-flags
+https://docs.oracle.com/en/java/javase/25/docs/specs/man/java.html
+
+公式itzg/mc-proxy:java25でJVM起動とPrintFlagsFinalの
+UseCompactObjectHeaders=trueを確認しています。実トラフィックでの性能は未計測です。
+問題が出た場合はこのフラグを削除してプロキシを再デプロイしてください。
