@@ -1,4 +1,4 @@
-# Minecraft運用（2026-09-18）
+# Minecraft運用（2026-09-20）
 
 ## Architecture
 
@@ -18,7 +18,11 @@ Internet (Java TCP 25565 / Bedrock UDP 19132)
                      ├ WorldEdit / CraftBook
                      ├ ImageFrame
                      ├ Better Horses (取得検証後に有効化)
-                     └ Backpack Plus
+                     ├ Backpack Plus
+                     ├ EssentialsX / EssentialsX Spawn
+                     ├ VaultUnlocked / EssentialsUnlocked
+                     ├ EconomyShopGUI Free
+                     └ FEATO Ancient Coin
 Data Packs: Enchants Plus / KETKET'S Graves
 Web: nginx dynmap.feato.jp -> Paper :8123 (対応Dynmapを待機)
 ```
@@ -30,10 +34,8 @@ forwarding secret、backend routing、Paperのoffline-modeを維持します。
 Paper・MariaDB・Dynmapの直接publishはありません。既存暗号化overlay、Volumeを維持し、
 DB接続のためVelocity/Paperだけdatabase-networkへ追加します。
 
-**この変更は確定構成の対応確認済み部分です。ショップ、帰還札、Dynmap、DualHorse、Better Horsesは未稼働です。**
-安定版と26.2、Java 25を別々に確認した結果は[versions.md](../deploys/versions.md)を参照してください。
-Vault / XConomyは26.2未確認、Genius Shopはbeta、SetSpawn 3.2はJava 26必須、
-Dynmapは26.2対応stable未確認、DualHorse 1.5.4は26.1までのため自動取得に含めません。
+**Paper 26.2で経済・spawn基盤とFEATO Ancient Coinを導入します。帰還札販売、古銭換金、Dynmap、DualHorse、Better Horsesは未稼働です。**
+Paper 26.2 build 126（STABLE）と採用Pluginの起動をローカルで確認しました。採用版と対応範囲は[versions.md](../deploys/versions.md)を参照してください。
 
 ## LuckPerms / Database / Secrets
 
@@ -129,31 +131,73 @@ ZIP内部のmanifest/function配置は確認済みですが、26.2でのロー�
 `script/copy_plugins_to_remote.sh` を使用します。転送先directoryは先に用意してください。
 旧resources/datapacksは転送しません。
 
-## Economy / 緊急帰還札（対応版待機）
+## Economy / Spawn / FEATO Ancient Coin
 
-XConomyの待機templateは `minecraft/templates/XConomy/` に置き、mountしません。
-初期残高200G、通貨G、UUID-mode=Default、単一PaperのためSyncData無効です。
-Floodgateの既存prefix `b-` を維持します。prefixが空の場合のSemiOnlineは使いません。
-導入時は専用DB/user `xconomy` と `xconomy_db_password` を追加し、既存app/LP資格情報を
-共有しないでください。現時点ではXConomy DB/user/secretは作成しません。
+Economy ProviderはEssentialsXへ統一し、Vault API層にVaultUnlocked、橋渡しに
+EssentialsUnlockedを使用します。XConomy / XConomy_Reload、旧Vault、SetSpawn、
+Genius Shopは採用しません。初期残高は200G、通貨記号は金額の後ろに`G`を表示し、
+負残高を禁止します。既存XConomy残高が本番Volumeや外部DBに存在する場合は削除せず、
+旧環境でexportしてから移行表を作り、EssentialsXの`eco set`で管理者が反映してください。
+自動変換処理はありません。
 
-Genius Shopは管理者の限定ショップとし、一般資源の大量販売や万能ショップは作りません。
-目標は商品ID `emergency_return`、ExecutableItems item ID `emergency_return`、価格100G、
-購入1回につき公式 `ei give <player> emergency_return 1` コマンドで1個配布です。
-現在このitemは存在せず、このテストコマンドは後続の有効化後だけ使用します。
+一般プレイヤーへ許可するEssentialsX権限は次の3つだけです。aliasも同じ権限ノードで制御されます。
+`essentials.*`は付与しません。
 
-帰還札はright click/useでSetSpawnの本拠点へ移動し、**転送成功時だけ1個消費**します。
-単純な `spawn` コマンドとEI usage消費の連結では、spawn未設定/権限拒否/転送失敗時も
-消費する恐れがあり、公式で成功判定できる方法を確認するまで実行設定を作りません。
-購入成功・失敗時の引落しと配布も二重処理/無料配布がないことを検証してから販売開始します。
-cooldown、teleport delay、cast time、damage/movement cancel、combat restrictionは追加しません。
+```bash
+lp group default permission set essentials.balance true
+lp group default permission set essentials.pay true
+lp group default permission set essentials.spawn true
+```
 
-SetSpawn対応版の導入後、管理者が帰還先で `/setspawn` を実行します。
-座標はGitで決めません。公式configの `cooldown-time` と `countdown-time` を0にし、
-座標を含む生成config全体を毎起動上書きせず、必要なキーのみ変更します。
-`/spawn` とベッド死亡respawnを別々に確認し、全員を本拠点へ強制respawnさせません。
-Java/Bedrock両方で残高200G→購入100G→札1個→使用→成功時だけ札0個を確認します。
-100G未満、spawn未設定、権限拒否、転送失敗、連続use、満杯inventoryもテストします。
+`home`、`sethome`、`back`、`tpa`、`tpahere`、`tpaccept`、`tpdeny`、`tpacancel`、
+`warp`、`setwarp`、`kit`、`nick`、`sudo`はEssentialsX設定でも無効化しています。
+管理者の経済操作とspawn設定は必要な管理グループへ個別付与します。
+
+```bash
+lp group <admin-group> permission set essentials.balance.others true
+lp group <admin-group> permission set essentials.eco true
+lp group <admin-group> permission set essentials.setspawn true
+```
+
+EssentialsX Spawnの死亡respawn listenerは`none`、`spawn-on-join`は`false`です。
+通常死亡はvanillaのbed / respawn anchorを使い、`/spawn`だけが管理者の
+`/setspawn`で設定した本拠点へ移動します。初回導入後、本拠点で`/setspawn`を1回実行してください。
+
+EssentialsXは公式の`ja`、EconomyShopGUIは同梱の`lang-jp.yml`と`ja-JP`を指定します。
+Ancient Coinには言語設定がなく、SCore / ExecutableItemsの配布版にも日本語ロケールはありません。
+
+EconomyShopGUI Free 7.2.1はVault APIを明示指定し、一般資源を含まない空の
+`feato_exchange`だけを追跡します。Plugin既定ではsell系権限がtrueのため、
+LuckPermsで明示的に拒否し、交換所だけを許可します。
+
+```bash
+lp group default permission set economyshopgui.sellall false
+lp group default permission set economyshopgui.sellallitem false
+lp group default permission set economyshopgui.sellallhand false
+lp group default permission set economyshopgui.sellgui false
+lp group default permission set economyshopgui.shop true
+lp group default permission set economyshopgui.shop.all false
+lp group default permission set economyshopgui.shop.feato_exchange true
+```
+
+FEATO Ancient Coin v0.2.0をPaper backendへ導入し、公式既定drop率を
+`plugins/AncientCoin/config.yml`で管理します。v0.2.0は`api-version: 26.2`を宣言し、
+Paper 26.2で起動確認済みです。古銭はGold Nuggetをbaseに、
+`minecraft:custom_data={feato_coin:{id:"ancient_coin",schema:1}}`で識別されます。
+Plugin自身は経済・換金・GUIを実装しません。旧Ancient Coin Data Packがworld内に存在する場合は、
+二重抽選を避けるため停止中に退避してください。Enchants Plusは別Packなので維持します。
+
+EconomyShopGUI Freeでは`components`/NBT、外部custom item provider、
+`buy-commands`/`sell-commands`がPremium限定です。無料版のMaterial、name、Loreだけでは
+通常Gold Nuggetや同名/Lore模倣品を安全に排除できないため、古銭の10G換金は設定しません。
+安全に実現するには、AncientCoin Plugin自身がcustom dataを検証して1枚を消費し、
+VaultUnlocked economyへ10Gを入金する換金処理を実装する案があります。設計変更は未実施です。
+
+同じ制約により、EconomyShopGUI FreeからExecutableItemsの`emergency_return`を正しく配布する
+custom item連携と購入時commandは利用できません。100Gの緊急帰還札商品は作らず、
+名前だけ同じ無効アイテムの販売も行いません。ExecutableItems側に既存item設定はありません。
+後続実装時はプレイヤー自身の`/spawn`権限で実行し、temp OPやconsole権限昇格を使わず、
+価格100G、消費1個、cooldown/cast time 0、成功時だけ消費を検証してください。
 
 ## 権限 / その他設定
 
@@ -181,8 +225,11 @@ player marker/location、cave map、hidden/visibility、map detailは現状維�
 - Velocity/Paper起動、依存errorなし、forwarding、backend登録、Geyser/Floodgate load
 - Java/Bedrock login、Floodgate UUID/prefix/再接続・link時のidentity
 - LuckPerms DB接続、両側権限同期、LuckTags prefixと管理権限の分離
-- XConomy残高、Java/Bedrock間 `/pay`、再接続で残高維持（対応版導入後）
-- Genius Shop購入、帰還札購入/use/失敗時非消費、bed spawn維持（対応版導入後）
+- EssentialsX残高、初期200G、Java/Bedrock間 `/pay`、再接続で残高維持
+- `/spawn`とvanilla bed/respawn anchorの分離
+- EconomyShopGUIのVaultUnlocked接続と空の交換所、sell系権限拒否
+- FEATO Ancient Coin drop、custom data維持、既存lootとの共存
+- 帰還札購入/useと古銭10G換金（安全な実装追加後）
 - Dynmap nginx公開（対応版導入後）、ImageFrame Bedrock rendering
 - Backpack Plus Bedrock UI/mapping、既存backpackデータ保持
 - Better Horses + DualHorse二人乗り/育成/保存（DualHorse対応版導入後）
@@ -192,8 +239,8 @@ player marker/location、cave map、hidden/visibility、map detailは現状維�
 
 公開情報だけではValhallaMMOとEnchants Plus、Better HorsesとDualHorse、Bedrock custom item等の
 組合せ互換性を保証しません。競合する場合はworld/DBを保全して対象機能を停止してください。
-CoreProtect、Cart Speed、BulletCart、FEATO Ancient Coinは導入しません。
-Backpack容量/recipe、Dynmap visibility、一般商品、村長予算、古銭、追加ICは未決定のままです。
+CoreProtect、Cart Speed、BulletCartは導入しません。
+Backpack容量/recipe、Dynmap visibility、一般商品、村長予算、古銭の安全な換金、帰還札販売、追加ICは未決定のままです。
 
 rollbackは旧Git設定/イメージ/JAR/Packと秘密情報を揃え、停止中に整合したVolume/DB backupから
 復元します。`docker service rollback` だけでは変更済みDB、world、Plugin dataは戻りません。
@@ -211,7 +258,7 @@ rollbackは旧Git設定/イメージ/JAR/Packと秘密情報を揃え、停止�
 - Velocity固定版: 公式APIで4.2.0 build 30/channel STABLE確認、JAR GETは403で未検証
 - Bash構文、git diff --check: PASS
 - Better HorsesのGET: 403、manifestは未検証
-- Plugin起動テスト: 自動承認レビューがネットワーク下の外部Plugin実行を拒否したため未実行
+- Plugin起動テスト: Paper 26.2 build 126で対象9 Pluginを有効化し、ERROR/Exceptionなし。AncientCoin 0.2.0、EssentialsX ja、EconomyShopGUI lang-jp.yml、Vault連携を確認: PASS
 - 本番deployment、DNS変更、既存DB migration: 未実行
 
 Swarm config検証はローカル旧CLIに当該コマンドがないため、公式Docker CLI 29.8.0を
@@ -228,10 +275,13 @@ Swarm config検証はローカル旧CLIに当該コマンドがないため、�
 - `deploys/versions.md`
 - `minecraft/README.md`
 - `minecraft/java/plugins.txt`
+- `minecraft/java/plugins/AncientCoin/config.yml`
+- `minecraft/java/plugins/EconomyShopGUI/config.yml`
+- `minecraft/java/plugins/EconomyShopGUI/sections/feato_exchange.yml`
+- `minecraft/java/plugins/EconomyShopGUI/shops/feato_exchange.yml`
+- `minecraft/java/plugins/Essentials/config.yml`
 - `minecraft/java/plugins/CraftBook/config.yml`
 - `minecraft/java/plugins/LuckPerms/config.yml`
-- `minecraft/templates/XConomy/config.yml`
-- `minecraft/templates/XConomy/database.yml`
 - `minecraft-proxy/config/plugins/LuckPerms/config.yml`
 - `minecraft-proxy/plugins/Geyser-Velocity/config.yml`
 - `script/deploy_swarm.sh`
@@ -247,3 +297,5 @@ Swarm config検証はローカル旧CLIに当該コマンドがないため、�
 - `minecraft/java/plugins/NewGods/config.yml`
 - `minecraft/java/plugins/SimplyFarming/config.yml`
 - `minecraft-proxy/plugins/Geyser-Spigot/config.yml`（Geyser-Velocityへ内容保持して移動）
+- `minecraft/templates/XConomy/config.yml`
+- `minecraft/templates/XConomy/database.yml`

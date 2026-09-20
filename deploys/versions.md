@@ -1,4 +1,4 @@
-# バージョン確認（2026-09-18）
+# バージョン確認（2026-09-20）
 
 公式リリース一覧・APIで安定版を確認し、Minecraft本体・プロキシ以外のコンテナは固定タグを指定しています。
 nginxはMainlineではなくStable系列です。
@@ -15,9 +15,9 @@ nginxはMainlineではなくStable系列です。
 | Certbot / DNS Cloudflare | 5.8.0（変更なし） | https://github.com/certbot/certbot/releases/tag/v5.8.0 |
 | Minecraft server image | itzg/minecraft-server:java25-graalvm（公式イメージ） | https://docker-minecraft-server.readthedocs.io/en/latest/versions/java/ |
 | Minecraft proxy image | itzg/mc-proxy:java25（公式HotSpotイメージ） | https://github.com/itzg/docker-mc-proxy/blob/main/README.md |
-| Paper / Minecraft | 26.2、Java 25 | https://papermc.io/downloads/paper/ |
+| Paper / Minecraft | 26.2 build 126（STABLE）、Java 25 | https://fill.papermc.io/v3/projects/paper/versions/26.2/builds/latest |
 
-GitHubは`releases/latest`の`prerelease=false`を確認しています。
+GitHub Release採用品は`releases/latest`の`prerelease=false`を確認しています。EssentialsXは26.2対応を優先し、公式CIの固定development buildを採用します。
 Docker HubでMariaDB・nginx・Portainer・itzgの採用タグの存在も確認しました。
 Java 25の要件: https://docs.papermc.io/paper/getting-started/
 
@@ -88,9 +88,9 @@ https://docs.oracle.com/en/java/javase/25/docs/specs/man/java.html
 UseCompactObjectHeaders=trueを確認しています。実トラフィックでの性能は未計測です。
 問題が出た場合はこのフラグを削除してプロキシを再デプロイしてください。
 
-## Minecraft確定構成（2026-09-18）
+## Minecraft確定構成（2026-09-20）
 
-Modrinth公式APIでrelease、26.2、配置先loaderを確認し、GETしたJAR/ZIPのSHA-512を照合しました。
+Modrinth/GitHub/Paper公式APIでrelease、対応版、配置先loaderを確認し、GETしたJAR/ZIPのSHA-512を照合しました。
 Java列は同梱クラスの最大バージョンに基づきます。Java 25起動、外部依存と組合せ互換性は
 すべて Requires runtime verification。配布metadataの対応表と実際の動作保証は別です。
 
@@ -109,10 +109,11 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | Enchants Plus | 1.6 | [固定URL](https://cdn.modrinth.com/data/N72bKhby/versions/oeMySJjE/Enchants%2B%20v1.6%201.21%20-%201.21.11.zip) | Data Pack | 26.2（配布metadata） | stable | Requires runtime verification |
 | KETKET'S Graves | 2.4 | [固定URL](https://cdn.modrinth.com/data/bYcfmIoG/versions/KL6JT1nQ/graves-v2.4.zip) | Data Pack | 26.2（配布metadata） | stable | Requires runtime verification |
 | Better Horses | 未採用（候補6.3、取得は動的） | [作者配布](https://www.spigotmc.org/resources/better-horses.124223/) | Paper | 26.2（作者tested一覧） | stable | 確認後にBETTER_HORSES_SPIGET_RESOURCE=124223。固定release assetなし、GETは403。公開ソース6.2はJava 21、6.3のmanifestとJava 25をデプロイ前に確認 |
-| Vault | 未採用（候補1.7.3） | [公式release](https://github.com/MilkBowl/Vault/releases/tag/1.7.3) | Paper | 26.2未確認 | stable | 対応確認後に導入 |
-| XConomy | 未採用（候補2.26.3） | [作者配布](https://www.spigotmc.org/resources/xconomy.75669/) | Paper | tested一覧1.20まで | stable | Java 25・26.2未確認。200G/G設定は待機template |
-| Genius Shop | 未採用（候補1.6.0-BETA.26.7.2） | [公式配布](https://modrinth.com/plugin/genius-shop/versions) | Paper | 1.21.x | beta | stable 26.2未確認。帰還札販売を保留 |
-| SetSpawn | 未採用（候補3.2） | [公式配布](https://modrinth.com/plugin/setspawn/versions) | Paper | 26.2 | stable | JAR class major=70、Java 26必須。Java 25では起動不可 |
+| EssentialsX Core / Spawn | 2.22.1-dev+24-49a2f10（公式CI build 1829） | [Core](https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsX-2.22.1-dev+24-49a2f10.jar) / [Spawn](https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsXSpawn-2.22.1-dev+24-49a2f10.jar) | Paper | 26.2（現行公式support一覧） | development | 2.22.0 stableは26.1.2まで。Paper 26.2で起動確認 |
+| VaultUnlocked | 2.20.3 | [固定URL](https://cdn.modrinth.com/data/ayRaM8J7/versions/qZgRzoYs/VaultUnlocked-2.20.3.jar) | Paper | 26.2（配布metadata） | stable | plugin名は`Vault`。Paper 26.2で起動確認 |
+| EssentialsUnlocked | 1.0.0.1 | [固定URL](https://cdn.modrinth.com/data/gPLRdl3T/versions/fUaoKCyT/EssentialsUnlocked-1.0.0.1.jar) | Paper | 26.2（配布metadata） | stable | manifest versionは1.0.0.0。Paper 26.2で起動確認 |
+| EconomyShopGUI Free | 7.2.1 | [作者配布](https://www.spigotmc.org/resources/economyshopgui.69927/) | Paper | 26.2（作者tested一覧） | stable | Paper 26.2でEssentialsX Economyへの接続確認。Spiget CDNは動的URL |
+| FEATO Ancient Coin | 0.2.0 | [固定Release](https://github.com/FEATO-org/feato_ancient_coin/releases/tag/v0.2.0) | Paper | 26.2（plugin api-version） | stable release | draft=false、prerelease=false。Paper 26.2で起動確認 |
 | Dynmap | 未採用 | [公式release](https://github.com/webbukkit/dynmap/releases) | Paper | 26.2未確認 | 対応stable未確認 | [対応PR #4271](https://github.com/webbukkit/dynmap/pull/4271)は未マージ。設定・nginx経路維持 |
 | DualHorse | 未採用（候補1.5.4） | [公式配布](https://modrinth.com/plugin/dualhorse/versions) | Paper | 26.1–26.1.2 | stable | 26.2未確認。Better Horsesとの併用は Requires runtime verification |
 | Velocity | 4.2.0 build 30 | [公式配布](https://papermc.io/downloads/velocity) | Velocity | 接続を実機検証 | stable（公式API STABLE） | VELOCITY_VERSIONとBUILD_IDで固定。JAR GETは403、Requires runtime verification |
@@ -133,5 +134,11 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | craftbook-3.10.13.jar | `04ff7ae4ddaf732951a882096e9d0744626e0449b6d6c24c2fa4f5af02ac5241b45c8992dcf4814153c5d1a3d01051a7bb6a42bd8102fea192ca93c8513addb3` |
 | ImageFrame-2026.1.4.0.jar | `2a510fa5906e26331351fb69da6b19ca08d82ffb3ea34781cde8de44eed25a18e43862e6144a3bcbc8bf2184ee3a975fe65ee10689ff07039d23076fda35f58a` |
 | BackpackPlus-3.2.0-all.jar | `e2385aab904864957ec1063f4faa9c553ad8e68604cb719a74b8a3a03c7459b628f82b10e7f4a56768ee77511129a0884bda7d4168074d26cec10448ce80ff5f` |
+| EssentialsX-2.22.1-dev+24-49a2f10.jar | `11564dd426f55738507fe776dbc6cf644243f37289eb34e4cb6ac83960e1b565c93f0212332bea93d1a24990c88cfc0d94e23b0cf1dafbce0a27bde38605f7b8` |
+| EssentialsXSpawn-2.22.1-dev+24-49a2f10.jar | `f634b55517cc3ee9d191a275bb9093552e3312aa5f54d1c35dfddd8f90c3f92f32c10cce9049b93e4d635fa0dfe986377e507b3f7b15e59e35f56d0a7035eef7` |
+| VaultUnlocked-2.20.3.jar | `0eedea1591459e7e327315b43afa834a173c8c2ae31b3b235586d31963df29a4a6c0ef4b8f3fdc746e15afd47ee50c1ff93584543b5c2ef7c2a80135dba1136a` |
+| EssentialsUnlocked-1.0.0.1.jar | `c271923c87e2a1e85011e3784141f50b848c4717f9c04c9279cc03d7aaafd79ddcf73abadfdb6aac0d964be818065ee510737365feed07a2309687aa533c85b9` |
+| EconomyShopGUI-7.2.1.jar | `178c3d5e0d051be27008a5bf9ef2b69c74bf1be7a37f40f4b63046f6d520c4f886e7b94502dfc01893b97262feb56d674c4e8100352a36fa4fa6058409bf9114` |
+| FEATO-Ancient-Coin-0.2.0.jar | `b48305f6918df47070e6b6ceea1e4326a120a18f713f2bd221f4e75db71b047b5c0f3bf08c247aa671ef8eb2be1dc5db641146dd768537d3c98a398652e5a183` |
 | Enchants+ v1.6 1.21 - 1.21.11.zip | `93e507c428287d7e8562a2ddd5a6488e47fcd76282426d683621c947f4fa8dda6a0ed605d458a1fed659ac5aa0909f01c8adb32994664788abe35fce0411083b` |
 | graves-v2.4.zip | `ec11eb415c3108fa2741d32331a35328122a1d0f34eafb7885ca7cee8d93606d2c65c44b7f93fea02b57eb6bfe00f3fb96bc526c343d8329e65050e351819b8b` |
