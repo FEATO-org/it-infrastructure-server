@@ -1,0 +1,44 @@
+entity-loot:
+  zombie: { chance: 0.005, min: 1, max: 1 }
+  skeleton: { chance: 0.005, min: 1, max: 1 }
+  spider: { chance: 0.005, min: 1, max: 1 }
+  creeper: { chance: 0.0075, min: 1, max: 1 }
+  witch: { chance: 0.015, min: 1, max: 2 }
+  enderman: { chance: 0.01, min: 1, max: 1 }
+  blaze: { chance: 0.015, min: 1, max: 1 }
+  piglin_brute: { chance: 0.03, min: 1, max: 2 }
+  evoker: { chance: 0.05, min: 1, max: 3 }
+  wither: { chance: 1.0, min: 10, max: 20 }
+  ender_dragon: { chance: 1.0, min: 20, max: 30 }
+
+structure-loot:
+  minecraft:chests/village/village_armorer: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/village/village_butcher: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/village/village_cartographer: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/village/village_desert_house: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/village/village_fisher: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/village/village_fletcher: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/village/village_mason: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/village/village_plains_house: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/village/village_savanna_house: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/village/village_shepherd: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/village/village_snowy_house: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/village/village_taiga_house: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/village/village_tannery: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/village/village_temple: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/village/village_toolsmith: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/village/village_weaponsmith: { chance: 0.10, min: 1, max: 1 }
+  minecraft:chests/abandoned_mineshaft: { chance: 0.20, min: 1, max: 2 }
+  minecraft:chests/simple_dungeon: { chance: 0.20, min: 1, max: 2 }
+  minecraft:chests/shipwreck_treasure: { chance: 0.30, min: 1, max: 3 }
+  minecraft:chests/buried_treasure: { chance: 0.40, min: 2, max: 4 }
+  minecraft:chests/desert_pyramid: { chance: 0.30, min: 1, max: 3 }
+  minecraft:chests/jungle_temple: { chance: 0.30, min: 1, max: 3 }
+  minecraft:chests/pillager_outpost: { chance: 0.30, min: 1, max: 3 }
+  minecraft:chests/nether_bridge: { chance: 0.35, min: 1, max: 4 }
+  minecraft:chests/bastion_bridge: { chance: 0.50, min: 2, max: 6 }
+  minecraft:chests/bastion_hoglin_stable: { chance: 0.50, min: 2, max: 6 }
+  minecraft:chests/bastion_other: { chance: 0.50, min: 2, max: 6 }
+  minecraft:chests/bastion_treasure: { chance: 0.50, min: 2, max: 6 }
+  minecraft:chests/end_city_treasure: { chance: 0.50, min: 3, max: 7 }
+  minecraft:chests/ancient_city: { chance: 0.60, min: 4, max: 10 }

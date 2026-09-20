@@ -1,0 +1,5 @@
+pages:
+  page1:
+    gui-rows: 1
+    title: "&8FEATO Exchange"
+    items: {}
