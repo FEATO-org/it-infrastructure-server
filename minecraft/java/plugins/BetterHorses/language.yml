@@ -1,0 +1,105 @@
+prefix: '&7[&6BetterHorses&7] '
+messages:
+  horse: 馬
+  camel: ラクダ
+  llama: ラマ
+  mule: ラバ
+  donkey: ロバ
+  horse-item-name: <gold>%name% %gender%</gold>
+  lore-gender: '性別: %value%'
+  insufficient-permission: '%command%を使用する権限がありません。'
+  horse-usage: '使用法: /horse <spawn|despawn|neuter|reload|info*>'
+  already-castrated: この馬はすでに去勢されています。
+  successfully-castrated: 馬を去勢しました。この馬は繁殖できなくなりました。
+  horse-respawned: 保存した能力で%mount%を再出現させました。
+  invalid-horse-data: このアイテムには有効な%mount%データがありません。
+  not-horse-owner: あなたはこの%mount%の所有者ではありません。
+  unknown-subcommand: 不明なサブコマンドです。/horse <spawn|despawn|neuter|reload>を使用してください。
+  only-players: このコマンドはプレイヤーだけが使用できます。
+  horsecreate-usage: '使用法: /horsecreate <health> <speed> <jump> [gender] [name] [trait] [growth] [mounttype] [neutered]'
+  traits-disabled: 特性は設定で無効です。
+  traits-error: この特性は有効でないか、設定に存在しません。
+  invalid-mount-type: '無効な乗用動物です。使用可能: %types%'
+  mount-type-disabled: この乗用動物は設定で無効です。
+  invalid-number-format: 数値形式が正しくありません。
+  horse-despawned: '%mount%を格納しました。'
+  invalid-item: 有効な馬アイテムをメインハンドに持ってください。
+  invalid-vehicle: 格納する馬に乗ってください。
+  cant-spawn: ここでは馬を出現させられません。
+  cant-despawn: ここでは馬を格納できません。
+  cant-despawn-chested: チェストを装着した%mount%は格納できません。
+  config-reloaded: 設定を再読み込みしました。
+  trait-line: '特性: %trait%'
+  gender-male: ♂
+  gender-female: ♀
+  lore-speed: '速度: %value%'
+  lore-jump: '跳躍力: %value%'
+  lore-speed-blocks: '<grey>速度: %speed%ブロック/秒</grey>'
+  lore-jump-blocks: '<grey>跳躍力: %jump%ブロック</grey>'
+  lore-health: '体力: %value% / %max%'
+  lore-neutered: ⚠ 去勢済み - 繁殖不可
+  lore-growth: '成長度: %value%0%'
+  cooldown-message-bossbar: '&e%value% &7クールダウン'
+  cooldown-message-hotbar: '&e%value% &7クールダウン: &f%remaining%秒'
+  horse-info:
+    item:
+    - '&6------ BetterHorses Item Debug ------'
+    - '&eType: &f%item_type%'
+    - '&eAmount: &f%item_amount%'
+    - '&eDisplay Name: &f%item_display_name%'
+    - '&eUnbreakable: &f%item_unbreakable%'
+    - '%item_damage_line%'
+    - '&eCustomModelData: &f%item_custom_model_data%'
+    - '%item_lore%'
+    - '%item_flags%'
+    - '%persistent_data%'
+    - '&e%known_values_title%:'
+    - '%known_values%'
+    mounted-horse:
+    - '&6------ BetterHorses Mounted Horse Debug ------'
+    - '&eEntity: &f%entity_type%'
+    - '&eUUID: &f%entity_uuid%'
+    - '&eTamed: &f%tamed%'
+    - '&eOwner: &f%owner%'
+    - '&eHealth: &f%health%'
+    - '&eSpeed: &f%speed%'
+    - '&eJump: &f%jump%'
+    - '&eTrait: &f%trait%'
+    - '&eGender: &f%gender%'
+    - '&eGrowth Stage: &f%growth_stage%'
+    - '&eNeutered: &f%neutered%'
+    - '&e%known_values_title%:'
+    - '%known_values%'
+    no-target:
+    - '&c馬アイテムをメインハンドに持つか、馬に乗ってください。'
+traits:
+  hellmare: ヘルメア
+  hellmare-message: ヘルメアを発動しました！
+  fireheart: 炎の心
+  dashboost: ダッシュブースト
+  dashboost-message: ダッシュブーストを発動しました！
+  featherhooves: 羽の蹄
+  frosthooves: 霜の蹄
+  heavenhooves: 天の蹄
+  kickback: 蹴り返し
+  kickback-message: 蹴り返しを発動しました！
+  ghosthorse: 幽霊馬
+  ghosthorse-message: あなたと馬が幽霊になりました…
+  skyburst: スカイバースト
+  revenantcurse: 亡霊の呪い
+  revenantcurse-message: 呪いを発動しました。攻撃者に災いが降りかかります。
+training-lore:
+  title: '&6トレーニング'
+  complete: 完了
+  progress-bar:
+    filled-char: ■
+    empty-char: ■
+    filled-color: '&b'
+    empty-color: '&8'
+  categories:
+    riding-name: '&7騎乗:'
+    brushing-name: '&7ブラッシング:'
+    feeding-name: '&7餌やり:'
+    riding: '&7騎乗: %bar% &b%percent%%'
+    brushing: '&7ブラッシング: %bar% &b%percent%%'
+    feeding: '&7餌やり: %bar% &b%percent%%'
