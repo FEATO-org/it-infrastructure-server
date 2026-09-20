@@ -1,4 +1,4 @@
-# バージョン確認（2026-09-20）
+# バージョン確認（2026-09-21）
 
 公式リリース一覧・APIで安定版を確認し、Minecraft本体・プロキシ以外のコンテナは固定タグを指定しています。
 nginxはMainlineではなくStable系列です。
@@ -108,14 +108,15 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | Backpack Plus | 3.2.0 | [固定URL](https://cdn.modrinth.com/data/lDAFcnRN/versions/vsRfbexG/BackpackPlus-3.2.0-all.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | Enchants Plus | 1.6 | [固定URL](https://cdn.modrinth.com/data/N72bKhby/versions/oeMySJjE/Enchants%2B%20v1.6%201.21%20-%201.21.11.zip) | Data Pack | 26.2（配布metadata） | stable | Requires runtime verification |
 | KETKET'S Graves | 2.4 | [固定URL](https://cdn.modrinth.com/data/bYcfmIoG/versions/KL6JT1nQ/graves-v2.4.zip) | Data Pack | 26.2（配布metadata） | stable | Requires runtime verification |
-| Better Horses | 未採用（候補6.3、取得は動的） | [作者配布](https://www.spigotmc.org/resources/better-horses.124223/) | Paper | 26.2（作者tested一覧） | stable | 確認後にBETTER_HORSES_SPIGET_RESOURCE=124223。固定release assetなし、GETは403。公開ソース6.2はJava 21、6.3のmanifestとJava 25をデプロイ前に確認 |
+| Better Horses | 6.3 | [作者配布](https://www.spigotmc.org/resources/better-horses.124223/) | Paper | 26.2（作者tested一覧、起動確認） | stable | Spiget resource 124223から動的取得。ProtocolLibなしでは一部機能無効 |
 | EssentialsX Core / Spawn | 2.22.1-dev+24-49a2f10（公式CI build 1829） | [Core](https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsX-2.22.1-dev+24-49a2f10.jar) / [Spawn](https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsXSpawn-2.22.1-dev+24-49a2f10.jar) | Paper | 26.2（現行公式support一覧） | development | 2.22.0 stableは26.1.2まで。Paper 26.2で起動確認 |
 | VaultUnlocked | 2.20.3 | [固定URL](https://cdn.modrinth.com/data/ayRaM8J7/versions/qZgRzoYs/VaultUnlocked-2.20.3.jar) | Paper | 26.2（配布metadata） | stable | plugin名は`Vault`。Paper 26.2で起動確認 |
 | EssentialsUnlocked | 1.0.0.1 | [固定URL](https://cdn.modrinth.com/data/gPLRdl3T/versions/fUaoKCyT/EssentialsUnlocked-1.0.0.1.jar) | Paper | 26.2（配布metadata） | stable | manifest versionは1.0.0.0。Paper 26.2で起動確認 |
 | EconomyShopGUI Free | 7.2.1 | [作者配布](https://www.spigotmc.org/resources/economyshopgui.69927/) | Paper | 26.2（作者tested一覧） | stable | Paper 26.2でEssentialsX Economyへの接続確認。Spiget CDNは動的URL |
 | FEATO Ancient Coin | 0.2.0 | [固定Release](https://github.com/FEATO-org/feato_ancient_coin/releases/tag/v0.2.0) | Paper | 26.2（plugin api-version） | stable release | draft=false、prerelease=false。Paper 26.2で起動確認 |
-| Dynmap | 未採用 | [公式release](https://github.com/webbukkit/dynmap/releases) | Paper | 26.2未確認 | 対応stable未確認 | [対応PR #4271](https://github.com/webbukkit/dynmap/pull/4271)は未マージ。設定・nginx経路維持 |
-| DualHorse | 未採用（候補1.5.4） | [公式配布](https://modrinth.com/plugin/dualhorse/versions) | Paper | 26.1–26.1.2 | stable | 26.2未確認。Better Horsesとの併用は Requires runtime verification |
+| FancyNpcs | 2.12.0 | [固定URL](https://cdn.modrinth.com/data/EeyAn23L/versions/53lykMXY/FancyNpcs-2.12.0.jar) | Paper | 26.2（配布metadata、起動確認） | stable | 依存なし。NPC actionはplayer_commandを使用し、一時OPは禁止 |
+| squaremap | 1.3.15 | [固定Release](https://github.com/jpenilla/squaremap/releases/tag/v1.3.15) | Paper | 26.2（api-version、起動確認） | stable | 内部Webサーバー8123、既存dynmap.feato.jp経路を再利用 |
+| DualHorse | 1.5.4 | [固定URL](https://cdn.modrinth.com/data/mgoLZ3st/versions/9jTb2KHl/DualHorse-1.5.4.jar) | Paper | 配布metadataは26.1.2まで、26.2で起動確認 | stable | 26.2の実プレイヤー二人乗りとBetter Horses併用は要確認 |
 | Velocity | 4.2.0 build 30 | [公式配布](https://papermc.io/downloads/velocity) | Velocity | 接続を実機検証 | stable（公式API STABLE） | VELOCITY_VERSIONとBUILD_IDで固定。JAR GETは403、Requires runtime verification |
 | Geyser | 既存latest | [公式配布](https://download.geysermc.org/) | Velocity | 接続を実機検証 | 取得build要確認 | 既存方式維持、Requires runtime verification |
 | Floodgate | 既存latest | [公式配布](https://download.geysermc.org/) | Velocity | 接続を実機検証 | 取得build要確認 | 既存UUID・username-prefix維持、Requires runtime verification |
@@ -140,5 +141,15 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | EssentialsUnlocked-1.0.0.1.jar | `c271923c87e2a1e85011e3784141f50b848c4717f9c04c9279cc03d7aaafd79ddcf73abadfdb6aac0d964be818065ee510737365feed07a2309687aa533c85b9` |
 | EconomyShopGUI-7.2.1.jar | `178c3d5e0d051be27008a5bf9ef2b69c74bf1be7a37f40f4b63046f6d520c4f886e7b94502dfc01893b97262feb56d674c4e8100352a36fa4fa6058409bf9114` |
 | FEATO-Ancient-Coin-0.2.0.jar | `b48305f6918df47070e6b6ceea1e4326a120a18f713f2bd221f4e75db71b047b5c0f3bf08c247aa671ef8eb2be1dc5db641146dd768537d3c98a398652e5a183` |
+| FancyNpcs-2.12.0.jar | `f7a52c7e44d004e4235c12bf8d6936b25188ae7259b375d8b310b56538e724452805173e3781f9326c8fa794802f329c18416cbafccf5b5fab5016a628027399` |
+| squaremap-paper-mc26.2-1.3.15.jar | `a6f00e0ea57268ed30b4aa2246b8ea3424f1210daab01bd47b217ec334199e792605f9419b7cfed7ed07cac20ad125593ddaf181c0ee72a129255563c75ab11e` |
+| DualHorse-1.5.4.jar | `fd70684e9b3263bfc4edb9bde54a5fc1cc08c9f2ca4577434e2517dd7a3e5958029ebb0fd4090faa0545ae957531608cafe5452cb30d87f67344b28ac30e75d2` |
+| BetterHorses-6.3.jar | `d54e921e073eec52dbe81542f0d06713bf1c217a645c4644caf410fcc08ebfa27723866d7de3803a2be7c3d4143c61943849dd9e959f312f8d465426d863e704` |
 | Enchants+ v1.6 1.21 - 1.21.11.zip | `93e507c428287d7e8562a2ddd5a6488e47fcd76282426d683621c947f4fa8dda6a0ed605d458a1fed659ac5aa0909f01c8adb32994664788abe35fce0411083b` |
 | graves-v2.4.zip | `ec11eb415c3108fa2741d32331a35328122a1d0f34eafb7885ca7cee8d93606d2c65c44b7f93fea02b57eb6bfe00f3fb96bc526c343d8329e65050e351819b8b` |
+
+## 26.2追加構成の起動検証（2026-09-21）
+
+Paper 26.2 build 126 / Java 25で全19 Pluginを同時に有効化し、正常停止を確認しました。FancyNpcs 2.12.0、squaremap 1.3.15、DualHorse 1.5.4、Better Horses 6.3を含みます。squaremapは8123番で起動し、ValhallaMMOはja-jp、Backpack Plusはjpn、EconomyShopGUIはlang-jp.ymlを読み込みました。ExecutableItemsはemergency_returnを含む追跡アイテム1件を読み込み、EconomyShopGUIはfeato_shop 1セクション/1ショップとEssentialsX Economy接続を確認しました。
+
+Better HorsesはProtocolLibなしでも起動しますが一部機能を無効化します。DualHorseの配布metadataは26.1.2までのため、26.2では起動確認に加えて実プレイヤーで二人乗り、再接続、馬データ保存、Better Horsesとの併用を確認してください。NPCクリック、帰還札の100G徴収・1回消費・teleport、Java/Bedrock接続はクライアント試験が必要です。

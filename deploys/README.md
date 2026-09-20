@@ -132,7 +132,7 @@ sudo -E TLS_STATE_FILE=/var/lib/swarm-certbot/swarm-secrets.env \
 
 ## 5. DNSとファイアウォール
 
-- `api.feato.jp`と`dynmap.feato.jp`（Web map）はCloudflare Proxyを有効化
+- `api.feato.jp`と`dynmap.feato.jp`（squaremap。互換性のため既存ホスト名を維持）はCloudflare Proxyを有効化
 - Minecraft Java/Bedrock用の`minecraft.feato.jp`はDNS Only
 - `minecraft.feato.jp`はedgeノードIPへ向け、必要ならJava用SRVも設定
 
