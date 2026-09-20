@@ -1,11 +1,11 @@
 enable: true
 slot: 4
-title: "&8FEATO Exchange"
+title: "&8FEATO 商店"
 hidden: false
 sub-section: false
 display-item: false
 hide-if-no-perms: true
-economy: "VAULT"
+economy: VAULT
 fill-item:
   material: GRAY_STAINED_GLASS_PANE
   name: " "
@@ -13,6 +13,6 @@ nav-bar:
   mode: DISABLED
 item:
   material: EMERALD
-  name: "&aFEATO Exchange"
+  name: "&aFEATO 商店"
   lore:
-    - "&7Only verified products are offered."
+    - "&7生活用品の購入と指定品の売却"

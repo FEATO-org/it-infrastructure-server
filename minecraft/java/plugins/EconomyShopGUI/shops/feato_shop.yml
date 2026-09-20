@@ -1,0 +1,36 @@
+pages:
+  page1:
+    gui-rows: 2
+    title: "&8FEATO 商店"
+    items:
+      name_tag:
+        material: NAME_TAG
+        buy: 150
+        stack-size: 1
+        slot: 0
+      saddle:
+        material: SADDLE
+        buy: 200
+        stack-size: 1
+        slot: 1
+      lead_pair:
+        material: LEAD
+        buy: 80
+        stack-size: 2
+        slot: 2
+      oxidized_copper:
+        material: OXIDIZED_COPPER
+        buy: 250
+        stack-size: 16
+        slot: 3
+      player_head:
+        material: PLAYER_HEAD
+        buy: 200
+        stack-size: 1
+        slot: 4
+      poisonous_potato:
+        material: POISONOUS_POTATO
+        sell: 10
+        stack-size: 64
+        min-sell: 64
+        slot: 8

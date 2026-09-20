@@ -187,7 +187,6 @@ disabled-commands:
   - back
   - delhome
   - home
-  - kit
   - nick
   - sethome
   - setwarp
@@ -387,7 +386,7 @@ pastebin-createkit: false
 # WARNING: This option only works on 1.15.2+ Paper servers, and it will bypass any custom serializers from other plugins such as Magic.
 # WARNING: When creating kits via /createkit with this option enabled, you will not be able to downgrade your server with these kit items.
 # This option only affects /createkit - you can still create kits by hand in 'kits.yml' using Essentials' human-readable item format.
-use-nbt-serialization-in-createkit: false
+use-nbt-serialization-in-createkit: true
 
 # To enable signs, remove the # symbol. To disable all signs, comment out or remove each sign.
 # See https://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.
@@ -873,6 +872,7 @@ command-costs:
   #example: 1000
   # To make '/kit tools' cost $1500 PER USE:
   #kit-tools: 1500
+  kit-return_ticket: 100
 
 # Set this to a currency symbol you want to use.
 # Remember, if you want to use special characters in this document, such as accented letters,

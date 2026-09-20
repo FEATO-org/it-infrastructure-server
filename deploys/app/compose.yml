@@ -115,8 +115,8 @@ services:
       PLAYER_IDLE_TIMEOUT: "90"
       VIEW_DISTANCE: "14"
       SIMULATION_DISTANCE: "8"
-      # Keep disabled until the author distribution is reachable and its JAR is verified.
-      SPIGET_RESOURCES: ${BETTER_HORSES_SPIGET_RESOURCE:-}
+      # Better Horses has no immutable release asset; Spiget resource 124223 resolves the author release.
+      SPIGET_RESOURCES: ${BETTER_HORSES_SPIGET_RESOURCE:-124223}
       PLUGINS_FILE: /extras/plugins.txt
       DATAPACKS: |-
         https://cdn.modrinth.com/data/N72bKhby/versions/oeMySJjE/Enchants%2B%20v1.6%201.21%20-%201.21.11.zip

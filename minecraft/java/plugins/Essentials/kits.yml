@@ -1,0 +1,5 @@
+kits:
+  return_ticket:
+    delay: 0
+    items:
+      - '/ei give {USERNAME} emergency_return 1'
