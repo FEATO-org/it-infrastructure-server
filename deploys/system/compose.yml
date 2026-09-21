@@ -174,6 +174,10 @@ services:
         mode: host
       - target: 19132
         published: 19132
+        protocol: tcp
+        mode: host
+      - target: 19132
+        published: 19132
         protocol: udp
         mode: host
     configs:

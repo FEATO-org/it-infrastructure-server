@@ -144,6 +144,7 @@ nginxのpublishはSwarm routing meshではなく`mode: host`です。そのた�
 
 - `80/tcp`、`443/tcp`
 - `25565/tcp`
+- `19132/tcp`
 - `19132/udp`
 
 UFWだけではDockerのpublish規則を十分に制御できないため、この構成でも
