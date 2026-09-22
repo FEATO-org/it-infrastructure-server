@@ -8,6 +8,7 @@
 
 # List of mechanics to enable! If they aren't in this list, the server won't load them!
 enabled-mechanics:
+  - BetterPlants
   - Elevator
   - Bridge
   - Gate
@@ -23,7 +24,7 @@ disabled-mechanics:
   - BetterLeads
   - BetterPhysics
   - BetterPistons
-  - BetterPlants
+  # - BetterPlants
   - BoatDecay
   - BoatDrops
   - BoatExitRemover
