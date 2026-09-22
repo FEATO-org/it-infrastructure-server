@@ -1,4 +1,7 @@
-example: valhalla
+example: survival
+add_examples:
+  - valhalla
+
 vanilla_icons_enabled: true
 
 # Keep the official Valhalla pack selection, but let the existing FEATO pack pipeline send it.
