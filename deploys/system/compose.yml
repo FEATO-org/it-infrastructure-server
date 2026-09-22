@@ -73,6 +73,7 @@ services:
       LOKI_USER_ID: ${LOKI_USER_ID}
       PROM_USER_ID: ${PROM_USER_ID}
       PROMETHEUS_REMOTE_WRITE_HOST: ${PROMETHEUS_REMOTE_WRITE_HOST:-prometheus-prod-18-prod-ap-southeast-0.grafana.net}
+      METRICS_SCRAPE_INTERVAL: ${METRICS_SCRAPE_INTERVAL:-2m}
       GRAFANA_API_KEY: ${GRAFANA_API_KEY}
       APP_MODE: ${APP_MODE}
     volumes:
@@ -106,8 +107,10 @@ services:
     image: ghcr.io/google/cadvisor:v0.60.5
     command:
       - --docker_only=true
-      - --housekeeping_interval=10s
+      - --housekeeping_interval=30s
       - --store_container_labels=false
+      - --disable_root_cgroup_stats=true
+      - --enable_metrics=cpu,memory,network,oom_event
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro

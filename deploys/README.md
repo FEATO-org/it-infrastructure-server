@@ -140,6 +140,19 @@ sudo -E TLS_STATE_FILE=/var/lib/swarm-certbot/swarm-secrets.env \
 スクリプトは4つの暗号化overlay networkを必要時に作成し、`app`、`system`、
 `infra`の順で更新します。
 
+### メトリクス使用量
+
+Grafana Cloudのactive seriesとDPMを抑えるため、Fluent Bitのメトリクス取得間隔は
+既定で2分です。変更する場合は`.env`の`METRICS_SCRAPE_INTERVAL`を指定します。
+cAdvisorはコンテナのCPU、メモリ、ネットワーク、OOMに限定し、node exporterも
+基本的なホストメトリクスだけを収集します。
+
+Grafana Exploreでは次のInstant queryで系列数の多いメトリクスを確認できます。
+
+```promql
+topk(20, count by (__name__) ({__name__=~".+"}))
+```
+
 ## 5. DNSとファイアウォール
 
 - `api.feato.jp`と`dynmap.feato.jp`（squaremap。互換性のため既存ホスト名を維持）はCloudflare Proxyを有効化
