@@ -122,7 +122,7 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | Velocity | 4.2.0 build 30 | [公式配布](https://papermc.io/downloads/velocity) | Velocity | 接続を実機検証 | stable（公式API STABLE） | VELOCITY_VERSIONとBUILD_IDで固定。JAR GETは403、Requires runtime verification |
 | Geyser | 既存latest | [公式配布](https://download.geysermc.org/) | Velocity | 接続を実機検証 | 取得build要確認 | 既存方式維持、Requires runtime verification |
 | Floodgate | 既存latest | [公式配布](https://download.geysermc.org/) | Velocity | 接続を実機検証 | 取得build要確認 | 既存UUID・username-prefix維持、Requires runtime verification |
-| EmoteOffhand | latest（確認時 build 3） | [公式Downloads API](https://download.geysermc.org/v2/projects/emoteoffhand/versions/latest/builds/latest/downloads/emoteoffhand) | Geyser Extension（Velocity上のGeyser） | Geyser latest | dynamic build | `DOWNLOAD_EXTRA_CONFIGS`で`plugins/Geyser-Velocity/extensions`へ取得。Velocity Pluginとしては配置しない |
+| EmoteOffhand | Version ID: YiejycoE | [Modrinth](https://modrinth.com/plugin/pVsz9nZm/version/YiejycoE) | Geyser Extension（Velocity上のGeyser） | 1.21.11（配布metadata） | fixed artifact | Source: Modrinth。Project ID: pVsz9nZm。`resources/minecraft/geyser/extensions/EmoteOffhand.jar` を管理側で用意し、更新時のみ `script/copy_plugins_to_remote.sh` で配布。通常deploy時に再取得しない。Velocity Pluginとしては配置しない |
 | Hurricane | latest（確認時 build 4） | [公式Downloads API](https://download.geysermc.org/v2/projects/hurricane/versions/latest/builds/latest/downloads/spigot) | Paper | 公式README表記は26.1まで | dynamic build | bamboo / pointed dripstone collisionのみ。Paper 26.2ではRequires runtime verification |
 
 ### GET検証済みSHA-512

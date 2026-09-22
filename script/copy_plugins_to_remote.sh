@@ -13,6 +13,7 @@ bedrock_resourcepacks=(
   resources/minecraft/resourcepacks/bedrock/*.zip
 )
 geyser_custom_mappings=(resources/minecraft/geyser/custom_mappings/*.json)
+geyser_extensions=(resources/minecraft/geyser/extensions/*.jar)
 
 if [[ ! "$REMOTE_DEPLOY_ROOT" =~ ^/[A-Za-z0-9._/-]+$ ]]; then
   echo "REMOTE_DEPLOY_ROOT must be an absolute path containing only letters, digits, '.', '_', '-', and '/'." >&2
@@ -22,7 +23,8 @@ fi
 ssh "$REMOTE_HOST" mkdir -p -- \
   "$REMOTE_DEPLOY_ROOT/resources/minecraft/resourcepacks/java" \
   "$REMOTE_DEPLOY_ROOT/resources/minecraft/resourcepacks/bedrock" \
-  "$REMOTE_DEPLOY_ROOT/resources/minecraft/geyser/custom_mappings"
+  "$REMOTE_DEPLOY_ROOT/resources/minecraft/geyser/custom_mappings" \
+  "$REMOTE_DEPLOY_ROOT/resources/minecraft/geyser/extensions"
 
 if (( ${#datapacks[@]} )); then
   scp "${datapacks[@]}" "${REMOTE_HOST}:${REMOTE_DEPLOY_ROOT}/minecraft/java/datapacks/"
@@ -35,4 +37,7 @@ if (( ${#bedrock_resourcepacks[@]} )); then
 fi
 if (( ${#geyser_custom_mappings[@]} )); then
   scp "${geyser_custom_mappings[@]}" "${REMOTE_HOST}:${REMOTE_DEPLOY_ROOT}/resources/minecraft/geyser/custom_mappings/"
+fi
+if (( ${#geyser_extensions[@]} )); then
+  scp "${geyser_extensions[@]}" "${REMOTE_HOST}:${REMOTE_DEPLOY_ROOT}/resources/minecraft/geyser/extensions/"
 fi

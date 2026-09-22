@@ -36,9 +36,11 @@ Web: nginx dynmap.feato.jp -> squaremap :8123
 
 GeyserとFloodgateはVelocityへ配置します。Paper側へFloodgate APIを要求するプラグインは今回ありません。Velocityのオンライン認証、modern forwarding、共有secret、Paperのoffline modeを維持します。Paper、MariaDB、squaremapはホストへ直接公開しません。
 
-EmoteOffhandはPaper/Velocity PluginではなくGeyser Extensionです。`mc-proxy`の
-`DOWNLOAD_EXTRA_CONFIGS`でGeyserMC公式Downloads APIから起動前に更新し、
-`/server/plugins/Geyser-Velocity/extensions/EmoteOffhand.jar`へ配置します。
+EmoteOffhandはPaper/Velocity PluginではなくGeyser Extensionです。管理側の
+`resources/minecraft/geyser/extensions/EmoteOffhand.jar`を更新時のみ
+`script/copy_plugins_to_remote.sh`でVPSへ配布し、
+`/plugins/Geyser-Velocity/extensions/EmoteOffhand.jar`へread-only mountします。
+通常deploy時には取得しません。
 `gameplay.emotes-enabled: true`は維持し、旧`emote-offhand-workaround`は追加しません。
 HurricaneはPaper Pluginとして`plugins.txt`から公式APIで取得します。追跡する
 `java/plugins/Hurricane/hurricane.conf`では、Bedrockの移動補正に必要なbambooと

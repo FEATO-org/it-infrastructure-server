@@ -66,11 +66,6 @@ services:
         https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity
         https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity
         https://cdn.modrinth.com/data/Vebnzrzj/versions/tamnmXad/LuckPerms-Velocity-5.5.71.jar
-      # Geyser extensions are loaded from Geyser's own extensions directory, not
-      # Velocity's plugin directory. mc-proxy refreshes this official API download
-      # before Velocity starts.
-      DOWNLOAD_EXTRA_CONFIGS: >-
-        plugins/Geyser-Velocity/extensions/EmoteOffhand.jar<https://download.geysermc.org/v2/projects/emoteoffhand/versions/latest/builds/latest/downloads/emoteoffhand
     secrets:
       - source: forwarding_secret
         target: forwarding_secret
@@ -86,6 +81,7 @@ services:
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/plugins:/plugins:ro
       - ${MINECRAFT_ASSET_ROOT:-/opt/it-infrastructure-server/resources/minecraft}/resourcepacks/bedrock:/plugins/Geyser-Velocity/packs:ro
       - ${MINECRAFT_ASSET_ROOT:-/opt/it-infrastructure-server/resources/minecraft}/geyser/custom_mappings:/plugins/Geyser-Velocity/custom_mappings:ro
+      - ${MINECRAFT_ASSET_ROOT:-/opt/it-infrastructure-server/resources/minecraft}/geyser/extensions:/plugins/Geyser-Velocity/extensions:ro
     networks:
       - minecraft-ingress-network
       - minecraft-backend-network
