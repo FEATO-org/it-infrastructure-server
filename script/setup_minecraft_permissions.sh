@@ -27,6 +27,8 @@ player_allow=(
   ei.item.emergency_return
   EconomyShopGUI.shop
   EconomyShopGUI.shop.feato_shop
+  deadchest.generate
+  deadchest.get
 )
 player_deny=(
   essentials.spawn

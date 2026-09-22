@@ -23,8 +23,9 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ ImageFrame
                      ├ Better Horses / DualHorse
                      ├ Backpack Plus
+                     ├ DeadChest 4.30.0
                      └ FEATO Ancient Coin
-Data Packs: Enchants Plus / KETKET'S Graves
+Data Packs: Enchants Plus
 Web: nginx dynmap.feato.jp -> squaremap :8123
 ```
 
@@ -43,7 +44,11 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 - RPG・アイテム: ValhallaMMO、SCore、ExecutableItems
 - 建築・表示: WorldEdit、CraftBook、ImageFrame
 - 馬・収納: Better Horses、DualHorse、Backpack Plus
+- 死亡時保護: DeadChest 4.30.0
 - 独自機能: FEATO Ancient Coin 0.2.0
+
+DeadChest 4.30.0をPaper 26.2環境で使用します。公式の対応表記は26.1.xまでで、
+Paper 26.2での実機テストは未実施です。
 
 旧Vault、XConomy、XConomy_Reload、SetSpawn、Genius Shop、Dynmapは採用しません。既存VolumeからJARが自動削除されるとは限らないため、停止中に退避してください。Dynmapのタイルはバックアップ後に残して構いませんが、squaremapは別形式で再描画します。
 

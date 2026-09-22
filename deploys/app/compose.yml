@@ -119,7 +119,6 @@ services:
       SPIGET_RESOURCES: ${BETTER_HORSES_SPIGET_RESOURCE:-124223}
       PLUGINS_FILE: /extras/plugins.txt
       DATAPACKS: |-
-        https://cdn.modrinth.com/data/bYcfmIoG/versions/KL6JT1nQ/graves-v2.4.zip
         /extras/datapacks
       ENABLE_COMMAND_BLOCK: "TRUE"
       COPY_CONFIG_DEST: /data

@@ -107,7 +107,7 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | ImageFrame | 2026.1.4 | [固定URL](https://cdn.modrinth.com/data/lJFOpcEj/versions/nt0GWT1y/ImageFrame-2026.1.4.0.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | Backpack Plus | 3.2.0 | [固定URL](https://cdn.modrinth.com/data/lDAFcnRN/versions/vsRfbexG/BackpackPlus-3.2.0-all.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | Enchants Plus | 1.6 | [固定URL](https://cdn.modrinth.com/data/N72bKhby/versions/oeMySJjE/Enchants%2B%20v1.6%201.21%20-%201.21.11.zip) | Data Pack | 26.2（配布metadata） | stable | Requires runtime verification |
-| KETKET'S Graves | 2.4 | [固定URL](https://cdn.modrinth.com/data/bYcfmIoG/versions/KL6JT1nQ/graves-v2.4.zip) | Data Pack | 26.2（配布metadata） | stable | Requires runtime verification |
+| DeadChest | 4.30.0 | [固定URL](https://cdn.modrinth.com/data/pKqnV03Y/versions/mBSgqYZH/dead-chest-4.30.0.jar) | Paper | 配布metadataは26.1.2まで | stable | Paper 26.2で使用、実機テスト未実施; Requires runtime verification |
 | Better Horses | 6.3 | [作者配布](https://www.spigotmc.org/resources/better-horses.124223/) | Paper | 26.2（作者tested一覧、起動確認） | stable | Spiget resource 124223から動的取得。ProtocolLibなしでは一部機能無効 |
 | EssentialsX Core / Spawn | 2.22.1-dev+24-49a2f10（公式CI build 1829） | [Core](https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsX-2.22.1-dev+24-49a2f10.jar) / [Spawn](https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsXSpawn-2.22.1-dev+24-49a2f10.jar) | Paper | 26.2（現行公式support一覧） | development | 2.22.0 stableは26.1.2まで。Paper 26.2で起動確認 |
 | VaultUnlocked | 2.20.3 | [固定URL](https://cdn.modrinth.com/data/ayRaM8J7/versions/qZgRzoYs/VaultUnlocked-2.20.3.jar) | Paper | 26.2（配布metadata） | stable | plugin名は`Vault`。Paper 26.2で起動確認 |
@@ -146,7 +146,7 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | DualHorse-1.5.4.jar | `fd70684e9b3263bfc4edb9bde54a5fc1cc08c9f2ca4577434e2517dd7a3e5958029ebb0fd4090faa0545ae957531608cafe5452cb30d87f67344b28ac30e75d2` |
 | BetterHorses-6.3.jar | `d54e921e073eec52dbe81542f0d06713bf1c217a645c4644caf410fcc08ebfa27723866d7de3803a2be7c3d4143c61943849dd9e959f312f8d465426d863e704` |
 | Enchants+ v1.6 1.21 - 1.21.11.zip | `93e507c428287d7e8562a2ddd5a6488e47fcd76282426d683621c947f4fa8dda6a0ed605d458a1fed659ac5aa0909f01c8adb32994664788abe35fce0411083b` |
-| graves-v2.4.zip | `ec11eb415c3108fa2741d32331a35328122a1d0f34eafb7885ca7cee8d93606d2c65c44b7f93fea02b57eb6bfe00f3fb96bc526c343d8329e65050e351819b8b` |
+| dead-chest-4.30.0.jar | `1cc61288c1c530e0839f7060bd0f670a5b54b18dd70399ca50207ff973ad1f1b5a1effa5da52a18b9f6944ec784913b2798f59ea9b208d3f31643992681e1b9d` |
 
 ## 26.2追加構成の起動検証（2026-09-21）
 
