@@ -45,8 +45,13 @@ def is_sound_registry(path: PurePosixPath) -> bool:
     return len(parts) == 3 and parts[0] == "assets" and path.name == "sounds.json"
 
 
+def is_item_definition(path: PurePosixPath) -> bool:
+    parts = path.parts
+    return len(parts) == 4 and parts[:3] == ("assets", "minecraft", "items") and path.suffix == ".json"
+
+
 def is_mergeable_json(path: PurePosixPath) -> bool:
-    return is_language_file(path) or is_sound_registry(path)
+    return is_language_file(path) or is_sound_registry(path) or is_item_definition(path)
 
 
 def parse_mergeable_json(path: PurePosixPath, data: bytes) -> dict[str, object]:
@@ -70,12 +75,51 @@ def parse_mergeable_json(path: PurePosixPath, data: bytes) -> dict[str, object]:
 
 
 def merge_json_files(path: PurePosixPath, previous: bytes, incoming: bytes) -> bytes:
+    if is_item_definition(path):
+        return merge_item_definitions(path, previous, incoming)
     merged = parse_mergeable_json(path, previous)
     for key, value in parse_mergeable_json(path, incoming).items():
         if key in merged and merged[key] != value:
             raise ValueError(f"conflicting resource-pack JSON entry: {path} key {key!r}")
         merged[key] = value
     return (json.dumps(merged, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+
+def merge_item_definitions(path: PurePosixPath, previous: bytes, incoming: bytes) -> bytes:
+    definitions = [parse_mergeable_json(path, data) for data in (previous, incoming)]
+    models = [definition.get("model") for definition in definitions]
+    if not all(isinstance(model, dict) for model in models):
+        raise ValueError(f"item definition must contain a model object: {path}")
+
+    first, second = models
+    required = {"type": "range_dispatch", "property": "custom_model_data"}
+    if not all(all(model.get(key) == value for key, value in required.items()) for model in models):
+        raise ValueError(f"only custom_model_data range-dispatch item definitions can be merged: {path}")
+    if first.get("fallback") != second.get("fallback"):
+        raise ValueError(f"conflicting item-definition fallback: {path}")
+
+    entries_by_threshold: dict[int | float, dict[str, object]] = {}
+    for model in models:
+        entries = model.get("entries")
+        if not isinstance(entries, list):
+            raise ValueError(f"item-definition entries must be an array: {path}")
+        for entry in entries:
+            if not isinstance(entry, dict) or not isinstance(entry.get("threshold"), (int, float)):
+                raise ValueError(f"item-definition entry requires a numeric threshold: {path}")
+            threshold = entry["threshold"]
+            if threshold in entries_by_threshold and entries_by_threshold[threshold] != entry:
+                raise ValueError(f"conflicting item-definition threshold: {path} threshold {threshold!r}")
+            entries_by_threshold[threshold] = entry
+
+    merged = {
+        "model": {
+            "type": "range_dispatch",
+            "property": "custom_model_data",
+            "entries": [entries_by_threshold[key] for key in sorted(entries_by_threshold)],
+            "fallback": first["fallback"],
+        }
+    }
+    return (json.dumps(merged, ensure_ascii=False, indent=2) + "\n").encode("utf-8")
 
 
 def add_file(files: dict[PurePosixPath, bytes], path: PurePosixPath, data: bytes) -> None:

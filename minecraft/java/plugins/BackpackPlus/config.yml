@@ -164,7 +164,7 @@ resource-pack-url: "https://www.dropbox.com/scl/fi/rtx4hkfaxh3fzl2meg7ju/Backpac
 resource-pack-hash: "2d56276eb36465a60070dd5a670fc3fbdf1a9d0a"
 # If you are using server resourcepack set this to false
 # Just remember to add the texture and model of the backpack
-use-resource-pack: true
+use-resource-pack: false
 
 # If the player does not accept the resourcepack, then if the value is on true it will be discarded
 force-resource-pack: true
