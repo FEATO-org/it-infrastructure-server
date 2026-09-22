@@ -111,6 +111,12 @@ for stack_file in \
 done
 
 docker stack deploy \
+  --compose-file "${REPO_ROOT}/deploys/infra/compose.yml" \
+  --with-registry-auth \
+  --prune \
+  infra
+
+docker stack deploy \
   --compose-file "${REPO_ROOT}/deploys/app/compose.yml" \
   --with-registry-auth \
   --prune \
@@ -122,12 +128,6 @@ docker stack deploy \
   --prune \
   system
 
-docker stack deploy \
-  --compose-file "${REPO_ROOT}/deploys/infra/compose.yml" \
-  --with-registry-auth \
-  --prune \
-  infra
-
+docker stack services infra
 docker stack services app
 docker stack services system
-docker stack services infra
