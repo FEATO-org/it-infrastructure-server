@@ -1,6 +1,10 @@
 # FEATO リソースパック統合
 
-このツールは、ValhallaMMO、Gun Core Resources V1.0.15、Modern Guns Resources V1.9.3 を統合し、第三者アセットを改変しない単一のサーバー用リソースパックを作成します。各公式配布元からZIPを取得して `sources/` に置き、次を実行します。
+このツールは、ValhallaMMO、Gun Core Resources V1.0.15、Modern Guns Resources V1.9.3 を統合し、第三者アセットを改変しない単一のサーバー用リソースパックを作成します。以下から取得したZIPを `sources/` に置き、次を実行します。
+
+- ValhallaMMO: サーバーコンソールで `/val resourcepack download` を実行する。詳細は[公式Resource Pack手順](https://github.com/Athlaeos/ValhallaMMO/wiki/Default-Resource-Pack-%F0%9F%8E%A8)を参照する。
+- Gun Core Resources V1.0.15: [ZIPを取得](https://cdn.modrinth.com/data/Ti7LgRXJ/versions/X7knYm9t/Gun%20Core%20-%20Resources%20V1.0.15.zip)
+- Modern Guns Resources V1.9.3: [ZIPを取得](https://cdn.modrinth.com/data/ufgOyMFr/versions/bcKCNJp2/Modern%20Guns%20-%20Resources%20V1.9.3.zip)
 
 ```bash
 python minecraft/java/resourcepack/merge.py \
