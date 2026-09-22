@@ -77,6 +77,9 @@ services:
       APP_MODE: ${APP_MODE}
     volumes:
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/host/root:ro
       - minecraft_server_data:/minecraft:ro
       - fluent_bit_state:/fluent-bit/state
     networks:
