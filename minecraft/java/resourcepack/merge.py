@@ -35,12 +35,57 @@ def safe_member_path(name: str) -> PurePosixPath:
     return path
 
 
+def is_language_file(path: PurePosixPath) -> bool:
+    parts = path.parts
+    return len(parts) == 4 and parts[0] == "assets" and parts[2] == "lang" and path.suffix == ".json"
+
+
+def is_sound_registry(path: PurePosixPath) -> bool:
+    parts = path.parts
+    return len(parts) == 3 and parts[0] == "assets" and path.name == "sounds.json"
+
+
+def is_mergeable_json(path: PurePosixPath) -> bool:
+    return is_language_file(path) or is_sound_registry(path)
+
+
+def parse_mergeable_json(path: PurePosixPath, data: bytes) -> dict[str, object]:
+    def reject_duplicate_keys(pairs: list[tuple[str, object]]) -> dict[str, object]:
+        parsed: dict[str, object] = {}
+        for key, value in pairs:
+            if key in parsed:
+                raise ValueError(f"duplicate key in resource-pack language file {path}: {key!r}")
+            parsed[key] = value
+        return parsed
+
+    try:
+        parsed = json.loads(data.decode("utf-8-sig"), object_pairs_hook=reject_duplicate_keys)
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise ValueError(f"invalid mergeable resource-pack JSON file: {path}") from error
+    if not isinstance(parsed, dict):
+        raise ValueError(f"mergeable resource-pack JSON file must contain an object: {path}")
+    if is_language_file(path) and not all(isinstance(key, str) and isinstance(value, str) for key, value in parsed.items()):
+        raise ValueError(f"resource-pack language file must contain a string-to-string object: {path}")
+    return parsed
+
+
+def merge_json_files(path: PurePosixPath, previous: bytes, incoming: bytes) -> bytes:
+    merged = parse_mergeable_json(path, previous)
+    for key, value in parse_mergeable_json(path, incoming).items():
+        if key in merged and merged[key] != value:
+            raise ValueError(f"conflicting resource-pack JSON entry: {path} key {key!r}")
+        merged[key] = value
+    return (json.dumps(merged, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+
 def add_file(files: dict[PurePosixPath, bytes], path: PurePosixPath, data: bytes) -> None:
-    if path in {PurePosixPath("pack.mcmeta"), PurePosixPath("pack.png")}:
+    if path in {PurePosixPath("pack.mcmeta"), PurePosixPath("pack.png"), PurePosixPath("version.txt")}:
         return
     previous = files.get(path)
     if previous is not None and previous != data:
-        raise ValueError(f"conflicting resource-pack file: {path}")
+        if not is_mergeable_json(path):
+            raise ValueError(f"conflicting resource-pack file: {path}")
+        data = merge_json_files(path, previous, data)
     files[path] = data
 
 
