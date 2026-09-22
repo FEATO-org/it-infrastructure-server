@@ -1,0 +1,2 @@
+# Third-party mappings are downloaded locally and copied by script/copy_plugins_to_remote.sh.
+*.json

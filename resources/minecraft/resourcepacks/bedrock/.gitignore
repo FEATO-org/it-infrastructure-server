@@ -1,0 +1,7 @@
+# Third-party packs are downloaded locally and copied by script/copy_plugins_to_remote.sh.
+*.mcpack
+*.zip
+
+# The current ValhallaMMO Wiki download expands to this directory. Do not deploy it
+# directly: it also contains the obsolete GeyserOptionalPack.
+/ValhallaMMO_Geyser/

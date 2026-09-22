@@ -80,6 +80,7 @@ services:
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/config:/config:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/plugins:/plugins:ro
       - ${MINECRAFT_ASSET_ROOT:-/opt/it-infrastructure-server/resources/minecraft}/resourcepacks/bedrock:/plugins/Geyser-Velocity/packs:ro
+      - ${MINECRAFT_ASSET_ROOT:-/opt/it-infrastructure-server/resources/minecraft}/geyser/custom_mappings:/plugins/Geyser-Velocity/custom_mappings:ro
     networks:
       - minecraft-ingress-network
       - minecraft-backend-network
