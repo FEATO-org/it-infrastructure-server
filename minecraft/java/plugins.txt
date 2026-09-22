@@ -1,6 +1,7 @@
 https://cdn.modrinth.com/data/Vebnzrzj/versions/b0mk8uS6/LuckPerms-Bukkit-5.5.71.jar
 https://cdn.modrinth.com/data/riEl5GDK/versions/mMmIwg51/lucktags-1.4.jar
 https://cdn.modrinth.com/data/rxrgsoud/versions/GkeSDJSq/ValhallaMMO_1.10.3.jar
+https://mediafilez.forgecdn.net/files/8375/702/Magic-11.2.4.jar
 https://cdn.modrinth.com/data/ZfcV7L06/versions/EHLoQYh8/SCore-5.26.9.17.jar
 https://cdn.modrinth.com/data/g8Zwnnmn/versions/XrhxAt8x/ExecutableItems-7.26.9.17.jar
 https://cdn.modrinth.com/data/1u6JkXh5/versions/F5ea2ov3/worldedit-bukkit-7.4.5.jar

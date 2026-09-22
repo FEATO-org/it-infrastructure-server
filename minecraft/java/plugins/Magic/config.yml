@@ -1,0 +1,14 @@
+example: valhalla
+vanilla_icons_enabled: true
+
+# Keep the official Valhalla pack selection, but let the existing FEATO pack pipeline send it.
+resource_pack: valhalla
+add_resource_pack: valhalla
+enable_resource_pack: false
+assume_resource_pack_downloaded: true
+
+enable_spell_upgrades: false
+
+valhalla:
+  profile:
+    enabled: true

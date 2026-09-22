@@ -1,0 +1,6 @@
+mage:
+  spells: []
+  mana_max: 100
+  mana_regeneration: 4
+  path: beginner
+

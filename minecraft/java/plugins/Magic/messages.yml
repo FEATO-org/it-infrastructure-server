@@ -1,0 +1,68 @@
+paths:
+  beginner:
+    name: "&7魔術基礎"
+    description: "魔導具と基礎魔法を扱うための初歩"
+  student:
+    name: "&2修練者"
+    description: "Mana Capacity I: 最大Mana 115"
+  apprentice:
+    name: "&a熟練者"
+    description: "Mana Capacity II: 最大Mana 135 / 回復 5毎秒"
+  master:
+    name: "&6達人"
+    description: "Mana Capacity III: 最大Mana 165 / 回復 6毎秒"
+  feato_archmage:
+    name: "&d魔術完成"
+    description: "魔術Lv100補正: 最大Mana 185"
+
+spells:
+  missile:
+    name: "Magic Missile"
+    description: "低威力の魔力弾を放つ。ブロックは破壊しない"
+  feato_light:
+    name: "Light"
+    description: "暗所を見通す探索補助魔法"
+  heal:
+    name: "Heal"
+    description: "自身の体力を回復する"
+  fling:
+    name: "Leap"
+    description: "前方へ軽く跳躍する"
+  fireball:
+    name: "Fireball"
+    description: "爆発する火球を放つ。ブロックは破壊しない"
+  blink:
+    name: "Blink"
+    description: "視線方向へ短距離転移する"
+  reflect:
+    name: "Shield"
+    description: "短時間だけ投射物を反射する障壁を作る"
+  gills:
+    name: "Gills"
+    description: "一定時間、水中で呼吸しやすくなる"
+  push:
+    name: "Push"
+    description: "近くの対象を押し返す"
+  recall:
+    name: "Recall"
+    description: "詠唱後に登録済みの自宅へ帰還する"
+  chainlightning:
+    name: "Lightning"
+    description: "少数の敵へ限定的に連鎖する雷撃"
+  feato_clear_skies:
+    name: "晴天祈願"
+    description: "ワールドの天候を晴れにする天象術"
+  feato_call_rain:
+    name: "雨乞い"
+    description: "ワールドに雨を呼ぶ天象術"
+  feato_call_storm:
+    name: "嵐の招来"
+    description: "ワールドに雷雨を呼ぶ天象術。追加攻撃は発生しない"
+  wound:
+    name: "魔力穿ち"
+    description: "単体へ高威力の魔力を放つ高位戦闘魔法"
+
+wand:
+  mana_amount: "&eMana: $amount"
+  mana_regeneration: "&eMana回復: $amount/秒"
+

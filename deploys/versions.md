@@ -1,4 +1,4 @@
-# バージョン確認（2026-09-21）
+# バージョン確認（2026-09-22）
 
 公式リリース一覧・APIで安定版を確認し、Minecraft本体・プロキシ以外のコンテナは固定タグを指定しています。
 nginxはMainlineではなくStable系列です。
@@ -100,6 +100,7 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | LuckPerms | v5.5.71-velocity | [固定URL](https://cdn.modrinth.com/data/Vebnzrzj/versions/tamnmXad/LuckPerms-Velocity-5.5.71.jar) | Velocity | 26.2（配布metadata） | stable | 同梱Java 11以上; Requires runtime verification |
 | LuckTags | 1.4 | [固定URL](https://cdn.modrinth.com/data/riEl5GDK/versions/mMmIwg51/lucktags-1.4.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | ValhallaMMO | 1.10.3 | [固定URL](https://cdn.modrinth.com/data/rxrgsoud/versions/GkeSDJSq/ValhallaMMO_1.10.3.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
+| Magic | 11.2.4 | [固定URL](https://mediafilez.forgecdn.net/files/8375/702/Magic-11.2.4.jar) | Paper | 26.2（公式配布対象） | stable | 公式ValhallaMMO integrationを使用; Requires runtime verification |
 | SCore | 5.26.9.17 | [固定URL](https://cdn.modrinth.com/data/ZfcV7L06/versions/EHLoQYh8/SCore-5.26.9.17.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 8以上; Requires runtime verification |
 | ExecutableItems | 7.26.9.17 | [固定URL](https://cdn.modrinth.com/data/g8Zwnnmn/versions/XrhxAt8x/ExecutableItems-7.26.9.17.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 8以上; Requires runtime verification |
 | WorldEdit | 7.4.5 | [固定URL](https://cdn.modrinth.com/data/1u6JkXh5/versions/F5ea2ov3/worldedit-bukkit-7.4.5.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 25以上; Requires runtime verification |
@@ -130,6 +131,7 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | LuckPerms-Velocity-5.5.71.jar | `a619da8804727bed7b2b2ee5383974329a3c09181a67745484fdffd0f4b6c5b13c44aa88e0d2b30d13f3068d9b0f3e26863abba9855f80a7eb5f9455ca6c40d4` |
 | lucktags-1.4.jar | `1052d2ea814da732d5e39447384df0427fd14c2e1f206441b3d71a5a65b10733bf30db983cc92e21079503687c9097310d43b237e388db7d8d1129fc56989855` |
 | ValhallaMMO_1.10.3.jar | `e04a1e8f39e009e141fe8f07dd1eea85ad06c5850e63e5518618c316e3b4822179ab5bab571f1a5fc6ccf35c17de4baaae07c86e7fd9b374b6eb1f6cedd528a6` |
+| Magic-11.2.4.jar | `4eb13cba74a534f6f58ef4dd4a301cac20f58299b4606ff2488c7fa7c4fc6dac69781449669acbef12a30b378771d474fdd58b9e4fa33defa59e9061aeed9e32` |
 | SCore-5.26.9.17.jar | `7d023fa5973ca88acce406581eeb8378b2c14de9a77545d04f87ff79b3049de296f1d67eb0b442977b2e6b4fb5665ec344b8c274b7ccbda942fcc87fa72f57ee` |
 | ExecutableItems-7.26.9.17.jar | `4d96fe9d62f8936fa9a471d118eaf4d18cee491da8f4a42bc438be8b2a85bd85a3d3508350dea48e92f2f99aae4f4602522117fea8329c802ebaef3b7e8be04d` |
 | worldedit-bukkit-7.4.5.jar | `a383492fac6bfb4d43a257dfa7b5fc076aae503a71151b463de4fe80e6f3d5fc11209eaf4097baa115f3febf0adc40ca0a1ecda227b8439b429d0a4ba3a63a4f` |

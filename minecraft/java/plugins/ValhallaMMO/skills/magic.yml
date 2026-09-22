@@ -1,0 +1,9 @@
+display_name: "魔術"
+icon: STICK
+icon_data: 18001
+description: "&b魔導具を操り、戦闘・防護・秘術の魔法を修得する"
+
+levelbar_title: "&b魔術 &dLv %lv_current% &5%exp_current%&7/&5%exp_next% &7(&d%exp%&7)"
+levelbar_color: BLUE
+levelbar_style: SEGMENTED_6
+

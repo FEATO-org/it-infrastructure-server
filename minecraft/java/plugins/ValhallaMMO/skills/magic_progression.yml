@@ -1,0 +1,271 @@
+experience:
+  max_level: 100
+  exp_level_curve: "(%level% + 75 * 2^(%level%/7.6)) + 300"
+  exp_multiplier_quality: 0.00334
+  multiplier_automated: 0.25
+  multiplier_manual: 2
+  daily_limit: -1
+  daily_limit_warning: "&c今日はこれ以上、魔術を修練できません"
+
+special_perks: []
+commands: []
+messages:
+  - "&b魔術&7がレベル&d%level%&7になりました"
+leveling_perks: []
+starting_coordinates: "0,0"
+
+starting_perks:
+  perks_unlocked_add:
+    - beginner
+    - missile
+    - feato_light
+
+perks:
+  beginner:
+    icon: STICK
+    name: "魔術基礎"
+    description: "基礎魔法とMana 100、Mana回復4/秒を得る"
+    coords: "0,0"
+    cost: 0
+    required_lv: 1
+    perk_rewards:
+      p:path_upgrade: beginner
+
+  missile:
+    icon: SPECTRAL_ARROW
+    name: "Magic Missile"
+    description: "基本遠距離攻撃を修得する"
+    coords: "-1,1"
+    cost: 0
+    required_lv: 1
+    perk_rewards:
+      p:learn_spell: missile
+    requireperk_all: [beginner]
+
+  feato_light:
+    icon: TORCH
+    name: "Light"
+    description: "暗所探索の補助魔法を修得する"
+    coords: "1,1"
+    cost: 0
+    required_lv: 1
+    perk_rewards:
+      p:learn_spell: feato_light
+    requireperk_all: [beginner]
+
+  combat_root:
+    icon: IRON_SWORD
+    name: "戦闘魔術"
+    description: "瞬間火力と制圧を扱う系統"
+    coords: "-4,2"
+    cost: 1
+    required_lv: 1
+    perk_rewards: {}
+    requireperk_all: [missile]
+
+  defense_root:
+    icon: SHIELD
+    name: "防護魔術"
+    description: "回復と防御を扱う系統"
+    coords: "0,2"
+    cost: 1
+    required_lv: 1
+    perk_rewards: {}
+    requireperk_all: [missile]
+
+  arcane_root:
+    icon: ENDER_EYE
+    name: "秘術"
+    description: "移動・探索・天象術を扱う系統"
+    coords: "4,2"
+    cost: 1
+    required_lv: 1
+    perk_rewards: {}
+    requireperk_all: [feato_light]
+
+  heal:
+    icon: GLISTERING_MELON_SLICE
+    name: "Heal"
+    description: "自身を回復する"
+    coords: "-1,3"
+    cost: 1
+    required_lv: 5
+    perk_rewards:
+      p:learn_spell: heal
+    requireperk_all: [defense_root]
+
+  fling:
+    icon: FEATHER
+    name: "Leap"
+    description: "軽量な跳躍魔法を修得する"
+    coords: "4,3"
+    cost: 1
+    required_lv: 5
+    perk_rewards:
+      p:learn_spell: fling
+    requireperk_all: [arcane_root]
+
+  student:
+    icon: EXPERIENCE_BOTTLE
+    name: "Mana Capacity I"
+    description: "最大Manaを115にする"
+    coords: "0,4"
+    cost: 1
+    required_lv: 10
+    perk_rewards:
+      p:path_upgrade: student
+    requireperk_all: [beginner]
+
+  fireball:
+    icon: FIRE_CHARGE
+    name: "Fireball"
+    description: "地形を破壊しない火球を修得する"
+    coords: "-5,4"
+    cost: 2
+    required_lv: 10
+    perk_rewards:
+      p:learn_spell: fireball
+    requireperk_all: [combat_root, student]
+
+  blink:
+    icon: ENDER_PEARL
+    name: "Blink"
+    description: "短距離転移を修得する"
+    coords: "4,5"
+    cost: 1
+    required_lv: 15
+    perk_rewards:
+      p:learn_spell: blink
+    requireperk_all: [fling, student]
+
+  reflect:
+    icon: SHIELD
+    name: "Shield"
+    description: "短時間の反射障壁を修得する"
+    coords: "-1,5"
+    cost: 2
+    required_lv: 20
+    perk_rewards:
+      p:learn_spell: reflect
+    requireperk_all: [heal, student]
+
+  gills:
+    icon: HEART_OF_THE_SEA
+    name: "Gills"
+    description: "水中探索魔法を修得する"
+    coords: "5,6"
+    cost: 1
+    required_lv: 20
+    perk_rewards:
+      p:learn_spell: gills
+    requireperk_all: [feato_light, student]
+
+  push:
+    icon: PISTON
+    name: "Push"
+    description: "少数の敵を押し返す"
+    coords: "-3,6"
+    cost: 1
+    required_lv: 25
+    perk_rewards:
+      p:learn_spell: push
+    requireperk_all: [combat_root, student]
+
+  apprentice:
+    icon: EXPERIENCE_BOTTLE
+    name: "Mana Capacity II / Regen II"
+    description: "最大Manaを135、回復を5/秒にする"
+    coords: "0,7"
+    cost: 1
+    required_lv: 30
+    perk_rewards:
+      p:path_upgrade: apprentice
+    requireperk_all: [student]
+
+  recall:
+    icon: COMPASS
+    name: "Recall"
+    description: "登録済みの自宅へ帰還する"
+    coords: "4,8"
+    cost: 2
+    required_lv: 30
+    perk_rewards:
+      p:learn_spell: recall
+    requireperk_all: [blink, apprentice]
+
+  chainlightning:
+    icon: LIGHTNING_ROD
+    name: "Lightning"
+    description: "限定的に連鎖する雷撃を修得する"
+    coords: "-4,8"
+    cost: 2
+    required_lv: 40
+    perk_rewards:
+      p:learn_spell: chainlightning
+    requireperk_all: [fireball, apprentice]
+
+  feato_clear_skies:
+    icon: SUNFLOWER
+    name: "晴天祈願"
+    description: "天象術でワールドを晴天にする"
+    coords: "5,9"
+    cost: 2
+    required_lv: 50
+    perk_rewards:
+      p:learn_spell: feato_clear_skies
+    requireperk_all: [recall, apprentice]
+
+  master:
+    icon: NETHER_STAR
+    name: "Mana Capacity III / Regen III"
+    description: "最大Manaを165、回復を6/秒にする"
+    coords: "0,10"
+    cost: 1
+    required_lv: 60
+    perk_rewards:
+      p:path_upgrade: master
+    requireperk_all: [apprentice]
+
+  feato_call_rain:
+    icon: WATER_BUCKET
+    name: "雨乞い"
+    description: "天象術でワールドに雨を呼ぶ"
+    coords: "5,11"
+    cost: 2
+    required_lv: 60
+    perk_rewards:
+      p:learn_spell: feato_call_rain
+    requireperk_all: [feato_clear_skies, master]
+
+  feato_call_storm:
+    icon: LIGHTNING_ROD
+    name: "嵐の招来"
+    description: "天象術でワールドに雷雨を呼ぶ"
+    coords: "5,12"
+    cost: 3
+    required_lv: 70
+    perk_rewards:
+      p:learn_spell: feato_call_storm
+    requireperk_all: [feato_call_rain]
+
+  wound:
+    icon: NETHERITE_SWORD
+    name: "魔力穿ち"
+    description: "単体用の高位Burst魔法を修得する"
+    coords: "-4,12"
+    cost: 4
+    required_lv: 90
+    perk_rewards:
+      p:learn_spell: wound
+    requireperk_all: [chainlightning, master]
+
+  feato_archmage:
+    icon: NETHER_STAR
+    name: "魔術完成"
+    description: "Lv100補正で最大Manaを185にする"
+    coords: "0,13"
+    cost: 0
+    required_lv: 100
+    perk_rewards:
+      p:path_upgrade: feato_archmage
+    requireperk_all: [master]

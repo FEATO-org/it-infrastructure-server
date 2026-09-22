@@ -17,7 +17,7 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ EconomyShopGUI Free
                      ├ FancyNpcs
                      ├ squaremap :8123
-                     ├ ValhallaMMO
+                     ├ ValhallaMMO / Magic 11.2.4
                      ├ SCore / ExecutableItems
                      ├ WorldEdit / CraftBook
                      ├ ImageFrame
@@ -42,7 +42,7 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 - 経済・基本機能: EssentialsX Core / Spawn、VaultUnlocked、EssentialsUnlocked
 - 商店・NPC: EconomyShopGUI Free、FancyNpcs
 - マップ: squaremap
-- RPG・アイテム: ValhallaMMO、SCore、ExecutableItems
+- RPG・アイテム: ValhallaMMO、Magic 11.2.4、SCore、ExecutableItems
 - 建築・表示: WorldEdit、CraftBook、ImageFrame
 - 馬・収納: Better Horses、DualHorse、Backpack Plus
 - 死亡時保護: DeadChest 4.30.0
@@ -70,6 +70,26 @@ ValhallaMMOの訳は、JAR内英語原本とキー・配列・名前付きプレ
 ```
 
 この処理は[日本語Gist](https://gist.github.com/LenTakayama/e8f65dbce8e58baec96c8554a4eba4e5)を一時領域へ取得し、[検証スクリプト](../script/validate_valhallammo_translation.py)を通過してから置換します。
+
+## 魔術（ValhallaMMO + Magic）
+
+Magic 11.2.4の公式`valhalla` exampleを使用し、ValhallaMMOへ`魔術` Skill（Lv 0-100）を追加します。成長の主体はValhallaMMOの魔術Lv、EXP、Skill Point、Skill Treeです。MagicはSpell、Mana、Cooldown、Casting、魔導具UI、演出だけを担当し、独立した第二のMMOレベルやSpell Pointを使いません。
+
+- EXPは公式曲線`(%level% + 75 * 2^(%level%/7.6)) + 300`を変更せず、successful castの`earns_type: valhalla_xp_magic`と`earns_multiplier: 10`でValhalla魔術EXPへ変換します。
+- Spell Shopは公式`OpenValhallaSkillTreeAction`でValhallaのSkill Treeを開きます。戦闘、防護、秘術の3分岐とMana系統を設け、全取得コストは30です。Skill PointはValhallaMMOの既存Power profileで全Skill共通管理されるため、魔術専用の約20ポイント上限は独自integrationなしでは強制できません。運用上は他Skillとの配分を含め約20を目安にします。
+- Manaは100、回復4/秒から開始します。Path upgradeとMana perkを同じ公式rewardにまとめ、Lv10で115、Lv30で135、Lv60で165、Lv100で185へ増加し、回復は最終6/秒です。Magic 11.2.4のMana値は整数のため、指定目安5.8/秒は6/秒へ丸めています。
+- Pathは`beginner`、`student`、`apprentice`、`master`を内部進行に使用し、Lv100補正だけ`feato_archmage`を追加します。プレイヤーには魔術LvとSkill Treeを主表示します。
+- Cooldownはすべてミリ秒です。Magic MissileとFireballはブロックを破壊せず、高位戦闘魔法を含め通常武器の継続火力を置き換えない設定です。
+- 魔術Lvによる直接Damage倍率は追加しません（0%）。成長はSpell解放、Mana、Mana回復、移動・探索・防御の選択を主体にします。
+- 天象術は晴天祈願、雨乞い、嵐の招来です。すべてMagicの`WeatherAction`でワールド天候だけを変更し、コマンド、追加落雷攻撃、Mob spawnは使いません。
+- WandはSpell選択・発動UIとしてのみ使用します。rarity、ランダム性能、恒常的な攻撃強化、Magic Armorは採用しません。
+- Fill、Box、Blob、Construct、採掘・生産代替、Portal、常時Flight、Mob召喚などの禁止SpellはSkill Treeへ登録しません。
+
+Magic側のresource pack自動配布は無効です。公式[Magic+ValhallaMMO pack](https://rp.elmakers.com/Magic-valhalla-RP-26.2.zip)を既存の[resourcepack統合手順](java/resourcepack/README.md)の入力にし、完成した単一packだけを配布してください。Java/BedrockともCustom Modelに依存せず、日本語のSpell名と説明で識別できます。
+
+`ValhallaMMO/skills/magic_progression.yml`は分岐、必要Lv、コストを固定するためGitで追跡します。Magic update時はmagic_progression.ymlの再生成要否をrelease noteで確認し、必要なら再生成後にdiffを確認する。
+
+実機では、MagicとValhallaMMOのenable順、魔術profile作成、Spell XP加算、Skill Point総数、Path upgrade、Mana表示・回復、各Spellの成功判定とCooldown、Spell Shop GUI、日本語表示、Java/Bedrockの魔導具操作、統合resource packの表示を確認してください。
 
 ## 経済と通常商店
 

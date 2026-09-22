@@ -1,0 +1,177 @@
+override:
+  earns_type: valhalla_xp_magic
+  earns_multiplier: 10
+
+spellshop:
+  actions:
+    cast:
+      - class: com.elmakers.mine.bukkit.integration.valhalla.OpenValhallaSkillTreeAction
+  parameters:
+    target: self
+
+missile:
+  actions:
+    cast:
+      - class: CustomProjectile
+        actions:
+          - class: Damage
+  parameters:
+    cooldown: 1500
+    damage: 2
+    target_breakables: 0
+  costs:
+    mana: 8
+
+feato_light:
+  icon: torch
+  category: utility
+  earns: 1
+  actions:
+    cast:
+      - class: PotionEffect
+  parameters:
+    target: self
+    duration: 120000
+    effect_night_vision: 0
+    cooldown: 5000
+  costs:
+    mana: 5
+
+heal:
+  actions:
+    cast:
+      - class: Heal
+  parameters:
+    target: self
+    amount: 4
+    cooldown: 15000
+  costs:
+    mana: 20
+
+fling:
+  parameters:
+    cooldown: 6000
+    min_speed: 1.2
+    max_speed: 1.6
+  costs:
+    mana: 10
+
+fireball:
+  parameters:
+    break_blocks: false
+    fire: false
+    cooldown: 8000
+  costs:
+    mana: 25
+
+blink:
+  parameters:
+    range: 12
+    cooldown: 10000
+  costs:
+    mana: 20
+
+reflect:
+  parameters:
+    radius: 1
+    undo: 1200
+    breakable: 1
+    cooldown: 25000
+  costs:
+    mana: 30
+
+gills:
+  parameters:
+    cooldown: 30000
+  costs:
+    mana: 20
+
+push:
+  parameters:
+    range: 8
+    target_count: 2
+    cooldown: 6000
+  costs:
+    mana: 15
+
+recall:
+  parameters:
+    options:
+      - type: home
+    allow_home: true
+    allow_spawn: false
+    allow_marker: false
+    allow_death: false
+    allow_souls: false
+    allow_wand: false
+    allow_cross_world: false
+    allow_town: false
+    allow_fields: false
+    allow_friends: false
+    cooldown: 300000
+  costs:
+    mana: 40
+
+chainlightning:
+  parameters:
+    radius: 3
+    target_count: 1
+    repeat: 2
+    player_damage: 1
+    entity_damage: 2
+    target_breakables: 0
+    cooldown: 15000
+  costs:
+    mana: 40
+
+feato_clear_skies:
+  icon: sunflower
+  category: utility
+  earns: 2
+  actions:
+    cast:
+      - class: Weather
+  parameters:
+    target: none
+    weather: clear
+    cooldown: 1200000
+  costs:
+    mana: 60
+
+feato_call_rain:
+  icon: water_bucket
+  category: utility
+  earns: 2
+  actions:
+    cast:
+      - class: Weather
+  parameters:
+    target: none
+    weather: rain
+    cooldown: 1800000
+  costs:
+    mana: 70
+
+feato_call_storm:
+  icon: lightning_rod
+  category: utility
+  earns: 2
+  actions:
+    cast:
+      - class: Weather
+  parameters:
+    target: none
+    weather: storm
+    cooldown: 2700000
+  costs:
+    mana: 90
+
+wound:
+  parameters:
+    range: 8
+    damage: 10
+    target_breakables: 0
+    cooldown: 60000
+  costs:
+    mana: 85
+

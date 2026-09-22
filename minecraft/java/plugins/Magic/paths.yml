@@ -1,0 +1,52 @@
+beginner:
+  upgrade: student
+  spells:
+    - missile
+    - feato_light
+    - heal
+    - fling
+  override_properties:
+    mana_max: 100
+    mana_regeneration: 4
+
+student:
+  upgrade: apprentice
+  spells:
+    - fireball
+    - blink
+    - reflect
+    - gills
+    - push
+  override_properties:
+    mana_max: 115
+    mana_regeneration: 4
+
+apprentice:
+  upgrade: master
+  spells:
+    - recall
+    - chainlightning
+    - feato_clear_skies
+  override_properties:
+    mana_max: 135
+    mana_regeneration: 5
+
+master:
+  upgrade: feato_archmage
+  spells:
+    - feato_call_rain
+    - feato_call_storm
+    - wound
+  override_properties:
+    mana_max: 165
+    mana_regeneration: 6
+
+feato_archmage:
+  inherit: master
+  icon: stick
+  vanilla_icon: nether_star
+  spells: []
+  override_properties:
+    mana_max: 185
+    mana_regeneration: 6
+
