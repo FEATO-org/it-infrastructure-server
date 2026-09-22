@@ -71,6 +71,8 @@ services:
       NOTIFY_WEBHOOK_URL: ${NOTIFY_WEBHOOK_URL}
       ERROR_WEBHOOK_URL: ${ERROR_WEBHOOK_URL}
       LOKI_USER_ID: ${LOKI_USER_ID}
+      PROM_USER_ID: ${PROM_USER_ID}
+      PROMETHEUS_REMOTE_WRITE_HOST: ${PROMETHEUS_REMOTE_WRITE_HOST:-prometheus-prod-18-prod-ap-southeast-0.grafana.net}
       GRAFANA_API_KEY: ${GRAFANA_API_KEY}
       APP_MODE: ${APP_MODE}
     volumes:
