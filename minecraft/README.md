@@ -24,8 +24,8 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ Better Horses / DualHorse
                      ├ Backpack Plus
                      ├ DeadChest 4.30.0
-                     ├ FEATO Ancient Coin
-                     └ FEATO Coin Exchange（Release公開待ち）
+                     ├ FEATO Ancient Coin 1.0.0
+                     └ FEATO Coin Exchange 1.1.0
 Data Packs: Enchants Plus
 Web: nginx dynmap.feato.jp -> squaremap :8123
 ```
@@ -46,7 +46,7 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 - 建築・表示: WorldEdit、CraftBook、ImageFrame
 - 馬・収納: Better Horses、DualHorse、Backpack Plus
 - 死亡時保護: DeadChest 4.30.0
-- 独自機能: FEATO Ancient Coin 0.2.0、FEATO Coin Exchange（Release公開待ち）
+- 独自機能: FEATO Ancient Coin 1.0.0、FEATO Coin Exchange 1.1.0
 
 DeadChest 4.30.0をPaper 26.2環境で使用します。公式の対応表記は26.1.xまでで、
 Paper 26.2での実機テストは未実施です。
@@ -129,7 +129,7 @@ FEATO Coin Exchange
 
 `FEATO Coin Exchange` はConsoleSenderからの`/feato-coin-exchange <player>`のみを受け付ける前提です。一般PlayerおよびOP Playerへコマンド実行権限は付与せず、FancyNpcsからも`player_command`、`player_command_as_op`、`scoreboard`、`clear`、`eco give`、`wait`、複数の`console_command`を用いません。
 
-現時点では想定配布元 `FEATO-org/feato_coin_exchange` に公開Repository / Releaseが確認できないため、`plugins.txt`へのJAR URL、JAR hash、Plugin data folder、`config.yml`は未追加です。Release公開後に、実在するtag・artifact名・SHA-512・`plugin.yml`で判明するdata folder名を確認して追加してください。Pluginが`exchange-value`を設定可能な場合は、既存の追跡方針に従いその実フォルダの`config.yml`で`exchange-value: 10.0`を管理します。
+`plugins.txt`はAncient Coin 1.0.0とCoin Exchange 1.1.0のGitHub Release JARを取得します。GitHubのasset名にはバージョンが含まれるため、両URLは新しい安定Releaseごとに実在するtagとasset名へ更新してください。起動時は古いFEATO版JARを削除してから一覧のJARを再取得するため、版違いが残って二重に有効化されることはありません。Coin Exchange 1.1.0のRelease asset公開後にデプロイしてください。初期設定は`java/plugins/FEATOCoinExchange/config.yml`で管理し、交換額は`exchange-value: 10.0`です。
 
 ### FancyNpcs設定
 
@@ -166,8 +166,8 @@ squaremap 1.3.15をPaper 26.2用JARで導入し、内部Webサーバーを8123�
 2. Volume内の旧JARを確認し、旧Vault、XConomy、SetSpawn、Genius Shop、Dynmapと重複版をVolume外へ退避します。
 3. 旧Data PackとAncient Coin Data Packを確認し、二重抽選を避けて退避します。
 4. Compose/Swarm設定を検証してデプロイします。
-5. `setup_minecraft_permissions.sh`を実グループ名で実行し、本拠点で`/setspawn`、NPC作成を行います。FEATO Coin ExchangeのReleaseを追加した場合は、起動ログでPlugin enableとVault Economy provider取得成功を確認します。
-6. Java/Bedrock両方で商店、残高、帰還札、馬、Backpack、AncientCoin drop、squaremap表示を確認します。Coin Exchange導入時は、次の換金試験も行います。
+5. `setup_minecraft_permissions.sh`を実グループ名で実行し、本拠点で`/setspawn`、NPC作成を行います。起動ログでFEATO Coin ExchangeのenableとVault Economy provider取得成功を確認します。
+6. Java/Bedrock両方で商店、残高、帰還札、馬、Backpack、AncientCoin drop、squaremap表示を確認します。Coin Exchangeは、次の換金試験も行います。
 
    - 正規古銭1枚でNPCを右クリックし、1枚だけ減少、残高が10G増加、成功メッセージを確認する。
    - 古銭なし、通常Gold Nugget、名前だけ「古銭」のGold Nugget、Loreだけ似せたGold Nuggetでは、残高・アイテムが変化せず交換不可メッセージとなることを確認する。

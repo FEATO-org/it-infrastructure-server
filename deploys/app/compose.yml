@@ -125,6 +125,10 @@ services:
       # Better Horses has no immutable release asset; Spiget resource 124223 resolves the author release.
       SPIGET_RESOURCES: ${BETTER_HORSES_SPIGET_RESOURCE:-124223}
       PLUGINS_FILE: /extras/plugins.txt
+      # Remove superseded FEATO release JARs before downloading current entries.
+      REMOVE_OLD_MODS: "TRUE"
+      REMOVE_OLD_MODS_INCLUDE: "FEATO-Ancient-Coin-*.jar,FEATO-Coin-Exchange-*.jar"
+      REMOVE_OLD_MODS_DEPTH: "1"
       DATAPACKS: |-
         /extras/datapacks
       ENABLE_COMMAND_BLOCK: "TRUE"

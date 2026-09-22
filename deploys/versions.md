@@ -113,8 +113,8 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | VaultUnlocked | 2.20.3 | [固定URL](https://cdn.modrinth.com/data/ayRaM8J7/versions/qZgRzoYs/VaultUnlocked-2.20.3.jar) | Paper | 26.2（配布metadata） | stable | plugin名は`Vault`。Paper 26.2で起動確認 |
 | EssentialsUnlocked | 1.0.0.1 | [固定URL](https://cdn.modrinth.com/data/gPLRdl3T/versions/fUaoKCyT/EssentialsUnlocked-1.0.0.1.jar) | Paper | 26.2（配布metadata） | stable | manifest versionは1.0.0.0。Paper 26.2で起動確認 |
 | EconomyShopGUI Free | 7.2.1 | [作者配布](https://www.spigotmc.org/resources/economyshopgui.69927/) | Paper | 26.2（作者tested一覧） | stable | Paper 26.2でEssentialsX Economyへの接続確認。Spiget CDNは動的URL |
-| FEATO Ancient Coin | 0.2.0 | [固定Release](https://github.com/FEATO-org/feato_ancient_coin/releases/tag/v0.2.0) | Paper | 26.2（plugin api-version） | stable release | draft=false、prerelease=false。Paper 26.2で起動確認 |
-| FEATO Coin Exchange | 未公開 | [想定Repository](https://github.com/FEATO-org/feato_coin_exchange) | Paper | 未確認 | 導入保留 | 2026-09-22にRepository / Releaseを確認したが公開されていないため、JAR URL・artifact名・SHA-512・Plugin設定フォルダは未記録。公開Releaseから実値を確認して追加する |
+| FEATO Ancient Coin | 1.0.0 | [固定Release](https://github.com/FEATO-org/feato_ancient_coin/releases/tag/v1.0.0) | Paper | 26.2（plugin api-version） | stable release | GitHub latest release（draft=false、prerelease=false）。Paper 26.2で起動確認 |
+| FEATO Coin Exchange | 1.1.0 | [公開予定Release](https://github.com/FEATO-org/feato-coin-exchange/releases/tag/v1.1.0) | Paper | 26.2（plugin api-version） | release pending | `FEATO-Coin-Exchange-1.1.0.jar`を取得対象として事前設定。data folderは`FEATOCoinExchange`、`exchange-value: 10.0` |
 | FancyNpcs | 2.12.0 | [固定URL](https://cdn.modrinth.com/data/EeyAn23L/versions/53lykMXY/FancyNpcs-2.12.0.jar) | Paper | 26.2（配布metadata、起動確認） | stable | 依存なし。帰還札はplayer_command、古銭換金はconsole_command 1回を使用し、一時OPは禁止 |
 | squaremap | 1.3.15 | [固定Release](https://github.com/jpenilla/squaremap/releases/tag/v1.3.15) | Paper | 26.2（api-version、起動確認） | stable | 内部Webサーバー8123、既存dynmap.feato.jp経路を再利用 |
 | DualHorse | 1.5.4 | [固定URL](https://cdn.modrinth.com/data/mgoLZ3st/versions/9jTb2KHl/DualHorse-1.5.4.jar) | Paper | 配布metadataは26.1.2まで、26.2で起動確認 | stable | 26.2の実プレイヤー二人乗りとBetter Horses併用は要確認 |
@@ -141,7 +141,8 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | VaultUnlocked-2.20.3.jar | `0eedea1591459e7e327315b43afa834a173c8c2ae31b3b235586d31963df29a4a6c0ef4b8f3fdc746e15afd47ee50c1ff93584543b5c2ef7c2a80135dba1136a` |
 | EssentialsUnlocked-1.0.0.1.jar | `c271923c87e2a1e85011e3784141f50b848c4717f9c04c9279cc03d7aaafd79ddcf73abadfdb6aac0d964be818065ee510737365feed07a2309687aa533c85b9` |
 | EconomyShopGUI-7.2.1.jar | `178c3d5e0d051be27008a5bf9ef2b69c74bf1be7a37f40f4b63046f6d520c4f886e7b94502dfc01893b97262feb56d674c4e8100352a36fa4fa6058409bf9114` |
-| FEATO-Ancient-Coin-0.2.0.jar | `b48305f6918df47070e6b6ceea1e4326a120a18f713f2bd221f4e75db71b047b5c0f3bf08c247aa671ef8eb2be1dc5db641146dd768537d3c98a398652e5a183` |
+| FEATO-Ancient-Coin-1.0.0.jar | `d4e7608d9d1f2614a6e420f3ee7e02a84b96e8c638cc9f5c6fa17f554aaaa99ef6af3d54a180a7002f0b87959ff249420c255a6bd48bfe8f81017d44e106e238` |
+| FEATO-Coin-Exchange-1.1.0.jar | Release公開後にGitHub Release asset digestを記録 |
 | FancyNpcs-2.12.0.jar | `f7a52c7e44d004e4235c12bf8d6936b25188ae7259b375d8b310b56538e724452805173e3781f9326c8fa794802f329c18416cbafccf5b5fab5016a628027399` |
 | squaremap-paper-mc26.2-1.3.15.jar | `a6f00e0ea57268ed30b4aa2246b8ea3424f1210daab01bd47b217ec334199e792605f9419b7cfed7ed07cac20ad125593ddaf181c0ee72a129255563c75ab11e` |
 | DualHorse-1.5.4.jar | `fd70684e9b3263bfc4edb9bde54a5fc1cc08c9f2ca4577434e2517dd7a3e5958029ebb0fd4090faa0545ae957531608cafe5452cb30d87f67344b28ac30e75d2` |
