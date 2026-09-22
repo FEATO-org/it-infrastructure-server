@@ -131,6 +131,7 @@ services:
       REMOVE_OLD_MODS_DEPTH: "1"
       DATAPACKS: |-
         /extras/datapacks
+      DATAPACKS_FILE: /extras/datapacks.txt
       ENABLE_COMMAND_BLOCK: "TRUE"
       COPY_CONFIG_DEST: /data
       REPLACE_ENV_VARIABLES: "TRUE"
@@ -172,6 +173,7 @@ services:
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/paper-global.yml:/config/config/paper-global.yml:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/paper-world-defaults.yml:/config/config/paper-world-defaults.yml:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/datapacks:/extras/datapacks:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/datapacks.txt:/extras/datapacks.txt:ro
     networks:
       - minecraft-backend-network
       - database-network
