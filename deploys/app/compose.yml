@@ -49,6 +49,7 @@ services:
       REPLACE_ENV_VARIABLES: "TRUE"
       REPLACE_ENV_DURING_SYNC: "TRUE"
       REPLACE_ENV_VARIABLE_PREFIX: CFG_
+      PATCH_DEFINITIONS: /patches/geyser-nethernet.json
       CFG_LUCKPERMS_PASSWORD_FILE: /run/secrets/luckperms_db_password
       ENABLE_RCON: "true"
       RCON_PORT: "25575"
@@ -75,6 +76,7 @@ services:
     volumes:
       - minecraft_proxy_data:/server
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/proxy-rcon-entrypoint.sh:/rcon-init/proxy-rcon-entrypoint.sh:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/patches:/patches:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/config:/config:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/plugins:/plugins:ro
       - ${MINECRAFT_ASSET_ROOT:-/opt/it-infrastructure-server/resources/minecraft}/resourcepacks/bedrock:/plugins/Geyser-Velocity/packs:ro

@@ -189,6 +189,10 @@ services:
         published: 19132
         protocol: udp
         mode: host
+      - target: 19133
+        published: 19133
+        protocol: udp
+        mode: host
     configs:
       - source: nginx_main_config
         target: /etc/nginx/nginx.conf
