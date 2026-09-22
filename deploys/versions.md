@@ -114,7 +114,8 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | EssentialsUnlocked | 1.0.0.1 | [固定URL](https://cdn.modrinth.com/data/gPLRdl3T/versions/fUaoKCyT/EssentialsUnlocked-1.0.0.1.jar) | Paper | 26.2（配布metadata） | stable | manifest versionは1.0.0.0。Paper 26.2で起動確認 |
 | EconomyShopGUI Free | 7.2.1 | [作者配布](https://www.spigotmc.org/resources/economyshopgui.69927/) | Paper | 26.2（作者tested一覧） | stable | Paper 26.2でEssentialsX Economyへの接続確認。Spiget CDNは動的URL |
 | FEATO Ancient Coin | 0.2.0 | [固定Release](https://github.com/FEATO-org/feato_ancient_coin/releases/tag/v0.2.0) | Paper | 26.2（plugin api-version） | stable release | draft=false、prerelease=false。Paper 26.2で起動確認 |
-| FancyNpcs | 2.12.0 | [固定URL](https://cdn.modrinth.com/data/EeyAn23L/versions/53lykMXY/FancyNpcs-2.12.0.jar) | Paper | 26.2（配布metadata、起動確認） | stable | 依存なし。NPC actionはplayer_commandを使用し、一時OPは禁止 |
+| FEATO Coin Exchange | 未公開 | [想定Repository](https://github.com/FEATO-org/feato_coin_exchange) | Paper | 未確認 | 導入保留 | 2026-09-22にRepository / Releaseを確認したが公開されていないため、JAR URL・artifact名・SHA-512・Plugin設定フォルダは未記録。公開Releaseから実値を確認して追加する |
+| FancyNpcs | 2.12.0 | [固定URL](https://cdn.modrinth.com/data/EeyAn23L/versions/53lykMXY/FancyNpcs-2.12.0.jar) | Paper | 26.2（配布metadata、起動確認） | stable | 依存なし。帰還札はplayer_command、古銭換金はconsole_command 1回を使用し、一時OPは禁止 |
 | squaremap | 1.3.15 | [固定Release](https://github.com/jpenilla/squaremap/releases/tag/v1.3.15) | Paper | 26.2（api-version、起動確認） | stable | 内部Webサーバー8123、既存dynmap.feato.jp経路を再利用 |
 | DualHorse | 1.5.4 | [固定URL](https://cdn.modrinth.com/data/mgoLZ3st/versions/9jTb2KHl/DualHorse-1.5.4.jar) | Paper | 配布metadataは26.1.2まで、26.2で起動確認 | stable | 26.2の実プレイヤー二人乗りとBetter Horses併用は要確認 |
 | Velocity | 4.2.0 build 30 | [公式配布](https://papermc.io/downloads/velocity) | Velocity | 接続を実機検証 | stable（公式API STABLE） | VELOCITY_VERSIONとBUILD_IDで固定。JAR GETは403、Requires runtime verification |

@@ -24,7 +24,8 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ Better Horses / DualHorse
                      ├ Backpack Plus
                      ├ DeadChest 4.30.0
-                     └ FEATO Ancient Coin
+                     ├ FEATO Ancient Coin
+                     └ FEATO Coin Exchange（Release公開待ち）
 Data Packs: Enchants Plus
 Web: nginx dynmap.feato.jp -> squaremap :8123
 ```
@@ -45,7 +46,7 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 - 建築・表示: WorldEdit、CraftBook、ImageFrame
 - 馬・収納: Better Horses、DualHorse、Backpack Plus
 - 死亡時保護: DeadChest 4.30.0
-- 独自機能: FEATO Ancient Coin 0.2.0
+- 独自機能: FEATO Ancient Coin 0.2.0、FEATO Coin Exchange（Release公開待ち）
 
 DeadChest 4.30.0をPaper 26.2環境で使用します。公式の対応表記は26.1.xまでで、
 Paper 26.2での実機テストは未実施です。
@@ -103,17 +104,43 @@ ExecutableItemsの`emergency_return`を右クリックすると、EssentialsX Sp
 
 FancyNpcsの`player_command_as_op`は使用しません。価格徴収、EIアイテム発行、右クリック時の消費はJava版とBedrock版の実プレイヤーで公開前に確認してください。
 
-## FEATO Ancient Coinの換金
+## 古銭換金
 
-AncientCoin 0.2.0は、`minecraft:custom_data={feato_coin:{id:"ancient_coin",schema:1}}`で正規品を識別しますが、換金処理を持ちません。EconomyShopGUI FreeはPDC/custom data照合に対応せず、FancyNpcsにもPDC条件や原子的なアイテム消費・入金処理はありません。このため、偽造防止要件を満たさない古銭10G換金は有効化していません。
+古銭生成と換金は別Pluginとして運用します。
 
-安全な実装はAncientCoinへ単一コマンドを追加する方式です。そのコマンド内でメインスレッド上にてPDCを検証し、1枚だけ減らし、Vaultへ10G入金し、入金失敗時はアイテムを復元します。実装後、NPCにはその1コマンドだけを`player_command`として登録します。それまでは案内NPCだけを作成できます。
+- **FEATO Ancient Coin**: 古銭生成、Lootへの追加、古銭Item定義、`custom_data`付与
+- **FEATO Coin Exchange**: 正規古銭識別、1枚消費、Vault Economyへの換金、失敗時rollback、Player通知
+
+正規古銭は、`minecraft:gold_nugget`かつ`minecraft:custom_data={feato_coin:{id:"ancient_coin",schema:1}}`だけです。交換レートは1枚あたり10Gです。通常のGold Nugget、表示名だけを変えたもの、Loreだけを似せたものは換金対象にしません。
+
+```text
+FancyNpcs
+    │ console_command 1個
+    ▼
+FEATO Coin Exchange
+    ├─ ConsoleSender検証
+    ├─ Player解決
+    ├─ 正規古銭判定
+    ├─ 古銭1枚消費
+    ├─ Vaultへ10G入金
+    ├─ 失敗時rollback
+    └─ Playerへ結果通知
+```
+
+`FEATO Coin Exchange` はConsoleSenderからの`/feato-coin-exchange <player>`のみを受け付ける前提です。一般PlayerおよびOP Playerへコマンド実行権限は付与せず、FancyNpcsからも`player_command`、`player_command_as_op`、`scoreboard`、`clear`、`eco give`、`wait`、複数の`console_command`を用いません。
+
+現時点では想定配布元 `FEATO-org/feato_coin_exchange` に公開Repository / Releaseが確認できないため、`plugins.txt`へのJAR URL、JAR hash、Plugin data folder、`config.yml`は未追加です。Release公開後に、実在するtag・artifact名・SHA-512・`plugin.yml`で判明するdata folder名を確認して追加してください。Pluginが`exchange-value`を設定可能な場合は、既存の追跡方針に従いその実フォルダの`config.yml`で`exchange-value: 10.0`を管理します。
+
+### FancyNpcs設定
 
 ```text
 /npc create ancient_coin_trader
 /npc displayname ancient_coin_trader <gold>古銭商</gold>
-/npc action ancient_coin_trader RIGHT_CLICK add message <yellow>古銭の換金は現在準備中です。</yellow>
+/npc interaction_cooldown ancient_coin_trader 1s
+/npc action ancient_coin_trader RIGHT_CLICK add console_command feato-coin-exchange {player}
 ```
+
+交換処理として登録するactionは最後の`console_command`だけです。既存の案内用`message` actionがある場合は削除してから登録します。FancyNpcsの`console_command`はConsoleとして実行され、`{player}`はクリックしたPlayer名に置換されます。
 
 ## LuckPerms
 
@@ -123,7 +150,7 @@ AncientCoin 0.2.0は、`minecraft:custom_data={feato_coin:{id:"ancient_coin",sch
 ./script/setup_minecraft_permissions.sh <player-group> <admin-group>
 ```
 
-スクリプトは一般グループへ残高確認、送金、帰還札kit、EIアイテム使用、FEATO商店だけを許可し、一般`/spawn`とEconomyShopGUIの一括売却コマンドを拒否します。管理グループへ経済、spawn、kit、商店編集、NPC作成と必要なaction種別を個別付与します。ワイルドカード権限、prefix、suffix、継承は変更しません。
+スクリプトは一般グループへ残高確認、送金、帰還札kit、EIアイテム使用、FEATO商店だけを許可し、一般`/spawn`とEconomyShopGUIの一括売却コマンドを拒否します。`featocoinexchange.execute`などFEATO Coin Exchangeの実行権限は一般・管理のいずれにも付与しません。管理グループへ経済、spawn、kit、商店編集、NPC作成と`console_command`を含む必要なaction種別だけを個別付与します。ワイルドカード権限、prefix、suffix、継承は変更しません。
 
 LuckPermsはVelocity/Paper共通MariaDBを使います。SQL messagingによる反映のため、両側で`/lp info`、Velocityで`/lpv info`を確認します。
 
@@ -139,8 +166,13 @@ squaremap 1.3.15をPaper 26.2用JARで導入し、内部Webサーバーを8123�
 2. Volume内の旧JARを確認し、旧Vault、XConomy、SetSpawn、Genius Shop、Dynmapと重複版をVolume外へ退避します。
 3. 旧Data PackとAncient Coin Data Packを確認し、二重抽選を避けて退避します。
 4. Compose/Swarm設定を検証してデプロイします。
-5. `setup_minecraft_permissions.sh`を実グループ名で実行し、本拠点で`/setspawn`、NPC作成を行います。
-6. Java/Bedrock両方で商店、残高、帰還札、馬、Backpack、AncientCoin drop、squaremap表示を確認します。
+5. `setup_minecraft_permissions.sh`を実グループ名で実行し、本拠点で`/setspawn`、NPC作成を行います。FEATO Coin ExchangeのReleaseを追加した場合は、起動ログでPlugin enableとVault Economy provider取得成功を確認します。
+6. Java/Bedrock両方で商店、残高、帰還札、馬、Backpack、AncientCoin drop、squaremap表示を確認します。Coin Exchange導入時は、次の換金試験も行います。
+
+   - 正規古銭1枚でNPCを右クリックし、1枚だけ減少、残高が10G増加、成功メッセージを確認する。
+   - 古銭なし、通常Gold Nugget、名前だけ「古銭」のGold Nugget、Loreだけ似せたGold Nuggetでは、残高・アイテムが変化せず交換不可メッセージとなることを確認する。
+   - 正規古銭を2枚以上持って1回クリックし、1枚だけ減少して10Gだけ増えることを確認する。
+   - 一般PlayerとOP Playerの双方が`/feato-coin-exchange <自分>`を直接実行すると拒否され、残高・古銭が変化しないことを確認する。
 
 ローカルではPaper 26.2 build 126 / Java 25で19 Pluginをすべて有効化し、正常停止まで確認しました。確認できた内容は、設定読込、依存解決、コマンド登録、squaremap 8123起動、ValhallaMMO `ja-jp`、Backpack Plus `jpn`、EI 1アイテム、EconomyShopGUI 1セクション/1ショップ、VaultとEssentialsX Economy連携です。
 

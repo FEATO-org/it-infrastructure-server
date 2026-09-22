@@ -69,6 +69,7 @@ admin_allow=(
   fancynpcs.command.npc.action.add.need_permission
   fancynpcs.command.npc.action.add.message
   fancynpcs.command.npc.action.add.player_command
+  fancynpcs.command.npc.action.add.console_command
   fancynpcs.command.npc.action.remove
   fancynpcs.command.npc.action.clear
   fancynpcs.command.npc.action.list
