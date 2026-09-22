@@ -21,3 +21,4 @@ https://github.com/FEATO-org/feato-coin-exchange/releases/download/v0.2.0/FEATO-
 https://cdn.modrinth.com/data/pKqnV03Y/versions/mBSgqYZH/dead-chest-4.30.0.jar
 https://cdn.spiget.org/file/spiget-resources/124223.jar
 https://cdn.spiget.org/file/spiget-resources/40996.jar
+https://download.geysermc.org/v2/projects/hurricane/versions/latest/builds/latest/downloads/spigot
