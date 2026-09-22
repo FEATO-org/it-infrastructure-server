@@ -68,8 +68,8 @@ services:
       - source: fluent_bit_discord_lua
         target: /fluent-bit/etc/discord.lua
     environment:
-      DISCORD_WEBHOOK_HOST: discord.com
-      DISCORD_WEBHOOK_URI: ${DISCORD_WEBHOOK_URI}
+      NOTIFY_WEBHOOK_URL: ${NOTIFY_WEBHOOK_URL}
+      ERROR_WEBHOOK_URL: ${ERROR_WEBHOOK_URL}
       LOKI_USER_ID: ${LOKI_USER_ID}
       GRAFANA_API_KEY: ${GRAFANA_API_KEY}
       APP_MODE: ${APP_MODE}

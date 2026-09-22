@@ -102,5 +102,6 @@ function process_minecraft_log(tag, timestamp, record)
   return 2, timestamp, {
     body = build_payload(event, value),
     headers = { ["Content-Type"] = "application/json" },
+    route = event == "ERROR" and "error" or "notify",
   }
 end
