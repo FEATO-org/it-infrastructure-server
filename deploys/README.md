@@ -61,7 +61,17 @@ openssl rand -base64 48 | docker secret create mariadb_app_password -
 openssl rand -base64 48 | docker secret create luckperms_db_password -
 openssl rand -hex 32 | docker secret create forwarding_secret -
 openssl rand -base64 32 | docker secret create rcon_password -
+openssl rand -base64 32 | docker secret create minecraft_proxy_rcon_password -
 docker secret create cloudflare_tunnel_token /secure/path/cloudflare-tunnel-token
+```
+
+`minecraft_proxy_rcon_password`はVelocity Proxy専用であり、Paperの
+`rcon_password`と共有しません。Proxy RCONはコンテナ内のTCP 25575だけで有効化し、
+ホスト、Swarm ingress、nginxへは公開しません。Proxy起動後はホストから次のように
+管理コマンドを実行できます。
+
+```bash
+docker exec <minecraft-proxy-container> rcon-cli "geyser dump"
 ```
 
 `cloudflare_tunnel_token`はremote-managed Tunnelのtokenです。Cloudflare

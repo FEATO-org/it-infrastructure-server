@@ -87,6 +87,7 @@ required_secrets=(
   mariadb_app_password
   forwarding_secret
   rcon_password
+  minecraft_proxy_rcon_password
   luckperms_db_password
   cloudflare_tunnel_token
   "${TLS_FULLCHAIN_SECRET}"

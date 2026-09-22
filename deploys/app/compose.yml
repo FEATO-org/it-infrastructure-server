@@ -38,6 +38,8 @@ services:
 
   minecraft-proxy:
     image: itzg/mc-proxy:java25
+    entrypoint: ["/bin/bash", "/rcon-init/proxy-rcon-entrypoint.sh"]
+    command: ["/usr/bin/run-bungeecord.sh"]
     environment:
       TYPE: VELOCITY
       VELOCITY_VERSION: "4.2.0"
@@ -48,6 +50,8 @@ services:
       REPLACE_ENV_DURING_SYNC: "TRUE"
       REPLACE_ENV_VARIABLE_PREFIX: CFG_
       CFG_LUCKPERMS_PASSWORD_FILE: /run/secrets/luckperms_db_password
+      ENABLE_RCON: "true"
+      RCON_PORT: "25575"
       # Java 25 compact headers; retain automatic G1 region sizing for 1G heap.
       JVM_XX_OPTS: >-
         -XX:+UseG1GC
@@ -66,8 +70,11 @@ services:
         target: forwarding_secret
       - source: luckperms_db_password
         target: luckperms_db_password
+      - source: minecraft_proxy_rcon_password
+        target: minecraft_proxy_rcon_password
     volumes:
       - minecraft_proxy_data:/server
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/proxy-rcon-entrypoint.sh:/rcon-init/proxy-rcon-entrypoint.sh:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/config:/config:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/plugins:/plugins:ro
       - ${MINECRAFT_ASSET_ROOT:-/opt/it-infrastructure-server/resources/minecraft}/texturepacks:/plugins/Geyser-Velocity/packs:ro
@@ -211,6 +218,8 @@ secrets:
   forwarding_secret:
     external: true
   rcon_password:
+    external: true
+  minecraft_proxy_rcon_password:
     external: true
   luckperms_db_password:
     external: true
