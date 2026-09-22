@@ -6,6 +6,7 @@
 Java TCP 25565 / Bedrock UDP 19132
   -> nginx -> Velocity 4.2.0
                 ├ Geyser-Velocity
+                │  └ EmoteOffhand (Geyser Extension)
                 ├ Floodgate
                 └ LuckPerms
                      │ modern forwarding
@@ -24,6 +25,7 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ Better Horses / DualHorse
                      ├ Backpack Plus
                      ├ DeadChest 4.30.0
+                     ├ Hurricane (bamboo / pointed dripstone collision only)
                      ├ FEATO Ancient Coin 1.0.0
                      └ FEATO Coin Exchange 1.1.0
 Data Packs: Enchants Plus
@@ -33,6 +35,15 @@ Web: nginx dynmap.feato.jp -> squaremap :8123
 対象バージョンは26.2です。`.env`の`MINECRAFT_VERSION`が既定値を上書きするため、デプロイ前に26.2であることを確認してください。
 
 GeyserとFloodgateはVelocityへ配置します。Paper側へFloodgate APIを要求するプラグインは今回ありません。Velocityのオンライン認証、modern forwarding、共有secret、Paperのoffline modeを維持します。Paper、MariaDB、squaremapはホストへ直接公開しません。
+
+EmoteOffhandはPaper/Velocity PluginではなくGeyser Extensionです。`mc-proxy`の
+`DOWNLOAD_EXTRA_CONFIGS`でGeyserMC公式Downloads APIから起動前に更新し、
+`/server/plugins/Geyser-Velocity/extensions/EmoteOffhand.jar`へ配置します。
+`gameplay.emotes-enabled: true`は維持し、旧`emote-offhand-workaround`は追加しません。
+HurricaneはPaper Pluginとして`plugins.txt`から公式APIで取得します。追跡する
+`java/plugins/Hurricane/hurricane.conf`では、Bedrockの移動補正に必要なbambooと
+pointed dripstoneだけを有効にしています。両回避策は対象ブロックのサーバー側衝突を
+なくすため、改造クライアントによる通過リスクと設置時の不安定さを理解したうえで運用してください。
 
 ## 採用Plugin
 
@@ -194,6 +205,6 @@ squaremap 1.3.15をPaper 26.2用JARで導入し、内部Webサーバーを8123�
    - 正規古銭を2枚以上持って1回クリックし、1枚だけ減少して10Gだけ増えることを確認する。
    - 一般PlayerとOP Playerの双方が`/feato-coin-exchange <自分>`を直接実行すると拒否され、残高・古銭が変化しないことを確認する。
 
-ローカルではPaper 26.2 build 126 / Java 25で19 Pluginをすべて有効化し、正常停止まで確認しました。確認できた内容は、設定読込、依存解決、コマンド登録、squaremap 8123起動、ValhallaMMO `ja-jp`、Backpack Plus `jpn`、EI 1アイテム、EconomyShopGUI 1セクション/1ショップ、VaultとEssentialsX Economy連携です。
+Hurricane追加前のローカル検証では、Paper 26.2 build 126 / Java 25で19 Pluginをすべて有効化し、正常停止まで確認しました。確認できた内容は、設定読込、依存解決、コマンド登録、squaremap 8123起動、ValhallaMMO `ja-jp`、Backpack Plus `jpn`、EI 1アイテム、EconomyShopGUI 1セクション/1ショップ、VaultとEssentialsX Economy連携です。Hurricaneは公式READMEの対応表記が26.1までのため、26.2での起動ログとbamboo / pointed dripstoneの実機動作をデプロイ前に確認してください。
 
 クライアント操作が必要なJava/Bedrockログイン、NPCクリック、100G徴収、帰還札の消費とteleport、商品売買、馬の二人乗り、各Data Pack、古銭dropは本番公開前の実機確認事項です。Better HorsesはProtocolLibなしでも起動しますが、一部機能が無効になるという通知があります。今回ProtocolLibは追加していません。

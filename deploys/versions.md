@@ -122,6 +122,8 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | Velocity | 4.2.0 build 30 | [公式配布](https://papermc.io/downloads/velocity) | Velocity | 接続を実機検証 | stable（公式API STABLE） | VELOCITY_VERSIONとBUILD_IDで固定。JAR GETは403、Requires runtime verification |
 | Geyser | 既存latest | [公式配布](https://download.geysermc.org/) | Velocity | 接続を実機検証 | 取得build要確認 | 既存方式維持、Requires runtime verification |
 | Floodgate | 既存latest | [公式配布](https://download.geysermc.org/) | Velocity | 接続を実機検証 | 取得build要確認 | 既存UUID・username-prefix維持、Requires runtime verification |
+| EmoteOffhand | latest（確認時 build 3） | [公式Downloads API](https://download.geysermc.org/v2/projects/emoteoffhand/versions/latest/builds/latest/downloads/emoteoffhand) | Geyser Extension（Velocity上のGeyser） | Geyser latest | dynamic build | `DOWNLOAD_EXTRA_CONFIGS`で`plugins/Geyser-Velocity/extensions`へ取得。Velocity Pluginとしては配置しない |
+| Hurricane | latest（確認時 build 4） | [公式Downloads API](https://download.geysermc.org/v2/projects/hurricane/versions/latest/builds/latest/downloads/spigot) | Paper | 公式README表記は26.1まで | dynamic build | bamboo / pointed dripstone collisionのみ。Paper 26.2ではRequires runtime verification |
 
 ### GET検証済みSHA-512
 
@@ -154,6 +156,6 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 
 ## 26.2追加構成の起動検証（2026-09-21）
 
-Paper 26.2 build 126 / Java 25で全19 Pluginを同時に有効化し、正常停止を確認しました。FancyNpcs 2.12.0、squaremap 1.3.15、DualHorse 1.5.4、Better Horses 6.3を含みます。squaremapは8123番で起動し、ValhallaMMOはja-jp、Backpack Plusはjpn、EconomyShopGUIはlang-jp.ymlを読み込みました。ExecutableItemsはemergency_returnを含む追跡アイテム1件を読み込み、EconomyShopGUIはfeato_shop 1セクション/1ショップとEssentialsX Economy接続を確認しました。
+Hurricane追加前に、Paper 26.2 build 126 / Java 25で全19 Pluginを同時に有効化し、正常停止を確認しました。FancyNpcs 2.12.0、squaremap 1.3.15、DualHorse 1.5.4、Better Horses 6.3を含みます。squaremapは8123番で起動し、ValhallaMMOはja-jp、Backpack Plusはjpn、EconomyShopGUIはlang-jp.ymlを読み込みました。ExecutableItemsはemergency_returnを含む追跡アイテム1件を読み込み、EconomyShopGUIはfeato_shop 1セクション/1ショップとEssentialsX Economy接続を確認しました。Hurricaneは公式READMEの対応表記が26.1までのため、Paper 26.2での起動ログと両collision workaroundの実機動作は未検証です。
 
 Better HorsesはProtocolLibなしでも起動しますが一部機能を無効化します。DualHorseの配布metadataは26.1.2までのため、26.2では起動確認に加えて実プレイヤーで二人乗り、再接続、馬データ保存、Better Horsesとの併用を確認してください。NPCクリック、帰還札の100G徴収・1回消費・teleport、Java/Bedrock接続はクライアント試験が必要です。
