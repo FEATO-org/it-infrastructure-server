@@ -29,6 +29,7 @@ if [[ -z "${CONFIG_VERSION:-}" ]]; then
     sha256sum \
       "${REPO_ROOT}/fluentbit/fluent-bit.conf" \
       "${REPO_ROOT}/fluentbit/parsers.conf" \
+      "${REPO_ROOT}/fluentbit/discord.lua" \
       "${REPO_ROOT}/nginx/nginx.conf" \
       "${REPO_ROOT}/nginx/http.d/public.conf" \
       "${REPO_ROOT}/nginx/stream.d/minecraft.conf" |
@@ -48,9 +49,7 @@ required_variables=(
   GUILD_IDS
   APP_MODE
   NOTIFY_CHANNEL_ID
-  NOTIFY_WEBHOOK_URL
-  ERROR_WEBHOOK_URL
-  PROM_USER_ID
+  DISCORD_WEBHOOK_URI
   LOKI_USER_ID
   GRAFANA_API_KEY
   TLS_FULLCHAIN_SECRET

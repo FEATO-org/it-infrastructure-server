@@ -65,16 +65,17 @@ services:
         target: /fluent-bit/etc/fluent-bit.conf
       - source: fluent_bit_parsers
         target: /fluent-bit/etc/parsers.conf
+      - source: fluent_bit_discord_lua
+        target: /fluent-bit/etc/discord.lua
     environment:
-      NOTIFY_WEBHOOK_URL: ${NOTIFY_WEBHOOK_URL}
-      ERROR_WEBHOOK_URL: ${ERROR_WEBHOOK_URL}
-      PROM_USER_ID: ${PROM_USER_ID}
+      DISCORD_WEBHOOK_HOST: discord.com
+      DISCORD_WEBHOOK_URI: ${DISCORD_WEBHOOK_URI}
       LOKI_USER_ID: ${LOKI_USER_ID}
       GRAFANA_API_KEY: ${GRAFANA_API_KEY}
       APP_MODE: ${APP_MODE}
     volumes:
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - minecraft_server_data:/minecraft:ro
       - fluent_bit_state:/fluent-bit/state
     networks:
       - monitoring-network
@@ -248,6 +249,9 @@ networks:
 volumes:
   mariadb_data:
   fluent_bit_state:
+  minecraft_server_data:
+    external: true
+    name: app_minecraft_server_data
 
 configs:
   fluent_bit_config:
@@ -256,6 +260,9 @@ configs:
   fluent_bit_parsers:
     name: system_fluent_bit_parsers_${CONFIG_VERSION:-v1}
     file: ../../fluentbit/parsers.conf
+  fluent_bit_discord_lua:
+    name: system_fluent_bit_discord_lua_${CONFIG_VERSION:-v1}
+    file: ../../fluentbit/discord.lua
   nginx_main_config:
     name: system_nginx_main_config_${CONFIG_VERSION:-v1}
     file: ../../nginx/nginx.conf
