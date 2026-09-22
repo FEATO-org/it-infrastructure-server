@@ -1,13 +1,64 @@
 entity-loot:
-  zombie: { chance: 0.005, min: 1, max: 1 }
-  skeleton: { chance: 0.005, min: 1, max: 1 }
-  spider: { chance: 0.005, min: 1, max: 1 }
-  creeper: { chance: 0.0075, min: 1, max: 1 }
-  witch: { chance: 0.015, min: 1, max: 2 }
-  enderman: { chance: 0.01, min: 1, max: 1 }
-  blaze: { chance: 0.015, min: 1, max: 1 }
-  piglin_brute: { chance: 0.03, min: 1, max: 2 }
-  evoker: { chance: 0.05, min: 1, max: 3 }
+  # Common overworld
+  zombie: { chance: 0.009, min: 1, max: 1 }
+  zombie_villager: { chance: 0.012, min: 1, max: 1 }
+  skeleton: { chance: 0.009, min: 1, max: 1 }
+  spider: { chance: 0.009, min: 1, max: 1 }
+  cave_spider: { chance: 0.009, min: 1, max: 1 }
+  creeper: { chance: 0.014, min: 1, max: 1 }
+
+  # Zombie / skeleton variants
+  husk: { chance: 0.010, min: 1, max: 1 }
+  stray: { chance: 0.010, min: 1, max: 1 }
+  bogged: { chance: 0.010, min: 1, max: 1 }
+  parched: { chance: 0.010, min: 1, max: 1 }
+  drowned: { chance: 0.014, min: 1, max: 1 }
+
+  # Easily farmable / numerous mobs
+  silverfish: { chance: 0.004, min: 1, max: 1 }
+  endermite: { chance: 0.004, min: 1, max: 1 }
+  slime: { chance: 0.004, min: 1, max: 1 }
+
+  # Other overworld combat mobs
+  witch: { chance: 0.027, min: 1, max: 2 }
+  phantom: { chance: 0.018, min: 1, max: 1 }
+  enderman: { chance: 0.018, min: 1, max: 1 }
+
+  # Illagers / raids
+  pillager: { chance: 0.014, min: 1, max: 1 }
+  vindicator: { chance: 0.027, min: 1, max: 2 }
+  evoker: { chance: 0.090, min: 1, max: 3 }
+  vex: { chance: 0.009, min: 1, max: 1 }
+  ravager: { chance: 0.070, min: 1, max: 3 }
+
+  # Trial chambers
+  breeze: { chance: 0.027, min: 1, max: 2 }
+
+  # Ocean
+  guardian: { chance: 0.018, min: 1, max: 1 }
+  elder_guardian: { chance: 0.140, min: 2, max: 4 }
+
+  # Nether
+  blaze: { chance: 0.027, min: 1, max: 1 }
+  ghast: { chance: 0.027, min: 1, max: 2 }
+  magma_cube: { chance: 0.007, min: 1, max: 1 }
+
+  piglin: { chance: 0.009, min: 1, max: 1 }
+  piglin_brute: { chance: 0.054, min: 1, max: 2 }
+  zombified_piglin: { chance: 0.005, min: 1, max: 1 }
+
+  hoglin: { chance: 0.014, min: 1, max: 1 }
+  zoglin: { chance: 0.027, min: 1, max: 2 }
+
+  wither_skeleton: { chance: 0.027, min: 1, max: 1 }
+
+  # The End
+  shulker: { chance: 0.027, min: 1, max: 2 }
+
+  # Special high-risk mob
+  warden: { chance: 1.0, min: 5, max: 10 }
+
+  # Bosses
   wither: { chance: 1.0, min: 10, max: 20 }
   ender_dragon: { chance: 1.0, min: 20, max: 30 }
 
