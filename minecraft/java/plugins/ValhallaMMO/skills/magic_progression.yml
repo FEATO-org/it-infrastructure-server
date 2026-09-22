@@ -30,6 +30,11 @@ perks:
     required_lv: 1
     perk_rewards:
       p:path_upgrade: beginner
+    messages:
+      - "&d魔術基礎"
+      - "&7基礎魔法を扱えるようになる"
+      - "&7最大Mana: &b100"
+      - "&7Mana回復: &b4/秒"
 
   missile:
     icon: SPECTRAL_ARROW
@@ -41,6 +46,18 @@ perks:
     perk_rewards:
       p:learn_spell: missile
     requireperk_all: [beginner]
+    connection_line:
+      '1':
+        position: '-1,0'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dMagic Missile"
+      - "&7低威力の魔力弾を放つ。ブロックは破壊しない"
+      - "&7威力: &b2"
+      - "&7消費Mana: &b8"
+      - "&7Cooldown: &e1.5秒"
 
   feato_light:
     icon: TORCH
@@ -52,6 +69,18 @@ perks:
     perk_rewards:
       p:learn_spell: feato_light
     requireperk_all: [beginner]
+    connection_line:
+      '1':
+        position: '1,0'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dLight"
+      - "&7暗所を見通す探索補助魔法"
+      - "&7効果時間: &b120秒"
+      - "&7消費Mana: &b5"
+      - "&7Cooldown: &e5秒"
 
   combat_root:
     icon: IRON_SWORD
@@ -62,6 +91,15 @@ perks:
     required_lv: 1
     perk_rewards: {}
     requireperk_all: [missile]
+    connection_line:
+      '1':
+        position: '-3,1'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&d戦闘魔術"
+      - "&7瞬間火力や敵の制圧を重視する魔術系統"
 
   defense_root:
     icon: SHIELD
@@ -72,6 +110,15 @@ perks:
     required_lv: 1
     perk_rewards: {}
     requireperk_all: [missile]
+    connection_line:
+      '1':
+        position: '0,1'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&d防護魔術"
+      - "&7回復や防御を重視する魔術系統"
 
   arcane_root:
     icon: ENDER_EYE
@@ -82,6 +129,15 @@ perks:
     required_lv: 1
     perk_rewards: {}
     requireperk_all: [feato_light]
+    connection_line:
+      '1':
+        position: '3,1'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&d秘術"
+      - "&7移動、探索、天候操作を扱う魔術系統"
 
   heal:
     icon: GLISTERING_MELON_SLICE
@@ -93,6 +149,18 @@ perks:
     perk_rewards:
       p:learn_spell: heal
     requireperk_all: [defense_root]
+    connection_line:
+      '1':
+        position: '-1,2'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dHeal"
+      - "&7自身の体力を回復する"
+      - "&7回復量: &b4"
+      - "&7消費Mana: &b20"
+      - "&7Cooldown: &e15秒"
 
   fling:
     icon: FEATHER
@@ -104,6 +172,18 @@ perks:
     perk_rewards:
       p:learn_spell: fling
     requireperk_all: [arcane_root]
+    connection_line:
+      '1':
+        position: '3,3'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dLeap"
+      - "&7前方へ軽く跳躍する"
+      - "&7最大速度: &b1.6"
+      - "&7消費Mana: &b10"
+      - "&7Cooldown: &e6秒"
 
   student:
     icon: EXPERIENCE_BOTTLE
@@ -115,6 +195,16 @@ perks:
     perk_rewards:
       p:path_upgrade: student
     requireperk_all: [beginner]
+    connection_line:
+      '1':
+        position: '0,3'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dMana Capacity I"
+      - "&7最大Mana: &b115"
+      - "&7Mana回復: &b4/秒"
 
   fireball:
     icon: FIRE_CHARGE
@@ -126,6 +216,23 @@ perks:
     perk_rewards:
       p:learn_spell: fireball
     requireperk_all: [combat_root, student]
+    connection_line:
+      '1':
+        position: '-5,3'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+      '2':
+        position: '-4,4'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dFireball"
+      - "&7爆発する火球を放つ。ブロックは破壊しない"
+      - "&7炎上・地形破壊: &bなし"
+      - "&7消費Mana: &b25"
+      - "&7Cooldown: &e8秒"
 
   blink:
     icon: ENDER_PEARL
@@ -137,6 +244,23 @@ perks:
     perk_rewards:
       p:learn_spell: blink
     requireperk_all: [fling, student]
+    connection_line:
+      '1':
+        position: '4,4'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+      '2':
+        position: '3,4'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dBlink"
+      - "&7視線方向へ短距離転移する"
+      - "&7最大距離: &b12ブロック"
+      - "&7消費Mana: &b20"
+      - "&7Cooldown: &e10秒"
 
   reflect:
     icon: SHIELD
@@ -148,6 +272,23 @@ perks:
     perk_rewards:
       p:learn_spell: reflect
     requireperk_all: [heal, student]
+    connection_line:
+      '1':
+        position: '-1,4'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+      '2':
+        position: '-2,4'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dShield"
+      - "&7短時間だけ投射物を反射する障壁を作る"
+      - "&7半径: &b1ブロック / 持続: &b1.2秒"
+      - "&7消費Mana: &b30"
+      - "&7Cooldown: &e25秒"
 
   gills:
     icon: HEART_OF_THE_SEA
@@ -159,6 +300,22 @@ perks:
     perk_rewards:
       p:learn_spell: gills
     requireperk_all: [feato_light, student]
+    connection_line:
+      '1':
+        position: '5,5'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+      '2':
+        position: '4,6'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dGills"
+      - "&7一定時間、水中で呼吸しやすくなる"
+      - "&7消費Mana: &b20"
+      - "&7Cooldown: &e30秒"
 
   push:
     icon: PISTON
@@ -170,6 +327,23 @@ perks:
     perk_rewards:
       p:learn_spell: push
     requireperk_all: [combat_root, student]
+    connection_line:
+      '1':
+        position: '-3,5'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+      '2':
+        position: '-2,6'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dPush"
+      - "&7近くの対象を押し返す"
+      - "&7射程: &b8ブロック / 対象数: &b2"
+      - "&7消費Mana: &b15"
+      - "&7Cooldown: &e6秒"
 
   apprentice:
     icon: EXPERIENCE_BOTTLE
@@ -181,6 +355,16 @@ perks:
     perk_rewards:
       p:path_upgrade: apprentice
     requireperk_all: [student]
+    connection_line:
+      '1':
+        position: '0,6'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dMana Capacity II / Regen II"
+      - "&7最大Mana: &b135"
+      - "&7Mana回復: &b5/秒"
 
   recall:
     icon: COMPASS
@@ -192,6 +376,22 @@ perks:
     perk_rewards:
       p:learn_spell: recall
     requireperk_all: [blink, apprentice]
+    connection_line:
+      '1':
+        position: '4,7'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+      '2':
+        position: '3,8'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dRecall"
+      - "&7登録済みの自宅へ帰還する"
+      - "&7消費Mana: &b40"
+      - "&7Cooldown: &e5分"
 
   chainlightning:
     icon: LIGHTNING_ROD
@@ -203,6 +403,24 @@ perks:
     perk_rewards:
       p:learn_spell: chainlightning
     requireperk_all: [fireball, apprentice]
+    connection_line:
+      '1':
+        position: '-4,7'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+      '2':
+        position: '-3,8'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dLightning"
+      - "&7少数の敵へ限定的に連鎖する雷撃"
+      - "&7連鎖範囲: &b3ブロック / 連鎖: &b2回"
+      - "&7対プレイヤー威力: &b1 / 対Mob威力: &b2"
+      - "&7消費Mana: &b40"
+      - "&7Cooldown: &e15秒"
 
   feato_clear_skies:
     icon: SUNFLOWER
@@ -214,6 +432,22 @@ perks:
     perk_rewards:
       p:learn_spell: feato_clear_skies
     requireperk_all: [recall, apprentice]
+    connection_line:
+      '1':
+        position: '5,8'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+      '2':
+        position: '4,9'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&d晴天祈願"
+      - "&7ワールドの天候を晴れにする天象術"
+      - "&7消費Mana: &b60"
+      - "&7Cooldown: &e20分"
 
   master:
     icon: NETHER_STAR
@@ -225,6 +459,16 @@ perks:
     perk_rewards:
       p:path_upgrade: master
     requireperk_all: [apprentice]
+    connection_line:
+      '1':
+        position: '0,9'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dMana Capacity III / Regen III"
+      - "&7最大Mana: &b165"
+      - "&7Mana回復: &b6/秒"
 
   feato_call_rain:
     icon: WATER_BUCKET
@@ -236,6 +480,22 @@ perks:
     perk_rewards:
       p:learn_spell: feato_call_rain
     requireperk_all: [feato_clear_skies, master]
+    connection_line:
+      '1':
+        position: '5,10'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+      '2':
+        position: '4,11'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&d雨乞い"
+      - "&7ワールドに雨を呼ぶ天象術"
+      - "&7消費Mana: &b70"
+      - "&7Cooldown: &e30分"
 
   feato_call_storm:
     icon: LIGHTNING_ROD
@@ -247,6 +507,17 @@ perks:
     perk_rewards:
       p:learn_spell: feato_call_storm
     requireperk_all: [feato_call_rain]
+    connection_line:
+      '1':
+        position: '4,12'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&d嵐の招来"
+      - "&7ワールドに雷雨を呼ぶ天象術。追加攻撃は発生しない"
+      - "&7消費Mana: &b90"
+      - "&7Cooldown: &e45分"
 
   wound:
     icon: NETHERITE_SWORD
@@ -258,6 +529,23 @@ perks:
     perk_rewards:
       p:learn_spell: wound
     requireperk_all: [chainlightning, master]
+    connection_line:
+      '1':
+        position: '-4,10'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+      '2':
+        position: '-3,11'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&d魔力穿ち"
+      - "&7単体へ高威力の魔力を放つ高位戦闘魔法"
+      - "&7射程: &b8ブロック / 威力: &b10"
+      - "&7消費Mana: &b85"
+      - "&7Cooldown: &e60秒"
 
   feato_archmage:
     icon: NETHER_STAR
@@ -269,3 +557,13 @@ perks:
     perk_rewards:
       p:path_upgrade: feato_archmage
     requireperk_all: [master]
+    connection_line:
+      '1':
+        position: '0,12'
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&d魔術完成"
+      - "&7最大Mana: &b185"
+      - "&7Mana回復: &b6/秒"
