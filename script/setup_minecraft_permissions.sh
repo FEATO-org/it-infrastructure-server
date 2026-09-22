@@ -23,7 +23,6 @@ player_allow=(
   essentials.balance
   essentials.pay
   essentials.kit
-  essentials.kits.return_ticket
   ei.item.emergency_return
   EconomyShopGUI.shop
   EconomyShopGUI.shop.feato_shop
@@ -32,6 +31,7 @@ player_allow=(
 )
 player_deny=(
   essentials.spawn
+  essentials.kits.return_ticket
   EconomyShopGUI.shop.all
   EconomyShopGUI.sellall
   EconomyShopGUI.sellallitem
