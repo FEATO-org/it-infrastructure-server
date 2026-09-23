@@ -56,7 +56,8 @@ services:
       # Java 25 compact headers; retain automatic G1 region sizing for 1G heap.
       JVM_XX_OPTS: >-
         -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:MaxGCPauseMillis=200 -XX:+UseCompactObjectHeaders
-      JVM_OPTS: --enable-native-access=ALL-UNNAMED
+      JVM_OPTS: >-
+        --enable-native-access=ALL-UNNAMED -DgeyserAdvertiseAddresses=162.43.23.222
       PLUGINS: |-
         https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity
         https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity
