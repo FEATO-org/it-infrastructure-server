@@ -2,3 +2,4 @@ https://cdn.modrinth.com/data/gkuQygoB/versions/bF4FuiIb/Call-Your-Parrot-v2.1.0
 https://cdn.modrinth.com/data/E7M57BNU/versions/peRFqXVn/gm4_crossbow_cartridges_26_2.zip
 https://cdn.modrinth.com/data/Ti7LgRXJ/versions/X7knYm9t/Gun%20Core%20-%20Data%20V1.0.15.zip
 https://cdn.modrinth.com/data/ufgOyMFr/versions/bcKCNJp2/Modern%20Guns%20-%20Data%20V1.9.3.zip
+/extras/datapacks

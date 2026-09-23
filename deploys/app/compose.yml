@@ -38,8 +38,8 @@ services:
 
   minecraft-proxy:
     image: itzg/mc-proxy:java25
-    entrypoint: ["/bin/bash", "/rcon-init/proxy-rcon-entrypoint.sh"]
-    command: ["/usr/bin/run-bungeecord.sh"]
+    entrypoint: [ "/bin/bash", "/rcon-init/proxy-rcon-entrypoint.sh" ]
+    command: [ "/usr/bin/run-bungeecord.sh" ]
     environment:
       TYPE: VELOCITY
       VELOCITY_VERSION: "4.2.0"
@@ -55,12 +55,7 @@ services:
       RCON_PORT: "25575"
       # Java 25 compact headers; retain automatic G1 region sizing for 1G heap.
       JVM_XX_OPTS: >-
-        -XX:+UseG1GC
-        -XX:+ParallelRefProcEnabled
-        -XX:+AlwaysPreTouch
-        -XX:+DisableExplicitGC
-        -XX:MaxGCPauseMillis=200
-        -XX:+UseCompactObjectHeaders
+        -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:+DisableExplicitGC -XX:MaxGCPauseMillis=200 -XX:+UseCompactObjectHeaders
       JVM_OPTS: --enable-native-access=ALL-UNNAMED
       PLUGINS: |-
         https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity
@@ -133,8 +128,6 @@ services:
       REMOVE_OLD_MODS: "TRUE"
       REMOVE_OLD_MODS_INCLUDE: "FEATO-Ancient-Coin-*.jar,FEATO-Coin-Exchange-*.jar"
       REMOVE_OLD_MODS_DEPTH: "1"
-      DATAPACKS: |-
-        /extras/datapacks
       DATAPACKS_FILE: /extras/datapacks.txt
       ENABLE_COMMAND_BLOCK: "TRUE"
       COPY_CONFIG_DEST: /data
