@@ -22,3 +22,4 @@ https://cdn.modrinth.com/data/pKqnV03Y/versions/mBSgqYZH/dead-chest-4.30.0.jar
 https://cdn.spiget.org/file/spiget-resources/124223.jar
 https://cdn.spiget.org/file/spiget-resources/40996.jar
 https://download.geysermc.org/v2/projects/hurricane/versions/latest/builds/latest/downloads/spigot
+https://cdn.spiget.org/file/spiget-resources/126304.jar
