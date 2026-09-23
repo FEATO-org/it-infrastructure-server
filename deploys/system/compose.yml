@@ -205,8 +205,6 @@ services:
         target: tls_fullchain.pem
       - source: tls_private_key
         target: tls_privkey.pem
-    volumes:
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/resources:/usr/share/nginx/html:ro
     networks:
       - web-ingress-network
       - minecraft-ingress-network
