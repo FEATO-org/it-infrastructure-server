@@ -1,0 +1,124 @@
+name: '警備隊長旗'
+lore:
+- '&7右クリックで警備隊長の号令を発動します。'
+- '&7効果範囲: 半径16ブロック / クールダウン: 10分'
+material: BLUE_BANNER
+glow: false
+disableStack: true
+keepItemOnDeath: false
+canBeUsedOnlyByTheOwner: false
+storeItemInfo: false
+unbreakable: false
+usage: 0
+usageLimit: -1
+dropFeatures:
+  glowDrop: false
+  glowDropColor: WHITE
+  displayNameDrop: false
+hiders:
+  hideEnchantments: false
+  hideUnbreakable: false
+  hideAttributes: false
+  hidePotionEffects: false
+  hideUsage: false
+enchantments: {}
+giveFirstJoinFeatures:
+  giveFirstJoin: false
+  giveFirstJoinAmount: 1
+  giveFirstJoinSlot: 0
+restrictions: {}
+cancelEventIfNoPerm: false
+cancelEventIfNotOwner: false
+disabledWorlds: []
+variables: {}
+activators:
+  activator1:
+    name: '警備隊長の号令'
+    option: PLAYER_RIGHT_CLICK
+    typeTarget: NO_TYPE_TARGET
+    usageModification: 0
+    cancelEvent: false
+    noActivatorRunIfTheEventIsCancelled: false
+    silenceOutput: false
+    autoUpdateItem: false
+    updateName: true
+    updateLore: true
+    updateDurability: false
+    updateAttributes: false
+    updateEnchants: false
+    updateCustomModelData: false
+    cooldownFeatures:
+      cooldown: 600
+      isCooldownInTicks: false
+      cooldownMsg: '&cまだ使用できません。'
+      displayCooldownMessage: true
+      cancelEventIfInCooldown: true
+      pauseWhenOffline: false
+      pausePlaceholdersConditions: {}
+    globalCooldownFeatures:
+      cooldown: 0
+      isCooldownInTicks: false
+      cooldownMsg: '&cまだ使用できません。'
+      displayCooldownMessage: false
+      cancelEventIfInCooldown: false
+      pauseWhenOffline: false
+      pausePlaceholdersConditions: {}
+    otherEICooldowns: {}
+    requiredItems: {}
+    requiredExecutableItems: {}
+    requiredMagics: {}
+    detailedSlots:
+    - -1
+    playerCommands:
+    - minecraft:execute at %player% run minecraft:effect give @a[distance=..16] minecraft:strength 480 0 true
+    - minecraft:execute at %player% run minecraft:effect give @a[distance=..16] minecraft:resistance 480 0 true
+    - minecraft:execute at %player% run minecraft:effect give @a[distance=..16] minecraft:absorption 480 1 true
+    - minecraft:execute at %player% run minecraft:effect give @a[distance=..16] minecraft:glowing 480 0 true
+    - minecraft:execute at %player% run minecraft:effect give @a[distance=..16] minecraft:mining_fatigue 480 0 true
+    - minecraft:execute at %player% run minecraft:effect give @a[distance=..16] minecraft:fire_resistance 300 0 true
+    - minecraft:execute at %player% run minecraft:playsound minecraft:item.goat_horn.sound.2 master @a[distance=..16] ~ ~ ~ 0.8 0.85
+    - minecraft:execute at %player% run minecraft:playsound minecraft:block.bell.use master @a[distance=..16] ~ ~ ~ 0.6 0.85
+    - minecraft:execute at %player% run minecraft:playsound minecraft:entity.iron_golem.attack master @a[distance=..16] ~ ~ ~ 0.6 0.9
+    - minecraft:execute at %player% run minecraft:particle minecraft:angry_villager ~ ~1 ~ 1.2 0.8 1.2 0.02 8 force @a[distance=..16]
+    - minecraft:execute at %player% run minecraft:particle minecraft:electric_spark ~ ~1 ~ 1.5 1 1.5 0.04 16 force @a[distance=..16]
+    - minecraft:execute at %player% run minecraft:particle minecraft:dust{color:[1.0,0.1,0.1],scale:1.0} ~ ~1 ~ 1.5 1 1.5 0.02 20 force @a[distance=..16]
+    playerConditions:
+      ifHasPermission:
+      - feato.guard_captain
+      ifHasPermissionMsg: '&cこの旗の号令を発動できるのは警備隊長だけです。'
+      ifHasPermissionCancel: true
+    worldConditions: {}
+    itemConditions: {}
+    customConditions: {}
+    placeholdersConditions: {}
+    variablesModification: {}
+recognitions: []
+bannerSettings:
+  patterns:
+    pattern1:
+      '1':
+        string: color
+        object: WHITE
+      '2':
+        string: pattern
+        object: cr
+    pattern2:
+      '1':
+        string: color
+        object: PINK
+      '2':
+        string: pattern
+        object: mc
+    pattern3:
+      '1':
+        string: color
+        object: RED
+      '2':
+        string: pattern
+        object: sc
+attributes: {}
+nbt:
+  '0':
+    key: BlockEntityTag
+    type: COMPOUND
+config_5: true
