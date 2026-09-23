@@ -1,7 +1,7 @@
 name: '村長旗'
 lore:
 - '&7右クリックで村長の号令を発動します。'
-- '&7効果範囲: 半径24ブロック / クールダウン: 20分'
+- '&7効果範囲: 半径24ブロック / クールダウン: 15分'
 material: BLUE_BANNER
 glow: false
 disableStack: true
@@ -35,7 +35,7 @@ activators:
   activator1:
     name: '村長の号令'
     option: PLAYER_RIGHT_CLICK
-    typeTarget: NO_TYPE_TARGET
+    typeTarget: ONLY_AIR
     usageModification: 0
     cancelEvent: false
     noActivatorRunIfTheEventIsCancelled: false
@@ -48,7 +48,7 @@ activators:
     updateEnchants: false
     updateCustomModelData: false
     cooldownFeatures:
-      cooldown: 1200
+      cooldown: 900
       isCooldownInTicks: false
       cooldownMsg: '&cまだ使用できません。'
       displayCooldownMessage: true

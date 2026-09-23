@@ -35,7 +35,7 @@ activators:
   activator1:
     name: '警備隊長の号令'
     option: PLAYER_RIGHT_CLICK
-    typeTarget: NO_TYPE_TARGET
+    typeTarget: ONLY_AIR
     usageModification: 0
     cancelEvent: false
     noActivatorRunIfTheEventIsCancelled: false

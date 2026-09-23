@@ -143,7 +143,7 @@ ExecutableItemsの役職旗は通常のBannerとして設置でき、特殊能�
 
 | 旗 | permission | 効果範囲 | 効果 | Cooldown |
 | --- | --- | --- | --- | --- |
-| 村長旗 (`mayor_flag`) | `feato.mayor` | 発動者を含む半径24ブロック | 30分: Speed I、Glowing、Haste I、Hero of the Village I、Weakness I。20分: Jump Boost I、Slow Falling I、Conduit Power I | 発動者ごとに20分 |
+| 村長旗 (`mayor_flag`) | `feato.mayor` | 発動者を含む半径24ブロック | 30分: Speed I、Glowing、Haste I、Hero of the Village I、Weakness I。20分: Jump Boost I、Slow Falling I、Conduit Power I | 発動者ごとに15分 |
 | 警備隊長旗 (`guard_captain_flag`) | `feato.guard_captain` | 発動者を含む半径16ブロック | 8分: Strength I、Resistance I、Absorption II、Glowing I、Mining Fatigue I。5分: Fire Resistance I | 発動者ごとに10分 |
 
 `setup_minecraft_permissions.sh`は通常のEIアイテム操作permissionを一般グループへ付与し、追加ロール`mayor`と`guard_captain`を作成して、それぞれの専用permissionだけを付与します。役職ロールへ管理権限は付与しません。
