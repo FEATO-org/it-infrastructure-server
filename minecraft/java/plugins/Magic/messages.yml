@@ -16,6 +16,10 @@ paths:
     description: "魔術Lv100補正: 最大Mana 185"
 
 spells:
+  feato_wand_shop:
+    name: "魔導具店"
+    description: "魔法を扱うための魔導具を購入する"
+    title: "魔導具店"
   missile:
     name: "Magic Missile"
     description: "低威力の魔力弾を放つ。ブロックは破壊しない"
@@ -65,4 +69,3 @@ spells:
 wand:
   mana_amount: "&eMana: $amount"
   mana_regeneration: "&eMana回復: $amount/秒"
-

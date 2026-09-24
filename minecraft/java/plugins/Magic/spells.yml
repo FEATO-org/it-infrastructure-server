@@ -9,6 +9,17 @@ spellshop:
   parameters:
     target: self
 
+feato_wand_shop:
+  inherit: buyshop
+  hidden: true
+  parameters:
+    cost_type: currency
+    confirm: true
+    auto_close: true
+    items:
+      - item: wand|default
+        cost: 150
+
 missile:
   actions:
     cast:
@@ -174,4 +185,3 @@ wound:
     cooldown: 60000
   costs:
     mana: 85
-

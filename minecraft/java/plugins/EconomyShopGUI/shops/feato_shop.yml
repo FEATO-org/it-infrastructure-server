@@ -1,36 +1,180 @@
 pages:
   page1:
-    gui-rows: 2
+    gui-rows: 4
     title: "&8FEATO 商店"
     items:
-      name_tag:
-        material: NAME_TAG
-        buy: 150
-        stack-size: 1
+      gunpowder:
+        material: GUNPOWDER
+        buy: 50
+        stack-size: 32
         slot: 0
-      saddle:
-        material: SADDLE
-        buy: 200
-        stack-size: 1
-        slot: 1
-      lead_pair:
-        material: LEAD
-        buy: 80
-        stack-size: 2
-        slot: 2
       oxidized_copper:
         material: OXIDIZED_COPPER
-        buy: 250
-        stack-size: 16
-        slot: 3
+        buy: 100
+        stack-size: 32
+        slot: 1
       player_head:
         material: PLAYER_HEAD
-        buy: 200
+        buy: 100
+        stack-size: 1
+        slot: 2
+      wheat:
+        material: WHEAT
+        sell: 0.15625
+        stack-size: 1
+        slot: 3
+      carrot:
+        material: CARROT
+        sell: 0.078125
         stack-size: 1
         slot: 4
+      potato:
+        material: POTATO
+        sell: 0.078125
+        stack-size: 1
+        slot: 5
       poisonous_potato:
         material: POISONOUS_POTATO
-        sell: 10
-        stack-size: 64
-        min-sell: 64
+        sell: 0.046875
+        stack-size: 1
+        slot: 6
+      beetroot:
+        material: BEETROOT
+        sell: 0.1875
+        stack-size: 1
+        slot: 7
+      pumpkin:
+        material: PUMPKIN
+        sell: 0.125
+        stack-size: 1
         slot: 8
+      melon_slice:
+        material: MELON_SLICE
+        sell: 0.078125
+        stack-size: 1
+        slot: 9
+      sugar_cane:
+        material: SUGAR_CANE
+        sell: 0.078125
+        stack-size: 1
+        slot: 10
+      cactus:
+        material: CACTUS
+        sell: 0.078125
+        stack-size: 1
+        slot: 11
+      sweet_berries:
+        material: SWEET_BERRIES
+        sell: 0.078125
+        stack-size: 1
+        slot: 12
+      glow_berries:
+        material: GLOW_BERRIES
+        sell: 0.078125
+        stack-size: 1
+        slot: 13
+      cocoa_beans:
+        material: COCOA_BEANS
+        sell: 0.125
+        stack-size: 1
+        slot: 14
+      nether_wart:
+        material: NETHER_WART
+        sell: 0.1875
+        stack-size: 1
+        slot: 15
+      apple:
+        material: APPLE
+        sell: 0.234375
+        stack-size: 1
+        slot: 16
+      red_mushroom:
+        material: RED_MUSHROOM
+        sell: 0.078125
+        stack-size: 1
+        slot: 17
+      brown_mushroom:
+        material: BROWN_MUSHROOM
+        sell: 0.078125
+        stack-size: 1
+        slot: 18
+      honeycomb:
+        material: HONEYCOMB
+        sell: 0.078125
+        stack-size: 1
+        slot: 19
+      honey_bottle:
+        material: HONEY_BOTTLE
+        sell: 0.234375
+        stack-size: 1
+        slot: 20
+      beef:
+        material: BEEF
+        sell: 0.234375
+        stack-size: 1
+        slot: 21
+      porkchop:
+        material: PORKCHOP
+        sell: 0.234375
+        stack-size: 1
+        slot: 22
+      mutton:
+        material: MUTTON
+        sell: 0.234375
+        stack-size: 1
+        slot: 23
+      chicken:
+        material: CHICKEN
+        sell: 0.125
+        stack-size: 1
+        slot: 24
+      rabbit:
+        material: RABBIT
+        sell: 0.390625
+        stack-size: 1
+        slot: 25
+      leather:
+        material: LEATHER
+        sell: 0.15625
+        stack-size: 1
+        slot: 26
+      rabbit_hide:
+        material: RABBIT_HIDE
+        sell: 0.234375
+        stack-size: 1
+        slot: 27
+      feather:
+        material: FEATHER
+        sell: 0.046875
+        stack-size: 1
+        slot: 28
+      white_wool:
+        material: WHITE_WOOL
+        sell: 0.078125
+        stack-size: 1
+        slot: 29
+      egg:
+        material: EGG
+        sell: 0.046875
+        stack-size: 1
+        slot: 30
+      cod:
+        material: COD
+        sell: 0.3125
+        stack-size: 1
+        slot: 31
+      salmon:
+        material: SALMON
+        sell: 0.3125
+        stack-size: 1
+        slot: 32
+      pufferfish:
+        material: PUFFERFISH
+        sell: 0.390625
+        stack-size: 1
+        slot: 33
+      tropical_fish:
+        material: TROPICAL_FISH
+        sell: 0.390625
+        stack-size: 1
+        slot: 34

@@ -102,6 +102,19 @@ Magic側のresource pack自動配布は無効です。公式[Magic+ValhallaMMO p
 
 `ValhallaMMO/skills/magic_progression.yml`は分岐、必要Lv、コストを固定するためGitで追跡します。Magic update時はmagic_progression.ymlの再生成要否をrelease noteで確認し、必要なら再生成後にdiffを確認する。
 
+初期WandはMagicの`feato_wand_shop`で150Gで販売します。これは公式Survivalの`buyshop`を継承したMagic Shop actionであり、`wand|default`をMagic自身が生成します。Vault連携の通貨を使用するため、購入額はEssentialsX Economyから徴収されます。WandはSpell選択・発動UIのみで、`beginner` Pathの進行設定とは別です。
+
+Wand販売NPCは、販売位置に立って次を実行します。
+
+```text
+/npc create wand_vendor
+/npc displayname wand_vendor <gold>魔導具店</gold>
+/npc interaction_cooldown wand_vendor 1s
+/npc action wand_vendor RIGHT_CLICK add console_command castp {player} feato_wand_shop
+```
+
+`console_command`はConsoleとして`castp <player> <spell>`を実行するため、一般Playerへ`magic.commands.cast`や`magic.commands.castp`は付与しません。
+
 実機では、MagicとValhallaMMOのenable順、魔術profile作成、Spell XP加算、Skill Point総数、Path upgrade、Mana表示・回復、各Spellの成功判定とCooldown、Spell Shop GUI、日本語表示、Java/Bedrockの魔導具操作、統合resource packの表示を確認してください。
 
 ## 経済と通常商店
@@ -112,14 +125,31 @@ Magic側のresource pack自動配布は無効です。公式[Magic+ValhallaMMO p
 
 | 商品 | 取引 | 数量 | 価格 |
 | --- | --- | ---: | ---: |
-| Name Tag | 購入 | 1 | 150G |
-| Saddle | 購入 | 1 | 200G |
-| Lead | 購入 | 2 | 80G |
-| Oxidized Copper | 購入 | 16 | 250G |
-| Player Head | 購入 | 1 | 200G |
-| Poisonous Potato | 売却 | 64以上 | 64個あたり10G |
+| Gunpowder | 購入 | 32 | 50G |
+| Oxidized Copper | 購入 | 32 | 100G |
+| Player Head | 購入 | 1 | 100G |
 
-EconomyShopGUIでは`stack-size`の価格がスタック全体へ適用されます。`min-sell: 64`で64個未満の売却を拒否します。65個以上はPluginの数量計算に従うため、64個単位だけに厳密制限する設定ではありません。
+買取品はすべて1個から売却できます。以下の価格は64個あたりです（設定上は64で割った1個価格）。
+
+| 分類 | 商品 | 64個あたり |
+| --- | --- | ---: |
+| 農業 | Wheat | 10G |
+| 農業 | Carrot, Potato, Melon Slice, Sugar Cane, Cactus, Sweet Berries, Glow Berries | 5G |
+| 農業 | Poisonous Potato | 3G |
+| 農業 | Beetroot, Nether Wart | 12G |
+| 農業 | Pumpkin, Cocoa Beans | 8G |
+| 林業・採集・養蜂 | Apple, Honey Bottle | 15G |
+| 林業・採集・養蜂 | Red Mushroom, Brown Mushroom, Honeycomb | 5G |
+| 畜産 | Beef, Porkchop, Mutton, Rabbit Hide | 15G |
+| 畜産 | Chicken | 8G |
+| 畜産 | Rabbit | 25G |
+| 畜産 | Leather | 10G |
+| 畜産 | Feather, Egg | 3G |
+| 畜産 | White Wool | 5G |
+| 漁業 | Cod, Salmon | 20G |
+| 漁業 | Pufferfish, Tropical Fish | 25G |
+
+`HONEY_BOTTLE`を含め、Minecraft上の最大スタック数にかかわらず64個換算の価格基準を使用します。
 
 ## 緊急帰還札
 
