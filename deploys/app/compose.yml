@@ -136,7 +136,7 @@ services:
       REPLACE_ENV_VARIABLE_PREFIX: CFG_
       CFG_FORWARDING_SECRET_FILE: /run/secrets/forwarding_secret
       CFG_LUCKPERMS_PASSWORD_FILE: /run/secrets/luckperms_db_password
-      RESOURCE_PACK_ENFORCE: "TRUE"
+      RESOURCE_PACK_ENFORCE: "FALSE"
       ENFORCE_SECURE_PROFILE: "FALSE"
       GUI: "FALSE"
       ENABLE_RCON: "true"
