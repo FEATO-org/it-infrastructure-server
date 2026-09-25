@@ -121,7 +121,7 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | DualHorse | 1.5.4 | [固定URL](https://cdn.modrinth.com/data/mgoLZ3st/versions/9jTb2KHl/DualHorse-1.5.4.jar) | Paper | 配布metadataは26.1.2まで、26.2で起動確認 | stable | 26.2の実プレイヤー二人乗りとBetter Horses併用は要確認 |
 | Velocity | 4.2.0 build 30 | [公式配布](https://papermc.io/downloads/velocity) | Velocity | 接続を実機検証 | stable（公式API STABLE） | VELOCITY_VERSIONとBUILD_IDで固定。JAR GETは403、Requires runtime verification |
 | Geyser | 既存latest | [公式配布](https://download.geysermc.org/) | Velocity | 接続を実機検証 | 取得build要確認 | 既存方式維持、Requires runtime verification |
-| Floodgate | 既存latest | [公式配布](https://download.geysermc.org/) | Velocity | 接続を実機検証 | 取得build要確認 | 既存UUID・username-prefix維持、Requires runtime verification |
+| Floodgate | 既存latest | [公式配布](https://download.geysermc.org/) | Velocity | 接続を実機検証 | 取得build要確認 | 既存UUID維持、username-prefixは`.`へ変更、Requires runtime verification |
 | EmoteOffhand | Version ID: YiejycoE | [Modrinth](https://modrinth.com/plugin/pVsz9nZm/version/YiejycoE) | Geyser Extension（Velocity上のGeyser） | 1.21.11（配布metadata） | fixed artifact | Source: Modrinth。Project ID: pVsz9nZm。`resources/minecraft/geyser/extensions/EmoteOffhand.jar` を管理側で用意し、更新時のみ `script/copy_plugins_to_remote.sh` で配布。通常deploy時に再取得しない。Velocity Pluginとしては配置しない |
 | Hurricane | latest（確認時 build 4） | [公式Downloads API](https://download.geysermc.org/v2/projects/hurricane/versions/latest/builds/latest/downloads/spigot) | Paper | 公式README表記は26.1まで | dynamic build | bamboo / pointed dripstone collisionのみ。Paper 26.2ではRequires runtime verification |
 
