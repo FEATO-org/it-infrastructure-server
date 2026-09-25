@@ -1,5 +1,6 @@
 server: paper
 storage-method: mariadb
+allow-invalid-usernames: true
 data:
   address: system_mariadb:3306
   database: luckperms
