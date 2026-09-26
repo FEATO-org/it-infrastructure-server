@@ -69,6 +69,8 @@ services:
         target: luckperms_db_password
       - source: minecraft_proxy_rcon_password
         target: minecraft_proxy_rcon_password
+      - source: floodgate_key
+        target: floodgate_key
     volumes:
       - minecraft_proxy_data:/server
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/proxy-rcon-entrypoint.sh:/rcon-init/proxy-rcon-entrypoint.sh:ro
@@ -161,6 +163,8 @@ services:
         target: luckperms_db_password
       - source: rcon_password
         target: rcon_password
+      - source: floodgate_key
+        target: floodgate_key
     volumes:
       - minecraft_server_data:/data
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/plugins.txt:/extras/plugins.txt:ro
@@ -225,4 +229,6 @@ secrets:
   minecraft_proxy_rcon_password:
     external: true
   luckperms_db_password:
+    external: true
+  floodgate_key:
     external: true

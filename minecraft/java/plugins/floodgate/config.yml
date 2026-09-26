@@ -1,11 +1,8 @@
-# Shared with the Paper Floodgate instance through a Docker Swarm secret.
+# Must be the same private key used by Floodgate on Velocity.
 key-file-name: /run/secrets/floodgate_key
 
 username-prefix: "."
 replace-spaces: true
-
-# Forward encrypted Bedrock player data to backend Floodgate instances.
-send-floodgate-data: true
 
 disconnect:
   invalid-key: Please connect through the official Geyser
@@ -22,6 +19,5 @@ player-link:
 
 metrics:
   enabled: false
-  uuid: a5fe835c-dd39-4531-84b6-9116de345ea5
 
 config-version: 3

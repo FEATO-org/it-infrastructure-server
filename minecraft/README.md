@@ -15,6 +15,7 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ LuckPerms / LuckTags
                      ├ EssentialsX Core / Spawn
                      ├ VaultUnlocked / EssentialsUnlocked
+                     ├ Floodgate (backend API / Bedrock detection)
                      ├ EconomyShopGUI Free
                      ├ FancyNpcs
                      ├ squaremap :8123
@@ -34,7 +35,7 @@ Web: nginx dynmap.feato.jp -> squaremap :8123
 
 対象バージョンは26.2です。`.env`の`MINECRAFT_VERSION`が既定値を上書きするため、デプロイ前に26.2であることを確認してください。
 
-GeyserとFloodgateはVelocityへ配置します。Paper側へFloodgate APIを要求するプラグインは今回ありません。Velocityのオンライン認証、modern forwarding、共有secret、Paperのoffline modeを維持します。Paper、MariaDB、squaremapはホストへ直接公開しません。
+GeyserとFloodgateはVelocityへ配置し、Bedrock判定をPaper側Pluginでも利用できるようFloodgate-SpigotもPaperへ配置します。Velocity側は`send-floodgate-data: true`で暗号化したBedrock player dataを転送します。両Floodgateは同一のDocker Swarm secret `floodgate_key`を`/run/secrets/floodgate_key`から読み込みます。Velocityのmodern forwarding、共有forwarding secret、Paperのoffline modeは維持します。Paper、MariaDB、squaremapはホストへ直接公開しません。
 
 EmoteOffhandはPaper/Velocity PluginではなくGeyser Extensionです。管理側の
 `resources/minecraft/geyser/extensions/EmoteOffhand.jar`を更新時のみ
@@ -121,13 +122,15 @@ Wand販売NPCは、販売位置に立って次を実行します。
 
 経済ProviderはEssentialsX、Vault API層はVaultUnlocked、橋渡しはEssentialsUnlockedです。初期残高200G、通貨記号は金額の後ろ、負残高は禁止です。
 
-`/shop`の`feato_shop`に次の商品を設定しています。価格は`minecraft/java/plugins/EconomyShopGUI/shops/feato_shop.yml`で変更します。
+`/shop`の`feato_shop`は単一ショップを維持し、EconomyShopGUIの標準ページナビゲーションで「販売」と「買取」を分離します。Java/Bedrockともクリック種別の使い分けを必須にしません。
 
 | 商品 | 取引 | 数量 | 価格 |
 | --- | --- | ---: | ---: |
 | Gunpowder | 購入 | 32 | 50G |
 | Oxidized Copper | 購入 | 32 | 100G |
 | Player Head | 購入 | 1 | 100G |
+| Mending Enchanted Book | 購入 | 1 | 2,000G |
+| Villager Spawn Egg | 購入 | 1 | 2,000G |
 
 買取品はすべて1個から売却できます。以下の価格は64個あたりです（設定上は64で割った1個価格）。
 
@@ -138,18 +141,18 @@ Wand販売NPCは、販売位置に立って次を実行します。
 | 農業 | Poisonous Potato | 3G |
 | 農業 | Beetroot, Nether Wart | 12G |
 | 農業 | Pumpkin, Cocoa Beans | 8G |
-| 林業・採集・養蜂 | Apple, Honey Bottle | 15G |
-| 林業・採集・養蜂 | Red Mushroom, Brown Mushroom, Honeycomb | 5G |
-| 畜産 | Beef, Porkchop, Mutton, Rabbit Hide | 15G |
+| 採集 | Apple | 15G |
+| 採集 | Red Mushroom, Brown Mushroom | 5G |
+| 畜産 | Beef, Porkchop, Mutton | 15G |
 | 畜産 | Chicken | 8G |
-| 畜産 | Rabbit | 25G |
 | 畜産 | Leather | 10G |
 | 畜産 | Feather, Egg | 3G |
 | 畜産 | White Wool | 5G |
 | 漁業 | Cod, Salmon | 20G |
 | 漁業 | Pufferfish, Tropical Fish | 25G |
+| その他 | Rotten Flesh | 3G |
 
-`HONEY_BOTTLE`を含め、Minecraft上の最大スタック数にかかわらず64個換算の価格基準を使用します。
+Honeycomb、Honey Bottle、Rabbit、Rabbit Hideは買取対象外です。Minecraft上の最大スタック数にかかわらず64個換算の価格基準を使用します。
 
 ## 緊急帰還札
 
@@ -183,9 +186,9 @@ ExecutableItemsの役職旗は通常のBannerとして設置でき、特殊能�
 古銭生成と換金は別Pluginとして運用します。
 
 - **FEATO Ancient Coin**: 古銭生成、Lootへの追加、古銭Item定義、`custom_data`付与
-- **FEATO Coin Exchange**: 正規古銭識別、1枚消費、Vault Economyへの換金、失敗時rollback、Player通知
+- **FEATO Coin Exchange**: 正規古銭識別、所持古銭の一括消費、Vault Economyへの一括換金、失敗時rollback、Player通知
 
-正規古銭は、`minecraft:gold_nugget`かつ`minecraft:custom_data={feato_coin:{id:"ancient_coin",schema:1}}`だけです。交換レートは1枚あたり10Gです。通常のGold Nugget、表示名だけを変えたもの、Loreだけを似せたものは換金対象にしません。
+正規古銭は、`minecraft:gold_nugget`かつ`minecraft:custom_data={feato_coin:{id:"ancient_coin",schema:1}}`だけです。交換レートは1枚あたり50Gです。通常のGold Nugget、表示名だけを変えたもの、Loreだけを似せたものは換金対象にしません。
 
 ```text
 FancyNpcs
@@ -195,15 +198,15 @@ FEATO Coin Exchange
     ├─ ConsoleSender検証
     ├─ Player解決
     ├─ 正規古銭判定
-    ├─ 古銭1枚消費
-    ├─ Vaultへ10G入金
+    ├─ Inventory/Offhandの正規古銭を一括消費
+    ├─ Vaultへ合計額を1回入金
     ├─ 失敗時rollback
     └─ Playerへ結果通知
 ```
 
 `FEATO Coin Exchange` はConsoleSenderからの`/feato-coin-exchange <player>`のみを受け付ける前提です。一般PlayerおよびOP Playerへコマンド実行権限は付与せず、FancyNpcsからも`player_command`、`player_command_as_op`、`scoreboard`、`clear`、`eco give`、`wait`、複数の`console_command`を用いません。
 
-`plugins.txt`はAncient Coin 1.0.0とCoin Exchange 1.1.0のGitHub Release JARを取得します。GitHubのasset名にはバージョンが含まれるため、両URLは新しい安定Releaseごとに実在するtagとasset名へ更新してください。起動時は古いFEATO版JARを削除してから一覧のJARを再取得するため、版違いが残って二重に有効化されることはありません。Coin Exchange 1.1.0のRelease asset公開後にデプロイしてください。初期設定は`java/plugins/FEATOCoinExchange/config.yml`で管理し、交換額は`exchange-value: 10.0`です。
+`plugins.txt`はAncient Coin 1.0.0とCoin Exchange 1.1.0のGitHub Release JARを取得します。GitHubのasset名にはバージョンが含まれるため、両URLは新しい安定Releaseごとに実在するtagとasset名へ更新してください。起動時は古いFEATO版JARを削除してから一覧のJARを再取得するため、版違いが残って二重に有効化されることはありません。Coin Exchange 1.1.0のRelease asset公開後にデプロイしてください。初期設定は`java/plugins/FEATOCoinExchange/config.yml`で管理し、交換額は`exchange-value: 50.0`です。
 
 ### FancyNpcs設定
 
@@ -234,6 +237,10 @@ squaremap 1.3.15をPaper 26.2用JARで導入し、内部Webサーバーを8123�
 
 初回公開前に管理者が対象ワールドを指定してfull renderを実行し、CPU、メモリ、ディスク使用量を監視してください。プレイヤー位置、洞窟や非公開領域の表示方針も公開前に確認します。
 
+## Floodgate backend key
+
+Paper側Floodgate導入前に、現在Velocity側Floodgateが使用している`key.pem`を安全な管理端末へ取り出し、同じ内容からSwarm secret `floodgate_key`を作成してください。鍵そのものはGitへ保存しません。新しい鍵を生成する場合はVelocity/Paperを同じ鍵へ同時に切り替えます。公式Floodgateの要件どおり、proxy側`send-floodgate-data`を有効にし、backend側と同一鍵であることを確認してからBedrock接続を試験します。
+
 ## デプロイ前後
 
 1. appを停止し、Minecraft/Proxy VolumeとMariaDBを整合した状態でバックアップします。
@@ -243,9 +250,9 @@ squaremap 1.3.15をPaper 26.2用JARで導入し、内部Webサーバーを8123�
 5. `setup_minecraft_permissions.sh`を実グループ名で実行し、本拠点で`/setspawn`、NPC作成を行います。起動ログでFEATO Coin ExchangeのenableとVault Economy provider取得成功を確認します。
 6. Java/Bedrock両方で商店、残高、帰還札、馬、Backpack、AncientCoin drop、squaremap表示を確認します。Coin Exchangeは、次の換金試験も行います。
 
-   - 正規古銭1枚でNPCを右クリックし、1枚だけ減少、残高が10G増加、成功メッセージを確認する。
+   - 正規古銭1枚でNPCを右クリックし、1枚減少、残高が50G増加、成功メッセージを確認する。
    - 古銭なし、通常Gold Nugget、名前だけ「古銭」のGold Nugget、Loreだけ似せたGold Nuggetでは、残高・アイテムが変化せず交換不可メッセージとなることを確認する。
-   - 正規古銭を2枚以上持って1回クリックし、1枚だけ減少して10Gだけ増えることを確認する。
+   - 正規古銭を複数slotとoffhandに持って1回クリックし、すべての正規古銭が消費され、枚数×50Gだけ残高が増えることを確認する。
    - 一般PlayerとOP Playerの双方が`/feato-coin-exchange <自分>`を直接実行すると拒否され、残高・古銭が変化しないことを確認する。
 
 Hurricane追加前のローカル検証では、Paper 26.2 build 126 / Java 25で19 Pluginをすべて有効化し、正常停止まで確認しました。確認できた内容は、設定読込、依存解決、コマンド登録、squaremap 8123起動、ValhallaMMO `ja-jp`、Backpack Plus `jpn`、当時追跡していたEI 1アイテム、EconomyShopGUI 1セクション/1ショップ、VaultとEssentialsX Economy連携です。Hurricaneは公式READMEの対応表記が26.1までのため、26.2での起動ログとbamboo / pointed dripstoneの実機動作をデプロイ前に確認してください。
