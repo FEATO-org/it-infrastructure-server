@@ -84,11 +84,7 @@ activators:
     - minecraft:execute at %player% run minecraft:particle minecraft:end_rod ~ ~1 ~ 1.5 1 1.5 0.03 24 force @a[distance=..24]
     - minecraft:execute at %player% run minecraft:particle minecraft:dust{color:[1.0,0.55,0.75],scale:1.0} ~ ~1 ~ 1.5 1 1.5 0.02 16 force @a[distance=..24]
     - minecraft:execute at %player% run minecraft:particle minecraft:happy_villager ~ ~1 ~ 1.2 0.8 1.2 0.02 12 force @a[distance=..24]
-    playerConditions:
-      ifHasPermission:
-      - feato.mayor
-      ifHasPermissionMsg: '&cこの旗の号令を発動できるのは村長だけです。'
-      ifHasPermissionCancel: true
+    playerConditions: {}
     worldConditions: {}
     itemConditions: {}
     customConditions: {}
