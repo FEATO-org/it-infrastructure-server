@@ -87,6 +87,7 @@ required_secrets=(
   mariadb_root_password
   mariadb_app_password
   forwarding_secret
+  floodgate_key
   rcon_password
   minecraft_proxy_rcon_password
   luckperms_db_password
