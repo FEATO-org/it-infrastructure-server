@@ -82,11 +82,7 @@ activators:
     - minecraft:execute at %player% run minecraft:particle minecraft:angry_villager ~ ~1 ~ 1.2 0.8 1.2 0.02 8 force @a[distance=..16]
     - minecraft:execute at %player% run minecraft:particle minecraft:electric_spark ~ ~1 ~ 1.5 1 1.5 0.04 16 force @a[distance=..16]
     - minecraft:execute at %player% run minecraft:particle minecraft:dust{color:[1.0,0.1,0.1],scale:1.0} ~ ~1 ~ 1.5 1 1.5 0.02 20 force @a[distance=..16]
-    playerConditions:
-      ifHasPermission:
-      - feato.guard_captain
-      ifHasPermissionMsg: '&cこの旗の号令を発動できるのは警備隊長だけです。'
-      ifHasPermissionCancel: true
+    playerConditions: {}
     worldConditions: {}
     itemConditions: {}
     customConditions: {}
