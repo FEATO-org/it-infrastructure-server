@@ -1,180 +1,181 @@
 pages:
   page1:
-    gui-rows: 4
-    title: "&8FEATO 商店"
+    gui-rows: 2
+    title: "&8FEATO 商店 - 販売"
     items:
       gunpowder:
         material: GUNPOWDER
         buy: 50
         stack-size: 32
-        slot: 0
+        slot: 2
       oxidized_copper:
         material: OXIDIZED_COPPER
         buy: 100
         stack-size: 32
-        slot: 1
+        slot: 3
       player_head:
         material: PLAYER_HEAD
         buy: 100
         stack-size: 1
-        slot: 2
+        slot: 4
+      mending_book:
+        material: ENCHANTED_BOOK
+        enchantments:
+          - "MENDING"
+        buy: 2000
+        stack-size: 1
+        slot: 5
+      villager_spawn_egg:
+        material: VILLAGER_SPAWN_EGG
+        buy: 2000
+        stack-size: 1
+        slot: 6
+  page2:
+    gui-rows: 4
+    title: "&8FEATO 商店 - 買取"
+    items:
       wheat:
         material: WHEAT
         sell: 0.15625
         stack-size: 1
-        slot: 3
+        slot: 0
       carrot:
         material: CARROT
         sell: 0.078125
         stack-size: 1
-        slot: 4
+        slot: 1
       potato:
         material: POTATO
         sell: 0.078125
         stack-size: 1
-        slot: 5
+        slot: 2
       poisonous_potato:
         material: POISONOUS_POTATO
         sell: 0.046875
         stack-size: 1
-        slot: 6
+        slot: 3
       beetroot:
         material: BEETROOT
         sell: 0.1875
         stack-size: 1
-        slot: 7
+        slot: 4
       pumpkin:
         material: PUMPKIN
         sell: 0.125
         stack-size: 1
-        slot: 8
+        slot: 5
       melon_slice:
         material: MELON_SLICE
         sell: 0.078125
         stack-size: 1
-        slot: 9
+        slot: 6
       sugar_cane:
         material: SUGAR_CANE
         sell: 0.078125
         stack-size: 1
-        slot: 10
+        slot: 7
       cactus:
         material: CACTUS
         sell: 0.078125
         stack-size: 1
-        slot: 11
+        slot: 8
       sweet_berries:
         material: SWEET_BERRIES
         sell: 0.078125
         stack-size: 1
-        slot: 12
+        slot: 9
       glow_berries:
         material: GLOW_BERRIES
         sell: 0.078125
         stack-size: 1
-        slot: 13
+        slot: 10
       cocoa_beans:
         material: COCOA_BEANS
         sell: 0.125
         stack-size: 1
-        slot: 14
+        slot: 11
       nether_wart:
         material: NETHER_WART
         sell: 0.1875
         stack-size: 1
-        slot: 15
+        slot: 12
       apple:
         material: APPLE
         sell: 0.234375
         stack-size: 1
-        slot: 16
+        slot: 13
       red_mushroom:
         material: RED_MUSHROOM
         sell: 0.078125
         stack-size: 1
-        slot: 17
+        slot: 14
       brown_mushroom:
         material: BROWN_MUSHROOM
         sell: 0.078125
         stack-size: 1
-        slot: 18
-      honeycomb:
-        material: HONEYCOMB
-        sell: 0.078125
-        stack-size: 1
-        slot: 19
-      honey_bottle:
-        material: HONEY_BOTTLE
-        sell: 0.234375
-        stack-size: 1
-        slot: 20
+        slot: 15
       beef:
         material: BEEF
         sell: 0.234375
         stack-size: 1
-        slot: 21
+        slot: 16
       porkchop:
         material: PORKCHOP
         sell: 0.234375
         stack-size: 1
-        slot: 22
+        slot: 17
       mutton:
         material: MUTTON
         sell: 0.234375
         stack-size: 1
-        slot: 23
+        slot: 18
       chicken:
         material: CHICKEN
         sell: 0.125
         stack-size: 1
-        slot: 24
-      rabbit:
-        material: RABBIT
-        sell: 0.390625
-        stack-size: 1
-        slot: 25
+        slot: 19
       leather:
         material: LEATHER
         sell: 0.15625
         stack-size: 1
-        slot: 26
-      rabbit_hide:
-        material: RABBIT_HIDE
-        sell: 0.234375
-        stack-size: 1
-        slot: 27
+        slot: 20
       feather:
         material: FEATHER
         sell: 0.046875
         stack-size: 1
-        slot: 28
+        slot: 21
       white_wool:
         material: WHITE_WOOL
         sell: 0.078125
         stack-size: 1
-        slot: 29
+        slot: 22
       egg:
         material: EGG
         sell: 0.046875
         stack-size: 1
-        slot: 30
+        slot: 23
       cod:
         material: COD
         sell: 0.3125
         stack-size: 1
-        slot: 31
+        slot: 24
       salmon:
         material: SALMON
         sell: 0.3125
         stack-size: 1
-        slot: 32
+        slot: 25
       pufferfish:
         material: PUFFERFISH
         sell: 0.390625
         stack-size: 1
-        slot: 33
+        slot: 26
       tropical_fish:
         material: TROPICAL_FISH
         sell: 0.390625
         stack-size: 1
-        slot: 34
+        slot: 27
+      rotten_flesh:
+        material: ROTTEN_FLESH
+        sell: 0.046875
+        stack-size: 1
+        slot: 28
