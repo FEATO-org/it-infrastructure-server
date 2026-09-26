@@ -24,8 +24,6 @@ player_allow=(
   essentials.pay
   essentials.kit
   ei.item.emergency_return
-  ei.item.mayor_flag
-  ei.item.guard_captain_flag
   EconomyShopGUI.shop
   EconomyShopGUI.shop.feato_shop
   deadchest.generate
@@ -87,6 +85,8 @@ for role_group in mayor guard_captain; do
   docker exec "$container_id" rcon-cli "lp creategroup $role_group"
 done
 set_permission mayor feato.mayor true
+set_permission mayor ei.item.mayor_flag true
 set_permission guard_captain feato.guard_captain true
+set_permission guard_captain ei.item.guard_captain_flag true
 
 echo "Permissions applied to player group '$player_group' and admin group '$admin_group'."
