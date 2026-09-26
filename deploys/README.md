@@ -60,10 +60,14 @@ openssl rand -base64 48 | docker secret create mariadb_root_password -
 openssl rand -base64 48 | docker secret create mariadb_app_password -
 openssl rand -base64 48 | docker secret create luckperms_db_password -
 openssl rand -hex 32 | docker secret create forwarding_secret -
+# Existing Floodgate private key; do not generate a replacement key here.
+docker secret create floodgate_key /secure/path/floodgate-key.pem
 openssl rand -base64 32 | docker secret create rcon_password -
 openssl rand -base64 32 | docker secret create minecraft_proxy_rcon_password -
 docker secret create cloudflare_tunnel_token /secure/path/cloudflare-tunnel-token
 ```
+
+`floodgate_key`には、現在Velocity側Floodgateが使用している`key.pem`を指定します。Velocity/Paperで同一鍵を使用するため、新しいランダム値を生成しないでください。鍵ファイルはrepositoryへ保存しません。
 
 `minecraft_proxy_rcon_password`はVelocity Proxy専用であり、Paperの
 `rcon_password`と共有しません。Proxy RCONはコンテナ内のTCP 25575だけで有効化し、
