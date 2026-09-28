@@ -141,8 +141,9 @@ sudo -E TLS_STATE_FILE=/var/lib/swarm-certbot/swarm-secrets.env \
   ./script/deploy_swarm.sh
 ```
 
-スクリプトは4つの暗号化overlay networkを必要時に作成し、`app`、`system`、
-`infra`の順で更新します。
+スクリプトは4つの暗号化overlay networkを必要時に作成し、`infra`、`app`、
+`system`の順で更新します。初回構築時は、上記のとおりLuckPerms DBを準備してから
+`app`を更新してください。
 
 ### メトリクス使用量
 

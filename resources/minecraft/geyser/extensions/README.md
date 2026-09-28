@@ -5,14 +5,16 @@ EmoteOffhand is a Geyser Extension, not a Velocity Plugin. Place the managed
 from Git by the repository-wide `*.jar` rule.
 
 The artifact is copied to the VPS only when
-`script/copy_plugins_to_remote.sh` is run, then mounted read-only into the
-container. A normal deploy neither downloads nor copies this JAR.
+`script/copy_plugins_to_remote.sh` is run. The current
+`deploys/app/compose.yml` does not mount this directory, so copying the JAR
+does not establish that the extension is loaded. A normal deploy neither
+downloads nor copies this JAR.
 
 | Location | Path |
 | --- | --- |
 | Management host | `resources/minecraft/geyser/extensions/EmoteOffhand.jar` |
 | VPS (default) | `/opt/it-infrastructure-server/resources/minecraft/geyser/extensions/EmoteOffhand.jar` |
-| Container | `/plugins/Geyser-Velocity/extensions/EmoteOffhand.jar` |
+| Intended container location (not currently mounted) | `/plugins/Geyser-Velocity/extensions/EmoteOffhand.jar` |
 
 ## Source and updates
 
