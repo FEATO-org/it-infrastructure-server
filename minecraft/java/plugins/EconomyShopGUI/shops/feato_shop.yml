@@ -30,6 +30,18 @@ pages:
         buy: 2000
         stack-size: 1
         slot: 6
+      back_to_main:
+        material: ARROW
+        name: "&c商店一覧へ戻る"
+        action: BACK
+        slot: 16
+      open_buyback_page:
+        material: LIME_DYE
+        name: "&a買取ページへ"
+        lore:
+          - "&7クリックして買取ページを開く"
+        action: PAGE_NEXT
+        slot: 17
   page2:
     gui-rows: 4
     title: "&8FEATO 商店 - 買取"
@@ -179,3 +191,15 @@ pages:
         sell: 0.046875
         stack-size: 1
         slot: 28
+      back_to_sale_page:
+        material: RED_DYE
+        name: "&c販売ページへ"
+        lore:
+          - "&7クリックして販売ページを開く"
+        action: PAGE_BACK
+        slot: 34
+      back_to_main:
+        material: ARROW
+        name: "&c商店一覧へ戻る"
+        action: BACK
+        slot: 35
