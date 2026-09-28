@@ -162,16 +162,16 @@ MineGames 1.0.5のSlotsを既存Vault Economyで利用します。3リール×1�
 
 | 台 | BET | 当たり | 1/2/3個の払戻 | 最大払戻 |
 | --- | ---: | --- | --- | ---: |
-| Beginner | 100G | GOLD_BLOCK | 50 / 300 / 1,700G | 1,700G |
-| Standard | 500G | DIAMOND_BLOCK | 250 / 1,500 / 8,500G | 8,500G |
+| Beginner | 10G | GOLD_BLOCK | 5 / 30 / 170G | 170G |
+| Standard | 50G | DIAMOND_BLOCK | 25 / 150 / 850G | 850G |
 
-両台の理論RTPは同じです。グローバル`max-payout: 10000.0`は設定事故用の上限で、通常の最大払戻8,500Gには適用されません。stationの座標はサーバー上で決め、管理者が各場所で次を実行します。`set`と`setwinning`は対象stationの近くで実行し、一般プレイヤーへ`slots.admin`を付与しません。
+両台の理論RTPは同じです。グローバル`max-payout: 10000.0`は設定事故用の上限で、通常の最大払戻850Gには適用されません。stationの座標はサーバー上で決め、管理者が各場所で次を実行します。`set`と`setwinning`は対象stationの近くで実行し、一般プレイヤーへ`slots.admin`を付与しません。
 
 Beginnerの場所で:
 
 ```text
 /slotsadmin create 3 1
-/slotsadmin set cost-per-spin 100
+/slotsadmin set cost-per-spin 10
 /slotsadmin setwinning GOLD_BLOCK
 ```
 
@@ -179,7 +179,7 @@ Standardの別の場所で:
 
 ```text
 /slotsadmin create 3 1
-/slotsadmin set cost-per-spin 500
+/slotsadmin set cost-per-spin 50
 /slotsadmin setwinning DIAMOND_BLOCK
 ```
 
