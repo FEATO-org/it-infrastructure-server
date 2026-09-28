@@ -1,5 +1,5 @@
 # Must be the same private key used by Floodgate on Velocity.
-key-file-name: /run/secrets/floodgate_key
+key-file-name: key.pem
 
 username-prefix: "."
 replace-spaces: true

@@ -35,7 +35,7 @@ Web: nginx dynmap.feato.jp -> squaremap :8123
 
 対象バージョンは26.2です。`.env`の`MINECRAFT_VERSION`が既定値を上書きするため、デプロイ前に26.2であることを確認してください。
 
-GeyserとFloodgateはVelocityへ配置し、Bedrock判定をPaper側Pluginでも利用できるようFloodgate-SpigotもPaperへ配置します。Velocity側は`send-floodgate-data: true`で暗号化したBedrock player dataを転送します。両Floodgateは同一のDocker Swarm secret `floodgate_key`を`/run/secrets/floodgate_key`から読み込みます。Velocityのmodern forwarding、共有forwarding secret、Paperのoffline modeは維持します。Paper、MariaDB、squaremapはホストへ直接公開しません。
+GeyserとFloodgateはVelocityへ配置し、Bedrock判定をPaper側Pluginでも利用できるようFloodgate-SpigotもPaperへ配置します。Velocity側は`send-floodgate-data: true`で暗号化したBedrock player dataを転送します。両Floodgateは同一のDocker Swarm secret `floodgate_key`を使用します。Paperコンテナは起動時に`/run/secrets/floodgate_key`を`/data/plugins/floodgate/key.pem`へコピーし、Floodgateは`key-file-name: key.pem`で参照します。Velocityのmodern forwarding、共有forwarding secret、Paperのoffline modeは維持します。Paper、MariaDB、squaremapはホストへ直接公開しません。
 
 EmoteOffhandはPaper/Velocity PluginではなくGeyser Extensionです。管理側の
 `resources/minecraft/geyser/extensions/EmoteOffhand.jar`を更新時のみ
@@ -240,6 +240,8 @@ squaremap 1.3.15をPaper 26.2用JARで導入し、内部Webサーバーを8123�
 ## Floodgate backend key
 
 Paper側Floodgate導入前に、現在Velocity側Floodgateが使用している`key.pem`を安全な管理端末へ取り出し、同じ内容からSwarm secret `floodgate_key`を作成してください。鍵そのものはGitへ保存しません。新しい鍵を生成する場合はVelocity/Paperを同じ鍵へ同時に切り替えます。公式Floodgateの要件どおり、proxy側`send-floodgate-data`を有効にし、backend側と同一鍵であることを確認してからBedrock接続を試験します。
+
+PaperはMinecraft起動前にSecretを`/data/plugins/floodgate/key.pem`へ毎回上書きコピーします。Secretがない、空、またはコピーできない場合は起動を中止します。
 
 ## デプロイ前後
 
