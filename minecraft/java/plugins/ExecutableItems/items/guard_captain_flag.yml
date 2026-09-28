@@ -1,7 +1,7 @@
 name: '警備隊長旗'
 lore:
 - '&7右クリックで警備隊長の号令を発動します。'
-- '&7効果範囲: 半径16ブロック / クールダウン: 10分'
+- '&7効果範囲: 半径16ブロック / クールダウン: 5分'
 material: BLUE_BANNER
 glow: false
 disableStack: true
@@ -48,7 +48,7 @@ activators:
     updateEnchants: false
     updateCustomModelData: false
     cooldownFeatures:
-      cooldown: 600
+      cooldown: 300
       isCooldownInTicks: false
       cooldownMsg: '&cまだ使用できません。'
       displayCooldownMessage: true

@@ -1,7 +1,7 @@
 name: '村長旗'
 lore:
 - '&7右クリックで村長の号令を発動します。'
-- '&7効果範囲: 半径24ブロック / クールダウン: 15分'
+- '&7効果範囲: 半径24ブロック / クールダウン: 10分'
 material: BLUE_BANNER
 glow: false
 disableStack: true
@@ -48,7 +48,7 @@ activators:
     updateEnchants: false
     updateCustomModelData: false
     cooldownFeatures:
-      cooldown: 900
+      cooldown: 600
       isCooldownInTicks: false
       cooldownMsg: '&cまだ使用できません。'
       displayCooldownMessage: true
@@ -76,7 +76,6 @@ activators:
     - minecraft:execute at %player% run minecraft:effect give @a[distance=..24] minecraft:hero_of_the_village 1800 0 true
     - minecraft:execute at %player% run minecraft:effect give @a[distance=..24] minecraft:weakness 1800 0 true
     - minecraft:execute at %player% run minecraft:effect give @a[distance=..24] minecraft:jump_boost 1200 0 true
-    - minecraft:execute at %player% run minecraft:effect give @a[distance=..24] minecraft:slow_falling 1200 0 true
     - minecraft:execute at %player% run minecraft:effect give @a[distance=..24] minecraft:conduit_power 1200 0 true
     - minecraft:execute at %player% run minecraft:playsound minecraft:item.goat_horn.sound.0 master @a[distance=..24] ~ ~ ~ 0.8 1
     - minecraft:execute at %player% run minecraft:playsound minecraft:block.bell.use master @a[distance=..24] ~ ~ ~ 0.6 1

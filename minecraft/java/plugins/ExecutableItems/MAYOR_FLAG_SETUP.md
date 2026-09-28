@@ -21,7 +21,7 @@
 - 旗を所持していても、`feato.mayor` を持たないプレイヤーは号令を発動できない
 - 号令は空中右クリック時のみ発動させ、ブロック右クリック時の通常設置を妨げない
 - 効果対象: 発動者本人を含む半径24ブロック以内のプレイヤー
-- Cooldown: 20分（1200秒）
+- Cooldown: 10分（600秒）
 
 ### バフ / デバフ
 
@@ -36,7 +36,6 @@
 20分:
 
 - Jump Boost I
-- Slow Falling
 - Conduit Power I
 
 Weakness I は、村長旗を遠征・戦闘用の恒常強化へ転用しにくくするための意図的なデバフ。
@@ -107,7 +106,7 @@ Banner patternの内部保存形式を手書きで推測しないこと。Paper 
 - アイテムを消費しない
 - 設置をキャンセルしない
 - `feato.mayor` を必須条件にする
-- cooldown 1200秒
+- cooldown 600秒
 - cooldown中は発動をキャンセルする
 - 同じ `mayor_flag` を複数所持した場合にPlayer cooldownが共有されることを実機確認する
 
@@ -124,7 +123,6 @@ execute at %player% run effect give @a[distance=..24] minecraft:haste 1800 0 tru
 execute at %player% run effect give @a[distance=..24] minecraft:hero_of_the_village 1800 0 true
 execute at %player% run effect give @a[distance=..24] minecraft:weakness 1800 0 true
 execute at %player% run effect give @a[distance=..24] minecraft:jump_boost 1200 0 true
-execute at %player% run effect give @a[distance=..24] minecraft:slow_falling 1200 0 true
 execute at %player% run effect give @a[distance=..24] minecraft:conduit_power 1200 0 true
 execute at %player% run playsound minecraft:item.goat_horn.sound.0 master @a[distance=..24] ~ ~ ~ 1 1
 execute at %player% run playsound minecraft:block.bell.use master @a[distance=..24] ~ ~ ~ 0.7 1
@@ -162,9 +160,9 @@ Java版とBedrock版の両方で確認する。
 4. 村長・非村長とも、所持している旗を通常Bannerとして設置できる。
 5. 村長は空中右クリックで号令を発動できる。
 6. 非村長が同じ旗を持っていても号令を発動できない。
-7. 発動者を含む半径24ブロック内だけに8効果が付与される。
+7. 発動者を含む半径24ブロック内だけに7効果が付与される。
 8. 24ブロック外には付与されない。
 9. 音とパーティクルが範囲内で正常に再生される。
-10. 20分Cooldownが動作する。
+10. 10分Cooldownが動作する。
 11. 複数の `mayor_flag` を持ち替えてもCooldownを回避できないことを確認する。採用版の挙動で共有されない場合は、複数旗による回避を仕様として許容する。
 12. 退任して `mayor` parentを外した直後、既存の旗を持っていても号令を使用できない。
