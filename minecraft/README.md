@@ -54,6 +54,7 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 
 - 権限・表示: LuckPerms、LuckTags
 - 経済・基本機能: EssentialsX Core / Spawn、VaultUnlocked、EssentialsUnlocked
+- カジノ: MineGames 1.0.5（初期利用はSlotsのみ）
 - 商店・NPC: EconomyShopGUI Free、FancyNpcs
 - マップ: squaremap
 - RPG・アイテム: ValhallaMMO、Magic 11.2.4、SCore、ExecutableItems
@@ -153,6 +154,35 @@ Wand販売NPCは、販売位置に立って次を実行します。
 | その他 | Rotten Flesh | 3G |
 
 Honeycomb、Honey Bottle、Rabbit、Rabbit Hideは買取対象外です。Minecraft上の最大スタック数にかかわらず64個換算の価格基準を使用します。
+
+## MineGames Slots
+
+MineGames 1.0.5のSlotsを既存Vault Economyで利用します。3リール×1行、4種類のシンボルを等確率で抽選し、当たり1/2/3個の倍率は0.5/3/17倍です。理論RTPは89.84375%。プレイヤーのBET変更ボタンと新規参加時のJoin Giftは無効です。Dice/Crapsは1.0.5ではコマンドが登録されず、設定でも無効としています。ほかのゲームのstationは作成しません。
+
+| 台 | BET | 当たり | 1/2/3個の払戻 | 最大払戻 |
+| --- | ---: | --- | --- | ---: |
+| Beginner | 100G | GOLD_BLOCK | 50 / 300 / 1,700G | 1,700G |
+| Standard | 500G | DIAMOND_BLOCK | 250 / 1,500 / 8,500G | 8,500G |
+
+両台の理論RTPは同じです。グローバル`max-payout: 10000.0`は設定事故用の上限で、通常の最大払戻8,500Gには適用されません。stationの座標はサーバー上で決め、管理者が各場所で次を実行します。`set`と`setwinning`は対象stationの近くで実行し、一般プレイヤーへ`slots.admin`を付与しません。
+
+Beginnerの場所で:
+
+```text
+/slotsadmin create 3 1
+/slotsadmin set cost-per-spin 100
+/slotsadmin setwinning GOLD_BLOCK
+```
+
+Standardの別の場所で:
+
+```text
+/slotsadmin create 3 1
+/slotsadmin set cost-per-spin 500
+/slotsadmin setwinning DIAMOND_BLOCK
+```
+
+デプロイ後はPaper起動ログでMineGamesのenableとVault Economy provider取得成功を確認します。各台のBETとwinning blockを確認し、レバー操作でVault残高がBET分減り、当選時に配当が残高へ入ることを少額で試します。新規参加時のJoin Gift、`/dice`、`/craps`、BET変更ボタンが利用できないことも確認します。`/slotsadmin housebalance`でBET・払戻統計を確認してください。
 
 ## 緊急帰還札
 

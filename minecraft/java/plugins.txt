@@ -13,6 +13,7 @@ https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsX-2.22.1-dev+
 https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsXSpawn-2.22.1-dev+24-49a2f10.jar
 https://cdn.modrinth.com/data/ayRaM8J7/versions/qZgRzoYs/VaultUnlocked-2.20.3.jar
 https://cdn.modrinth.com/data/gPLRdl3T/versions/fUaoKCyT/EssentialsUnlocked-1.0.0.1.jar
+https://cdn.modrinth.com/data/YAetfB2l/versions/457fwbAR/minegames-1.0.5.jar
 https://cdn.spiget.org/file/spiget-resources/69927.jar
 https://cdn.modrinth.com/data/EeyAn23L/versions/53lykMXY/FancyNpcs-2.12.0.jar
 https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot

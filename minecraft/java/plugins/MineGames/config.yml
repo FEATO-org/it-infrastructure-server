@@ -1,0 +1,467 @@
+hologram:
+  background-color: '#000000'
+  background-opacity: 128
+  foreground-color: ''
+  foreground-opacity: 255
+  see-through-walls: true
+
+minegame:
+  board:
+    station-block: BEACON
+    grid-size: 5
+    wall-distance: 4
+    hidden-block: COPPER_BARS
+    safe-reveal-block: WAXED_COPPER_BLOCK
+    mine-reveal-block: TNT
+    frame-block: QUARTZ_BLOCK
+    reset-delay-seconds: 3
+    frame-one-higher: true
+  frame-animation:
+    enabled: false
+    block: REDSTONE_LAMP
+    pattern: 1
+    mode: idle_only
+    interval-ticks: 6
+  casino-frame-activation-distance: 20.0
+  game:
+    duration-seconds: 300
+    house-edge-percent: 4.0
+    max-multiplier: 0
+    max-payout: -1
+    title-prefix: '&6[MineGame] &f'
+  announcements:
+    broadcast-start: false
+    broadcast-cashout: false
+    broadcast-win: false
+    broadcast-loss: false
+    send-welcome-on-start: true
+  effects:
+    fireworks-on-win: true
+    firework-count: 3
+    win-ding-count: 5
+  hologram:
+    enabled: true
+    affix-to-wall: false
+    line-spacing: 0.28
+    behind-beacon-distance: 1.4
+    base-height: 4.2
+    view-range: 20.0
+
+roulette:
+  announcements:
+    broadcast-win: false
+    broadcast-loss: false
+  board-size: 13
+  red-percent: 48.61
+  black-percent: 48.61
+  green-percent: 2.78
+  betting-seconds: 15
+  spin-seconds: 10
+  result-seconds: 5
+  min-bet: 1.0
+  max-bet: -1
+  red-multiplier: 2.0
+  black-multiplier: 2.0
+  green-multiplier: 35.0
+  house-edge-percent: 4.0
+  max-payout: -1
+  max-bet-distance: 18.0
+  activation-distance-from-frame: 20.0
+  hologram-height: 5
+  hologram-line-spacing: 0.6
+  hologram-title-gap: 0
+  hologram-section-gap: 0
+  hologram-view-range: 20.0
+  fireworks-per-winner: 1
+  broadcast-top-winner: true
+  blocks:
+    frame: STONE_BRICKS
+    red: RED_CONCRETE
+    black: BLACK_CONCRETE
+    green: LIME_CONCRETE
+    selector: QUARTZ_BLOCK
+  frame-animation:
+    enabled: true
+    block: REDSTONE_LAMP
+    pattern: 8
+    mode: idle_only
+    interval-ticks: 6
+
+fights:
+  betting-seconds: 10
+  reveal-seconds: 5
+  celebration-seconds: 5
+  hologram-line-spacing: 0.38
+  hologram-view-range: 24.0
+  max-fighters: 16
+  fireworks-per-winner: 1
+  fireworks-for-winning-bettors: true
+  min-bet: 1.0
+  max-bet: -1
+  payout-multiplier: 1.9
+  activation-distance: 24.0
+  hologram-height: 5.5
+  arena-style: fence # walls or fence
+  casino-frame-animation:
+    enabled: true
+    block: REDSTONE_LAMP
+    mode: betting_only # always or betting_only
+    pattern: 3 # 1-10
+  blocks:
+    fill-block: DEEPSLATE_TILES
+    frame-block: DEEPSLATE_BRICKS
+    fence-block: SPRUCE_FENCE
+    casino-frame-block: REDSTONE_LAMP
+slots:
+  announcements:
+    broadcast-win: false
+    broadcast-loss: false
+  reel-count: 3
+  row-count: 1
+  cost-per-spin: 100.0
+  min-bet: 1.0
+  max-bet: -1
+  bet-buttons:
+    enabled: false
+  spin-seconds: 5
+  stop-interval-ticks: 12
+  result-seconds: 5
+  activation-distance-from-frame: 20.0
+  lever-placement: front_right_middle
+  spin-light-mode: flashing_fast
+  max-payout: 10000.0
+  fireworks-per-win: 1
+  hologram-height: 5.8
+  hologram-line-spacing: 0.6
+  hologram-view-range: 20.0
+  blocks:
+    outer-frame: STONE
+    inner-frame: REDSTONE_LAMP
+    winning: DIAMOND_BLOCK
+    reel-options:
+    - GOLD_BLOCK
+    - EMERALD_BLOCK
+    - DIAMOND_BLOCK
+    - AMETHYST_BLOCK
+  payout-multipliers:
+    1: 0.5
+    2: 3.0
+    3: 17.0
+  frame-animation:
+    enabled: true
+    block: REDSTONE_LAMP
+    pattern: 4
+    mode: idle_only
+    interval-ticks: 6
+
+dice:
+  command-enabled: false
+  craps:
+    enabled: false
+
+join-gift:
+  enabled: false
+  amount: 1000.0
+
+messages:
+  shared:
+    only-players: Only players can use this command.
+    no-permission: '&cNo permission.'
+    missing-message: '&cMissing message: %path%'
+    invalid-block-material: '&cInvalid block material.'
+    pattern-not-number: '&cPattern must be a number (1-10).'
+    pattern-out-of-range: '&cPattern must be between 1 and 10.'
+    amount-must-be-number-or-all: '&cAmount must be a number or ''all''.'
+    amount-must-be-greater-than-zero: '&cAmount must be greater than 0.'
+    economy-withdraw-failed: '&cEconomy error: withdraw failed.'
+
+  join-gift:
+    welcome: '&aWelcome to the server, you''ve been gifted &6$%amount%&a! Find your way to the casino!'
+    command:
+      usage: '&eUsage: /minegamesjoin <true|false|set <amount>> | Enabled: %enabled% | Amount: $%amount% | Seen players: %seen%'
+      set-usage: '&eUsage: /minegamesjoin set <amount>'
+      amount-not-number: '&cAmount must be a number.'
+      amount-set: '&aJoin gift amount set to &6$%amount%&a.'
+      enabled: '&aJoin gift enabled.'
+      disabled: '&eJoin gift disabled.'
+
+  minegame:
+    command:
+      usage: 'Usage: /minegame <mines 1-24> <wager> or /minegame cashout'
+      mines-not-number: Mines must be a number.
+      wager-not-number: Wager must be a number.
+      admin-usage: '&6Usage: &f /minegameadmin <create|remove|regen|list|set|setframe|sethidden|setsafe|setmine|holo|debug|casinoframe|housebalance|housewithdraw|reload>'
+      set-usage: '&eUsage: /minegameadmin set <path> <value>'
+      holo-usage: '&eUsage: /minegameadmin holo <on|off>'
+      debug-usage: '&eUsage: /minegameadmin debug <on|off>'
+      housewithdraw-usage: '&eUsage: /minegameadmin housewithdraw <amount|all>'
+      board-all-usage: '&eUsage: /minegameadmin %type% all <block>'
+      unknown-material-command: '&cUnknown material command.'
+      current-config: '&eCurrent %path% = %value%'
+      current-board-frame: '&eCurrent board.frame-block = %value%'
+      current-board-hidden: '&eCurrent board.hidden-block = %value%'
+      current-board-safe: '&eCurrent board.safe-reveal-block = %value%'
+      current-board-mine: '&eCurrent board.mine-reveal-block = %value%'
+      setframe-usage: '&eUsage: /minegameadmin setframe <block> | /minegameadmin setframe reset'
+      sethidden-usage: '&eUsage: /minegameadmin sethidden <block> | /minegameadmin sethidden reset'
+      setsafe-usage: '&eUsage: /minegameadmin setsafe <block> | /minegameadmin setsafe reset'
+      setmine-usage: '&eUsage: /minegameadmin setmine <block> | /minegameadmin setmine reset'
+      casino-frame-mode-usage: '&eUsage: /minegameadmin casinoframe %scope%mode <idle_only|always>'
+      casino-frame-usage-lines:
+      - '&eUsage:'
+      - '&e/minegameadmin casinoframe <block> <pattern 1-10>  (this station)'
+      - '&e/minegameadmin casinoframe mode <idle_only|always>   (this station)'
+      - '&e/minegameadmin casinoframe off|reset                 (this station)'
+      - '&e/minegameadmin casinoframe all <block> <pattern 1-10>'
+      - '&e/minegameadmin casinoframe all mode <idle_only|always>'
+      - '&e/minegameadmin casinoframe all off|reset'
+
+    gameplay:
+      not-on-beacon: '&cStand on a beacon station to use this.'
+      invalid-mines: '&cMines must be between 1 and %max%.'
+      invalid-wager: '&cWager must be greater than 0.'
+      no-money: '&cYou do not have enough money for that wager.'
+      started: '&aGame started: &f%mines% mines, wager &6$%wager%'
+      started-broadcast: '&f%player% started a game with &6$%wager% &f(%mines% mines)'
+      welcome: '&fBreak blocks within the frame to reveal &a%safe_block%&f. Avoid
+        the &c%mine_block%&f!'
+      progress-actionbar: '&7Time: &f%seconds_left%s &7| &a%revealed%/%target% safe
+        &7| &e%xmult%x'
+      progress: '&eRev: &a%revealed%&7/&a%target% &7| &eMulti: &a%xmult%x &7-> &e%xnext%x
+        &7| &ePot: &6$%potential% &7-> &e$%next_potential%'
+      cashout: '&aCashed out for &6$%payout% &a(%xmult%x) &7| Profit: &a$%profit%'
+      cashout-broadcast: '&e%player% &fcashed out &6$%payout% &f(%xmult%x) | &7Profit:
+        &a$%profit%'
+      cashout-none: '&cReveal at least 1 safe tile before cashing out.'
+      not-playing: '&cYou are not currently in a mines game.'
+      hit-mine: '&cBOOM! You hit a mine and lost &6$%wager%'
+      won: '&aYou cleared the board! Paid &6$%payout% &a(%xmult%x)'
+      won-broadcast: '&f%player% won &6$%payout% &f(%xmult%x) &7| Profit: &a$%profit%
+        &7(%mines% mines)'
+      timeout: '&cTime ran out! You lost &6$%wager%'
+      station-busy: '&cThat station is already in use.'
+      already-playing: '&cYou are already in a mines game.'
+      economy-payout-failed: '&cEconomy error: payout failed. Contact staff.'
+
+    admin:
+      created: '&aStation created at this beacon.'
+      removed: '&eStation removed from this beacon.'
+      regenerated: '&aStation regenerated.'
+      reloaded: '&aMinegame config reloaded.'
+      hologram-enabled: '&aMineGame holograms enabled.'
+      hologram-disabled: '&eMineGame holograms disabled.'
+      debug-on: '&aMineGame debug mode enabled. Mine locations will be revealed for
+        your games.'
+      debug-off: '&eMineGame debug mode disabled.'
+      config-set: '&aSet &f%path% &ato &f%value%&a.'
+      config-invalid-path: '&cThat config path cannot be changed in-game.'
+      config-invalid-value: '&cInvalid value for &f%path%&c.'
+      station-list-header: '&6[MineGame] &fStations: &e%count%'
+      station-list-entry: '&e%num%. &f%world% &7(%x%, %y%, %z%) &b[facing %facing%]'
+      station-list-entry-numbered: '&7%num%. &f%world% &7(%x%, %y%, %z%) &8facing %facing%'
+      remove-list-header: '&6[MineGame] &eStations — use &f/minegameadmin remove <number> &eto delete:'
+      no-stations: '&eNo mine stations exist.'
+      remove-bad-index-out-of-range: '&cStation #%index% does not exist (1-%max%).'
+      removed-by-index: '&aRemoved station #%num% at &f%world% &7(%x%, %y%, %z%).'
+      invalid-block-material: '&cInvalid block material: &f%material%'
+      board-material-reset-all: '&aBoard material overrides reset for all stations.'
+      board-material-reset-station: '&aBoard material overrides reset for this station.'
+      board-material-set-all: '&a%label% set to &f%material%&a for all stations.'
+      board-material-set-station: '&a%label% set to &f%material%&a for this station.'
+      house-balance-header: '&eHouse Balance: &a$%balance% &7| &eEdge: &a%edge%%'
+      house-balance-details: '&7Wagered: &f$%wagered% &7| Paid: &f$%paid%'
+      house-no-balance: '&cNo house balance available to withdraw.'
+      house-nothing-to-withdraw: '&cNothing to withdraw.'
+      house-withdraw-success: '&aWithdrew &6$%amount% &afrom MineGame house balance.'
+      house-remaining-balance: '&7Remaining MineGame house balance: &a$%balance%'
+      casino-frame:
+        not-on-station: '&cStand on a beacon station to edit that station''s casino
+          frame.'
+        reset-station: '&aCasino frame overrides reset for this station.'
+        reset-all: '&aCasino frame overrides reset for all stations.'
+        disabled-station: '&eCasino frame animation disabled for this station.'
+        invalid-mode: '&cMode must be idle_only or always.'
+        mode-set-station: '&aCasino frame mode set to %mode% for this station.'
+        updated-station: '&aCasino frame updated for this station: %block%, pattern
+          %pattern%.'
+        applied-all: '&aCasino frame settings applied to all stations.'
+
+    hologram:
+      idle-lines:
+      - '&6&lMINEGAME'
+      - '&7Use &e/minegame <mines 1-24> <wager> &7to place a bet'
+      - '&7Then &e/minegame cashout &7or break the frame to to quit'
+      active-lines:
+      - '&f%player%''s &6&lMINEGAME'
+      - '&7Wager: &6$%wager%'
+      - '&7Revealed: &a%revealed%&7/%target% &7(Mines: &c%mines%&7)'
+      - '&7Multiplier: &a%current_mult%x &7-> &e%next_mult%x'
+      - '&7Potential: &6$%potential% &7-> &e$%next_potential%'
+      - '&7Time Left: &f%seconds_left%s &7| &e/minegame cashout'
+
+  roulette:
+    command:
+      usage: 'Usage: /roulette <red|black|green> <amount>'
+      amount-not-number: Amount must be a number.
+      admin-usage: '&6Usage: &f /rouletteadmin <create|remove|regen|list|set [global]|setframe|setred|setblack|setgreen|setselector|casinoframe|housebalance|housewithdraw|reload>'
+      set-usage: '&eUsage: /rouletteadmin set [global] <path> <value>'
+      set-global-usage: '&eUsage: /rouletteadmin set global <path> <value>'
+      housewithdraw-usage: '&eUsage: /rouletteadmin housewithdraw <amount|all>'
+      board-usage: '&eUsage: /rouletteadmin %command% [all] <BLOCK|reset>'
+      unknown-material-command: '&cUnknown material command.'
+      current-config: '&eCurrent %path% = %value%'
+      casino-frame-usage-lines:
+      - '&eUsage: /rouletteadmin casinoframe [all] <block> <pattern 1-10>'
+      - '&eUsage: /rouletteadmin casinoframe [all] mode <always|betting_only>'
+      - '&eUsage: /rouletteadmin casinoframe [all] <off|reset>'
+
+    gameplay:
+      not-on-station: '&cStand on a roulette board/frame to use this.'
+      not-near: '&cYou are not near a roulette station.'
+      invalid-color: '&cUse red, black or green.'
+      invalid-bet: '&cInvalid bet amount.'
+      bet-closed: '&cBetting is closed.'
+      no-money: '&cYou do not have enough money.'
+      bet-placed: '&aBet: &f%color% &7| &eW: &6$%amount% &7| &eM: &a%xmult%x &7| &eP:
+        &6$%potential% &7| &a+$%profit%'
+      win-private: '&aWon: &6$%payout% &7(%xmult%x) &7| &a+$%profit% &7| &f%color%'
+      lose-private: '&cLost: &6$%amount% &7| &f%color%'
+      top-winner-broadcast: '&6[Roulette] &f%player% won &a$%payout% &fon %color%!'
+      win-broadcast: '&6[Roulette] &f%player% won &a$%payout% &fon %color%!'
+      lose-broadcast: '&6[Roulette] &f%player% lost &c$%amount% &fon %color%.'
+      win-broadcast: '&6[Roulette] &f%player% won &a$%payout% &fon %color%!'
+      lose-broadcast: '&6[Roulette] &f%player% lost &c$%amount% &fon %color%.'
+      result-landed-on: '&eLanded on %color%'
+      result-entry: '%profit_color%%profit_prefix%$%net% &7| &f%player% &7| %color_code%%color%
+        &7| &6$%payout%'
+
+    admin:
+      created: '&aRoulette station created.'
+      removed: '&eRoulette station removed.'
+      regenerated: '&aRoulette station regenerated.'
+      reloaded: '&aRoulette config reloaded.'
+      config-invalid: '&cInvalid roulette config value/path.'
+      config-set: '&aSet &f%path% &ato &f%value%&a.'
+      station-list-header: '&6[Roulette] &fStations: &e%count%'
+      station-list-entry: '&e%num%. &f%world% &7(%x%, %y%, %z%)'
+      board-material-set-all: '&a%label% set to &f%material% &afor all roulette stations.'
+      board-material-set-station: '&a%label% set to &f%material%&a for this roulette
+        station.'
+      board-material-reset-all: '&aRoulette board material overrides reset for all
+        stations.'
+      board-material-reset-station: '&aRoulette board material overrides reset for
+        this station.'
+      house-balance-header: '&6[Roulette] &eHouse Balance: &a$%balance% &7| &eEdge:
+        &a%edge%%'
+      house-balance-details: '&7Wagered: &f$%wagered% &7| Paid: &f$%paid%'
+      house-no-balance: '&6[Roulette] &cNo house balance available to withdraw.'
+      house-nothing-to-withdraw: '&6[Roulette] &cNothing to withdraw.'
+      house-withdraw-success: '&6[Roulette] &aWithdrew &6$%amount% &afrom roulette
+        house balance.'
+      house-remaining-balance: '&7Remaining roulette house balance: &a$%balance%'
+      casino-frame:
+        updated-all: '&aRoulette casino frame updated for all stations: &f%block%&a,
+          pattern &f%pattern%&a.'
+        updated-station: '&aRoulette casino frame updated: &f%block%&a, pattern &f%pattern%&a.'
+        invalid-mode: '&cMode must be always or betting_only.'
+        mode-set-all: '&aRoulette casino frame mode set to &f%mode% &afor all stations.'
+        mode-set-station: '&aRoulette casino frame mode set to &f%mode%&a.'
+        disabled-all: '&eRoulette casino frame animation disabled for all stations.'
+        disabled-station: '&eRoulette casino frame animation disabled.'
+        reset-all: '&aRoulette casino frame animation overrides reset for all stations.'
+        reset-station: '&aRoulette casino frame animation overrides reset for this
+          station.'
+
+    hologram:
+      betting-lines:
+      - '&6&lROULETTE'
+      - '&e%seconds%s remaining to place bets'
+      - '&7Type &e/roulette <red|black|green> <amount> &7to place a bet!'
+      spinning-lines:
+      - '&6&lROULETTE'
+      - '&eSpinning... &f%seconds%s'
+      result-header-lines:
+      - '&6&lROULETTE'
+      result-empty-lines:
+      - '&eRound complete'
+      bets-header: '&7Bets:'
+      bets-entry: '&f%player% &7| %color_code%%color% &7| &e%xmult%x &7| &6$%amount%
+        &7-> &e$%potential% &7| &a+$%profit%'
+
+  slots:
+    command:
+      admin-usage: '&6Usage: &f /slotsadmin <create [3-8] [1|2]|remove|regen|list|set [global]|setouterframe|setinnerframe|setwinning|casinoframe|housebalance|housewithdraw|reload>'
+      set-usage: '&eUsage: /slotsadmin set [global] <path> <value>'
+      set-global-usage: '&eUsage: /slotsadmin set global <path> <value>'
+      board-usage: '&eUsage: /slotsadmin %command% [all] <BLOCK|reset>'
+      housewithdraw-usage: '&eUsage: /slotsadmin housewithdraw <amount|all>'
+      unknown-material-command: '&cUnknown material command.'
+      current-config: '&eCurrent %path% = %value%'
+      reel-count-not-number: '&cSlots width must be a number.'
+      rows-not-number: '&cRow count must be a number.'
+      casino-frame-usage-lines:
+      - '&eUsage: /slotsadmin casinoframe [all] <block> <pattern 1-10>'
+      - '&eUsage: /slotsadmin casinoframe [all] mode <idle_only|always>'
+      - '&eUsage: /slotsadmin casinoframe [all] <off|reset>'
+
+    gameplay:
+      not-near: '&cStand near a slots station to use this.'
+      station-busy: '&cThat slots machine is already spinning.'
+      no-money: '&cYou do not have enough money.'
+      spin-charged: '&aSpin started for &6$%amount%&a. Good luck!'
+      win: '&aYou hit &f%wins% &awinning blocks and won &6$%payout% &7(%xmult%x) &7| &a+$%profit%'
+      lose: '&cNo payout this spin. Wager lost: &6$%amount%'
+      win-broadcast: '&e[Slots] &f%player% won &6$%payout% &f(%xmult%x)!'
+      lose-broadcast: '&e[Slots] &f%player% lost &6$%amount% &fon a spin.'
+      win-broadcast: '&e[Slots] &f%player% won &6$%payout% &f(%xmult%x)!'
+      lose-broadcast: '&e[Slots] &f%player% lost &6$%amount% &fon a spin.'
+      win-broadcast: '&e[Slots] &f%player% won &6$%payout% &f(%xmult%x)!'
+      lose-broadcast: '&e[Slots] &f%player% lost &6$%amount% &fon a spin.'
+      result-header: '&e%player%''s result'
+      result-wins: '&7Winning blocks: &b%wins%'
+      result-payout: '&7Payout: &6$%payout% &7(%xmult%x)'
+      result-pattern: '&7Pattern: &f%pattern%'
+
+    admin:
+      created: '&aSlots station created with &f%count% &areels and &f%rows% &arow(s).'
+      removed: '&eSlots station removed.'
+      regenerated: '&aSlots station regenerated.'
+      reloaded: '&aSlots config reloaded.'
+      config-invalid: '&cInvalid slots config value/path.'
+      config-set: '&aSet &f%path% &ato &f%value%&a.'
+      station-list-header: '&6[Slots] &fStations: &e%count%'
+      station-list-entry: '&e%num%. &f%world% &7(%x%, %y%, %z%) &b[width %width% | rows %rows%]'
+      board-material-set-all: '&a%label% set to &f%material% &afor all slots stations.'
+      board-material-set-station: '&a%label% set to &f%material%&a for this slots station.'
+      board-material-reset-all: '&aSlots material overrides reset for all stations.'
+      board-material-reset-station: '&aSlots material overrides reset for this station.'
+      house-balance-header: '&6[Slots] &eHouse Balance: &a$%balance% &7| &eEdge: &a%edge%%'
+      house-balance-details: '&7Wagered: &f$%wagered% &7| Paid: &f$%paid%'
+      house-no-balance: '&6[Slots] &cNo house balance available to withdraw.'
+      house-nothing-to-withdraw: '&6[Slots] &cNothing to withdraw.'
+      house-withdraw-success: '&6[Slots] &aWithdrew &6$%amount% &afrom slots house balance.'
+      house-remaining-balance: '&7Remaining slots house balance: &a$%balance%'
+      casino-frame:
+        updated-all: '&aSlots casino frame updated for all stations: &f%block%&a, pattern &f%pattern%&a.'
+        updated-station: '&aSlots casino frame updated: &f%block%&a, pattern &f%pattern%&a.'
+        invalid-mode: '&cMode must be idle_only or always.'
+        mode-set-all: '&aSlots casino frame mode set to &f%mode% &afor all stations.'
+        mode-set-station: '&aSlots casino frame mode set to &f%mode%&a.'
+        disabled-all: '&eSlots casino frame animation disabled for all stations.'
+        disabled-station: '&eSlots casino frame animation disabled.'
+        reset-all: '&aSlots casino frame animation overrides reset for all stations.'
+        reset-station: '&aSlots casino frame animation overrides reset for this station.'
+
+    hologram:
+      idle-lines:
+      - '&6&lSLOTS'
+      - '&7Pull the lever to spin for &6$%price%'
+      - '&7Hit &b%winning_block% &7symbols to win'
+      spinning-lines:
+      - '&6&lSLOTS'
+      - '&eSpinning for %player%...'
+      - '&7Winning block: &b%winning_block%'
+      result-header-lines:
+      - '&6&lSLOTS'
+      result-empty-lines:
+      - '&eRound complete'

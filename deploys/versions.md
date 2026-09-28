@@ -113,6 +113,7 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | EssentialsX Core / Spawn | 2.22.1-dev+24-49a2f10（公式CI build 1829） | [Core](https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsX-2.22.1-dev+24-49a2f10.jar) / [Spawn](https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsXSpawn-2.22.1-dev+24-49a2f10.jar) | Paper | 26.2（現行公式support一覧） | development | 2.22.0 stableは26.1.2まで。Paper 26.2で起動確認 |
 | VaultUnlocked | 2.20.3 | [固定URL](https://cdn.modrinth.com/data/ayRaM8J7/versions/qZgRzoYs/VaultUnlocked-2.20.3.jar) | Paper | 26.2（配布metadata） | stable | plugin名は`Vault`。Paper 26.2で起動確認 |
 | EssentialsUnlocked | 1.0.0.1 | [固定URL](https://cdn.modrinth.com/data/gPLRdl3T/versions/fUaoKCyT/EssentialsUnlocked-1.0.0.1.jar) | Paper | 26.2（配布metadata） | stable | manifest versionは1.0.0.0。Paper 26.2で起動確認 |
+| MineGames | 1.0.5 | [Modrinth公式Release](https://cdn.modrinth.com/data/YAetfB2l/versions/457fwbAR/minegames-1.0.5.jar) | Paper | 26.2（配布metadata） | stable | Slotsのみ初期利用。Vault Economyへ接続。実機確認待ち |
 | EconomyShopGUI Free | 7.2.1 | [作者配布](https://www.spigotmc.org/resources/economyshopgui.69927/) | Paper | 26.2（作者tested一覧） | stable | Paper 26.2でEssentialsX Economyへの接続確認。Spiget CDNは動的URL |
 | FEATO Ancient Coin | 1.0.0 | [固定Release](https://github.com/FEATO-org/feato_ancient_coin/releases/tag/v1.0.0) | Paper | 26.2（plugin api-version） | stable release | GitHub latest release（draft=false、prerelease=false）。Paper 26.2で起動確認 |
 | FEATO Coin Exchange | 1.1.0 | [公開予定Release](https://github.com/FEATO-org/feato-coin-exchange/releases/tag/v1.1.0) | Paper | 26.2（plugin api-version） | release pending | `FEATO-Coin-Exchange-1.1.0.jar`を取得対象として事前設定。data folderは`FEATOCoinExchange`、`exchange-value: 10.0` |
@@ -144,6 +145,7 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | EssentialsXSpawn-2.22.1-dev+24-49a2f10.jar | `f634b55517cc3ee9d191a275bb9093552e3312aa5f54d1c35dfddd8f90c3f92f32c10cce9049b93e4d635fa0dfe986377e507b3f7b15e59e35f56d0a7035eef7` |
 | VaultUnlocked-2.20.3.jar | `0eedea1591459e7e327315b43afa834a173c8c2ae31b3b235586d31963df29a4a6c0ef4b8f3fdc746e15afd47ee50c1ff93584543b5c2ef7c2a80135dba1136a` |
 | EssentialsUnlocked-1.0.0.1.jar | `c271923c87e2a1e85011e3784141f50b848c4717f9c04c9279cc03d7aaafd79ddcf73abadfdb6aac0d964be818065ee510737365feed07a2309687aa533c85b9` |
+| minegames-1.0.5.jar | `54c3a6d5a5060cf3cb2016cbc3f76d7d40d2d96fd1e1e5bc1741c12b155086be10d34fdab58b75e5c3cbe0a338de75c3a6b42e6d3142341c8247b87d14d8b771` |
 | EconomyShopGUI-7.2.1.jar | `178c3d5e0d051be27008a5bf9ef2b69c74bf1be7a37f40f4b63046f6d520c4f886e7b94502dfc01893b97262feb56d674c4e8100352a36fa4fa6058409bf9114` |
 | FEATO-Ancient-Coin-1.0.0.jar | `d4e7608d9d1f2614a6e420f3ee7e02a84b96e8c638cc9f5c6fa17f554aaaa99ef6af3d54a180a7002f0b87959ff249420c255a6bd48bfe8f81017d44e106e238` |
 | FEATO-Coin-Exchange-1.1.0.jar | Release公開後にGitHub Release asset digestを記録 |
