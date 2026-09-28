@@ -128,42 +128,42 @@ pages:
         slot: 15
       beef:
         material: BEEF
-        sell: 0.234375
+        sell: 0.390625
         stack-size: 1
         slot: 16
       porkchop:
         material: PORKCHOP
-        sell: 0.234375
+        sell: 0.390625
         stack-size: 1
         slot: 17
       mutton:
         material: MUTTON
-        sell: 0.234375
+        sell: 0.390625
         stack-size: 1
         slot: 18
       chicken:
         material: CHICKEN
-        sell: 0.125
+        sell: 0.1875
         stack-size: 1
         slot: 19
       leather:
         material: LEATHER
-        sell: 0.15625
+        sell: 0.3125
         stack-size: 1
         slot: 20
       feather:
         material: FEATHER
-        sell: 0.046875
+        sell: 0.078125
         stack-size: 1
         slot: 21
       white_wool:
         material: WHITE_WOOL
-        sell: 0.078125
+        sell: 0.15625
         stack-size: 1
         slot: 22
       egg:
         material: EGG
-        sell: 0.046875
+        sell: 0.078125
         stack-size: 1
         slot: 23
       cod:
