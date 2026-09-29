@@ -86,6 +86,7 @@ for role_group in mayor guard_captain; do
 done
 set_permission mayor feato.mayor true
 set_permission mayor ei.item.mayor_flag true
+set_permission mayor slots.admin true
 set_permission guard_captain feato.guard_captain true
 set_permission guard_captain ei.item.guard_captain_flag true
 

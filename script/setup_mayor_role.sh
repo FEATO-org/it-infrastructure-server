@@ -16,8 +16,9 @@ rcon() {
 # mayor is an auxiliary social-role group, not a replacement primary group.
 rcon "lp creategroup mayor"
 rcon "lp group mayor permission set feato.mayor true"
+rcon "lp group mayor permission set slots.admin true"
 rcon "lp group mayor meta setprefix 100 &9[村長] "
 
-echo "Mayor role configured: group 'mayor', permission 'feato.mayor', prefix '[村長]'."
+echo "Mayor role configured: group 'mayor', permissions 'feato.mayor' and 'slots.admin', prefix '[村長]'."
 echo "Assign with: lp user <player> parent add mayor"
 echo "Remove with: lp user <player> parent remove mayor"
