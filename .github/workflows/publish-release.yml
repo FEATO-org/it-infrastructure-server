@@ -1,0 +1,57 @@
+name: Publish Minecraft release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: minecraft-release-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Identify merged release PR
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BEFORE: ${{ github.event.before }}
+          AFTER: ${{ github.sha }}
+        run: python scripts/patchnotes/release_control.py detect --before "$BEFORE" --after "$AFTER"
+      - name: Verify generated content and build Discord payload
+        if: steps.release.outputs.publish == 'true'
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          set -euo pipefail
+          python scripts/patchnotes/validate_changes.py --input-dir "changes/released/$VERSION" --require-nonempty
+          python scripts/patchnotes/generate_patchnote.py \
+            --version "$VERSION" --input-dir "changes/released/$VERSION" \
+            --output "$RUNNER_TEMP/${VERSION:0:4}/$VERSION.md"
+          cmp "patchnotes/${VERSION:0:4}/$VERSION.md" "$RUNNER_TEMP/${VERSION:0:4}/$VERSION.md"
+          python scripts/patchnotes/generate_discord_payload.py \
+            --version "$VERSION" --input-dir "changes/released/$VERSION" \
+            --output "$RUNNER_TEMP/discord-payload.json"
+      - name: Publish GitHub Release and Discord
+        if: steps.release.outputs.publish == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DISCORD_PATCHNOTE_WEBHOOK_URL: ${{ secrets.DISCORD_PATCHNOTE_WEBHOOK_URL }}
+          VERSION: ${{ steps.release.outputs.version }}
+          COMMIT: ${{ github.sha }}
+        run: |
+          python scripts/patchnotes/publish_release.py \
+            --version "$VERSION" --commit "$COMMIT" \
+            --patchnote "patchnotes/${VERSION:0:4}/$VERSION.md" \
+            --payload "$RUNNER_TEMP/discord-payload.json"
