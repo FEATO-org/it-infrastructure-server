@@ -28,6 +28,17 @@ player_allow=(
   EconomyShopGUI.shop.feato_shop
   deadchest.generate
   deadchest.get
+
+  # CraftBook: enabled user-facing mechanics.
+  craftbook.mech.elevator
+  craftbook.mech.elevator.use
+  craftbook.mech.bridge
+  craftbook.mech.bridge.use
+  craftbook.mech.bridge.restock
+  craftbook.mech.gate
+  craftbook.mech.gate.use
+  craftbook.mech.gate.restock
+  craftbook.circuits.pipes
   craftbook.vehicles.deposit
   craftbook.vehicles.reverser
   craftbook.vehicles.station
