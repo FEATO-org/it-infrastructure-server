@@ -28,6 +28,9 @@ player_allow=(
   EconomyShopGUI.shop.feato_shop
   deadchest.generate
   deadchest.get
+  craftbook.vehicles.deposit
+  craftbook.vehicles.reverser
+  craftbook.vehicles.station
 )
 player_deny=(
   essentials.spawn
