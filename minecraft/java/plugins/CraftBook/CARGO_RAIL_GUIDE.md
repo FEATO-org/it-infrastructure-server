@@ -6,9 +6,11 @@ FEATO Minecraft サーバーで、離れた農場・生産拠点と倉庫をチ�
 
 - `MinecartDeposit`: チェストとチェスト付きトロッコ間の積み下ろし
 - `MinecartStation`: トロッコの停止・指定方向への発車
+- `MinecartElevator`: トロッコの階層間垂直搬送
 - `MinecartReverser`: トロッコの反転、または進行方向の矯正
 - `MinecartBooster`: 長距離線での加速（既に有効）
 - `MinecartSpeedModifiers`: トロッコ速度調整（既に有効）
+- `Pipes`: 倉庫内でのアイテム搬送・分配（既に有効）
 
 ## 1. 推奨する基本構成
 
@@ -24,13 +26,22 @@ FEATO Minecraft サーバーで、離れた農場・生産拠点と倉庫をチ�
       │
 ====== 長距離線路 ======
       │
+ [CartLift Up]
+      │
+      │ 垂直搬送
+      ▼
+ [CartLift]   ← 倉庫2階
+      │
  [Collect]
       │
- [Station]  ← 倉庫から農場方向へ発車
+ 受入チェスト
       │
- 倉庫チェスト
-[倉庫]
+    Pipes
+      │
+ 分類先チェスト群
 ```
+
+倉庫が2階にあるため、長距離輸送はトロッコ、階層間輸送は `MinecartElevator`、荷下ろし後の倉庫内物流は `Pipes` と役割を分離します。
 
 Station は進行方向を指定して発車できるため、単純な2拠点往復では Reverser を必須としません。
 
@@ -118,29 +129,56 @@ CraftBook 3.x のドキュメントには3行目で数値IDを指定する旧式
 Station は以下のように動作します。
 
 - レッドストーン入力なし / OFF: トロッコを停止
-- レッドストーン入力 ON: 看板が向いている方向へ発車
-
-看板は、**トロッコを発車させたい方向を向くように設置**します。
+- レッドストーン入力 ON: 看板方向を基準に指定方向へ発車
 
 ### 手動駅
 
 ボタンやレバーで Station にレッドストーン入力を与えます。
 
-荷物を確認してから発車させたい場合はこちらを使用します。
-
 ### 自動折返し駅
 
-Deposit / Collect を Station の手前に設置し、Station を常時ONにしておくと、貨物トロッコは次の順で処理されます。
+Deposit / Collect を Station の手前に設置し、Station を常時ONにしておくことで、積み下ろし後にそのまま発車させられます。
 
-1. Deposit / Collect 上を通過
-2. アイテムを積み下ろし
-3. Station へ進入
-4. Station の看板方向へ発車
-5. 来た線路を逆方向へ戻る
+## 5. MinecartElevator: 2階倉庫への垂直搬送
 
-このため、単線の農場↔倉庫シャトルでは Reverser を追加しなくても自動往復を構成できます。
+倉庫が2階にあるため、トロッコ自体を `MinecartElevator` で垂直搬送します。
 
-## 5. Reverser
+標準のリフトブロックは `minecraft:nether_bricks` です。リフトブロックの上にレールを置き、その下に看板を設置します。
+
+### 1階: 上り側
+
+看板の2行目:
+
+```text
+[CartLift Up]
+```
+
+上方にある `[CartLift Down]` または `[CartLift]` を探してトロッコを転送します。
+
+### 2階: 到着側
+
+看板の2行目:
+
+```text
+[CartLift]
+```
+
+`[CartLift]` は到着専用で、そこから自動的に別階へ再転送しません。
+
+```text
+2F    レール ─── [CartLift] ─── [Collect] ─── [Station]
+                    ▲
+                    │
+                    │ 垂直搬送
+                    │
+1F    レール ─── [CartLift Up]
+```
+
+上りと下りを自動化する場合は、同じ列を往復させるよりも **上り用と下り用のCartLiftを別列にする**ことを推奨します。これにより到着直後の再転送や進行方向の混乱を避けられます。
+
+下り用は2階に `[CartLift Down]`、1階に到着専用 `[CartLift]` を設置します。
+
+## 6. Reverser
 
 `MinecartReverser` の標準ブロックは `minecraft:white_wool` です。
 
@@ -154,19 +192,15 @@ Deposit / Collect を Station の手前に設置し、Station を常時ONにし�
 
 ### Directed Reverser
 
-特定方向だけを許可したい場合は看板を追加します。
-
 看板の2行目:
 
 ```text
 [Reverse]
 ```
 
-看板を許可したい進行方向へ向けます。正しい方向で進入したトロッコはそのまま通過し、逆方向から来たトロッコだけ反転します。
-
 単純な2拠点貨物線では必須ではありません。分岐や合流を作る段階で利用してください。
 
-## 6. 長距離線路の加速
+## 7. 長距離線路の加速
 
 `MinecartBooster` は既に有効です。
 
@@ -181,83 +215,130 @@ Deposit / Collect を Station の手前に設置し、Station を常時ONにし�
 
 通常は Vanilla のパワードレールを主体にし、長い直線や速度不足が問題になる場所で Booster を補助的に使用してください。
 
-Booster は看板を必要としないため、今回追加した LuckPerms 権限は不要です。
-
-## 7. 推奨する農場駅の配置
-
-倉庫から農場へ来る方向を `→` とした場合の例です。
+## 8. 推奨する農場駅
 
 ```text
 倉庫から →
 
 ===========[Deposit]====[Station]=== 終端
                 │             │
-          農産物チェスト      └ 看板は倉庫方向を向ける
+          農産物チェスト      └ 倉庫方向へ発車
 
                   ← 発車後は倉庫へ戻る
 ```
 
 流れ:
 
-1. 空のチェスト付きトロッコが倉庫から到着
+1. 空のチェスト付きトロッコが到着
 2. `[Deposit]` で農産物を積載
 3. Station に進入
-4. Station が倉庫方向へ発車
+4. 倉庫方向へ発車
 
-## 8. 推奨する倉庫駅の配置
-
-農場から倉庫へ来る方向を `→` とした場合の例です。
+## 9. 推奨する2階倉庫駅
 
 ```text
-農場から →
-
-===========[Collect]====[Station]=== 終端
-                │             │
-            倉庫チェスト      └ 看板は農場方向を向ける
-
-                  ← 発車後は農場へ戻る
+農場
+ │
+ │ 長距離線
+ ▼
+1F [CartLift Up]
+       │
+       │
+       ▼
+2F [CartLift]
+       │
+    [Collect]
+       │
+   受入チェスト
+       │
+     Pipes
+   ┌───┼───┬───┐
+   ▼   ▼   ▼   ▼
+  穀物 野菜 種  その他
+       │
+   [Station]
+       │
+2F [CartLift Down]  ← 下り用の別列
+       │
+       ▼
+1F [CartLift]
+       │
+       └──── 農場へ返送
 ```
 
-流れ:
+この構成では、鉄道部分と倉庫内物流を分離できます。
 
-1. 荷物を積んだチェスト付きトロッコが農場から到着
-2. `[Collect]` で倉庫チェストへ荷下ろし
-3. Station に進入
-4. Station が農場方向へ発車
+## 10. Pipes による倉庫内自動分配
 
-これを繰り返すことで、1台の貨物トロッコが農場と倉庫の間を往復します。
+`Pipes` は既に有効です。
 
-## 9. LuckPerms
+基本構成:
+
+1. アイテム源となる受入チェスト
+2. 受入チェストへ向けた粘着ピストン
+3. ガラス等のパイプ用ブロック
+4. 分配先チェストへ向けた通常ピストン
+5. 分配先チェスト
+
+粘着ピストンが OFF → ON になったとき、受入チェストからパイプへアイテムを吸い出します。
+
+標準設定では1回の動作につき1スタックを搬送します。
+
+### フィルタ
+
+CraftBook 3.x ではピストンに `[Pipe]` 看板を付け、3行目に許可対象、4行目に除外対象を指定するフィルタ機能があります。
+
+```text
+
+[Pipe]
+<許可対象>
+<除外対象>
+```
+
+ただし、3.x公式ドキュメントは旧式の数値アイテムIDで例示されています。FEATOサーバーは現行Minecraft上で動作しているため、**実際のアイテム指定構文はサーバー上で検証してから本番の仕分けルールへ固定してください**。
+
+そのため現時点の正式方針は次の通りです。
+
+- Pipesによる倉庫内自動分配機能は採用する
+- 分配設備は `受入チェスト → Pipes → 分類先チェスト` とする
+- 個別アイテムのフィルタ構文は実機確認後に確定する
+- フィルタできない場合でも、Pipes自体は倉庫内搬送に利用できる
+
+`MinecartSorter` はトロッコそのものを線路分岐させるMechanicであり、倉庫内のアイテム分類には使用しません。
+
+## 11. LuckPerms
 
 通常プレイヤーが貨物線設備を作成できるよう、以下の権限を付与します。
 
 ```text
 craftbook.vehicles.deposit
+craftbook.vehicles.cartlift
 craftbook.vehicles.reverser
 craftbook.vehicles.station
+craftbook.circuits.pipes
 ```
 
 FEATOの `script/setup_minecraft_permissions.sh` に追加済みです。
 
-セットアップスクリプトは従来通り以下で実行します。
+セットアップスクリプト:
 
 ```bash
 ./script/setup_minecraft_permissions.sh <player-group> <admin-group>
 ```
 
-個別に付与する場合は次のコマンドでも設定できます。
+個別に付与する場合:
 
 ```text
 /lp group <player-group> permission set craftbook.vehicles.deposit true
+/lp group <player-group> permission set craftbook.vehicles.cartlift true
 /lp group <player-group> permission set craftbook.vehicles.reverser true
 /lp group <player-group> permission set craftbook.vehicles.station true
+/lp group <player-group> permission set craftbook.circuits.pipes true
 ```
 
-## 10. チャンク読み込みに関する注意
+## 12. チャンク読み込みに関する注意
 
 Minecraft のトロッコは、線路があるチャンクが読み込まれていない状態では継続して走行・処理できません。
-
-そのため、農場と倉庫が非常に離れている場合、完全無人の24時間物流には向きません。
 
 CraftBook には `ChunkAnchor` がありますが、線路全体を常時読み込みするとサーバー負荷が増えるため、FEATOでは今回有効化していません。
 
@@ -267,38 +348,35 @@ CraftBook には `ChunkAnchor` がありますが、線路全体を常時読み�
 - 長距離線路へ大量の ChunkAnchor を設置しない
 - 完全無人物流が必要になった場合は、チャンク負荷を測定した上で別途設計する
 
-## 11. 今回有効化した CraftBook Mechanic
-
-`minecraft/java/plugins/CraftBook/config.yml` に以下を追加しています。
+## 13. 有効化している関連Mechanic
 
 ```yaml
 enabled-mechanics:
-  - MinecartDeposit
-  - MinecartReverser
-  - MinecartStation
-```
-
-既存の以下はそのまま利用できます。
-
-```yaml
   - MinecartBooster
+  - MinecartDeposit
+  - MinecartElevator
+  - MinecartReverser
   - MinecartSpeedModifiers
+  - MinecartStation
+  - Pipes
 ```
 
-## 12. 将来拡張
+## 14. 将来拡張
 
 貨物線が増えた場合は、次の Mechanic を追加候補とします。
 
-- `MinecartSorter`: 貨物内容やトロッコ種別による自動分岐
+- `MinecartSorter`: 貨物内容やトロッコ種別による線路分岐
 - `MinecartDispenser`: トロッコの回収・再配置、車庫運用
 - `MinecartMoreRails`: 複雑な交差・物流網への拡張
 
 これらは現在の農場↔倉庫の1対1輸送には不要なため、有効化していません。
 
-## 13. 公式資料
+## 15. 公式資料
 
 - CraftBook 3.x Minecart Mechanics: https://craftbook.enginehub.org/en/3.x/mechanics/minecart/
 - Collectors and Depositors: https://craftbook.enginehub.org/en/3.x/mechanics/minecart/block/collector_depositor/
 - Station: https://craftbook.enginehub.org/en/3.x/mechanics/minecart/block/station/
+- Minecart Elevator: https://craftbook.enginehub.org/en/3.x/mechanics/minecart/block/elevator/
 - Reverser: https://craftbook.enginehub.org/en/3.x/mechanics/minecart/block/reverser/
 - Boosters and Brakes: https://craftbook.enginehub.org/en/3.x/mechanics/minecart/block/booster_brake/
+- Pipes: https://craftbook.enginehub.org/en/3.x/mechanics/pipes/
