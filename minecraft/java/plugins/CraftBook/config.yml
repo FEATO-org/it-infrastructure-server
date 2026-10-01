@@ -14,6 +14,7 @@ enabled-mechanics:
   - Gate
   - MinecartBooster
   - MinecartDeposit
+  - MinecartElevator
   - MinecartReverser
   - MinecartSpeedModifiers
   - MinecartStation
@@ -70,7 +71,7 @@ disabled-mechanics:
   # - MinecartDeposit
   - MinecartDispenser
   - MinecartEjector
-  - MinecartElevator
+  # - MinecartElevator
   - MinecartEmptySlowdown
   - MinecartExitRemover
   - MinecartFallModifier
