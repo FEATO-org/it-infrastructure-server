@@ -40,6 +40,7 @@ player_allow=(
   craftbook.mech.gate.restock
   craftbook.circuits.pipes
   craftbook.vehicles.deposit
+  craftbook.vehicles.cartlift
   craftbook.vehicles.reverser
   craftbook.vehicles.station
 )
