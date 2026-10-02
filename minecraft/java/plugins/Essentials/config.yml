@@ -873,6 +873,7 @@ command-costs:
   # To make '/kit tools' cost $1500 PER USE:
   #kit-tools: 1500
   kit-return_ticket: 100
+  kit-administrative_enforcement_order: 10
 
 # Set this to a currency symbol you want to use.
 # Remember, if you want to use special characters in this document, such as accented letters,

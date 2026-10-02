@@ -6,7 +6,7 @@
 
 選出は原則立候補制、候補者がいない場合は管理側で指名する。任期は定めず、本人の申し出等で退任する。
 
-村長には LuckPerms の補助グループ `mayor` を付与し、専用 permission `feato.mayor` だけを持たせる。管理者権限は与えない。
+村長には LuckPerms の補助グループ `mayor` を付与する。村長はサーバー管理者ではなく、OP権限やサーバー全般の管理権限は持たない。村の公共設備の運営に必要なPlugin管理権限のみ例外的に付与し、現在の例外はMineGames Slotsの `slots.admin` とする。この権限には設置・設定に加え、グローバル設定変更やカジノ資金の引き出しも含まれる。
 
 ## 村長旗の仕様
 
@@ -65,9 +65,11 @@ Weakness I は、村長旗を遠征・戦闘用の恒常強化へ転用しにく
 ```text
 /lp creategroup mayor
 /lp group mayor permission set feato.mayor true
+/lp group mayor permission set ei.item.mayor_flag true
+/lp group mayor permission set slots.admin true
 ```
 
-表示用prefixは既存のLuckTags表示方式を実機確認したうえで設定する。村長をprimary groupへ変更せず、既存プレイヤーグループへ追加parentとして付与する。
+統合セットアップも上記3権限を設定する。`setup_mayor_role.sh` 単体は従来どおり旗アイテム権限を扱わず、`feato.mayor` と `slots.admin` を設定する。表示用prefixは既存のLuckTags表示方式を実機確認したうえで設定する。村長をprimary groupへ変更せず、既存プレイヤーグループへ追加parentとして付与する。
 
 就任:
 

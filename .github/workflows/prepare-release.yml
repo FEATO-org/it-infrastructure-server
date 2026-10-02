@@ -1,0 +1,75 @@
+name: Prepare Minecraft release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: minecraft-release-preparation
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: develop
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate pending changes
+        run: python scripts/patchnotes/validate_changes.py --require-nonempty
+      - name: Choose version
+        id: version
+        run: |
+          version=$(python scripts/patchnotes/release_control.py next-version)
+          echo "value=$version" >> "$GITHUB_OUTPUT"
+      - name: Prepare branch and patch note
+        env:
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          set -euo pipefail
+          branch="deploy/$VERSION"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
+            echo "Branch $branch already exists" >&2
+            exit 1
+          fi
+          git switch -c "$branch"
+          python scripts/patchnotes/generate_patchnote.py \
+            --version "$VERSION" --input-dir changes/pending \
+            --output "patchnotes/${VERSION:0:4}/$VERSION.md"
+          mkdir -p "changes/released/$VERSION"
+          git mv changes/pending/*.md "changes/released/$VERSION/"
+          git add "patchnotes/${VERSION:0:4}/$VERSION.md" "changes/released/$VERSION"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m "chore(release): prepare $VERSION"
+          git push origin "HEAD:refs/heads/$branch"
+      - name: Open release PRs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/main-pr.md" <<EOF
+          Minecraft Server Patch $VERSION
+
+          - Generated patch note
+          - Archived pending changes
+
+          Merge this PR after deployment/production verification is complete.
+          EOF
+          cat > "$RUNNER_TEMP/develop-pr.md" <<EOF
+          Syncs the archived changes and completed patch note for $VERSION.
+
+          Merge after the main release and production check are complete.
+          EOF
+          gh pr create --base main --head "deploy/$VERSION" \
+            --title "Release $VERSION" --body-file "$RUNNER_TEMP/main-pr.md"
+          gh pr create --base develop --head "deploy/$VERSION" \
+            --title "Sync release metadata $VERSION" --body-file "$RUNNER_TEMP/develop-pr.md"

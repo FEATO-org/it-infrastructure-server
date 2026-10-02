@@ -169,7 +169,7 @@ MineGames 1.0.5のSlotsを既存Vault Economyで利用します。3リール×1�
 | Beginner | 10G | GOLD_BLOCK | 5 / 30 / 170G | 170G |
 | Standard | 50G | DIAMOND_BLOCK | 25 / 150 / 850G | 850G |
 
-両台の理論RTPは同じです。グローバル`max-payout: 10000.0`は設定事故用の上限で、通常の最大払戻850Gには適用されません。stationの座標はサーバー上で決め、管理者が各場所で次を実行します。`set`と`setwinning`は対象stationの近くで実行し、一般プレイヤーへ`slots.admin`を付与しません。
+両台の理論RTPは同じです。グローバル`max-payout: 10000.0`は設定事故用の上限で、通常の最大払戻850Gには適用されません。stationの座標はサーバー上で決め、管理者または村長が各場所で次を実行します。`set`と`setwinning`は対象stationの近くで実行します。一般プレイヤーへ`slots.admin`を付与しません。
 
 Beginnerの場所で:
 
@@ -186,6 +186,8 @@ Standardの別の場所で:
 /slotsadmin set cost-per-spin 50
 /slotsadmin setwinning DIAMOND_BLOCK
 ```
+
+村長は `slots.admin` により、Slot stationの新規設置、削除・再生成、station設定、外観、1プレイ料金、hologram位置を操作できます。採用中のMineGames 1.0.5にはSlots管理権限の細分化がなく、同じ権限でグローバル設定変更、`/slotsadmin reload`、`/slotsadmin housebalance`、`/slotsadmin housewithdraw` も実行できます。特に `housewithdraw` は村予算・カジノ資金に直接影響するため、誤操作に注意してください。
 
 デプロイ後はPaper起動ログでMineGamesのenableとVault Economy provider取得成功を確認します。各台のBETとwinning blockを確認し、レバー操作でVault残高がBET分減り、当選時に配当が残高へ入ることを少額で試します。新規参加時のJoin Gift、`/dice`、`/craps`、BET変更ボタンが利用できないことも確認します。`/slotsadmin housebalance`でBET・払戻統計を確認してください。
 
@@ -214,7 +216,15 @@ ExecutableItemsの役職旗は通常のBannerとして設置でき、特殊能�
 | 村長旗 (`mayor_flag`) | `feato.mayor` | 発動者を含む半径24ブロック | 30分: Speed I、Glowing、Haste I、Hero of the Village I、Weakness I。20分: Jump Boost I、Conduit Power I | 発動者ごとに10分 |
 | 警備隊長旗 (`guard_captain_flag`) | `feato.guard_captain` | 発動者を含む半径16ブロック | 8分: Strength I、Resistance I、Absorption II、Glowing I、Mining Fatigue I。5分: Fire Resistance I | 発動者ごとに5分 |
 
-`setup_minecraft_permissions.sh`は通常のEIアイテム操作permissionを一般グループへ付与し、追加ロール`mayor`と`guard_captain`を作成して、それぞれの専用permissionだけを付与します。役職ロールへ管理権限は付与しません。
+`setup_minecraft_permissions.sh`は通常のEIアイテム操作permissionを一般グループへ付与し、追加ロール`mayor`と`guard_captain`を作成します。`mayor`には`feato.mayor`、`ei.item.mayor_flag`に加え、村の公共設備を運営するための例外としてMineGames Slotsの`slots.admin`を付与します。村長は引き続きサーバー管理者ではなく、OP権限やサーバー全般の管理権限は持ちません。`slots.admin`は設置だけでなくグローバル設定や資金引き出しまで含む広い権限です。`guard_captain`には従来の専用permissionのみを付与します。
+
+## 役場職員 / 行政代執行文書
+
+役場職員はLuckPermsの補助グループ `town_clerk`（`feato.town_clerk`）を持ち、行政代執行文書（`administrative_enforcement_order`）をEssentialsX kitで1枚10Gで購入できます。購入用kit権限は役場職員だけに付与し、文書は警備隊などへ自由に譲渡できます。使用は一般プレイヤーも可能です。
+
+右クリックで1枚消費し、使用者本人に採掘速度上昇IV・火炎耐性I・コンジットパワーIを90秒、攻撃力上昇II・耐性IIを60秒、発光I・空腹IIを120秒付与します。使用クールダウンはありません。村長の許可は運用上のルールで、システムの発動条件にはしません。
+
+販売NPCの登録、役職の付与・解除、公開前の確認は [行政代執行文書セットアップ](java/plugins/ExecutableItems/ADMINISTRATIVE_ENFORCEMENT_ORDER_SETUP.md) を参照してください。NPCは管理者によるWorld上での登録が必要です。
 
 ## 古銭換金
 

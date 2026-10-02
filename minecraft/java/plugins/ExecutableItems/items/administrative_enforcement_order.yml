@@ -1,0 +1,95 @@
+name: '&6行政代執行文書'
+lore:
+- '&7村長の許可の下、行政代執行に使用する文書。'
+- '&7右クリックで使用者本人に効果を付与します。'
+- '&7採掘IV・火炎耐性I・コンジットパワーI: 90秒'
+- '&7攻撃力II・耐性II: 60秒'
+- '&7発光I・空腹II: 120秒'
+- '&7使用すると1枚消費します。'
+material: PAPER
+glow: true
+disableStack: false
+keepItemOnDeath: false
+canBeUsedOnlyByTheOwner: false
+storeItemInfo: false
+unbreakable: false
+usage: 1
+usageLimit: -1
+dropFeatures:
+  glowDrop: false
+  glowDropColor: WHITE
+  displayNameDrop: false
+hiders:
+  hideEnchantments: false
+  hideUnbreakable: false
+  hideAttributes: false
+  hidePotionEffects: false
+  hideUsage: false
+enchantments: {}
+giveFirstJoinFeatures:
+  giveFirstJoin: false
+  giveFirstJoinAmount: 1
+  giveFirstJoinSlot: 0
+restrictions:
+  cancel-item-place: true
+  cancel-item-craft: true
+cancelEventIfNoPerm: true
+cancelEventIfNotOwner: false
+disabledWorlds: []
+variables: {}
+activators:
+  activator1:
+    name: '&6行政代執行'
+    option: PLAYER_RIGHT_CLICK
+    typeTarget: NO_TYPE_TARGET
+    usageModification: -1
+    cancelEvent: true
+    noActivatorRunIfTheEventIsCancelled: false
+    silenceOutput: false
+    autoUpdateItem: false
+    updateName: true
+    updateLore: true
+    updateDurability: false
+    updateAttributes: false
+    updateEnchants: false
+    updateCustomModelData: false
+    cooldownFeatures:
+      cooldown: 0
+      isCooldownInTicks: false
+      cooldownMsg: '&cまだ使用できません。'
+      displayCooldownMessage: false
+      cancelEventIfInCooldown: true
+      pauseWhenOffline: false
+      pausePlaceholdersConditions: {}
+    globalCooldownFeatures:
+      cooldown: 0
+      isCooldownInTicks: false
+      cooldownMsg: '&cまだ使用できません。'
+      displayCooldownMessage: false
+      cancelEventIfInCooldown: false
+      pauseWhenOffline: false
+      pausePlaceholdersConditions: {}
+    otherEICooldowns: {}
+    requiredItems: {}
+    requiredExecutableItems: {}
+    requiredMagics: {}
+    detailedSlots:
+    - -1
+    - 40
+    playerCommands:
+    - minecraft:effect give %player% minecraft:haste 90 3 true
+    - minecraft:effect give %player% minecraft:strength 60 1 true
+    - minecraft:effect give %player% minecraft:resistance 60 1 true
+    - minecraft:effect give %player% minecraft:fire_resistance 90 0 true
+    - minecraft:effect give %player% minecraft:conduit_power 90 0 true
+    - minecraft:effect give %player% minecraft:glowing 120 0 true
+    - minecraft:effect give %player% minecraft:hunger 120 1 true
+    playerConditions: {}
+    worldConditions: {}
+    itemConditions: {}
+    customConditions: {}
+    placeholdersConditions: {}
+    variablesModification: {}
+recognitions: []
+attributes: {}
+config_5: true
