@@ -45,6 +45,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   validate:
+    name: Validate Swarm images
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
