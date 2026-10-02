@@ -1,0 +1,238 @@
+name: Swarm images
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'minecraft/**'
+      - 'minecraft-proxy/**'
+      - 'resources/minecraft/resourcepacks/bedrock/**'
+      - 'resources/minecraft/geyser/custom_mappings/**'
+      - 'nginx/**'
+      - 'fluentbit/**'
+      - 'deploys/app/compose.yml'
+      - 'deploys/system/**'
+      - '.dockerignore'
+      - '.github/workflows/swarm-images.yml'
+      - 'script/validate_image.sh'
+      - 'script/*swarm*.sh'
+      - 'script/certbot_renew.sh'
+      - 'script/sync_portainer_tls.py'
+      - 'tests/test_sync_portainer_tls.py'
+      - 'deploys/infra/compose.yml'
+  pull_request:
+    paths:
+      - 'minecraft/**'
+      - 'minecraft-proxy/**'
+      - 'resources/minecraft/resourcepacks/bedrock/**'
+      - 'resources/minecraft/geyser/custom_mappings/**'
+      - 'nginx/**'
+      - 'fluentbit/**'
+      - 'deploys/app/compose.yml'
+      - 'deploys/system/**'
+      - '.dockerignore'
+      - '.github/workflows/swarm-images.yml'
+      - 'script/validate_image.sh'
+      - 'script/*swarm*.sh'
+      - 'script/certbot_renew.sh'
+      - 'script/sync_portainer_tls.py'
+      - 'tests/test_sync_portainer_tls.py'
+      - 'deploys/infra/compose.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: swarm-images-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shell and TLS desired state
+        run: |
+          bash -n script/bootstrap_swarm.sh script/deploy_swarm.sh script/swarm_infra_deploy.sh script/certbot_renew.sh script/validate_image.sh script/copy_plugins_to_remote.sh
+          python3 -B -m unittest discover -s tests -v
+      - name: Compose and Swarm validation without real credentials
+        env:
+          DISCORD_TOKEN: validation-placeholder
+          GUILD_IDS: validation-placeholder
+          APP_MODE: validation
+          NOTIFY_CHANNEL_ID: validation-placeholder
+          NOTIFY_WEBHOOK_URL: /validation
+          ERROR_WEBHOOK_URL: /validation
+          LOKI_USER_ID: validation-placeholder
+          PROM_USER_ID: validation-placeholder
+          GRAFANA_API_KEY: validation-placeholder
+          TLS_FULLCHAIN_SECRET: validation-fullchain
+          TLS_PRIVATE_KEY_SECRET: validation-key
+        run: |
+          for stack in app system infra; do
+            docker compose --env-file /dev/null -f "deploys/$stack/compose.yml" config --quiet
+            docker stack config -c "deploys/$stack/compose.yml" >/dev/null
+          done
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      images: ${{ steps.matrix.outputs.images }}
+      app: ${{ steps.filter.outputs.app }}
+      system: ${{ steps.filter.outputs.system }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            minecraft-server:
+              - 'minecraft/**'
+              - '.dockerignore'
+              - '.github/workflows/swarm-images.yml'
+              - 'script/validate_image.sh'
+            minecraft-proxy:
+              - 'minecraft-proxy/**'
+              - 'resources/minecraft/resourcepacks/bedrock/**'
+              - 'resources/minecraft/geyser/custom_mappings/**'
+              - '.dockerignore'
+              - '.github/workflows/swarm-images.yml'
+              - 'script/validate_image.sh'
+            nginx:
+              - 'nginx/**'
+              - '.dockerignore'
+              - '.github/workflows/swarm-images.yml'
+              - 'script/validate_image.sh'
+            fluent-bit:
+              - 'fluentbit/**'
+              - '.dockerignore'
+              - '.github/workflows/swarm-images.yml'
+              - 'script/validate_image.sh'
+            mariadb:
+              - 'deploys/system/mariadb/**'
+              - '.dockerignore'
+              - '.github/workflows/swarm-images.yml'
+              - 'script/validate_image.sh'
+            app:
+              - 'minecraft/**'
+              - 'minecraft-proxy/**'
+              - 'resources/minecraft/resourcepacks/bedrock/**'
+              - 'resources/minecraft/geyser/custom_mappings/**'
+              - 'deploys/app/compose.yml'
+              - '.dockerignore'
+              - '.github/workflows/swarm-images.yml'
+              - 'script/validate_image.sh'
+            system:
+              - 'nginx/**'
+              - 'fluentbit/**'
+              - 'deploys/system/**'
+              - '.dockerignore'
+              - '.github/workflows/swarm-images.yml'
+              - 'script/validate_image.sh'
+      - id: matrix
+        env:
+          CHANGES: ${{ steps.filter.outputs.changes }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          python3 - <<'PY'
+          import json, os
+          files = {'minecraft-server': 'minecraft/Dockerfile',
+                   'minecraft-proxy': 'minecraft-proxy/Dockerfile',
+                   'nginx': 'nginx/Dockerfile', 'fluent-bit': 'fluentbit/Dockerfile',
+                   'mariadb': 'deploys/system/mariadb/Dockerfile'}
+          changed = json.loads(os.environ['CHANGES'])
+          images = [{'kind': k, 'file': v} for k, v in files.items()
+                    if k in changed or os.environ['EVENT'] == 'workflow_dispatch']
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write('images=' + json.dumps(images) + '\n')
+          PY
+  build:
+    needs: [validate, changes]
+    if: needs.changes.outputs.images != '[]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        image: ${{ fromJSON(needs.changes.outputs.images) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build validation image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ matrix.image.file }}
+          pull: true
+          load: true
+          tags: validation:${{ matrix.image.kind }}
+      - name: Validate embedded configuration
+        env:
+          KIND: ${{ matrix.image.kind }}
+        run: ./script/validate_image.sh "validation:$KIND" "$KIND"
+      - uses: docker/login-action@v3
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish main and full commit SHA
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ matrix.image.file }}
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ghcr.io/feato-org/feato-${{ matrix.image.kind }}:main
+            ghcr.io/feato-org/feato-${{ matrix.image.kind }}:sha-${{ github.sha }}
+  redeploy:
+    needs: [validate, changes, build]
+    if: >-
+      always() && github.event_name != 'pull_request' && github.ref == 'refs/heads/main' &&
+      needs.validate.result == 'success' && needs.changes.result == 'success' &&
+      (needs.build.result == 'success' || needs.build.result == 'skipped')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update system
+        if: needs.changes.outputs.system == 'true' || github.event_name == 'workflow_dispatch'
+        env:
+          WEBHOOK_URL: ${{ secrets.PORTAINER_SYSTEM_WEBHOOK_URL }}
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+        run: |
+          if [ -z "$WEBHOOK_URL" ]; then
+            echo 'system webhook is not configured; images remain published.'
+            exit 0
+          fi
+          access_headers=()
+          if [ -n "$CF_ACCESS_CLIENT_ID$CF_ACCESS_CLIENT_SECRET" ]; then
+            if [ -z "$CF_ACCESS_CLIENT_ID" ] || [ -z "$CF_ACCESS_CLIENT_SECRET" ]; then
+              echo 'Both Cloudflare Access credentials are required'; exit 1
+            fi
+            access_headers=(-H "CF-Access-Client-Id: $CF_ACCESS_CLIENT_ID" -H "CF-Access-Client-Secret: $CF_ACCESS_CLIENT_SECRET")
+          fi
+          curl --silent --output /dev/null --fail --connect-timeout 15 --max-time 60 \
+            "${access_headers[@]}" --request POST "$WEBHOOK_URL" || { echo 'system webhook failed'; exit 1; }
+      - name: Update app
+        if: needs.changes.outputs.app == 'true' || github.event_name == 'workflow_dispatch'
+        env:
+          WEBHOOK_URL: ${{ secrets.PORTAINER_APP_WEBHOOK_URL }}
+          CF_ACCESS_CLIENT_ID: ${{ secrets.CF_ACCESS_CLIENT_ID }}
+          CF_ACCESS_CLIENT_SECRET: ${{ secrets.CF_ACCESS_CLIENT_SECRET }}
+        run: |
+          if [ -z "$WEBHOOK_URL" ]; then
+            echo 'app webhook is not configured; images remain published.'
+            exit 0
+          fi
+          access_headers=()
+          if [ -n "$CF_ACCESS_CLIENT_ID$CF_ACCESS_CLIENT_SECRET" ]; then
+            if [ -z "$CF_ACCESS_CLIENT_ID" ] || [ -z "$CF_ACCESS_CLIENT_SECRET" ]; then
+              echo 'Both Cloudflare Access credentials are required'; exit 1
+            fi
+            access_headers=(-H "CF-Access-Client-Id: $CF_ACCESS_CLIENT_ID" -H "CF-Access-Client-Secret: $CF_ACCESS_CLIENT_SECRET")
+          fi
+          curl --silent --output /dev/null --fail --connect-timeout 15 --max-time 60 \
+            "${access_headers[@]}" --request POST "$WEBHOOK_URL" || { echo 'app webhook failed'; exit 1; }

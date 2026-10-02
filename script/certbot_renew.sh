@@ -97,6 +97,17 @@ printf 'TLS_PRIVATE_KEY_SECRET=%q\n' "${new_private_key_secret}" >> "${state_fil
 chmod 0600 "${state_file_tmp}"
 mv -f "${state_file_tmp}" "${TLS_STATE_FILE}"
 
+# Save desired state before updating nginx so a later GitOps deploy cannot restore old secrets.
+if [[ -n "${PORTAINER_URL:-}" || -n "${PORTAINER_SYSTEM_STACK_ID:-}" ||
+      -n "${PORTAINER_API_TOKEN_FILE:-}" ]]; then
+  : "${PORTAINER_URL:?Set PORTAINER_URL}"
+  : "${PORTAINER_SYSTEM_STACK_ID:?Set PORTAINER_SYSTEM_STACK_ID}"
+  : "${PORTAINER_API_TOKEN_FILE:?Set PORTAINER_API_TOKEN_FILE}"
+  export PORTAINER_URL PORTAINER_SYSTEM_STACK_ID PORTAINER_API_TOKEN_FILE
+  python3 "$(dirname -- "${BASH_SOURCE[0]}")/sync_portainer_tls.py" \
+    "${new_fullchain_secret}" "${new_private_key_secret}"
+fi
+
 if ! docker service inspect "${NGINX_SERVICE}" >/dev/null 2>&1; then
   echo "Created TLS secrets. Deploy the system stack using ${TLS_STATE_FILE}."
   exit 0

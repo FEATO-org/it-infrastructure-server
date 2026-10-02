@@ -1,10 +1,10 @@
 # このリポジトリで作業するエージェントへ
 
-Docker Swarm 上の本番インフラと Minecraft サーバーを管理するリポジトリ。依頼に関係する構成、配布元、実行時の保存先を確認してから変更する。ルート `README.md` の構成図は旧構成なので、現行の挙動は Compose とスクリプトで確認する。関連文書との食い違いを見つけたら、依頼範囲の中で整合を取る。
+Docker Swarm 上の本番インフラと Minecraft サーバーを管理するリポジトリ。依頼に関係する構成、配布元、実行時の保存先を確認してから変更する。現行の挙動は Compose とスクリプトで確認する。関連文書との食い違いを見つけたら、依頼範囲の中で整合を取る。
 
 ## 必要なときに参照する資料
 
-- Swarm 構成、デプロイ、公開範囲: `deploys/README.md`、対象の `deploys/*/compose.yml`、`script/deploy_swarm.sh`
+- Swarm 構成、デプロイ、公開範囲: `deploys/README.md`、対象の `deploys/*/compose.yml`、`script/bootstrap_swarm.sh`
 - Plugin やイメージの更新: `deploys/versions.md`、`minecraft/java/plugins.txt`、`minecraft/README.md`
 - Minecraft の実機確認: `minecraft/README.md`
 - Resource Pack、ValhallaMMO の Digging Loot、役職旗: それぞれ `minecraft/java/resourcepack/README.md`、`minecraft/java/plugins/ValhallaMMO/DIGGING_LOOT.md`、`minecraft/java/plugins/ExecutableItems/MAYOR_FLAG_SETUP.md`
