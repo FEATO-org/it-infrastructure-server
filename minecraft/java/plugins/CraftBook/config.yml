@@ -13,11 +13,7 @@ enabled-mechanics:
   - Bridge
   - Gate
   - MinecartBooster
-  - MinecartDeposit
-  - MinecartElevator
-  - MinecartReverser
   - MinecartSpeedModifiers
-  - MinecartStation
   - Pipes
 
 # A list of CraftBook mechanics that are disabled, for easy copy/pastability to the enabled list.
@@ -68,10 +64,10 @@ disabled-mechanics:
   - MinecartCollisionEntry
   - MinecartConstantSpeed
   - MinecartDecay
-  # - MinecartDeposit
+  - MinecartDeposit
   - MinecartDispenser
   - MinecartEjector
-  # - MinecartElevator
+  - MinecartElevator
   - MinecartEmptySlowdown
   - MinecartExitRemover
   - MinecartFallModifier
@@ -84,10 +80,10 @@ disabled-mechanics:
   - MinecartPlaceAnywhere
   - MinecartRailPlacer
   - MinecartRemoveEntities
-  # - MinecartReverser
+  - MinecartReverser
   - MinecartSorter
   # - MinecartSpeedModifiers
-  # - MinecartStation
+  - MinecartStation
   - MinecartTeleporter
   - MinecartTemporaryCart
   - MinecartVisionSteering
@@ -150,7 +146,7 @@ debug-mode-file-logging: false
 # Enable certain debug types when debug mode is enabled.
 debug-flags: []
 
-# Enables random easter eggs. Can be from console messages on startup for a special occasion, to funny little effects (Always harmless, won't mess anything up)
+# Enables random easter eggs. Can be from console messages on startup for a special occasion, to funny little effects with IC's and other mechanics (Always harmless, won't mess anything up)
 easter-eggs: false
 
 # Random numbers are much more random, with a small cost to CPU usage.
