@@ -24,4 +24,6 @@ reason: 通常の金塊系アイテムと見分けにくかったためです。
 ---
 ```
 
-`category` は `feature`、`content`、`improvement`、`balance`、`fix` から選ぶ。`scope` は対象を表す短い kebab-case、`change` は利用者から見た変更、`reason` は変更理由を書く。
+`category` は `feature`、`content`、`balance`、`improvement`、`fix`、`system`、`breaking` から選ぶ。`scope` は対象を表す短い kebab-case、`change` は利用者から見た具体的な変更事実を1行で書く。`reason` は任意で、確認できた変更理由がある場合だけ1行で書く。本文や他のフィールドは追加しない。ファイル名は英小文字・数字・ハイフンによる kebab-case にする。
+
+リリース手順は [パッチノート運用](../docs/patch-notes.md) を参照する。

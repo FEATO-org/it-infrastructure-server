@@ -21,6 +21,13 @@ Docker Swarm 上の本番インフラと Minecraft サーバーを管理する�
 
 - プレイヤーやサービス利用者が認識できる挙動、表示、利用条件の変更には、実装経路（Skill、直接修正、Codex、手動）に関係なく `changes/pending/<kebab-case>.md` を追加する。具体的な判定と形式は `changes/README.md` に従う。
 - 内部変更だけなら記録は不要。ユーザー影響が微妙な場合は記録を作る側に倒し、変更内容や理由を事実として書けない場合はユーザーに確認する。
+- 完成パッチノートと `changes/released/` への移動は、`develop` 集約後の手動 Release Preparation Workflow で行う。通常開発では `changes/pending/` を維持し、リリースの手順と確認事項は `docs/patch-notes.md` に従う。
+
+## ブランチとPR
+
+- 通常の設定・コード・文書の編集は作業ブランチで行い、`changes/pending/` の該当記録とともに `develop` 向けPRで集約する。`main` へ直接上げない。
+- リリース時は Workflow が `develop` から `deploy/<version>` を作る。このブランチから `main` 向けのリリースPRと `develop` 向けの同期PRを作り、先に `main`、本番・公開確認後に `develop` へマージする。両PRを自動マージしない。
+- このリリース機構自体の変更は、初回利用前に `main` と `develop` の両方へ反映する。以降の運用は `docs/patch-notes.md` を参照する。
 
 ## 秘密情報と本番
 
