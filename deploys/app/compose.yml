@@ -139,6 +139,8 @@ services:
       REPLACE_ENV_VARIABLE_PREFIX: CFG_
       CFG_FORWARDING_SECRET_FILE: /run/secrets/forwarding_secret
       CFG_LUCKPERMS_PASSWORD_FILE: /run/secrets/luckperms_db_password
+      RESOURCE_PACK: "https://drive.usercontent.google.com/download?id=1quBgcmYl9b2XyShDnLKpS7XQq-l3ZqOw&export=download&confirm=t"
+      RESOURCE_PACK_SHA1: "d8f1ff8feee62ced60beb4333687829f0bc0647b"
       RESOURCE_PACK_ENFORCE: "FALSE"
       ENFORCE_SECURE_PROFILE: "FALSE"
       GUI: "FALSE"

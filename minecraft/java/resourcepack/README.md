@@ -16,9 +16,13 @@ python minecraft/java/resourcepack/merge.py \
   minecraft/java/resourcepack/sources/BackpackPlus_Resourcepack_1_21_4.zip
 ```
 
-生成後は `resources/minecraft/resourcepacks/java/feato-resource-pack.zip` へコピーし、`script/copy_plugins_to_remote.sh` でdeployment nodeへ配布します。
+生成後はZIPを公開ダウンロードURLへアップロードします。Java版クライアントへの配信元は公開URLです。`resources/minecraft/resourcepacks/java/feato-resource-pack.zip` へコピーし、`script/copy_plugins_to_remote.sh` でdeployment nodeへ配布するだけでは、Java版クライアントへの配信は有効になりません。
 
-出力ZIPと隣接する`.sha1`ファイルはGit管理対象外です。ZIPを実在する公開URLで配布した後、`.sha1`ファイルの40文字の値をMinecraftの`resource-pack-sha1`へ設定してください。`pack.mcmeta`は統合用設定へ置き換え、`overrides/pack.png`がある場合のみ出力パックのアイコンとして採用します。入力パック固有の`pack.png`とルートの`version.txt`は出力しません。
+出力ZIPと隣接する`.sha1`ファイルはGit管理対象外です。公開URLを `deploys/app/compose.yml` のPaperサービスの `RESOURCE_PACK`、`.sha1`ファイルの40文字の値を `RESOURCE_PACK_SHA1` へ設定してください。起動時に永続Volume内の `/data/server.properties` の `resource-pack` と `resource-pack-sha1` へ反映されます。`RESOURCE_PACK_ENFORCE: "FALSE"` により、Java版プレイヤーはリソースパックの導入を拒否しても接続できます。URLやZIPを更新するときはSHA1も合わせて更新してください。
+
+appスタックをデプロイした後、Java版クライアントでダウンロード・適用・表示を確認し、導入を拒否しても接続できることを確認してください。この設定によるBedrock版リソースパックの配信は行いません。指定URLからの取得、SHA1の一致、本番での適用は未確認です。
+
+`pack.mcmeta`は統合用設定へ置き換え、`overrides/pack.png`がある場合のみ出力パックのアイコンとして採用します。入力パック固有の`pack.png`とルートの`version.txt`は出力しません。
 
 複数の入力に同じパスで異なる内容のファイルがある場合、原則として統合はエラーで終了します。`assets/*/lang/*.json`と`assets/*/sounds.json`はエントリをキー単位で統合します。`assets/minecraft/items/*.json`は、同一fallbackを持つ`custom_model_data`の`range_dispatch`に限り、thresholdを衝突検知して昇順に統合します。同じキー／thresholdの値が異なる場合や、不正なJSON・重複キーがある場合はエラーで停止し、後勝ち上書きは行いません。言語ファイルでは文字列以外の値も拒否します。Modern Gunsのアセットは編集しないでください。
 
