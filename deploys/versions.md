@@ -161,3 +161,21 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 Hurricane追加前に、Paper 26.2 build 126 / Java 25で全19 Pluginを同時に有効化し、正常停止を確認しました。FancyNpcs 2.12.0、squaremap 1.3.15、DualHorse 1.5.4、Better Horses 6.3を含みます。squaremapは8123番で起動し、ValhallaMMOはja-jp、Backpack Plusはjpn、EconomyShopGUIはlang-jp.ymlを読み込みました。ExecutableItemsはemergency_returnを含む追跡アイテム1件を読み込み、EconomyShopGUIはfeato_shop 1セクション/1ショップとEssentialsX Economy接続を確認しました。Hurricaneは公式READMEの対応表記が26.1までのため、Paper 26.2での起動ログと両collision workaroundの実機動作は未検証です。
 
 Better HorsesはProtocolLibなしでも起動しますが一部機能を無効化します。DualHorseの配布metadataは26.1.2までのため、26.2では起動確認に加えて実プレイヤーで二人乗り、再接続、馬データ保存、Better Horsesとの併用を確認してください。NPCクリック、帰還札の100G徴収・1回消費・teleport、Java/Bedrock接続はクライアント試験が必要です。
+
+## Portainer 用 custom images
+
+base image と Minecraft/Velocity/plugin の版は変更していません。build context は
+repository root です。配布先は GHCR の `ghcr.io/feato-org/feato-*`、tag は `main` と
+`sha-<full commit SHA>` です。取得・build 経路は `.github/workflows/swarm-images.yml`。
+
+| Image | Base / upstream | 検証 |
+| --- | --- | --- |
+| feato-minecraft-server | [itzg/minecraft-server:java25-graalvm](https://hub.docker.com/r/itzg/minecraft-server) | local build、同梱先・script 構文確認。Paper 本番起動未確認 |
+| feato-minecraft-proxy | [itzg/mc-proxy:java25](https://hub.docker.com/r/itzg/mc-proxy) | local build、同梱先・script 構文確認。Velocity 本番起動未確認 |
+| feato-nginx | [nginx:1.30.5](https://hub.docker.com/_/nginx) | local build、一時証明書で nginx -t 成功。local HTTP/Java TCP/Bedrock TCP の DNS 追従確認。本番・UDP 未確認 |
+| feato-fluent-bit | [fluent-bit:5.1.2](https://cr.fluentbit.io/fluent/fluent-bit) | local build、dry-run 成功。本番送信未確認 |
+| feato-mariadb | [mariadb:13.0.2](https://hub.docker.com/_/mariadb) | local build、init script 構文確認。本番 DB 起動未確認 |
+
+GHCR の初回公開は main merge 後です。PR の build は push/deploy を行いません。
+
+既存 Bedrock pack 2件/custom mapping 4件は本番配布元と実行中 Proxy の SHA-256 を照合して回収し、内容変更なしで同梱しました。[アセット一覧](../resources/minecraft/ASSETS.md)を参照してください。

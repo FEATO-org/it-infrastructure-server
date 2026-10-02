@@ -5,14 +5,8 @@ cd "$(dirname "$0")/.."
 
 : "${REMOTE_HOST:?Set REMOTE_HOST to the deployment node SSH destination}"
 REMOTE_DEPLOY_ROOT="${REMOTE_DEPLOY_ROOT:-/opt/it-infrastructure-server}"
-# Keep old ignored Data Packs out of the curated mount used by the Swarm stack.
-datapacks=(minecraft/java/datapacks/*.zip)
+# Java public downloads and inactive Geyser extensions retain their separate distribution path.
 java_resourcepacks=(resources/minecraft/resourcepacks/java/*.zip)
-bedrock_resourcepacks=(
-  resources/minecraft/resourcepacks/bedrock/*.mcpack
-  resources/minecraft/resourcepacks/bedrock/*.zip
-)
-geyser_custom_mappings=(resources/minecraft/geyser/custom_mappings/*.json)
 geyser_extensions=(resources/minecraft/geyser/extensions/*.jar)
 
 if [[ ! "$REMOTE_DEPLOY_ROOT" =~ ^/[A-Za-z0-9._/-]+$ ]]; then
@@ -22,21 +16,10 @@ fi
 
 ssh "$REMOTE_HOST" mkdir -p -- \
   "$REMOTE_DEPLOY_ROOT/resources/minecraft/resourcepacks/java" \
-  "$REMOTE_DEPLOY_ROOT/resources/minecraft/resourcepacks/bedrock" \
-  "$REMOTE_DEPLOY_ROOT/resources/minecraft/geyser/custom_mappings" \
   "$REMOTE_DEPLOY_ROOT/resources/minecraft/geyser/extensions"
 
-if (( ${#datapacks[@]} )); then
-  scp "${datapacks[@]}" "${REMOTE_HOST}:${REMOTE_DEPLOY_ROOT}/minecraft/java/datapacks/"
-fi
 if (( ${#java_resourcepacks[@]} )); then
   scp "${java_resourcepacks[@]}" "${REMOTE_HOST}:${REMOTE_DEPLOY_ROOT}/resources/minecraft/resourcepacks/java/"
-fi
-if (( ${#bedrock_resourcepacks[@]} )); then
-  scp "${bedrock_resourcepacks[@]}" "${REMOTE_HOST}:${REMOTE_DEPLOY_ROOT}/resources/minecraft/resourcepacks/bedrock/"
-fi
-if (( ${#geyser_custom_mappings[@]} )); then
-  scp "${geyser_custom_mappings[@]}" "${REMOTE_HOST}:${REMOTE_DEPLOY_ROOT}/resources/minecraft/geyser/custom_mappings/"
 fi
 if (( ${#geyser_extensions[@]} )); then
   scp "${geyser_extensions[@]}" "${REMOTE_HOST}:${REMOTE_DEPLOY_ROOT}/resources/minecraft/geyser/extensions/"

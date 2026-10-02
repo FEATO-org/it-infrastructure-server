@@ -37,7 +37,7 @@ services:
     logging: *default-logging
 
   minecraft-proxy:
-    image: itzg/mc-proxy:java25
+    image: ${MINECRAFT_PROXY_IMAGE:-ghcr.io/feato-org/feato-minecraft-proxy:main}
     entrypoint: [ "/bin/bash", "/rcon-init/proxy-rcon-entrypoint.sh" ]
     command: [ "/usr/bin/run-bungeecord.sh" ]
     environment:
@@ -73,12 +73,6 @@ services:
         target: floodgate_key
     volumes:
       - minecraft_proxy_data:/server
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/proxy-rcon-entrypoint.sh:/rcon-init/proxy-rcon-entrypoint.sh:ro
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/patches:/patches:ro
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/config:/config:ro
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft-proxy/plugins:/plugins:ro
-      - ${MINECRAFT_ASSET_ROOT:-/opt/it-infrastructure-server/resources/minecraft}/resourcepacks/bedrock:/plugins/Geyser-Velocity/packs:ro
-      - ${MINECRAFT_ASSET_ROOT:-/opt/it-infrastructure-server/resources/minecraft}/geyser/custom_mappings:/plugins/Geyser-Velocity/custom_mappings:ro
     networks:
       - minecraft-ingress-network
       - minecraft-backend-network
@@ -108,7 +102,7 @@ services:
     logging: *default-logging
 
   minecraft-server:
-    image: ${MINECRAFT_SERVER_IMAGE:-itzg/minecraft-server:java25-graalvm}
+    image: ${MINECRAFT_SERVER_IMAGE:-ghcr.io/feato-org/feato-minecraft-server:main}
     environment:
       EULA: "TRUE"
       ONLINE_MODE: "FALSE"
@@ -170,15 +164,6 @@ services:
         target: floodgate_key
     volumes:
       - minecraft_server_data:/data
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/plugins.txt:/extras/plugins.txt:ro
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/copy-floodgate-key.sh:/extras/copy-floodgate-key.sh:ro
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/plugins:/plugins:ro
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/bukkit.yml:/config/bukkit.yml:ro
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/spigot.yml:/config/spigot.yml:ro
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/paper-global.yml:/config/config/paper-global.yml:ro
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/paper-world-defaults.yml:/config/config/paper-world-defaults.yml:ro
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/datapacks:/extras/datapacks:ro
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/datapacks.txt:/extras/datapacks.txt:ro
     networks:
       - minecraft-backend-network
       - database-network
