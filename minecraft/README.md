@@ -214,6 +214,14 @@ ExecutableItemsの役職旗は通常のBannerとして設置でき、特殊能�
 
 `setup_minecraft_permissions.sh`は通常のEIアイテム操作permissionを一般グループへ付与し、追加ロール`mayor`と`guard_captain`を作成します。`mayor`には`feato.mayor`、`ei.item.mayor_flag`に加え、村の公共設備を運営するための例外としてMineGames Slotsの`slots.admin`を付与します。村長は引き続きサーバー管理者ではなく、OP権限やサーバー全般の管理権限は持ちません。`slots.admin`は設置だけでなくグローバル設定や資金引き出しまで含む広い権限です。`guard_captain`には従来の専用permissionのみを付与します。
 
+## 役場職員 / 行政代執行文書
+
+役場職員はLuckPermsの補助グループ `town_clerk`（`feato.town_clerk`）を持ち、行政代執行文書（`administrative_enforcement_order`）をEssentialsX kitで1枚10Gで購入できます。購入用kit権限は役場職員だけに付与し、文書は警備隊などへ自由に譲渡できます。使用は一般プレイヤーも可能です。
+
+右クリックで1枚消費し、使用者本人に採掘速度上昇IV・火炎耐性I・コンジットパワーIを90秒、攻撃力上昇II・耐性IIを60秒、発光I・空腹IIを120秒付与します。使用クールダウンはありません。村長の許可は運用上のルールで、システムの発動条件にはしません。
+
+販売NPCの登録、役職の付与・解除、公開前の確認は [行政代執行文書セットアップ](java/plugins/ExecutableItems/ADMINISTRATIVE_ENFORCEMENT_ORDER_SETUP.md) を参照してください。NPCは管理者によるWorld上での登録が必要です。
+
 ## 古銭換金
 
 古銭生成と換金は別Pluginとして運用します。
