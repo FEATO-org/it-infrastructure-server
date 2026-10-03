@@ -19,6 +19,7 @@ from common import check_version
 
 PENDING = "discord-delivery-pending.json"
 SENT = "discord-delivery-sent.json"
+DISCORD_USER_AGENT = "DiscordBot (https://github.com/FEATO-org/it-infrastructure-server, 1.0)"
 
 
 def gh(*args: str) -> str:
@@ -54,6 +55,17 @@ def webhook_url(value: str) -> str:
     query = [(key, item) for key, item in parse_qsl(parsed.query) if key != "wait"]
     query.append(("wait", "true"))
     return urlunsplit(parsed._replace(query=urlencode(query)))
+
+
+def discord_error_code(error: HTTPError) -> int | None:
+    if error.fp is None:
+        return None
+    try:
+        body = json.loads(error.read(4096))
+    except (OSError, ValueError, TypeError):
+        return None
+    code = body.get("code") if isinstance(body, dict) else None
+    return code if type(code) is int else None
 
 
 def main() -> int:
@@ -97,7 +109,12 @@ def main() -> int:
             # pending asset blocks automatic retries and therefore duplicate posts.
             for payload in payloads:
                 try:
-                    request = Request(webhook, data=json.dumps(payload, ensure_ascii=False).encode("utf-8"), headers={"Content-Type": "application/json"}, method="POST")
+                    request = Request(
+                        webhook,
+                        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+                        headers={"Content-Type": "application/json", "User-Agent": DISCORD_USER_AGENT},
+                        method="POST",
+                    )
                     with urlopen(request, timeout=30) as response:
                         if response.status != 200:
                             raise ValueError(f"Discord returned HTTP {response.status}")
@@ -105,7 +122,9 @@ def main() -> int:
                         if not isinstance(confirmation, dict) or not confirmation.get("id"):
                             raise ValueError("Discord did not confirm a message ID")
                 except HTTPError as exc:
-                    raise ValueError(f"Discord returned HTTP {exc.code}; delivery state requires manual review") from None
+                    code = discord_error_code(exc)
+                    detail = f" (Discord API code {code})" if code is not None else ""
+                    raise ValueError(f"Discord returned HTTP {exc.code}{detail}; delivery state requires manual review") from None
                 except URLError as exc:
                     raise ValueError(f"Discord delivery uncertain: {type(exc.reason).__name__}") from None
                 except (OSError, HTTPException) as exc:

@@ -14,6 +14,8 @@ Repository Actions secret `DISCORD_PATCHNOTE_WEBHOOK_URL` が必要。Actions �
 
 公開処理は、今回のpushで追加されたパッチノートと、そのcommitをマージした `deploy/<version> → main` PRが一致する場合だけ動作する。GitHub APIがエラーになった場合は、Releaseやtagが存在しないと推測して作成を続けず停止する。既存Releaseの本文が異なる場合やdraft / prereleaseの場合も停止する。
 
+Discordへの送信はAPI指定形式の `User-Agent` を付ける。HTTPエラー時はステータスと、JSONで返された数値のAPIエラーコードだけを記録し、レスポンス本文やWebhook URLは出力しない。403だけではURL・権限の問題とCloudflareによる拒否を確定できない。送信コードを修正した場合、過去のrunを再実行しても元のcommitのコードが使われるため、修正済みコードを使う復旧手順が必要になる。
+
 ## ブランチ保護と復旧
 
 `main` と `develop` はPR経由の更新と `validate` チェックを必須にし、管理者にも適用する。force pushとブランチ削除を許可しない。`validate` は変更記録とパッチノート用テストに加え、PRの向きも確認する。通常の作業PRは `develop` 向け、`main` 向けは `deploy/YYYY-MM-DD.N` のリリースPRだけとする。上記の初期導入ブランチは対象ファイルを制限した例外とする。

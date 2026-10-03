@@ -94,6 +94,11 @@ class PublishReleaseTests(unittest.TestCase):
         self.assertEqual(self.run_publish()[0], 0)
         self.assertNotIn(("release", "create"), [call.args[:2] for call in self.gh.call_args_list])
         self.open.assert_called_once()
+        request = self.open.call_args.args[0]
+        self.assertEqual(request.get_header("User-agent"), publish_release.DISCORD_USER_AGENT)
+        self.assertTrue(request.get_header("User-agent").startswith("DiscordBot ("))
+        self.assertEqual(request.get_header("Content-type"), "application/json")
+        self.assertEqual(request.get_method(), "POST")
 
     def test_orphan_tag_and_api_errors_cannot_create_a_release(self):
         for responses in ([None, {"ref": "tag"}], [ValueError("API unavailable")], [None, ValueError("API unavailable")]):
@@ -127,6 +132,28 @@ class PublishReleaseTests(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertIn("TimeoutError", output)
         self.assertNotIn("private-token", output)
+
+    def test_discord_json_error_logs_only_numeric_code(self):
+        secret_url = os.environ["DISCORD_PATCHNOTE_WEBHOOK_URL"]
+        body = json.dumps({"code": 40333, "message": secret_url}).encode()
+        self.open.side_effect = HTTPError(secret_url, 403, "Forbidden", {}, io.BytesIO(body))
+        code, output = self.run_publish()
+        self.assertEqual(code, 1)
+        self.assertIn("Discord API code 40333", output)
+        self.assertNotIn("private-token", output)
+        self.assertEqual([call.args[:2] for call in self.gh.call_args_list], [("release", "upload")])
+
+    def test_discord_non_numeric_or_html_errors_are_not_logged(self):
+        secret_url = os.environ["DISCORD_PATCHNOTE_WEBHOOK_URL"]
+        bodies = [b"<html>private-token</html>", json.dumps({"code": secret_url}).encode(), b"[]"]
+        for body in bodies:
+            with self.subTest(body=body):
+                self.open.side_effect = HTTPError(secret_url, 403, "Forbidden", {}, io.BytesIO(body))
+                code, output = self.run_publish()
+                self.assertEqual(code, 1)
+                self.assertIn("HTTP 403", output)
+                self.assertNotIn("Discord API code", output)
+                self.assertNotIn("private-token", output)
 
     def test_invalid_webhook_is_rejected_before_writes(self):
         with patch.dict(os.environ, {"DISCORD_PATCHNOTE_WEBHOOK_URL": "https://private-token@discord.com/bad"}):
