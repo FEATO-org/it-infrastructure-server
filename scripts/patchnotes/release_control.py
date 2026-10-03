@@ -53,6 +53,17 @@ def detect(before: str, after: str) -> str | None:
     return version
 
 
+def resume(version: str) -> str:
+    check_version(version)
+    commit = command("git", "rev-parse", "--verify", f"refs/tags/server-{version}^{{commit}}")
+    if not re.fullmatch(r"[0-9a-f]{40}", commit):
+        raise ValueError("release tag did not resolve to a commit")
+    command("git", "merge-base", "--is-ancestor", commit, "HEAD")
+    if detect(f"{commit}^", commit) != version:
+        raise ValueError(f"{version}: release tag does not match the merged release PR")
+    return commit
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     sub = parser.add_subparsers(dest="action", required=True)
@@ -60,17 +71,27 @@ def main() -> int:
     select = sub.add_parser("detect")
     select.add_argument("--before", required=True)
     select.add_argument("--after", required=True)
+    recovery = sub.add_parser("resume")
+    recovery.add_argument("--version", required=True)
     args = parser.parse_args()
     try:
         if args.action == "next-version":
             print(next_version())
         else:
-            version = detect(args.before, args.after)
+            if args.action == "resume":
+                if os.environ.get("GITHUB_REF") != "refs/heads/main":
+                    raise ValueError("recovery must run on main")
+                commit = resume(args.version)
+                version = args.version
+            else:
+                commit = args.after
+                version = detect(args.before, args.after)
             output = os.environ["GITHUB_OUTPUT"]
             with open(output, "a", encoding="utf-8") as handle:
                 handle.write(f"publish={'true' if version else 'false'}\n")
                 if version:
                     handle.write(f"version={version}\n")
+                    handle.write(f"commit={commit}\n")
     except (KeyError, OSError, subprocess.CalledProcessError, ValueError) as exc:
         print(f"release control: {exc}", file=sys.stderr)
         return 1

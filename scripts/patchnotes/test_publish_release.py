@@ -60,9 +60,9 @@ class PublishReleaseTests(unittest.TestCase):
             "DISCORD_PATCHNOTE_WEBHOOK_URL": "https://discord.com/api/webhooks/example/private-token",
         }))
 
-    def run_publish(self):
+    def run_publish(self, *extra_args):
         args = ["publish", "--version", "2026-09-29.1", "--commit", "a" * 40,
-                "--patchnote", str(self.note), "--payload", str(self.payload)]
+                "--patchnote", str(self.note), "--payload", str(self.payload), *extra_args]
         output = io.StringIO()
         with patch.object(sys, "argv", args), contextlib.redirect_stdout(output), contextlib.redirect_stderr(output):
             return publish_release.main(), output.getvalue()
@@ -160,6 +160,42 @@ class PublishReleaseTests(unittest.TestCase):
             code, output = self.run_publish()
         self.assertEqual(code, 1)
         self.assertNotIn("private-token", output)
+        self.gh.assert_not_called()
+        self.open.assert_not_called()
+
+    def test_manual_recovery_replaces_pending_then_sends_without_creating_release(self):
+        self.release["assets"] = [{"name": publish_release.PENDING}]
+        self.assertEqual(self.run_publish("--existing-release-only", "--retry-undelivered")[0], 0)
+        self.assertEqual([call.args[:2] for call in self.gh.call_args_list], [
+            ("release", "delete-asset"), ("release", "upload"),
+            ("release", "upload"), ("release", "delete-asset"),
+        ])
+        self.open.assert_called_once()
+
+    def test_manual_recovery_cannot_create_missing_release(self):
+        self.api.return_value = None
+        code, output = self.run_publish("--existing-release-only", "--retry-undelivered")
+        self.assertEqual(code, 1)
+        self.assertIn("requires an existing GitHub Release", output)
+        self.gh.assert_not_called()
+        self.open.assert_not_called()
+
+    def test_manual_recovery_skips_already_sent_release(self):
+        self.release["assets"] = [{"name": publish_release.SENT}]
+        self.assertEqual(self.run_publish("--existing-release-only", "--retry-undelivered")[0], 0)
+        self.gh.assert_not_called()
+        self.open.assert_not_called()
+
+    def test_manual_recovery_preserves_pending_when_webhook_is_invalid(self):
+        self.release["assets"] = [{"name": publish_release.PENDING}]
+        with patch.dict(os.environ, {"DISCORD_PATCHNOTE_WEBHOOK_URL": "invalid"}):
+            self.assertEqual(self.run_publish("--existing-release-only", "--retry-undelivered")[0], 1)
+        self.gh.assert_not_called()
+        self.open.assert_not_called()
+
+    def test_retry_requires_existing_release_only(self):
+        self.assertEqual(self.run_publish("--retry-undelivered")[0], 1)
+        self.api.assert_not_called()
         self.gh.assert_not_called()
         self.open.assert_not_called()
 

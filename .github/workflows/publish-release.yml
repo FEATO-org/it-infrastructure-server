@@ -3,6 +3,17 @@ name: Publish Minecraft release
 on:
   push:
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Existing release version to recover (YYYY-MM-DD.N)'
+        required: true
+        type: string
+      confirm_no_delivery:
+        description: 'I checked Discord and none of this release was posted'
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -28,7 +39,20 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           BEFORE: ${{ github.event.before }}
           AFTER: ${{ github.sha }}
-        run: python scripts/patchnotes/release_control.py detect --before "$BEFORE" --after "$AFTER"
+          EVENT_NAME: ${{ github.event_name }}
+          RECOVERY_VERSION: ${{ inputs.version }}
+          CONFIRM_NO_DELIVERY: ${{ inputs.confirm_no_delivery }}
+        run: |
+          set -euo pipefail
+          if [[ "$EVENT_NAME" == workflow_dispatch ]]; then
+            if [[ "$CONFIRM_NO_DELIVERY" != true ]]; then
+              echo "Confirm that no Discord messages were posted before recovery" >&2
+              exit 1
+            fi
+            python scripts/patchnotes/release_control.py resume --version "$RECOVERY_VERSION"
+          else
+            python scripts/patchnotes/release_control.py detect --before "$BEFORE" --after "$AFTER"
+          fi
       - name: Verify generated content and build Discord payload
         if: steps.release.outputs.publish == 'true'
         env:
@@ -49,9 +73,15 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           DISCORD_PATCHNOTE_WEBHOOK_URL: ${{ secrets.DISCORD_PATCHNOTE_WEBHOOK_URL }}
           VERSION: ${{ steps.release.outputs.version }}
-          COMMIT: ${{ github.sha }}
+          COMMIT: ${{ steps.release.outputs.commit }}
+          EVENT_NAME: ${{ github.event_name }}
         run: |
+          set -euo pipefail
+          recovery_args=()
+          if [[ "$EVENT_NAME" == workflow_dispatch ]]; then
+            recovery_args=(--existing-release-only --retry-undelivered)
+          fi
           python scripts/patchnotes/publish_release.py \
             --version "$VERSION" --commit "$COMMIT" \
             --patchnote "patchnotes/${VERSION:0:4}/$VERSION.md" \
-            --payload "$RUNNER_TEMP/discord-payload.json"
+            --payload "$RUNNER_TEMP/discord-payload.json" "${recovery_args[@]}"

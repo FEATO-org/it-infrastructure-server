@@ -74,9 +74,13 @@ def main() -> int:
     parser.add_argument("--commit", required=True)
     parser.add_argument("--patchnote", type=Path, required=True)
     parser.add_argument("--payload", type=Path, required=True)
+    parser.add_argument("--existing-release-only", action="store_true")
+    parser.add_argument("--retry-undelivered", action="store_true")
     args = parser.parse_args()
     try:
         version = check_version(args.version)
+        if args.retry_undelivered and not args.existing_release_only:
+            raise ValueError("manual retry requires --existing-release-only")
         tag = f"server-{version}"
         note = args.patchnote.read_text(encoding="utf-8")
         payloads = json.loads(args.payload.read_text(encoding="utf-8"))
@@ -85,6 +89,8 @@ def main() -> int:
         endpoint = f"repos/{os.environ['GITHUB_REPOSITORY']}"
         release = github_api(f"{endpoint}/releases/tags/{tag}", allow_not_found=True)
         if release is None:
+            if args.existing_release_only:
+                raise ValueError(f"{tag}: recovery requires an existing GitHub Release")
             # An existing tag without a release is ambiguous: never replace it.
             if github_api(f"{endpoint}/git/ref/tags/{tag}", allow_not_found=True) is not None:
                 raise ValueError(f"{tag}: tag exists without a GitHub Release")
@@ -98,9 +104,11 @@ def main() -> int:
         if SENT in assets:
             print(f"{tag}: already published to Discord")
             return 0
-        if PENDING in assets:
+        if PENDING in assets and not args.retry_undelivered:
             raise ValueError(f"{tag}: Discord delivery is uncertain; inspect webhook channel before manual retry")
         webhook = webhook_url(os.environ["DISCORD_PATCHNOTE_WEBHOOK_URL"])
+        if PENDING in assets:
+            gh("release", "delete-asset", tag, PENDING, "--yes")
         with tempfile.TemporaryDirectory() as temp:
             pending = Path(temp, PENDING)
             pending.write_text(json.dumps({"version": version, "state": "pending"}), encoding="utf-8")
