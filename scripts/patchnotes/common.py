@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import date
+import json
 from pathlib import Path
 import re
 
@@ -30,6 +32,26 @@ class Change:
     reason: str | None
 
 
+def read_value(path: Path, key: str, value: str) -> str:
+    value = value.strip()
+    if value.startswith('"'):
+        try:
+            value = json.loads(value)
+        except ValueError as exc:
+            raise ValueError(f"{path}: {key}: use a valid one-line quoted string") from exc
+    elif value.startswith("'"):
+        if not re.fullmatch(r"'(?:[^']|'')*'", value):
+            raise ValueError(f"{path}: {key}: close the quoted string and double internal quotes")
+        value = value[1:-1].replace("''", "'")
+    elif value in {"null", "Null", "NULL", "~"}:
+        value = ""
+    elif value and value[0] in "|>[{&*!#":
+        raise ValueError(f"{path}: {key}: use a one-line string, not YAML blocks or collections")
+    if not isinstance(value, str) or not value.strip() or value.splitlines() != [value]:
+        raise ValueError(f"{path}: {key}: provide a nonempty one-line value")
+    return value
+
+
 def read_change(path: Path) -> Change:
     if not SAFE_NAME.fullmatch(path.name):
         raise ValueError(f"{path}: filename: use safe kebab-case ending in .md")
@@ -55,10 +77,7 @@ def read_change(path: Path) -> Change:
             raise ValueError(f"{path}: {key}: remove unsupported field")
         if key in values:
             raise ValueError(f"{path}: {key}: remove duplicate field")
-        value = value.strip()
-        if not value or value in {"|", ">", "|-", ">-"}:
-            raise ValueError(f"{path}: {key}: provide a nonempty one-line value")
-        values[key] = value
+        values[key] = read_value(path, key, value)
     for key in ("category", "scope", "change"):
         if key not in values:
             raise ValueError(f"{path}: {key}: add required field")
@@ -77,7 +96,7 @@ def load_changes(directory: Path, *, require_nonempty: bool = False) -> list[Cha
     for path in paths:
         if path.name == ".gitkeep":
             continue
-        if not path.is_file():
+        if path.is_symlink() or not path.is_file():
             raise ValueError(f"{path}: filename: expected a regular .md file")
         changes.append(read_change(path))
     if require_nonempty and not changes:
@@ -88,4 +107,8 @@ def load_changes(directory: Path, *, require_nonempty: bool = False) -> list[Cha
 def check_version(version: str) -> str:
     if not VERSION.fullmatch(version):
         raise ValueError(f"version: expected YYYY-MM-DD.N, got {version!r}")
+    try:
+        date.fromisoformat(version[:10])
+    except ValueError as exc:
+        raise ValueError("version: use a valid calendar date") from exc
     return version

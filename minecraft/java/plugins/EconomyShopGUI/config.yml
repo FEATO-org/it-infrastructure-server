@@ -36,12 +36,12 @@
 #                                                                                  #
 ####################################################################################
 #
-config-version: 2.0.1.7
+config-version: 2.0.1.9
 # WARNING: Do not change this value as this might end up in a plugin that does not work!!
 #----------------------------------------------Language-------------------------------------------------
 
 # Here you can change the language of the plugin.
-language-file: lang-jp.yml
+language-file: lang-ja.yml
 
 # See this link for all available language files: https://wiki.gpplugins.com/economyshopgui/file-configuration/languages#currently-supported-languages
 
@@ -300,6 +300,20 @@ use-item-name: true
 
 
 #-----------------------------------------------Bedrock--------------------------------------------------
+
+# Requires Floodgate on the Paper server; Java players keep the inventory GUI.
+bedrock-forms:
+  enable: true
+  # Use standard list forms without JsonShopForms or its resource pack.
+  use-grid-forms: false
+  only-enable-for-touch-devices: false
+  # Select an item with one tap on touch devices as well.
+  use-double-click-for-touch-devices: false
+  # Geyser runs on Velocity, so cache the item icons using the upstream defaults.
+  item-ids:
+    cache: 48
+    geyser-palette-version: ""
+    force-update: false
 
 # When this option is true, all GUI screens opened for bedrock players will default to a full sized inventory
 resize-gui-for-bedrock: true

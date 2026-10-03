@@ -3,3 +3,7 @@ kits:
     delay: 0
     items:
       - '/ei give {USERNAME} emergency_return 1'
+  administrative_enforcement_order:
+    delay: 0
+    items:
+      - '/ei give {USERNAME} administrative_enforcement_order 1'

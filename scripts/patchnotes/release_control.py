@@ -12,7 +12,7 @@ import subprocess
 import sys
 from zoneinfo import ZoneInfo
 
-from common import VERSION
+from common import check_version
 
 
 def command(*args: str) -> str:
@@ -42,11 +42,10 @@ def detect(before: str, after: str) -> str | None:
     if not match or match.group(1) != match.group(2)[:4]:
         raise ValueError(f"invalid added patchnote path: {notes[0]}")
     version = match.group(2)
-    if not VERSION.fullmatch(version):
-        raise ValueError("invalid release version")
+    check_version(version)
     repository = os.environ["GITHUB_REPOSITORY"]
     pulls = json.loads(command("gh", "api", f"repos/{repository}/commits/{after}/pulls"))
-    matching = [pr for pr in pulls if pr.get("merged_at") and pr["base"]["ref"] == "main" and pr["head"]["ref"] == f"deploy/{version}"]
+    matching = [pr for pr in pulls if pr.get("merged_at") and pr.get("merge_commit_sha") == after and pr["base"]["ref"] == "main" and pr["head"]["ref"] == f"deploy/{version}"]
     if len(matching) != 1:
         raise ValueError(f"{version}: expected one merged deploy/{version} → main PR associated with commit")
     if not Path(f"changes/released/{version}").is_dir():
