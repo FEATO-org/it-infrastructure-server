@@ -72,7 +72,7 @@ Paper 26.2での実機テストは未実施です。
 ## 日本語化
 
 - EssentialsX: `locale: ja`
-- EconomyShopGUI: `lang-jp.yml`、通貨ロケール`ja-JP`
+- EconomyShopGUI: `lang-ja.yml`（7.3.2同梱）、通貨ロケール`ja-JP`
 - ValhallaMMO: `language: ja-jp`。Gistを原本として追跡
 - Backpack Plus: 公式同梱`jpn`ロケール
 - Better Horses: 追跡する`language.yml`を日本語化
@@ -125,6 +125,10 @@ Wand販売NPCは、販売位置に立って次を実行します。
 経済ProviderはEssentialsX、Vault API層はVaultUnlocked、橋渡しはEssentialsUnlockedです。初期残高200G、通貨記号は金額の後ろ、負残高は禁止です。
 
 `/shop`の`feato_shop`は単一ショップを維持し、EconomyShopGUIの標準ページナビゲーションで「販売」と「買取」を分離します。Java/Bedrockともクリック種別の使い分けを必須にしません。
+
+EconomyShopGUI Free 7.3.2では、Java Editionは従来のInventory GUI、Bedrock Editionは標準のリスト形式Form UIを使用します。`bedrock-forms.enable: true`、`only-enable-for-touch-devices: false`で、iOS/Android以外も含めた全Bedrockプレイヤーを対象にします。タッチ端末も1回の選択で操作できるよう`use-double-click-for-touch-devices: false`とし、`use-grid-forms: false`でJsonShopFormsは利用しません。
+
+既存のVelocity上のGeyserと、同一鍵・`send-floodgate-data: true`で接続したPaper側FloodgateでBedrockを判定します。GeyserがPaper上にないため、FormのアイコンIDはPluginが取得・キャッシュします（上流既定の48時間、palette版の指定なし、強制更新なし）。追跡する`java/plugins/EconomyShopGUI/config.yml`はComposeの`/plugins` mountから起動時に永続Volumeの`/data/plugins/EconomyShopGUI/config.yml`へ同期されます。ファイルの配布後は、起動ログで7.3.2・`lang-ja.yml`の読み込みと適用先の設定を確認してください。
 
 | 商品 | 取引 | 数量 | 価格 |
 | --- | --- | ---: | ---: |
@@ -299,5 +303,10 @@ PaperはMinecraft起動前にSecretを`/data/plugins/floodgate/key.pem`へ毎回
    - 一般PlayerとOP Playerの双方が`/feato-coin-exchange <自分>`を直接実行すると拒否され、残高・古銭が変化しないことを確認する。
 
 Hurricane追加前のローカル検証では、Paper 26.2 build 126 / Java 25で19 Pluginをすべて有効化し、正常停止まで確認しました。確認できた内容は、設定読込、依存解決、コマンド登録、squaremap 8123起動、ValhallaMMO `ja-jp`、Backpack Plus `jpn`、当時追跡していたEI 1アイテム、EconomyShopGUI 1セクション/1ショップ、VaultとEssentialsX Economy連携です。Hurricaneは公式READMEの対応表記が26.1までのため、26.2での起動ログとbamboo / pointed dripstoneの実機動作をデプロイ前に確認してください。
+
+EconomyShopGUI 7.3.2の起動と以下の実クライアント操作は未確認です（Requires runtime verification）。過去の7.2.1の起動確認とは分けて、公開前に確認してください。
+
+- Bedrock: `/shop`が標準Form UIで開くこと、商品を1回選択して購入数量指定へ進めること、購入・売却対象の選択と取引が成立すること、購入→売却・売却→購入の両方向と戻る操作が正常なことを確認する。残高・Inventoryの増減と、サーバーログに例外がないことも確認する。
+- Java: 従来のInventory GUIで商品選択・購入・売却・数量指定・navigationが7.2.1から退行していないことを確認する。
 
 クライアント操作が必要なJava/Bedrockログイン、NPCクリック、100G徴収、帰還札の消費とteleport、商品売買、馬の二人乗り、各Data Pack、古銭dropは本番公開前の実機確認事項です。Better HorsesはProtocolLibなしでも起動しますが、一部機能が無効になるという通知があります。今回ProtocolLibは追加していません。
