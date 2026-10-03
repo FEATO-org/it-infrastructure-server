@@ -43,6 +43,9 @@ jobs:
           python scripts/patchnotes/generate_patchnote.py \
             --version "$VERSION" --input-dir changes/pending \
             --output "patchnotes/${VERSION:0:4}/$VERSION.md"
+          python scripts/patchnotes/generate_discord_payload.py \
+            --version "$VERSION" --input-dir changes/pending \
+            --output "$RUNNER_TEMP/discord-payload.json"
           mkdir -p "changes/released/$VERSION"
           git mv changes/pending/*.md "changes/released/$VERSION/"
           git add "patchnotes/${VERSION:0:4}/$VERSION.md" "changes/released/$VERSION"

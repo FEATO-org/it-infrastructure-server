@@ -27,3 +27,5 @@ reason: 通常の金塊系アイテムと見分けにくかったためです。
 `category` は `feature`、`content`、`balance`、`improvement`、`fix`、`system`、`breaking` から選ぶ。`scope` は対象を表す短い kebab-case、`change` は利用者から見た具体的な変更事実を1行で書く。`reason` は任意で、確認できた変更理由がある場合だけ1行で書く。本文や他のフィールドは追加しない。ファイル名は英小文字・数字・ハイフンによる kebab-case にする。
 
 リリース手順は [パッチノート運用](../docs/patch-notes.md) を参照する。
+
+値は1行の文字列に限定する。引用符なし、YAMLの単一引用符（内部の `'` は `''`）、JSON互換の二重引用符を使える。引用符付きの空文字、`null`、複数行の値、YAMLのblock / collection / aliasは受け付けない。
