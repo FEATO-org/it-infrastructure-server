@@ -32,7 +32,8 @@ def main() -> int:
             raise ValueError("output: expected patchnotes/<year>/<version>.md")
         content = render(version, changes)
         args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(content, encoding="utf-8")
+        with args.output.open("x", encoding="utf-8") as handle:
+            handle.write(content)
     except (OSError, ValueError) as exc:
         print(exc, file=sys.stderr)
         return 1

@@ -6,7 +6,7 @@ import unittest
 from unittest.mock import patch
 from zoneinfo import ZoneInfo
 
-from common import load_changes
+from common import CATEGORIES, check_version, load_changes
 from generate_discord_payload import render as render_discord, units
 from generate_patchnote import render as render_markdown
 from release_control import next_version
@@ -60,6 +60,27 @@ class PatchnoteTests(unittest.TestCase):
             self.assertLessEqual(len(embed["fields"]), 25)
             self.assertLessEqual(units(embed["title"]) + sum(units(field["name"]) + units(field["value"]) for field in embed["fields"]), 6000)
             self.assertTrue(all(units(field["value"]) <= 1024 for field in embed["fields"]))
+        published = "\n".join(field["value"] for payload in payloads for field in payload["embeds"][0]["fields"])
+        self.assertEqual(published.splitlines(), [f"・{item.change}" for item in changes])
+
+    def test_all_categories_have_the_same_order_and_content(self):
+        for category, _ in reversed(CATEGORIES):
+            self.add(category, category, f"{category}を変更しました。")
+        changes = load_changes(self.directory)
+        markdown = render_markdown("2026-09-29.1", changes)
+        fields = render_discord("2026-09-29.1", changes)[0]["embeds"][0]["fields"]
+        self.assertEqual([field["name"] for field in fields], [label for _, label in CATEGORIES])
+        self.assertEqual([line[3:] for line in markdown.splitlines() if line.startswith("## ")], [field["name"] for field in fields])
+        self.assertEqual([line[2:] for line in markdown.splitlines() if line.startswith("- ")], [field["value"][1:] for field in fields])
+
+    def test_oversized_discord_change_is_rejected(self):
+        self.add("oversized", "feature", "😀" * 512)
+        with self.assertRaisesRegex(ValueError, "oversized.md.*1024"):
+            render_discord("2026-09-29.1", load_changes(self.directory))
+
+    def test_invalid_calendar_date_is_rejected(self):
+        with self.assertRaisesRegex(ValueError, "calendar date"):
+            check_version("2026-02-30.1")
 
     def test_version_counts_tags_and_deploy_branches(self):
         today = datetime.now(ZoneInfo("Asia/Tokyo")).strftime("%Y-%m-%d")
