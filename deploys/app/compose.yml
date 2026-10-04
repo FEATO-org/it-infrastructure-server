@@ -116,7 +116,7 @@ services:
       MEMORY: 6G
       VERSION: ${MINECRAFT_VERSION:-26.2}
       TYPE: PAPER
-      # Bridge 0.1.0 requires this exact Paper build.
+      # Bridge requires this exact Paper build.
       PAPER_BUILD: "126"
       GAMEMODE: survival
       DIFFICULTY: normal
