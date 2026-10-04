@@ -7,12 +7,23 @@
 3. `develop` を確認してから、実行ブランチに `develop` を選び `Prepare Minecraft release` を手動実行する。Workflow は東京の日付と既存 tag / deploy branch から `YYYY-MM-DD.N` を採番し、`deploy/<version>` に完成パッチノートと archived changes をコミットする。Discord用payloadも生成して文字数制限を検証し、生成済みパッチノートは上書きしない。
 4. 生成された `main` 向け Release PR と `develop` 向け sync PR の両方を確認する。Bot 作成 PR の validation が承認待ちなら、GitHub 上で実行を承認する。
 5. デプロイと本番確認を終えてから `main` 向け PR をマージする。Workflow はこの PR が追加したパッチノートだけを公開対象にする。
-6. GitHub Release と Discord 投稿を確認する。Discord 投稿結果が不明な場合は Release の `discord-delivery-pending.json` が自動再送を止める。投稿先に何件届いたか確認し、未投稿だと確定できた場合だけ pending asset を削除して同じ Workflow run を再実行する。複数 payload の一部だけ届いていた場合は残りを手動で投稿する。`discord-delivery-sent.json` は送信完了を表す。
+6. GitHub Release と Discord 投稿を確認する。Discord 投稿結果が不明な場合は Release の `discord-delivery-pending.json` が自動再送を止める。未投稿だと確定できた場合だけ、下記の手動復旧を使う。複数 payload の一部だけ届いていた場合は残りを手動で投稿する。`discord-delivery-sent.json` は送信完了を表す。
 7. `develop` 向け sync PR をマージする。`deploy/<version>` ブランチは自動削除しない。
 
 Repository Actions secret `DISCORD_PATCHNOTE_WEBHOOK_URL` が必要。Actions に PR 作成と contents 書き込みを許可し、Ruleset / branch protection で `main` と `develop` のレビュー・必要なチェックを設定する。Release assets を送信状態に使うため、immutable releases は有効化しない。実際の公開は `main` へのマージ後にのみ実行される。
 
 公開処理は、今回のpushで追加されたパッチノートと、そのcommitをマージした `deploy/<version> → main` PRが一致する場合だけ動作する。GitHub APIがエラーになった場合は、Releaseやtagが存在しないと推測して作成を続けず停止する。既存Releaseの本文が異なる場合やdraft / prereleaseの場合も停止する。
+
+Discordへの送信はAPI指定形式の `User-Agent` を付ける。HTTPエラー時はステータスと、JSONで返された数値のAPIエラーコードだけを記録し、レスポンス本文やWebhook URLは出力しない。403だけではURL・権限の問題とCloudflareによる拒否を確定できない。送信コードを修正した場合、過去のrunを再実行しても元のcommitのコードが使われるため、修正済みコードを使う復旧手順が必要になる。
+
+## Discord送信の手動復旧
+
+1. 投稿先で対象バージョンが1件も投稿されていないことを確認する。一部投稿済み・結果不明なら、この手順で全文を再送しない。
+2. 必要なコード修正を `main` に反映する。過去runのRe-runではなく、Actionsの `Publish Minecraft release` で `Run workflow` を選ぶ。
+3. 実行ブランチに `main`、`version` に既存のバージョン（例: `2026-10-03.2`）を指定し、`confirm_no_delivery` にチェックを入れて実行する。
+4. Workflowが成功し、Discord全文投稿とReleaseの `discord-delivery-sent.json` を確認する。
+
+復旧は既存tagがmainにマージ済みの対応するリリースPRのcommitを指し、正式Releaseが存在する場合だけ可能。保存済みchangeから生成した本文とRelease本文の一致も検証する。未投稿の確認を受けた復旧実行だけがpending assetを置き換えて送信を再開し、Releaseやtagは新規作成しない。送信済みなら何も投稿しない。通常の自動公開ではpending assetによる再送停止を維持する。
 
 ## ブランチ保護と復旧
 
