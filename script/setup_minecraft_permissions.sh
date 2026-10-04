@@ -59,6 +59,7 @@ player_deny=(
   EconomyShopGUI.sellgui.all
 )
 admin_allow=(
+  feato.horsemanship.admin
   essentials.balance.others
   essentials.eco
   essentials.setspawn
