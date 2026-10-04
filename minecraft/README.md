@@ -19,17 +19,19 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ EconomyShopGUI Free
                      ├ FancyNpcs
                      ├ squaremap :8123
-                     ├ ValhallaMMO / Magic 11.2.4
+                     ├ ValhallaMMO / Magic 11.2.4 / FEATO Horsemanship 0.2.0
+                     ├ FEATO Gun-Valhalla Bridge 0.1.0 (Phase 1 PoC)
                      ├ SCore / ExecutableItems
                      ├ WorldEdit / CraftBook
                      ├ ImageFrame
+                     ├ BreweryX 3.7.1
                      ├ Better Horses / DualHorse
                      ├ Backpack Plus
                      ├ DeadChest 4.30.0
                      ├ Hurricane (bamboo / pointed dripstone collision only)
                      ├ FEATO Ancient Coin 1.0.0
                      └ FEATO Coin Exchange 1.1.0
-Data Packs: Enchants Plus
+Data Packs: Enchants Plus / Gun Core 1.0.15 / Modern Guns 1.9.3 / Bridge 0.1.0
 Web: nginx dynmap.feato.jp -> squaremap :8123
 ```
 
@@ -59,8 +61,10 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 - 商店・NPC: EconomyShopGUI Free、FancyNpcs
 - マップ: squaremap
 - RPG・アイテム: ValhallaMMO、Magic 11.2.4、SCore、ExecutableItems
+- 銃器スキル検証: FEATO Gun-Valhalla Bridge 0.1.0（Phase 1 PoC）
 - 建築・表示: WorldEdit、CraftBook、ImageFrame
-- 馬・収納: Better Horses、DualHorse、Backpack Plus
+- 馬・収納: Better Horses、DualHorse、FEATO Horsemanship 0.2.0、Backpack Plus
+- 醸造・料理: BreweryX 3.7.1（標準レシピ・日本語表示）
 - 死亡時保護: DeadChest 4.30.0
 - 独自機能: FEATO Ancient Coin 1.0.0、FEATO Coin Exchange 1.1.0
 
@@ -71,6 +75,7 @@ Paper 26.2での実機テストは未実施です。
 
 ## 日本語化
 
+- BreweryX: `language: ja`、追跡する`BreweryX/languages/ja.yml`と標準`recipes.yml`の日本語訳
 - EssentialsX: `locale: ja`
 - EconomyShopGUI: `lang-ja.yml`（7.3.2同梱）、通貨ロケール`ja-JP`
 - ValhallaMMO: `language: ja-jp`。Gistを原本として追跡
@@ -86,6 +91,15 @@ ValhallaMMOの訳は、JAR内英語原本とキー・配列・名前付きプレ
 ```
 
 この処理は[日本語Gist](https://gist.github.com/LenTakayama/e8f65dbce8e58baec96c8554a4eba4e5)を一時領域へ取得し、[検証スクリプト](../script/validate_valhallammo_translation.py)を通過してから置換します。
+
+## 醸造・料理（BreweryX）
+
+BreweryX 3.7.1を公式固定URLから取得します。標準SQLite保存とゲーム挙動を維持し、
+操作案内・品質表示・標準飲料と料理の表示だけ日本語化しています。
+Paper 26.2 build 126で起動と日本語ヘルプを確認しましたが、本体はバージョンを
+`Unknown`と警告します。既存全Pluginとの併用と実製造・飲用は未検証です。
+配置先、翻訳仕様、再起動とコーヒーの手動確認は
+[BreweryX運用手順](java/plugins/BreweryX/README.md)を参照してください。
 
 ## 魔術（ValhallaMMO + Magic）
 
@@ -119,6 +133,40 @@ Wand販売NPCは、販売位置に立って次を実行します。
 `console_command`はConsoleとして`castp <player> <spell>`を実行するため、一般Playerへ`magic.commands.cast`や`magic.commands.castp`は付与しません。
 
 実機では、MagicとValhallaMMOのenable順、魔術profile作成、Spell XP加算、Skill Point総数、Path upgrade、Mana表示・回復、各Spellの成功判定とCooldown、Spell Shop GUI、日本語表示、Java/Bedrockの魔導具操作、統合resource packの表示を確認してください。
+
+## 銃器スキル（FIREARMS Bridge 0.1.0 / Phase 1 PoC）
+
+[公開Release v0.1.0](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/tag/v0.1.0)のPlugin JARとDatapack ZIPを、`java/plugins.txt`と`java/datapacks.txt`の固定URLから取得します。両方のrelease IDは`2`、protocolは`1`です。更新時は必ず両manifestの版を同時に変更してください。
+
+対象はPaper **26.2 build 126** / Java 25 / ValhallaMMO **1.10.3** / Gun Core **1.0.15** / Modern Guns **1.9.3**です。Composeで`PAPER_BUILD: "126"`を固定し、`.env`の`MINECRAFT_VERSION`も26.2であることを適用前に確認します。Gun CoreとModern Gunsは既存の固定版を維持します。build・対象版・Datapack markerの不一致やheartbeat停止ではBridgeが登録を停止するため、起動ログの確認が必要です。起動中の登録待ちではプレイヤーのログインが一時拒否されます。
+
+0.1.0は専用FIREARMS profile、銃器スキルの検証用ツリー、管理者debug、Datapackの互換性確認だけを実装したPoCです。銃撃によるEXP獲得、通常銃撃・武器殴打のDamage連携、Ability効果、最終スキルツリーは未実装です。`tactical-reload`などの設定は将来用で、Phase 1では効果を発揮しません。ValhallaMMOの既存設定は変更せず、必須の`mining`、`weapons_light`、`armor_light`、`armor_heavy`、`archery`は有効なままです。
+
+| 管理対象 | 起動時の配置先 |
+| --- | --- |
+| Plugin JAR | `/data/plugins/feato-gun-valhalla-bridge-plugin-0.1.0.jar` |
+| `java/plugins/FEATOGunValhallaBridge/config.yml` | `/data/plugins/FEATOGunValhallaBridge/config.yml`（`/plugins`から同期） |
+| Datapack ZIP | `/data/${LEVEL:-world}/datapacks/feato-gun-valhalla-bridge-datapack-0.1.0.zip` |
+
+初期値は公開JAR同梱の設定と同じで、`debug.enabled: false`です。検証時だけ追跡設定を`true`に変更して完全再起動し、対象管理者だけに`feato.gunvalhalla.debug`を与えます（Pluginの既定はOP）。一般グループには付与しません。debugを有効にしても銃撃EXPは自動付与されません。
+
+起動時の旧版削除は、Plugin側では既存FEATO JAR対象にBridge JARのglobを追加し、Datapack側では`feato-gun-valhalla-bridge-datapack-*.zip`だけを対象とします。別の名前の旧版や展開済みBridgeディレクトリがある場合は、停止中に手動で退避してください。Datapackの選択的削除はitzgの[setupスクリプト](https://github.com/itzg/docker-minecraft-server/blob/master/scripts/start-setupDatapack)と[取得helperのprune仕様](https://github.com/itzg/mc-image-helper/blob/main/README.md)に従います。
+
+### 適用前の確認と戻し方
+
+現時点で本番へ適用しておらず、Phase 1の実機検証も未完了です。本番環境しかないため、先に本番DBを使用しない隔離した検証環境を用意し、[上流のPhase 1手順](https://github.com/FEATO-org/feato-gun-valhalla-bridge/blob/v0.1.0/docs/poc.md#reproducible-live-test-procedure-dedicated-test-server)で保存・login・再起動・respecを確認します。共通Skill Pointと既存Skillへの影響も記録してください。`SKILLS_REFUND_EXP`は他SkillのPerkもresetするため、本番プレイヤーへの検証には使いません。
+
+実機検証を終えて適用する際は、サーバーを正常停止してWorldとValhallaMMOのSQLite DB（実際の保存先を確認）をバックアップし、manifest・設定・Composeを配布して完全起動します。`/reload`は使いません。実際のPaper build、ValhallaMMOとBridgeのenable、marker一致・登録完了ログ、`profiles_firearms`の作成、`/skills`の表示、同一UUIDの再接続・完全再起動後の保存値を確認します。markerは`fgv_bridge` objectiveの`#release = 2`、`#protocol = 1`です。導入後も通常設定のdebugは無効へ戻します。
+
+問題が出たら正常停止し、BridgeのJAR/ZIPの両manifest行を外して再起動します。上記globに一致するBridge配布物は起動時に削除されます。削除後に両方が読み込まれていないことをログと配置先で確認してください。旧版へ戻す場合も両方の版を揃えます。Plugin削除だけでは保存済みprofileは戻らないため、データ異常時は停止したままバックアップとの照合・復旧を行います。
+
+## 馬術（ValhallaMMO + FEATO Horsemanship）
+
+[FEATO Horsemanship v0.2.0](https://github.com/FEATO-org/feato_horsemanship/releases/tag/v0.2.0)で、ValhallaMMOに「馬術」（Lv 0-100）と移動・持久・操作・戦闘・育成のスキルツリーを追加します。対象は馬、スケルトンホース、ゾンビホース、ロバ、ラバです。移動EXPは操縦者だけに100ブロックごと10、馬上戦闘EXPは攻撃者本人に2秒間隔で0.5を付与する初期設定です。Lv20の「追う」は操縦中にメインハンドへリードを持って右クリックすると発動し、速度+6%、5秒、再使用35秒です。Perk取得前の操縦速度は-5%、鞍上の第一歩の取得後は-2%、手綱の心得の取得後はペナルティなしです。
+
+JARは`java/plugins.txt`から取得し、Release添付のSkillを`java/plugins/ValhallaMMO/skills/custom/horsemanship.yml`、JAR同梱の効果設定を`java/plugins/FEATOHorsemanship/config.yml`として追跡します。起動前に`/plugins`から`/data/plugins`へ同期します。BetterHorsesの馬上ダメージ加算だけを起動前patchで無効化し、ほかの既存設定は保持します。一般プレイヤーの育成コマンドは取得Perkで制限し、reload権限は管理グループだけへ付与します。
+
+2026-10-04にPaper 26.2 build 126 / Java 25、ValhallaMMO 1.10.3、BetterHorses 6.4、DualHorse 1.5.4、Magic 11.2.4で、スキル登録・5 Pluginの有効化・馬術設定reload・正常停止をローカル確認しました。v0.1.0の報酬未登録エラーは解消しています。本番適用、Java/BedrockのPerk取得・騎乗操作・育成連携は未確認です。配布先、バックアップ、適用・実機確認・戻し方は[馬術の導入手順](java/plugins/ValhallaMMO/HORSEMANSHIP_SETUP.md)を参照してください。
 
 ## 経済と通常商店
 
@@ -287,6 +335,29 @@ squaremap 1.3.15をPaper 26.2用JARで導入し、内部Webサーバーを8123�
 Paper側Floodgate導入前に、現在Velocity側Floodgateが使用している`key.pem`を安全な管理端末へ取り出し、同じ内容からSwarm secret `floodgate_key`を作成してください。鍵そのものはGitへ保存しません。新しい鍵を生成する場合はVelocity/Paperを同じ鍵へ同時に切り替えます。公式Floodgateの要件どおり、proxy側`send-floodgate-data`を有効にし、backend側と同一鍵であることを確認してからBedrock接続を試験します。
 
 PaperはMinecraft起動前にSecretを`/data/plugins/floodgate/key.pem`へ毎回上書きコピーします。Secretがない、空、またはコピーできない場合は起動を中止します。
+
+## 描画距離・シミュレーション距離
+
+初期目標は描画16チャンク・シミュレーション10チャンクです。実測前のため、最適値や動作確認済みの値ではありません。
+`deploys/app/compose.yml`の`VIEW_DISTANCE`と`SIMULATION_DISTANCE`は、
+[itzgの起動処理](https://docker-minecraft-server.readthedocs.io/en/latest/configuration/server-properties/)で
+永続Volume内の`/data/server.properties`の`view-distance`と`simulation-distance`へ反映されます。
+現行Composeはこの更新を無効化する`OVERRIDE_SERVER_PROPERTIES=false`や`SKIP_SERVER_PROPERTIES=true`を指定していません。
+`java/config/spigot.yml`は`/config/spigot.yml`から`/data/spigot.yml`へ同期され、
+両距離の[`default`](https://docs.papermc.io/paper/reference/spigot-configuration/#world-settings_default_view-distance)を維持して`server.properties`を参照します。追跡中のワールド別設定・Plugin設定には、両距離の上書き制限はありません。
+
+1. 変更前のTPS、MSPT、メモリ使用量と人数・活動内容を記録します。
+2. [通常のデプロイ手順](../deploys/README.md#4-環境変数とデプロイ)で変更を適用し、Paperを再起動します。
+3. 起動後、Paperタスクが動く`minecraft-data`ノードで次を実行し、`view-distance=16`と`simulation-distance=10`を確認します。秘密値を含むファイル全体は表示しません。
+
+   ```bash
+   docker exec <minecraft-server-container> sh -c 'grep -E "^(view-distance|simulation-distance)=" /data/server.properties'
+   ```
+
+4. Java／Bedrockの両方で地形の見通しと移動時のチャンク読み込みを確認します。クライアント側の描画距離も確認してください。Paperの[`auto-config-send-distance: true`](https://docs.papermc.io/paper/reference/global-configuration/#chunk-loading-advanced_auto-config-send-distance)は維持しているため、クライアントの指定距離が小さいと送信範囲も小さくなります。
+5. 変更前後で同程度の人数・活動に揃え、TPS、MSPT、メモリ使用量を比較します。TPSが継続して20を下回る、またはMSPTが継続して50msを超える場合は原因を確認し、必要ならComposeの両環境変数を`14`／`8`へ戻して再デプロイします。再起動後、同じ2項目と負荷を再確認します。
+
+本番Volume内のワールド別設定や追加Pluginによる上書き、Java／Bedrockの実機動作、負荷の比較は適用時の確認事項です。
 
 ## デプロイ前後
 
