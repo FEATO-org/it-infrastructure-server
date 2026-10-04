@@ -62,6 +62,7 @@ player_deny=(
   EconomyShopGUI.sellgui.all
 )
 admin_allow=(
+  feato.gunvalhalla.reload
   feato.horsemanship.admin
   essentials.balance.others
   essentials.eco
