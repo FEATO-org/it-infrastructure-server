@@ -185,3 +185,6 @@ wound:
     cooldown: 60000
   costs:
     mana: 85
+
+vengeance:
+  variables: bubble
