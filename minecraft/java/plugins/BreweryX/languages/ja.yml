@@ -1,0 +1,178 @@
+# BreweryX 3.7.1 languages/en.yml を基準にした日本語訳
+Brew_times: 回
+Brew_BadPotion: 失敗した醸造品
+Brew_BarrelRiped: 樽熟成
+Brew_DistillUndefined: 濁った蒸留液
+Brew_Distilled: 蒸留済み
+Brew_LessDistilled: 蒸留不足
+Brew_HundredsOfYears: 数百年
+Brew_Ingredients: 材料
+Brew_MinutePluralPostfix: ''
+Brew_OneYear: 1年
+Brew_ThickBrew: 泥状の醸造品
+Brew_Undefined: 大釜の醸造品
+Brew_Woodtype: 樽の種類
+Brew_Years: 年
+Brew_fermented: 発酵済み
+Brew_minute: 分
+Brew_Alc: アルコール &v1ml
+Brew_Alcoholic: アルコール入り
+Brew_Brewer: '醸造者: &v1'
+CMD_Copy_Error: '&6&v1 &c本のポーションをインベントリに収納できませんでした'
+CMD_Info_Drunk: '&v1の酔い度は&6&v2% &f、品質は&6&v3です'
+CMD_Info_NotDrunk: '&v1は酔っていません'
+CMD_NonStatic: '&eポーションの固定を解除しました。樽で通常どおり熟成します。'
+CMD_Player: '&a&v1の酔い度を&6&v2% &a、品質を&6&v3にしました'
+CMD_Player_Error: '&c品質は1〜10で指定してください！'
+CMD_Reload: '&a設定を再読み込みしました'
+CMD_Created: '&a醸造品を作成しました'
+CMD_Configname: '&a設定で使う名前: &f&v1'
+CMD_Configname_Error: '&c手に持っているアイテムが見つかりません'
+CMD_Static: '&aポーションを固定しました。樽や醸造台で変化しません。'
+CMD_UnLabel: '&aラベルを取り除きました！'
+CMD_Drink: '&a&v1を1本飲みました'
+CMD_DrinkOther: '&a&v1が&v2を1本飲みました'
+CMD_Set: '&a&v1の酔い度を&v2、品質を&v3にしました。'
+CMD_Simulated: '&aシミュレーションした醸造品を作成しました'
+CMD_Distilled: '&a醸造品を&v1回蒸留しました'
+CMD_Aged: '&a醸造品を&v1年熟成しました'
+CMD_Invalid_Option: '&c"&v1"は無効なオプションです'
+CMD_Duplicate_Option: '&cオプション"&v1"が重複しています'
+CMD_Invalid_Cook_Time: '&c煮込み時間"&v1"は0以上の整数で指定してください'
+CMD_Invalid_Distill_Runs: '&c蒸留回数"&v1"は正の整数で指定してください'
+CMD_Invalid_Wood_Type: '&c樽の種類"&v1"は無効です'
+CMD_Invalid_Age_Time: '&c熟成期間"&v1"は正の数で指定してください'
+CMD_Ingredient: 材料
+CMD_Invalid_Ingredient: '&c"&v1"は無効な材料です。"&v2/&v1"ではありませんか？'
+CMD_Missing_Cook_Time: '&cシミュレーションには"--cook"か"--recipe"が必要です'
+CMD_Missing_Ingredients: '&cシミュレーションには材料が1つ以上必要です'
+CMD_Cannot_Distill: '&cこの材料は蒸留できません'
+CMD_Distill_Ruined: '&e蒸留中に醸造品が台無しになりました'
+CMD_Age_Ruined: '&e熟成中に醸造品が台無しになりました'
+Defect_WrongIngredient:
+  - '余計なものが入っている...'
+  - '材料のどれかがまずい...'
+Defect_MissingIngredient:
+  - '何かが足りないようだ...'
+  - 'もう一味ほしい...'
+Defect_LowCount:
+  - '材料のどれかの味がほとんどしない...'
+  - '材料のどれかの味が薄すぎる...'
+Defect_HighCount:
+  - '材料のどれかが主張しすぎている...'
+  - '材料のどれかの味が強すぎる...'
+Defect_NeedsDistill:
+  - '蒸留が必要だ...'
+Defect_NeedsDistillAlc:
+  - 'アルコールの味がしない...'
+Defect_BadDistill:
+  - '醸造品が蒸発してしまった...'
+  - '風味が消えてしまった...'
+Defect_Uncooked:
+  - 'まだ生だ...'
+  - '加熱時間が足りない...'
+Defect_Overcooked:
+  - '焦げている...'
+  - '加熱しすぎた...'
+Defect_UnderAged:
+  - '発酵が必要だ...'
+  - '味がとがりすぎている...'
+Defect_OverAged:
+  - '傷んだにおいがする...'
+  - '古すぎる醸造品だ...'
+Defect_OverAgedAlc:
+  - '酢のようなにおいがする...'
+  - '古すぎる醸造品だ...'
+Defect_BadAged:
+  - 'これは熟成させるべきではなかった...'
+Defect_WrongWood:
+  - '&v1の味が強すぎる...'
+  - '&v1が主張しすぎている...'
+Defect_NoRecipesRegistered:
+  - 'この世界では醸造できない...'
+Error_ConfigUpdate: '不明なBrewery設定バージョン: v&v1。設定を更新できませんでした！'
+Error_ItemNotPotion: '&c手に持っているアイテムはポーションとして認識できません！'
+Error_SealingTableDisabled: '&c封印台は無効です'
+Error_SealedAlwaysStatic: '封印された醸造品は常に固定されています！'
+Error_AlreadyUnlabeled: '&c手に持っている醸造品には既にラベルがありません！'
+Error_NoBarrelAccess: '&cこの樽を開く権限がありません！'
+Error_NoBrewName: '&c次の名前のレシピが見つかりません: ''&v1&c''！'
+Error_NoPermissions: '&cこの操作を行う権限がありません！'
+Error_PlayerCommand: '&cこのコマンドはプレイヤーのみ実行できます！'
+Error_Recipeload: '&c一部のレシピを復元できませんでした。詳細はサーバーログを確認してください！'
+Error_ShowHelp: '&6/brew help &fでヘルプを表示します'
+Error_UnknownCommand: 不明なコマンド
+Error_YmlRead: 'config.ymlを読み込めません。空白や'' ''の使い方など、YAMLの書式を確認してください'
+Error_NoPlayer: '&cプレイヤーが見つかりません: &v1'
+Error_InvalidAmount: '&c無効な数量: &v1'
+Error_InvalidPluginItem: '&cプラグインのアイテムが見つかりません: &v1'
+Error_InvalidMaterial: '&c素材が見つかりません: &v1'
+Error_MissingBarrelType: '&c樽の種類が無効です'
+Etc_Barrel: 樽
+Etc_Page: ページ
+Etc_Usage: '使い方:'
+Etc_SealingTable: 醸造品の封印台
+Etc_NewRelease: '&rBreweryXの新しいバージョンがあります！ &2&v1 &r-> &2&v2&r ダウンロード&7: &2&v3'
+Etc_LandsFlag_Title: '樽の利用'
+Etc_LandsFlag_Description: '&r&7BreweryXの樽を\n&r&7開けるようにします。'
+Help_Copy: '&6/brew copy [Quantity]&9 手に持っているポーションを複製します'
+Help_Create: '&6/brew create <Recipe> [Quality] [Player] &9品質（1〜10）を指定して醸造品を作成します'
+Help_Give: '&6/brew give <Recipe> [Quality] [Player] &9/brew createの別名です'
+Help_Distill: '&6/brew distill [Runs] &9手に持っているポーションを蒸留します'
+Help_Age: '&6/brew age <Barrel Type> <Time> &9手に持っているポーションを熟成します'
+Help_Simulate: '&6/brew simulate <Options...> [Ingredients...] &9醸造をシミュレーションします'
+Help_Simulate_Options: '&eオプション:'
+Help_Simulate_Recipe: '&6-r/--recipe <Recipe>'
+Help_Simulate_Cook: '&6-c/--cook <Cook Time>'
+Help_Simulate_Distill: '&6-d/--distill <Distill Runs>'
+Help_Simulate_Age: '&6-a/--age <Barrel Type> <Age Time>'
+Help_Simulate_Brewer: '&6-b/--brewer <Player>'
+Help_Simulate_Player: '&6-p/--player <Player>'
+Help_Delete: '&6/brew delete &9手に持っているポーションを削除します'
+Help_Help: '&6/brew help [Page] &9指定したヘルプページを表示します'
+Help_Info: '&6/brew info&9 自分の酔い度と品質を表示します'
+Help_InfoOther: '&6/brew info [Player]&9 [Player]の酔い度と品質を表示します'
+Help_Reload: '&6/brew reload &9設定を再読み込みします'
+Help_Configname: '&6/brew ItemName &9手に持っているアイテムの設定用の名前を表示します'
+Help_Static: '&6/brew static &9醸造品を固定 -> 熟成や蒸留が進まなくなります'
+Help_Set: '&6/brew set <player> <drunkenness> [quality] &9プレイヤーの酔い度と品質を設定します'
+Help_UnLabel: '&6/brew unlabel &9ポーションの詳細ラベルを取り除きます'
+Help_Seal: '&6/brew seal &9商店で販売する醸造品を封印します'
+Help_Wakeup: '&6/brew wakeup list <Page>&9 すべての目覚める場所を一覧表示します'
+Help_WakeupAdd: '&6/brew wakeup add &9現在地を目覚める場所に登録します'
+Help_WakeupCheck: '&6/brew wakeup check &9すべての目覚める場所へテレポートします'
+Help_WakeupCheckSpecific: '&6/brew wakeup check <id> &9指定した<id>の目覚める場所へテレポートします'
+Help_WakeupList: '&6/brew wakeup list <Page> [World]&9 <world>の目覚める場所を一覧表示します'
+Help_WakeupRemove: '&6/brew wakeup remove <id> &9指定した<id>の目覚める場所を削除します'
+Help_Puke: '&6/brew puke [Player] [Amount] &9自分または[Player]を嘔吐させます'
+Help_Drink: '&6/brew drink <Recipe> [Quality] [Player] &9[Player]が醸造品を飲む動作をシミュレーションします'
+Perms_NoBarrelCreate: '&c樽を作る権限がありません！'
+Perms_NoBigBarrelCreate: '&c大きな樽を作る権限がありません！'
+Perms_NoCauldronFill: '&cこの大釜から瓶に注ぐ権限がありません！'
+Perms_NoCauldronInsert: '&c大釜に材料を入れる権限がありません！'
+Perms_NoSmallBarrelCreate: '&c小さな樽を作る権限がありません！'
+Player_BarrelCreated: 樽を作成しました
+Player_BarrelFull: '&cこの樽にはこれ以上飲み物を入れられません'
+Player_CantDrink: これ以上飲めません。
+Player_CauldronInfo1: この大釜は&v1分間煮込んでいます。
+Player_CauldronInfo2: この大釜は煮込み始めたばかりです。
+Player_DrunkPassOut: 飲みすぎて意識を失いました。
+Player_LoginDeny: 酔いすぎてサーバーにたどり着けません。もう一度お試しください！
+Player_LoginDenyLong: ひどく酔って意識を失っています。10分後にもう一度お試しください！
+Player_TriedToSay: '&v1が言おうとしたこと: &0&v2'
+Player_Wake: あれ？どうやってここに来たんだろう...
+Player_WakeAlreadyDeleted: '&cID: &6&v1 &cの目覚める場所は既に削除されています！'
+Player_WakeCancel: '&6目覚める場所の確認を中止しました'
+Player_WakeCreated: '&aID: &6&v1 &aの目覚める場所を登録しました！'
+Player_WakeDeleted: '&aID: &6&v1 &aの目覚める場所を削除しました！'
+Player_WakeFilled: '&cID: &6&v1&c、座標 &6&v2 &v3, &v4, &v5&c の目覚める場所はブロックで埋まっています！'
+Player_WakeHint1: '次の目覚める場所へ: 空中で素手を振ってください'
+Player_WakeHint2: '中止: &9/brew wakeup cancel'
+Player_WakeLast: '&aこれが最後の目覚める場所です'
+Player_WakeNoCheck: '&c目覚める場所の確認は行っていません'
+Player_WakeNoPoints: '&c目覚める場所が登録されていません！'
+Player_WakeNotExist: '&cID: &6&v1 &cの目覚める場所は存在しません！'
+Player_WakeTeleport: 'ID: &6&v1&f の目覚める場所へテレポート。座標: &6&v2 &v3, &v4, &v5'
+Player_ShopSealBrew: '&e取引・販売には&6封印済み&eの醸造品をおすすめします'
+Player_Drunkeness: '酔い度: '
+Player_Hangover: '二日酔い'

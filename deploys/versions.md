@@ -1,5 +1,28 @@
 # バージョン確認（2026-09-22）
 
+## BreweryX追加（2026-10-04）
+
+[BreweryX 3.7.1公式Release](https://github.com/BreweryTeam/BreweryX/releases/tag/3.7.1)が案内する
+[Modrinth版XmLbPZhp](https://modrinth.com/plugin/breweryx/version/XmLbPZhp)を採用します。
+固定取得URL: https://cdn.modrinth.com/data/gvXaGv1n/versions/XmLbPZhp/BreweryX-3.7.1.jar
+
+公式metadataはPaperを含み、Minecraft 1.20.2〜26.2の列挙に現行26.2も含まれます。
+公式ソースtagは`3.7.1`（Release commit `343872c`）です。
+配布JARの`plugin.yml`は`3.7.1;master`、`api-version: 1.13`と表記されています。
+GETした公式JARのSHA-512はmetadataと一致:
+
+`e1ccd1958e614b130762e2a6ff5fe7f9eff9702e63e89b7d4db458a5b8f9c9050b52829b742deac9088ceef25d4ffe550e04b3ec9e4eff02d0af67ae6715159b`
+
+隔離したPaper 26.2 build 126 / Java 25で初回起動・日本語設定での再起動、
+`Using language: ja.yml`、SQLite、enable、Consoleの日本語ヘルプ、正常停止を確認しました。
+本体のバージョン判定は26.2を`Unknown`と警告するため、対応metadataと起動確認だけで
+全挙動の互換性を保証しません。既存全Pluginとの同時起動、クライアント表示、
+コーヒーの実製造・飲用、樽・蒸留・飲酒演出、Java/Bedrock操作、本番は未検証です。
+Paper、権限設定、外部DBは変更していません。詳細と手動確認は
+[BreweryX運用手順](../minecraft/java/plugins/BreweryX/README.md)を参照してください。
+
+## 既存構成（2026-09-22確認）
+
 公式リリース一覧・APIで安定版を確認し、Minecraft本体・プロキシ以外のコンテナは固定タグを指定しています。
 nginxはMainlineではなくStable系列です。
 
