@@ -172,7 +172,7 @@ repository root です。配布先は GHCR の `ghcr.io/feato-org/feato-*`、tag
 | --- | --- | --- |
 | feato-minecraft-server | [itzg/minecraft-server:java25-graalvm](https://hub.docker.com/r/itzg/minecraft-server) | local build、同梱先・script 構文確認。Paper 本番起動未確認 |
 | feato-minecraft-proxy | [itzg/mc-proxy:java25](https://hub.docker.com/r/itzg/mc-proxy) | local build、同梱先・script 構文確認。Velocity 本番起動未確認 |
-| feato-nginx | [nginx:1.30.5](https://hub.docker.com/_/nginx) | local build、一時証明書で nginx -t 成功。local HTTP/Java TCP/Bedrock TCP の DNS 追従確認。本番・UDP 未確認 |
+| feato-nginx | [nginx:1.30.5](https://hub.docker.com/_/nginx) | local build、一時証明書で nginx -t 成功。DNS 追従修正とその検証は PR #35。本番未確認 |
 | feato-fluent-bit | [fluent-bit:5.1.2](https://cr.fluentbit.io/fluent/fluent-bit) | local build、dry-run 成功。本番送信未確認 |
 | feato-mariadb | [mariadb:13.0.2](https://hub.docker.com/_/mariadb) | local build、init script 構文確認。本番 DB 起動未確認 |
 

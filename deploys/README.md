@@ -266,6 +266,9 @@ webhook 応答は task 更新完了を保証しないので、Portainer と下�
 
 ### 既存構成の移行
 
+nginx の backend DNS 追従修正は [PR #35](https://github.com/FEATO-org/it-infrastructure-server/pull/35)
+に分割しています。先に develop へ取り込み、Portainer 移行後の image にもその設定が含まれることを確認してください。
+
 1. GitOps/webhook を未設定のまま、現在の service spec、stack 設定、配置 node、image digest、
    TLS Secret 名を安全な場所へ記録します。app を停止して Minecraft/Proxy Volume と
    MariaDB を整合した状態でバックアップし、Portainer data もバックアップします。
