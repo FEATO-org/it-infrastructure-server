@@ -7,7 +7,7 @@
 | 配布元 | コンテナ内の読み込み先 |
 | --- | --- |
 | `minecraft/java/plugins.txt`の固定Release JAR URL | `/data/plugins/feato-horsemanship-0.2.0.jar` |
-| `minecraft/java/plugins/ValhallaMMO/skills/custom/horsemanship.yml`（Release添付） | `/data/plugins/ValhallaMMO/skills/custom/horsemanship.yml` |
+| `minecraft/java/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml`（Release添付を基にGUIを調整） | `/data/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml` |
 | `minecraft/java/plugins/FEATOHorsemanship/config.yml`（JAR同梱初期設定） | `/data/plugins/FEATOHorsemanship/config.yml` |
 | `minecraft/java/prepare-paper-plugins.sh`と`patches/betterhorses-horsemanship.json` | `/extras/prepare-paper-plugins.sh`と`/extras/betterhorses-horsemanship.json` |
 
@@ -28,6 +28,39 @@
 
 標準のActionBarとチャットを使用し、専用リソースパックの追加は不要です。
 
+## スキルツリーGUIの配置
+
+Git管理のSkillはv0.2.0の表示を調整したものです。Perk ID・Lv・cost・報酬・前提・排他・NG+と効果設定は維持し、JARやReleaseのSkillをそのまま上書きするとGUI変更が失われます。今後の版更新では表示差分を保持して照合してください。
+
+ValhallaMMO 1.10.3 JAR内のArchery / Mining / Heavy Armor / Farmingを参考に、Lv10ごとにxを2進め、左から右へ進行します。主幹はy=6、機動0、持久3、技術9、馬上戦闘14、馬管理18です。線用の空間を確保し、馬上戦闘のLv70・90は上段13／下段15へ配置します。馬管理のLv40・60・80にノードは追加しません。
+
+```text
+機動 y=0     駿足 ─ 抜け出し ─ 全速駆け ─ 即応 ─ 電光の発進 ─ 風に乗る ─ 疾風一体
+持久 y=3     長駆 ─ 絶えぬ追い ─ 遠乗りの心得 ─ 巡航の極意 ─ 息を吹き返す ─ 不屈の遠乗り ─ 果てなき道
+基礎 y=6     鞍上の第一歩 ─ 手綱の心得 ─ 追う ─ 巧者の手綱 ─ 熟練騎手 ─ 信頼の手綱 ─ 人馬一体
+技術 y=9     確かな手綱 ─ 飛越 ─ 足取り確か ─ 冷静な手綱 ─ 精密操作 ─ 確かな着地 ─ 手綱の達人
+戦闘 y=14    騎兵 ─┬─ 突撃号令
+                  ├─ 騎射の心得
+                  └─ 古参騎兵 ─┬─ 重装騎兵 ─┬─ 鉄騎先鋒
+                               │            └─┐
+                               │               初撃（Lv80、中央）
+                               │            ┌─┘
+                               └─ 軽装騎兵 ─┴─ 疾駆戦騎
+馬管理 y=18  馬を見る目 ─ 生産者の眼 ─ 血統研究 ─ 名伯楽
+```
+
+図は前提の概念図です。Combatの騎射・古参騎兵は騎兵から、鉄騎先鋒／疾駆戦騎は重装／軽装から線を引きます。初撃からLv90への取得前提は追加しません。接続線は対象Perkの標準3状態色（灰・橙・緑）で描き、各slotを1つの線だけに割り当てます。標準設定と公式Magic+ValhallaMMO packの既存モデルで向きを確認し、独自CMDやT字モデルは追加していません。
+
+Lv30の5入口はx=6に揃え、「追う」からの分岐を説明と標準の前提表示で示します。複数レーンを横断する5本の長い線は省き、専門内の前提だけを接続します。飛越・突撃号令は「追う」に追加効果、抜け出し・絶えぬ追いは「追う」を変化させる、と説明冒頭で区別します。駿足・長駆は両立可能、排他はLv40の説明と既存lockで示します。Lv100は基礎の右端x=20、信頼の手綱だけを接続します。NG+は標準Archery同様hiddenの共通座標(0,20)に置き、通常線から外します。
+
+`starting_coordinates: "0,3"`はメニュー内部の中心値ではなく、初期表示の左上に対応します（内部でx+4、y+2）。初期9×5枠のx=0..8、y=3..7に基礎Lv0・10・20と持久Lv30が入り、上下スクロールで残る専門入口、右スクロールで後半へ進みます。6レーン全部を5行に詰めません。ナビゲーションボタンが基礎序盤のノードを隠さない座標です。
+
+説明は現在の`FEATOHorsemanship/config.yml`とv0.2.0実装に基づき、`/n`区切りで最大4行に整理しています。必要Lv・cost・他スキルLv・取得前提はValhalla標準loreへ任せます。設定の数値を変更した場合は説明も同期してください。失速の補助回復には既存の最低水平速度・移動ごとの上限が適用されます。
+
+GUI用の8件の検証テスト（重複・誤った角の向き・効果変更の拒否を含む）と変更前YAML比較が成功しました。Pluginソースの一時コピーへ追跡Skill・効果設定を組み込み、既存14テストと`test`、続けて`clean build`を実行して成功しています。配布JARは更新していません。
+
+ローカル静的検証はPyYAMLのあるPythonで`python script/validate_horsemanship_tree.py --baseline <変更前のhorsemanship.yml>`を実行します。検証テストは`python -m unittest discover -s script -p test_horsemanship_tree.py`です。GUI配置の実クライアント表示は未確認です。適用は既存の起動前同期とPaper再起動を使い、Java/Bedrockで初期表示・スクロール・各lock状態・loreを確認してください。GUIだけ戻す場合は停止中に変更前SkillをGit配布元とVolume側へ戻して再起動し、JAR・効果設定・profileは維持します。
+
 ## BetterHorsesの馬上ダメージ補正
 
 馬術側の攻撃補正と重複しないよう、`prepare-paper-plugins.sh`は既存のFloodgate鍵コピーを実行した後、`mc-image-helper patch`で永続Volumeの`/data/plugins/BetterHorses/config.yml`にある`settings.mounted-damage-boost.enabled`だけを`false`にします。ほかの繁殖・育成・Trait設定は保持します。
@@ -37,9 +70,9 @@
 ## 適用順
 
 1. `minecraft-data`ノードでPaperを停止し、Paper Volume（ValhallaMMO profile・共通スキルポイント・取得Perkを含む）と既存BetterHorses設定をバックアップします。
-2. Git管理のSkill・効果設定・`plugins.txt`・追加の起動スクリプトとpatch・Composeを同じ版で配置します。起動スクリプトの実行権限を保持してください。
+2. 既存Volumeの `ValhallaMMO/skills/custom/` に小文字名の旧Skill設定がある場合は、Paper停止中にバックアップしてVolume外へ退避します。同期で旧名が削除されるとは限りません。正本は `HORSEMANSHIP.yml` の1ファイルだけにします。Git管理のSkill・効果設定・`plugins.txt`・追加の起動スクリプトとpatch・Composeを同じ版で配置します。起動スクリプトの実行権限を保持してください。
 3. 必要な環境変数がある環境でCompose / Swarm設定を検証し、Paper taskを更新します。bind mountファイルの更新だけでSwarmが再起動したと判断せず、taskの再作成と起動前同期を確認します。
-4. ValhallaMMOの`Registered custom skill horsemanship.yml`、`FEATO Horsemanship enabled`、BetterHorses連携・排他条件登録の警告がないこと、実際の各Plugin版を確認します。Volume側の馬上ダメージ加算が`false`であることも確認します。
+4. `/data/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml` の配置と旧名が残っていないことを確認します。ValhallaMMOの`Registered custom skill HORSEMANSHIP.yml`、`FEATO Horsemanship enabled`、BetterHorses連携・排他条件登録の警告がないこと、実際の各Plugin版を確認します。Volume側の馬上ダメージ加算が`false`であることも確認します。
 5. 権限設定スクリプトを実行する場合は、`minecraft-data`ノードで実際の一般・管理グループ名を指定します。このスクリプトは既存の商店・経済・役職権限も適用します。
 6. 次のプレイヤー操作を確認してから利用を開始します。
 
@@ -54,6 +87,10 @@
 
 このローカル検証はMinecraft全Plugin構成やVault Economyを含めた検証ではありません。Magic側には既存exampleの重複キー・式警告がありましたが、馬術の報酬未登録エラー・連携初期化・排他条件登録の警告はありませんでした。
 
+過去のmacOS上の起動確認は、Linuxでのファイル名の大小文字を区別した読み込みを保証しません。ValhallaMMO 1.10.3が大文字のSkill typeを設定ファイル名として使うため、Release添付の小文字名を配布時には `HORSEMANSHIP.yml` とします。ConfigurableProfile・EXP付与・Profile Registry・progression再計算の既知の懸念は今回未対応で、enable成功だけでは育成・保存・EXP処理全体の正常性を判断しません。
+
+2026-10-04、隔離したLinux / Java 25 / Paper 26.2 build 126で、大文字名の追跡設定を使いValhallaMMO 1.10.3とFEATOHorsemanship 0.2.0のenable完了を確認しました。埋め込みリソース欠落・ValhallaMMOのenable失敗・起動中のdisableは発生していません。この検証にはFEATOGunValhallaBridgeと本番の全Plugin構成を含めていません。
+
 本番とJava/Bedrockの実プレイヤー操作は未確認です。以下を実機で確認してください。
 
 - スキルツリーと日本語表示、Lv・EXP・共通スキルポイント、通常Perk取得・返却・reset、NG+、排他Perk、他スキルLv条件。
@@ -64,6 +101,6 @@
 
 ## 戻し方
 
-Paperを停止し、導入前の配布設定・旧JAR除去対象・管理権限設定へ戻します。`PRE_START_SCRIPT`を`/extras/copy-floodgate-key.sh`へ戻し、馬術用の準備スクリプトとpatchのmountを外します。Volume内の`feato-horsemanship-*.jar`と`ValhallaMMO/skills/custom/horsemanship.yml`をVolume外へ退避し、BetterHorses設定をバックアップから戻してから再起動します。Gitからの削除だけではVolume内のファイルは消えません。付与済みの`feato.horsemanship.admin`も必要に応じて管理グループから外します。
+Paperを停止し、導入前の配布設定・旧JAR除去対象・管理権限設定へ戻します。`PRE_START_SCRIPT`を`/extras/copy-floodgate-key.sh`へ戻し、馬術用の準備スクリプトとpatchのmountを外します。Volume内の`feato-horsemanship-*.jar`と`ValhallaMMO/skills/custom/HORSEMANSHIP.yml`をVolume外へ退避し、BetterHorses設定をバックアップから戻してから再起動します。Gitからの削除だけではVolume内のファイルは消えません。付与済みの`feato.horsemanship.admin`も必要に応じて管理グループから外します。
 
 導入後に消費した共通スキルポイント・profileも戻す場合は、導入前の整合したバックアップから復旧します。馬術v0.1.0へのダウングレードは行わないでください。2026-10-03の同じPaper / ValhallaMMO構成では`horsemanship_first_saddle_set`の未登録エラーでValhallaMMOと馬術が無効化されました。v0.2.0では通常Perk報酬と取得状態の参照先を揃え、この起動エラーは解消しています。

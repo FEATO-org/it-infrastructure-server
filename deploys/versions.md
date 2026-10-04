@@ -1,5 +1,16 @@
 # バージョン確認（2026-09-22）
 
+## Plugin運用整理（2026-10-04）
+
+- DeadChest 4.31.0: [作者公式配布](https://modrinth.com/plugin/dead-chest/version/ej8X4AM4)はPaper / 26.2を列挙。GETしたJARのSHA-512は公式metadataと一致しました。旧`dead-chest-*.jar`は既存の起動前除去対象に追加し、`plugins/update/`の同名パターンも除去します。`prepare-paper-plugins.sh`で運用設定の`updates.auto-check`と旧形式`auto-update`だけをfalseへpatchし、死亡保護設定は保持します。
+- ProtocolLib: [公式dev changelog](https://github.com/dmulloy2/ProtocolLib/releases/tag/dev-build)は26.2対応（#3642）とJava 25修正（#3566）を含みます。stable 5.4.0の対応は1.21.8までなのでdevelopment版を採用。2026-10-03T18:20:42Z作成の`ProtocolLib-Spigot.jar`（JAR表記5.5.0-SNAPSHOT、asset ID `608298575`）を固定し、可変`dev-build`ダウンロードURLは使いません。`plugins.txt`には管理対象と固定取得元をコメントで記録し、Acceptヘッダーが必要なため起動前スクリプトで`mc-image-helper get --accept application/octet-stream`を実行します。SHA-256 `a4ef57c36e27adec56b3a7935b7930fd1e366b310b9b698949e7f3320c84a8f9`で検証してから配置します。公式asset削除・ハッシュ不一致時は起動を中止します。既存JARがハッシュ一致なら再取得しません。
+- PlaceholderAPI: [公式2.12.3 Release](https://github.com/PlaceholderAPI/PlaceholderAPI/releases/tag/2.12.3)は26.2対応を明記していますが、Paper版はexperimentalとされています。ここではReleaseのBukkit/Spigot JARを固定し、Java 25でenableを確認。SHA-256 `fde03259f5af6938f3c33eeb4d814000a1adabf1d2304ce14970be81f609a437`は公式asset digestと一致しました。eCloud・外部Expansionは導入していません（既存Plugin自身の内部placeholder登録は発生します）。
+- Magic 11.2.4: [upstream修正](https://github.com/elBukkit/MagicPlugin/commit/10d3665616efe71f3431a2434ff8124d0aeeebc7)に沿って`vengeance.variables: bubble`を追跡設定へ追加。本体版と0.4/0.6/0.8の式は維持。ただし、この版でのローカル起動では3段階の式評価警告が残りました。
+- MineGames 1.0.5: 外部configのRoulette / Slotsの重複6行を削除し、同じ文言を各1定義に統一。ただしJAR同梱configにも重複があり、既定設定読み込み時の警告は残ります。本体変更は今回行っていません。
+- GhastMaster: 履歴`ec6bcf3`にSpiget resource `126304`の追加、`18c1ce5`に取得失敗による削除がありましたが、どちらも版は記録されていません。手元の配布JARにも運用版を特定できるものがなく、本体の管理化は未実施。別版への移行は行いません。`ghastmaster.share`のみ一般グループの許可一覧へ追加しました。本番適用は未実施です。
+
+隔離Paper 26.2 build 126 / Oracle GraalVM Java 25.0.4でMagic、MineGames、DeadChest、ProtocolLib、PlaceholderAPI、BetterHorses（6.4）と既存依存Pluginを同時にenableし、正常停止を確認しました。DeadChestのAmbiguous plugin name、BetterHorsesのProtocolLib未導入警告はありません。Magicのbubble警告とMineGames既定YAMLのduplicate keys警告は残存。全Plugin・Data Packとの組合せ、本番、プレイヤー操作は未確認です。ValhallaMMO等の別タスクの修正は含みません。
+
 ## BreweryX追加（2026-10-04）
 
 [BreweryX 3.7.1公式Release](https://github.com/BreweryTeam/BreweryX/releases/tag/3.7.1)が案内する
@@ -134,7 +145,9 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | ImageFrame | 2026.1.4 | [固定URL](https://cdn.modrinth.com/data/lJFOpcEj/versions/nt0GWT1y/ImageFrame-2026.1.4.0.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | Backpack Plus | 3.2.0 | [固定URL](https://cdn.modrinth.com/data/lDAFcnRN/versions/vsRfbexG/BackpackPlus-3.2.0-all.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | Enchants Plus | 1.6 | [固定URL](https://cdn.modrinth.com/data/N72bKhby/versions/oeMySJjE/Enchants%2B%20v1.6%201.21%20-%201.21.11.zip) | Data Pack | 26.2（配布metadata） | stable | Requires runtime verification |
-| DeadChest | 4.30.0 | [固定URL](https://cdn.modrinth.com/data/pKqnV03Y/versions/mBSgqYZH/dead-chest-4.30.0.jar) | Paper | 配布metadataは26.1.2まで | stable | Paper 26.2で使用、実機テスト未実施; Requires runtime verification |
+| DeadChest | 4.31.0 | [固定URL](https://cdn.modrinth.com/data/pKqnV03Y/versions/ej8X4AM4/dead-chest-4.31.0.jar) | Paper | 26.2（公式metadata） | stable | Java 25 / Paper 26.2 build 126でenable・正常停止確認。死亡・回収操作と本番は未確認 |
+| ProtocolLib | 5.5.0-SNAPSHOT（asset 608298575） | [固定公式asset](https://api.github.com/repos/dmulloy2/ProtocolLib/releases/assets/608298575) | Paper（Spigot artifact） | 26.2（公式dev changelog #3642） | development | Java 25対応修正 #3566を含む。Java 25 / Paper 26.2 build 126でenableとBetterHorses接続確認 |
+| PlaceholderAPI | 2.12.3 | [固定公式Release](https://github.com/PlaceholderAPI/PlaceholderAPI/releases/download/2.12.3/PlaceholderAPI-2.12.3.jar) | Paper | 26.2（公式Release） | release（Paper版はexperimental表記） | Java 25 / Paper 26.2 build 126でenable確認。追加Expansionなし |
 | Better Horses | 6.4（検証時、動的取得） | [作者配布](https://www.spigotmc.org/resources/better-horses.124223/) | Paper | 26.2（6.4でローカル起動確認） | dynamic author release | Spiget resource 124223の取得方式を維持。2026-10-04に馬術との同時起動確認、プレイヤー操作は未確認。ProtocolLibなしでは一部機能無効 |
 | EssentialsX Core / Spawn | 2.22.1-dev+24-49a2f10（公式CI build 1829） | [Core](https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsX-2.22.1-dev+24-49a2f10.jar) / [Spawn](https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsXSpawn-2.22.1-dev+24-49a2f10.jar) | Paper | 26.2（現行公式support一覧） | development | 2.22.0 stableは26.1.2まで。Paper 26.2で起動確認 |
 | VaultUnlocked | 2.20.3 | [固定URL](https://cdn.modrinth.com/data/ayRaM8J7/versions/qZgRzoYs/VaultUnlocked-2.20.3.jar) | Paper | 26.2（配布metadata） | stable | plugin名は`Vault`。Paper 26.2で起動確認 |
@@ -180,6 +193,8 @@ Composeへ[`PAPER_BUILD`](https://docker-minecraft-server.readthedocs.io/en/late
 | feato-horsemanship-0.2.0.jar | `613002f811eb7c2ad613cf015fe40c050f879edd2a1561a4c198451c18a52a19` |
 | horsemanship.yml | `a384b5494df865c317686f78d306afb9c81beb87b1d2bb8052409157f0a34677` |
 
+Release asset名と取得URLは小文字のままですが、Git管理・配布時の正本は `minecraft/java/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml` とします。内容・SHA-256は変更せず、ValhallaMMO 1.10.3の大文字ファイル名での読み込みに合わせます。 2026-10-04、隔離したLinux / Java 25 / Paper 26.2 build 126でValhallaMMO 1.10.3とFEATOHorsemanship 0.2.0のenable完了を確認しました。Bridge・本番・育成や保存などの全体動作は未確認です。
+
 Paper 26.2 build 126 / Oracle GraalVM 25.0.4、ValhallaMMO 1.10.3、BetterHorses 6.4、DualHorse 1.5.4、Magic 11.2.4で、Custom Skill登録、5 Pluginの有効化、Magicから馬術Lv・EXPの認識、馬術設定reload、正常停止を隔離したローカル環境で確認しました。43 Perkの報酬・前提・排他条件・座標も静的検証しています。v0.1.0で再現した`horsemanship_first_saddle_set`未登録エラーは解消しました。一般プレイヤーのPerk取得・NG+・騎乗・育成連携、Java/Bedrock操作、本番動作は未確認です。
 
 既存BetterHorsesのSpiget URLは動的で、2026-10-03のGET結果を使用したローカル起動版は6.4でした。配布元の馬術対象表記は6.3です。取得方式は維持し、実際の本番起動版はログで確認してください。起動前patchは`settings.mounted-damage-boost.enabled`だけを無効化します。配置・停止バックアップ・実機確認・戻し方は[馬術の導入手順](../minecraft/java/plugins/ValhallaMMO/HORSEMANSHIP_SETUP.md)を参照してください。
@@ -214,7 +229,7 @@ Paper 26.2 build 126 / Oracle GraalVM 25.0.4、ValhallaMMO 1.10.3、BetterHorses
 | DualHorse-1.5.4.jar | `fd70684e9b3263bfc4edb9bde54a5fc1cc08c9f2ca4577434e2517dd7a3e5958029ebb0fd4090faa0545ae957531608cafe5452cb30d87f67344b28ac30e75d2` |
 | BetterHorses-6.3.jar | `d54e921e073eec52dbe81542f0d06713bf1c217a645c4644caf410fcc08ebfa27723866d7de3803a2be7c3d4143c61943849dd9e959f312f8d465426d863e704` |
 | Enchants+ v1.6 1.21 - 1.21.11.zip | `93e507c428287d7e8562a2ddd5a6488e47fcd76282426d683621c947f4fa8dda6a0ed605d458a1fed659ac5aa0909f01c8adb32994664788abe35fce0411083b` |
-| dead-chest-4.30.0.jar | `1cc61288c1c530e0839f7060bd0f670a5b54b18dd70399ca50207ff973ad1f1b5a1effa5da52a18b9f6944ec784913b2798f59ea9b208d3f31643992681e1b9d` |
+| dead-chest-4.31.0.jar | `8f39b4a11c5c4a168fe55f4a9e77e11c3aff9aa778a3a32565990e1de07b5d0fc7c28d14da1720fae08300f8874df89fd5f970c9bb796a7c19e2ceb1e3484028` |
 
 ## 26.2追加構成の起動検証（2026-09-21）
 
