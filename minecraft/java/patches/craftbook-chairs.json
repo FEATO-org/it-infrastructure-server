@@ -1,0 +1,54 @@
+{
+  "file": "/data/plugins/CraftBook/mechanisms.yml",
+  "ops": [
+    {
+      "$put": {
+        "path": "$.mechanics.Chairs",
+        "key": "allow-holding-blocks",
+        "value": false
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.Chairs",
+        "key": "regen-health",
+        "value": true
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.Chairs",
+        "key": "regen-health-amount",
+        "value": 0.5
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.Chairs",
+        "key": "face-correct-direction",
+        "value": true
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.Chairs",
+        "key": "require-sign",
+        "value": true
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.Chairs",
+        "key": "max-distance",
+        "value": 3
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.Chairs",
+        "key": "max-click-radius",
+        "value": 5
+      }
+    }
+  ]
+}

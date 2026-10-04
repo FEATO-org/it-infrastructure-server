@@ -189,13 +189,44 @@ JARは`java/plugins.txt`から取得し、Release添付を基にGUIを調整し�
 
 2026-10-04にPaper 26.2 build 126 / Java 25、ValhallaMMO 1.10.3、BetterHorses 6.4、DualHorse 1.5.4、Magic 11.2.4で、スキル登録・5 Pluginの有効化・馬術設定reload・正常停止をローカル確認しました。v0.1.0の報酬未登録エラーは解消しています。本番適用、Java/BedrockのPerk取得・騎乗操作・育成連携は未確認です。配布先、バックアップ、適用・実機確認・戻し方は[馬術の導入手順](java/plugins/ValhallaMMO/HORSEMANSHIP_SETUP.md)を参照してください。
 
+## CraftBook Chairs（休憩）
+
+CraftBook 3.10.13のChairsを有効化します。階段に看板を付け、ブロックを持たずに
+右クリックすると階段の向きに合わせて着席できます。着席中は20 tickごとに
+health 0.5（0.25ハート）回復し、通常の20 TPSでは約4秒で1ハートです。
+回復は最大HPを超えません。看板必須、`max-distance: 3`、`max-click-radius: 5`です。
+
+3.10.13の[Chair実装](https://github.com/EngineHub/CraftBook/blob/3.10.13/src/main/java/com/sk89q/craftbook/mechanics/Chair.java)と
+[設定ロード処理](https://github.com/EngineHub/CraftBook/blob/3.10.13/src/main/java/com/sk89q/craftbook/bukkit/CraftBookPlugin.java)を確認しています。
+一般グループには`craftbook.mech.chair.use`だけを追加します。既存の公式ProtocolLib
+5.5.0-SNAPSHOT固定assetを使用し、CraftBook・WorldEditの版は維持します。
+
+`mechanisms.yml`全体の同期による既存設定のリセットを避けるため、従来のCauldron設定を
+`java/config-seeds/craftbook-mechanisms.yml`へ移し、`/plugins`の通常同期から外しています。
+起動前スクリプトは`/data/plugins/CraftBook/mechanisms.yml`が存在しない場合だけseedを
+コピーし、`java/patches/craftbook-chairs.json`でChairsの7キーだけを更新します。
+既存の`blocks`と他mechanicの値は保持します。`blocks`が未設定なら3.10.13の
+`BlockCategories.STAIRS`による既定一覧をCraftBook自身が補完します。
+空ファイル・不正な構造は起動前処理の失敗として扱います。
+
+適用時はPaperを正常停止して既存CraftBook設定をバックアップし、seed・patchのmountと
+起動後の読み込み先を確認してください。戻す場合はChairsを無効化し、Chairs patchと
+利用権限を外して、停止中にバックアップの`mechanisms.yml`を戻します。
+
+Requires runtime verification:
+
+- 看板付き階段で着席でき、看板なし・ブロックを持った状態では着席しないこと。
+- 着席方向、health 0.5 / 20 tickの回復、最大HPの上限、Sneak等による離席。
+- Java版とGeyser経由のBedrock版での着席・離席。
+- 既存全Pluginとの併用時にProtocolLibによる回帰がないこと。
+
 ## CraftBook Cauldron（経験抽出）
 
 CraftBook 3.10.13の既存Cauldron mechanicを有効化します。水で満たした大釜の直下に火または溶岩を置き、大釜側面の壁看板の2行目に`[Cauldron]`と記入します。腐った肉16個、クモの目2個、アメジストの欠片1個、ガラス瓶1個を過不足なく投入し、スコップで大釜を右クリックすると経験値の瓶1個を錬成します。`chance: 93`にCraftBook本来のスコップ品質・エンチャント補正が適用されます。失敗時は材料が消費されず、再度かき混ぜて挑戦できます。看板必須、レッドストーン起動無効、item tracking無効です。
 
-追跡設定は`java/plugins/CraftBook/`の`config.yml`、`mechanisms.yml`、`cauldron-recipes.yml`です。Composeの`/plugins` mountから起動時に永続Volumeの`/data/plugins/CraftBook/`へ同期します。3.10.13の配布JARの同梱設定・読み込み処理に合わせ、レシピの最上位キーは`cauldron-recipes`を使用しています。
+追跡設定は`java/plugins/CraftBook/`の`config.yml`と`cauldron-recipes.yml`、初回用の`java/config-seeds/craftbook-mechanisms.yml`です。前者はComposeの`/plugins` mountから起動時に永続Volumeの`/data/plugins/CraftBook/`へ同期します。`mechanisms.yml`は既存ファイルを保持し、存在しない場合だけ初回用設定をコピーします。既存環境へのCauldron設定変更は、運用設定との差分を確認して取り込んでください。3.10.13の配布JARの同梱設定・読み込み処理に合わせ、レシピの最上位キーは`cauldron-recipes`を使用しています。
 
-適用前にPaperを正常停止し、永続Volumeの既存CraftBook設定をバックアップしてください。今回初めて追跡する2ファイルに本番独自の設定・レシピがある場合は、Cauldron以外の設定・既存レシピを保持してGitへ取り込んでから配布します。ファイルの配布だけでは適用済みとせず、再起動後の読み込み先と起動ログでCauldron・レシピの読み込みを確認してください。権限は既存の`craftbook.mech.cauldron`、`craftbook.mech.cauldron.use`、`craftbook.mech.cauldron.recipe.experience_extraction`を使用し、今回LuckPerms設定は変更しません。
+適用前にPaperを正常停止し、永続Volumeの既存CraftBook設定をバックアップしてください。追跡するレシピに本番独自の内容がある場合は、Cauldron以外の設定・既存レシピを保持してGitへ取り込んでから配布します。ファイルの配布だけでは適用済みとせず、再起動後の読み込み先と起動ログでCauldron・レシピの読み込みを確認してください。権限は既存の`craftbook.mech.cauldron`、`craftbook.mech.cauldron.use`、`craftbook.mech.cauldron.recipe.experience_extraction`を使用し、今回LuckPerms設定は変更しません。
 
 実機未確認です。適用後は次を確認してください。
 

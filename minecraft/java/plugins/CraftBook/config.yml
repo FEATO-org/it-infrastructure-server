@@ -12,6 +12,7 @@ enabled-mechanics:
   - Elevator
   - Bridge
   - Cauldron
+  - Chairs
   - Gate
   - MinecartBooster
   - MinecartDeposit
@@ -41,7 +42,7 @@ disabled-mechanics:
   - BounceBlocks
   # - Bridge
   # - Cauldron
-  - Chairs
+  # - Chairs
   - ChunkAnchor
   - CommandItems
   - CommandSigns

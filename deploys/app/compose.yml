@@ -181,6 +181,8 @@ services:
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/prepare-paper-plugins.sh:/extras/prepare-paper-plugins.sh:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/patches/betterhorses-horsemanship.json:/extras/betterhorses-horsemanship.json:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/patches/deadchest-updates.json:/extras/deadchest-updates.json:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/patches/craftbook-chairs.json:/extras/craftbook-chairs.json:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config-seeds/craftbook-mechanisms.yml:/extras/craftbook-mechanisms.yml:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/plugins:/plugins:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/bukkit.yml:/config/bukkit.yml:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/spigot.yml:/config/spigot.yml:ro
