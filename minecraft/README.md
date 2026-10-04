@@ -20,18 +20,19 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ FancyNpcs
                      ├ squaremap :8123
                      ├ ValhallaMMO / Magic 11.2.4 / FEATO Horsemanship 0.2.0
-                     ├ FEATO Gun-Valhalla Bridge 0.1.0 (Phase 1 PoC)
+                     ├ FEATO Gun-Valhalla Bridge 0.2.0 (Phase 1 PoC)
                      ├ SCore / ExecutableItems
                      ├ WorldEdit / CraftBook
                      ├ ImageFrame
                      ├ BreweryX 3.7.1
+                     ├ ProtocolLib 5.5.0-SNAPSHOT / PlaceholderAPI 2.12.3
                      ├ Better Horses / DualHorse
                      ├ Backpack Plus
-                     ├ DeadChest 4.30.0
+                     ├ DeadChest 4.31.0
                      ├ Hurricane (bamboo / pointed dripstone collision only)
                      ├ FEATO Ancient Coin 1.0.0
                      └ FEATO Coin Exchange 1.1.0
-Data Packs: Enchants Plus / Gun Core 1.0.15 / Modern Guns 1.9.3 / Bridge 0.1.0
+Data Packs: Enchants Plus / Gun Core 1.0.15 / Modern Guns 1.9.3 / Bridge 0.2.0
 Web: nginx dynmap.feato.jp -> squaremap :8123
 ```
 
@@ -61,15 +62,29 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 - 商店・NPC: EconomyShopGUI Free、FancyNpcs
 - マップ: squaremap
 - RPG・アイテム: ValhallaMMO、Magic 11.2.4、SCore、ExecutableItems
-- 銃器スキル検証: FEATO Gun-Valhalla Bridge 0.1.0（Phase 1 PoC）
+- 銃器スキル検証: FEATO Gun-Valhalla Bridge 0.2.0（Phase 1 PoC）
 - 建築・表示: WorldEdit、CraftBook、ImageFrame
 - 馬・収納: Better Horses、DualHorse、FEATO Horsemanship 0.2.0、Backpack Plus
 - 醸造・料理: BreweryX 3.7.1（標準レシピ・日本語表示）
-- 死亡時保護: DeadChest 4.30.0
+- 死亡時保護: DeadChest 4.31.0
 - 独自機能: FEATO Ancient Coin 1.0.0、FEATO Coin Exchange 1.1.0
 
-DeadChest 4.30.0をPaper 26.2環境で使用します。公式の対応表記は26.1.xまでで、
-Paper 26.2での実機テストは未実施です。
+DeadChest 4.31.0は公式metadataでPaper 26.2に対応し、Java 25で起動を確認しています。
+死亡・回収のプレイヤー操作と本番は未確認です。旧JARは既存の`REMOVE_OLD_MODS_INCLUDE`で
+`/data/plugins/dead-chest-*.jar`だけを除去し、4.31.0を再取得します。
+起動前にDeadChestの自動更新を無効化し、`/data/plugins/update/dead-chest-*.jar`も除去します。
+運用中の死亡保護設定は保持し、JARの版はインフラ側で管理します。
+
+ProtocolLibは公式Development Buildのasset IDとSHA-256を固定して起動前に取得します。
+一覧と固定取得元は`plugins.txt`、詳細は[versions.md](../deploys/versions.md)を参照してください。
+PlaceholderAPIは2.12.3本体だけを導入し、外部Expansionは追加しません。
+GhastMasterは運用版を特定できないため、今回の本体管理化は未実施です。
+既存の手動JARの正式版・公式配布元を確認するまで、そのJARを維持してください。
+`setup_minecraft_permissions.sh`には一般グループの`ghastmaster.share`だけを追加しています。
+
+Magicの`vengeance.variables: bubble`追加とMineGamesの外部YAMLの重複削除を反映しました。
+ただしMagic 11.2.4の式評価警告とMineGames 1.0.5のJAR内既定YAMLの重複警告は
+ローカル起動で残っています。本体版、式、メッセージ文言は変更していません。
 
 旧Vault、XConomy、XConomy_Reload、SetSpawn、Genius Shop、Dynmapは採用しません。既存VolumeからJARが自動削除されるとは限らないため、停止中に退避してください。Dynmapのタイルはバックアップ後に残して構いませんが、squaremapは別形式で再描画します。
 
@@ -134,29 +149,35 @@ Wand販売NPCは、販売位置に立って次を実行します。
 
 実機では、MagicとValhallaMMOのenable順、魔術profile作成、Spell XP加算、Skill Point総数、Path upgrade、Mana表示・回復、各Spellの成功判定とCooldown、Spell Shop GUI、日本語表示、Java/Bedrockの魔導具操作、統合resource packの表示を確認してください。
 
-## 銃器スキル（FIREARMS Bridge 0.1.0 / Phase 1 PoC）
+## 銃器スキル（FIREARMS Bridge 0.2.0 / Phase 1 PoC）
 
-[公開Release v0.1.0](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/tag/v0.1.0)のPlugin JARとDatapack ZIPを、`java/plugins.txt`と`java/datapacks.txt`の固定URLから取得します。両方のrelease IDは`2`、protocolは`1`です。更新時は必ず両manifestの版を同時に変更してください。
+[公開Release v0.2.0](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/tag/v0.2.0)のPlugin JARとDatapack ZIPを、`java/plugins.txt`と`java/datapacks.txt`の固定URLから取得します。両方のrelease IDは`3`、protocolは`1`です。更新時は必ず両manifestの版を同時に変更してください。
 
 対象はPaper **26.2 build 126** / Java 25 / ValhallaMMO **1.10.3** / Gun Core **1.0.15** / Modern Guns **1.9.3**です。Composeで`PAPER_BUILD: "126"`を固定し、`.env`の`MINECRAFT_VERSION`も26.2であることを適用前に確認します。Gun CoreとModern Gunsは既存の固定版を維持します。build・対象版・Datapack markerの不一致やheartbeat停止ではBridgeが登録を停止するため、起動ログの確認が必要です。起動中の登録待ちではプレイヤーのログインが一時拒否されます。
 
-0.1.0は専用FIREARMS profile、銃器スキルの検証用ツリー、管理者debug、Datapackの互換性確認だけを実装したPoCです。銃撃によるEXP獲得、通常銃撃・武器殴打のDamage連携、Ability効果、最終スキルツリーは未実装です。`tactical-reload`などの設定は将来用で、Phase 1では効果を発揮しません。ValhallaMMOの既存設定は変更せず、必須の`mining`、`weapons_light`、`armor_light`、`armor_heavy`、`archery`は有効なままです。
+0.2.0は専用FIREARMS profile、銃器スキルの検証用ツリー、管理者debug、Datapackの互換性確認、Bridge設定の再読み込みを実装したPoCです。銃撃によるEXP獲得、通常銃撃・武器殴打のDamage連携、Ability効果、最終スキルツリーは未実装です。`tactical-reload`などの設定は将来用で、Phase 1では効果を発揮しません。ValhallaMMOの既存設定は変更せず、必須の`mining`、`weapons_light`、`armor_light`、`armor_heavy`、`archery`は有効なままです。
 
 | 管理対象 | 起動時の配置先 |
 | --- | --- |
-| Plugin JAR | `/data/plugins/feato-gun-valhalla-bridge-plugin-0.1.0.jar` |
+| Plugin JAR | `/data/plugins/feato-gun-valhalla-bridge-plugin-0.2.0.jar` |
 | `java/plugins/FEATOGunValhallaBridge/config.yml` | `/data/plugins/FEATOGunValhallaBridge/config.yml`（`/plugins`から同期） |
-| Datapack ZIP | `/data/${LEVEL:-world}/datapacks/feato-gun-valhalla-bridge-datapack-0.1.0.zip` |
+| Datapack ZIP | `/data/${LEVEL:-world}/datapacks/feato-gun-valhalla-bridge-datapack-0.2.0.zip` |
 
-初期値は公開JAR同梱の設定と同じで、`debug.enabled: false`です。検証時だけ追跡設定を`true`に変更して完全再起動し、対象管理者だけに`feato.gunvalhalla.debug`を与えます（Pluginの既定はOP）。一般グループには付与しません。debugを有効にしても銃撃EXPは自動付与されません。
+初期値は0.2.0の公開JAR同梱の設定と同じで、`debug.enabled: false`を維持します。0.2.0では`/firearms reload`を追加し、Bridgeの`config.yml`だけを安全に再読み込みできます。debug無効時も実行でき、成功時は現在のdebug状態を表示します。YAML・必須キー・型・有限値・範囲の検証失敗時は、有効な旧設定とファイルを保持して理由とWARNを返します。
+
+`feato.gunvalhalla.reload`はPluginの既定OPで、`setup_minecraft_permissions.sh`の管理者グループへの許可対象に追加します。consoleからも利用できます。一般・役職グループには追加しません。debug用の`feato.gunvalhalla.debug`は独立した権限で、検証対象の管理者だけに付与します。reload権限だけでは検証用EXPを付与できず、debugを有効にしても銃撃EXPは自動付与されません。
+
+debug切替は追跡するconfigと実際の`/data/plugins/FEATOGunValhallaBridge/config.yml`を同じ値へ変更してから、`/firearms reload`で反映・表示を確認します。`/plugins`の管理元だけを変更しても、起動時同期前のruntimeファイルは変わりません。runtime側だけを編集した場合も、次回起動時に管理元で上書きされるため差分を管理元へ戻してください。検証終了後は`debug.enabled: false`へ戻してreloadします。
+
+reloadでSkill/Profile、ValhallaMMO Registry、Perk tree、Datapack handshake・markerは変更しません。停止したBridgeの再登録・復旧、Plugin JAR/Datapack更新、Skill/Profile構造の変更には完全再起動が必要です。Minecraft `/reload`、ValhallaMMO reload、Plugin disable/enableは実行しません。
 
 起動時の旧版削除は、Plugin側では既存FEATO JAR対象にBridge JARのglobを追加し、Datapack側では`feato-gun-valhalla-bridge-datapack-*.zip`だけを対象とします。別の名前の旧版や展開済みBridgeディレクトリがある場合は、停止中に手動で退避してください。Datapackの選択的削除はitzgの[setupスクリプト](https://github.com/itzg/docker-minecraft-server/blob/master/scripts/start-setupDatapack)と[取得helperのprune仕様](https://github.com/itzg/mc-image-helper/blob/main/README.md)に従います。
 
 ### 適用前の確認と戻し方
 
-現時点で本番へ適用しておらず、Phase 1の実機検証も未完了です。本番環境しかないため、先に本番DBを使用しない隔離した検証環境を用意し、[上流のPhase 1手順](https://github.com/FEATO-org/feato-gun-valhalla-bridge/blob/v0.1.0/docs/poc.md#reproducible-live-test-procedure-dedicated-test-server)で保存・login・再起動・respecを確認します。共通Skill Pointと既存Skillへの影響も記録してください。`SKILLS_REFUND_EXP`は他SkillのPerkもresetするため、本番プレイヤーへの検証には使いません。
+0.1.0ではユーザーから完全起動・Datapack handshake・FIREARMS登録・銃器表示・Lv0 Profileの再ログイン維持を確認したと報告を受けています。今回の0.2.0更新と新しいreload経路の実機確認は未実施です。特定XP値の保存一致、Level Up、完全再起動後の永続化、DB上の値、Perk三択排他は未確認のままです。respec/recalculationは未確認のまま後回しとし、その検証待ちで後続開発を止めません。残る検証は本番DBを使わない隔離環境で、[上流のPhase 1手順](https://github.com/FEATO-org/feato-gun-valhalla-bridge/blob/v0.2.0/docs/poc.md#reproducible-live-test-procedure-dedicated-test-server)で保存・login・再起動を確認し、respecは後日検証します。共通Skill Pointと既存Skillへの影響も記録してください。`SKILLS_REFUND_EXP`は他SkillのPerkもresetするため、本番プレイヤーへの検証には使いません。
 
-実機検証を終えて適用する際は、サーバーを正常停止してWorldとValhallaMMOのSQLite DB（実際の保存先を確認）をバックアップし、manifest・設定・Composeを配布して完全起動します。`/reload`は使いません。実際のPaper build、ValhallaMMOとBridgeのenable、marker一致・登録完了ログ、`profiles_firearms`の作成、`/skills`の表示、同一UUIDの再接続・完全再起動後の保存値を確認します。markerは`fgv_bridge` objectiveの`#release = 2`、`#protocol = 1`です。導入後も通常設定のdebugは無効へ戻します。
+0.2.0へ更新する際は、サーバーを正常停止してWorldとValhallaMMOのSQLite DB（実際の保存先を確認）をバックアップし、manifest・設定・Composeを配布して完全起動します。`/reload`は使いません。実際のPaper build、ValhallaMMOとBridgeのenable、marker一致・登録完了ログ、`profiles_firearms`の作成、`/skills`の表示、同一UUIDの再接続・完全再起動後の保存値を確認します。markerは`fgv_bridge` objectiveの`#release = 3`、`#protocol = 1`です。新しいreloadは、console・対象管理者からdebugのON/OFFと表示、不正設定拒否・旧設定保持、一般プレイヤーの拒否、Profile・handshakeの継続を確認します。通常設定のdebugは無効へ戻します。
 
 問題が出たら正常停止し、BridgeのJAR/ZIPの両manifest行を外して再起動します。上記globに一致するBridge配布物は起動時に削除されます。削除後に両方が読み込まれていないことをログと配置先で確認してください。旧版へ戻す場合も両方の版を揃えます。Plugin削除だけでは保存済みprofileは戻らないため、データ異常時は停止したままバックアップとの照合・復旧を行います。
 
@@ -164,9 +185,26 @@ Wand販売NPCは、販売位置に立って次を実行します。
 
 [FEATO Horsemanship v0.2.0](https://github.com/FEATO-org/feato_horsemanship/releases/tag/v0.2.0)で、ValhallaMMOに「馬術」（Lv 0-100）と移動・持久・操作・戦闘・育成のスキルツリーを追加します。対象は馬、スケルトンホース、ゾンビホース、ロバ、ラバです。移動EXPは操縦者だけに100ブロックごと10、馬上戦闘EXPは攻撃者本人に2秒間隔で0.5を付与する初期設定です。Lv20の「追う」は操縦中にメインハンドへリードを持って右クリックすると発動し、速度+6%、5秒、再使用35秒です。Perk取得前の操縦速度は-5%、鞍上の第一歩の取得後は-2%、手綱の心得の取得後はペナルティなしです。
 
-JARは`java/plugins.txt`から取得し、Release添付のSkillを`java/plugins/ValhallaMMO/skills/custom/horsemanship.yml`、JAR同梱の効果設定を`java/plugins/FEATOHorsemanship/config.yml`として追跡します。起動前に`/plugins`から`/data/plugins`へ同期します。BetterHorsesの馬上ダメージ加算だけを起動前patchで無効化し、ほかの既存設定は保持します。一般プレイヤーの育成コマンドは取得Perkで制限し、reload権限は管理グループだけへ付与します。
+JARは`java/plugins.txt`から取得し、Release添付を基にGUIを調整したSkillを`java/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml`、JAR同梱の効果設定を`java/plugins/FEATOHorsemanship/config.yml`として追跡します。起動前に`/plugins`から`/data/plugins`へ同期します。BetterHorsesの馬上ダメージ加算だけを起動前patchで無効化し、ほかの既存設定は保持します。一般プレイヤーの育成コマンドは取得Perkで制限し、reload権限は管理グループだけへ付与します。
 
 2026-10-04にPaper 26.2 build 126 / Java 25、ValhallaMMO 1.10.3、BetterHorses 6.4、DualHorse 1.5.4、Magic 11.2.4で、スキル登録・5 Pluginの有効化・馬術設定reload・正常停止をローカル確認しました。v0.1.0の報酬未登録エラーは解消しています。本番適用、Java/BedrockのPerk取得・騎乗操作・育成連携は未確認です。配布先、バックアップ、適用・実機確認・戻し方は[馬術の導入手順](java/plugins/ValhallaMMO/HORSEMANSHIP_SETUP.md)を参照してください。
+
+## CraftBook Cauldron（経験抽出）
+
+CraftBook 3.10.13の既存Cauldron mechanicを有効化します。水で満たした大釜の直下に火または溶岩を置き、大釜側面の壁看板の2行目に`[Cauldron]`と記入します。腐った肉16個、クモの目2個、アメジストの欠片1個、ガラス瓶1個を過不足なく投入し、スコップで大釜を右クリックすると経験値の瓶1個を錬成します。`chance: 93`にCraftBook本来のスコップ品質・エンチャント補正が適用されます。失敗時は材料が消費されず、再度かき混ぜて挑戦できます。看板必須、レッドストーン起動無効、item tracking無効です。
+
+追跡設定は`java/plugins/CraftBook/`の`config.yml`、`mechanisms.yml`、`cauldron-recipes.yml`です。Composeの`/plugins` mountから起動時に永続Volumeの`/data/plugins/CraftBook/`へ同期します。3.10.13の配布JARの同梱設定・読み込み処理に合わせ、レシピの最上位キーは`cauldron-recipes`を使用しています。
+
+適用前にPaperを正常停止し、永続Volumeの既存CraftBook設定をバックアップしてください。今回初めて追跡する2ファイルに本番独自の設定・レシピがある場合は、Cauldron以外の設定・既存レシピを保持してGitへ取り込んでから配布します。ファイルの配布だけでは適用済みとせず、再起動後の読み込み先と起動ログでCauldron・レシピの読み込みを確認してください。権限は既存の`craftbook.mech.cauldron`、`craftbook.mech.cauldron.use`、`craftbook.mech.cauldron.recipe.experience_extraction`を使用し、今回LuckPerms設定は変更しません。
+
+実機未確認です。適用後は次を確認してください。
+
+- 看板なしの大釜ではCraftBookが反応せず、側面の看板ありではスコップ操作が成立すること。
+- 材料16/2/1/1から経験値の瓶1個が生成され、成功時だけ材料が消費され、失敗時は再試行できること。
+- レッドストーンで錬成できず、既存権限チェックが機能すること。
+- BreweryX・ValhallaMMOなど他の大釜系機能と実用上競合しないこと。
+
+問題があればPaperを正常停止し、追跡設定と永続Volumeの設定を適用前のバックアップへ戻して再起動します。新規追跡ファイルは配布元から外すだけで永続Volumeから削除されるとは限らないため、両方の復元を確認してください。
 
 ## 経済と通常商店
 
@@ -380,4 +418,4 @@ EconomyShopGUI 7.3.2の起動と以下の実クライアント操作は未確認
 - Bedrock: `/shop`が標準Form UIで開くこと、商品を1回選択して購入数量指定へ進めること、購入・売却対象の選択と取引が成立すること、購入→売却・売却→購入の両方向と戻る操作が正常なことを確認する。残高・Inventoryの増減と、サーバーログに例外がないことも確認する。
 - Java: 従来のInventory GUIで商品選択・購入・売却・数量指定・navigationが7.2.1から退行していないことを確認する。
 
-クライアント操作が必要なJava/Bedrockログイン、NPCクリック、100G徴収、帰還札の消費とteleport、商品売買、馬の二人乗り、各Data Pack、古銭dropは本番公開前の実機確認事項です。Better HorsesはProtocolLibなしでも起動しますが、一部機能が無効になるという通知があります。今回ProtocolLibは追加していません。
+クライアント操作が必要なJava/Bedrockログイン、NPCクリック、100G徴収、帰還札の消費とteleport、商品売買、馬の二人乗り、各Data Pack、古銭dropは本番公開前の実機確認事項です。Better HorsesはProtocolLibなしでも起動しますが、一部機能が無効になるという通知があります。現在は固定したProtocolLibを導入し、隔離起動でBetterHorsesの接続を確認しています。プレイヤー操作は未確認です。

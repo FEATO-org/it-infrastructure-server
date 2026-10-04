@@ -1,5 +1,16 @@
 # バージョン確認（2026-09-22）
 
+## Plugin運用整理（2026-10-04）
+
+- DeadChest 4.31.0: [作者公式配布](https://modrinth.com/plugin/dead-chest/version/ej8X4AM4)はPaper / 26.2を列挙。GETしたJARのSHA-512は公式metadataと一致しました。旧`dead-chest-*.jar`は既存の起動前除去対象に追加し、`plugins/update/`の同名パターンも除去します。`prepare-paper-plugins.sh`で運用設定の`updates.auto-check`と旧形式`auto-update`だけをfalseへpatchし、死亡保護設定は保持します。
+- ProtocolLib: [公式dev changelog](https://github.com/dmulloy2/ProtocolLib/releases/tag/dev-build)は26.2対応（#3642）とJava 25修正（#3566）を含みます。stable 5.4.0の対応は1.21.8までなのでdevelopment版を採用。2026-10-03T18:20:42Z作成の`ProtocolLib-Spigot.jar`（JAR表記5.5.0-SNAPSHOT、asset ID `608298575`）を固定し、可変`dev-build`ダウンロードURLは使いません。`plugins.txt`には管理対象と固定取得元をコメントで記録し、Acceptヘッダーが必要なため起動前スクリプトで`mc-image-helper get --accept application/octet-stream`を実行します。SHA-256 `a4ef57c36e27adec56b3a7935b7930fd1e366b310b9b698949e7f3320c84a8f9`で検証してから配置します。公式asset削除・ハッシュ不一致時は起動を中止します。既存JARがハッシュ一致なら再取得しません。
+- PlaceholderAPI: [公式2.12.3 Release](https://github.com/PlaceholderAPI/PlaceholderAPI/releases/tag/2.12.3)は26.2対応を明記していますが、Paper版はexperimentalとされています。ここではReleaseのBukkit/Spigot JARを固定し、Java 25でenableを確認。SHA-256 `fde03259f5af6938f3c33eeb4d814000a1adabf1d2304ce14970be81f609a437`は公式asset digestと一致しました。eCloud・外部Expansionは導入していません（既存Plugin自身の内部placeholder登録は発生します）。
+- Magic 11.2.4: [upstream修正](https://github.com/elBukkit/MagicPlugin/commit/10d3665616efe71f3431a2434ff8124d0aeeebc7)に沿って`vengeance.variables: bubble`を追跡設定へ追加。本体版と0.4/0.6/0.8の式は維持。ただし、この版でのローカル起動では3段階の式評価警告が残りました。
+- MineGames 1.0.5: 外部configのRoulette / Slotsの重複6行を削除し、同じ文言を各1定義に統一。ただしJAR同梱configにも重複があり、既定設定読み込み時の警告は残ります。本体変更は今回行っていません。
+- GhastMaster: 履歴`ec6bcf3`にSpiget resource `126304`の追加、`18c1ce5`に取得失敗による削除がありましたが、どちらも版は記録されていません。手元の配布JARにも運用版を特定できるものがなく、本体の管理化は未実施。別版への移行は行いません。`ghastmaster.share`のみ一般グループの許可一覧へ追加しました。本番適用は未実施です。
+
+隔離Paper 26.2 build 126 / Oracle GraalVM Java 25.0.4でMagic、MineGames、DeadChest、ProtocolLib、PlaceholderAPI、BetterHorses（6.4）と既存依存Pluginを同時にenableし、正常停止を確認しました。DeadChestのAmbiguous plugin name、BetterHorsesのProtocolLib未導入警告はありません。Magicのbubble警告とMineGames既定YAMLのduplicate keys警告は残存。全Plugin・Data Packとの組合せ、本番、プレイヤー操作は未確認です。ValhallaMMO等の別タスクの修正は含みません。
+
 ## BreweryX追加（2026-10-04）
 
 [BreweryX 3.7.1公式Release](https://github.com/BreweryTeam/BreweryX/releases/tag/3.7.1)が案内する
@@ -123,8 +134,8 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | LuckPerms | v5.5.71-velocity | [固定URL](https://cdn.modrinth.com/data/Vebnzrzj/versions/tamnmXad/LuckPerms-Velocity-5.5.71.jar) | Velocity | 26.2（配布metadata） | stable | 同梱Java 11以上; Requires runtime verification |
 | LuckTags | 1.4 | [固定URL](https://cdn.modrinth.com/data/riEl5GDK/versions/mMmIwg51/lucktags-1.4.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | ValhallaMMO | 1.10.3 | [固定URL](https://cdn.modrinth.com/data/rxrgsoud/versions/GkeSDJSq/ValhallaMMO_1.10.3.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
-| FEATO Gun-Valhalla Bridge Plugin | 0.1.0 | [固定JAR](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.1.0/feato-gun-valhalla-bridge-plugin-0.1.0.jar) | Paper | 26.2 build 126（Bridge固定対象） | 公開Release（Phase 1 PoC） | Java 25、ValhallaMMO 1.10.3必須。release ID 2 / protocol 1。実機起動・保存・respec未検証 |
-| FEATO Gun-Valhalla Bridge Datapack | 0.1.0 | [固定ZIP](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.1.0/feato-gun-valhalla-bridge-datapack-0.1.0.zip) | Data Pack | 26.2（pack format 107.1） | 公開Release（Phase 1 PoC） | 同版Pluginと対で配置。Gun Core 1.0.15 / Modern Guns 1.9.3。実機未検証 |
+| FEATO Gun-Valhalla Bridge Plugin | 0.2.0 | [固定JAR](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.2.0/feato-gun-valhalla-bridge-plugin-0.2.0.jar) | Paper | 26.2 build 126（Bridge固定対象） | 公開Release（Phase 1 PoC） | Java 25、ValhallaMMO 1.10.3必須。release ID 3 / protocol 1。config reloadを追加。0.2.0の実機起動・reloadは未確認 |
+| FEATO Gun-Valhalla Bridge Datapack | 0.2.0 | [固定ZIP](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.2.0/feato-gun-valhalla-bridge-datapack-0.2.0.zip) | Data Pack | 26.2（pack format 107.1） | 公開Release（Phase 1 PoC） | 同版Pluginと対で配置。Gun Core 1.0.15 / Modern Guns 1.9.3。release ID 3 / protocol 1。0.2.0は実機未確認 |
 | FEATO Horsemanship | 0.2.0 | [固定JAR](https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.2.0/feato-horsemanship-0.2.0.jar) / [Custom Skill](https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.2.0/horsemanship.yml) | Paper | 26.2 build 126（配布元対象、api-version 26.2） | stable release（draft=false、prerelease=false） | Java 25、ValhallaMMO 1.10.3必須。BetterHorses 6.4 / DualHorse 1.5.4 / Magic 11.2.4との同時起動・reload・正常停止を2026-10-04にローカル確認。プレイヤー操作・本番は未確認 |
 | Magic | 11.2.4 | [固定URL](https://mediafilez.forgecdn.net/files/8375/702/Magic-11.2.4.jar) | Paper | 26.2（公式配布対象） | stable | 公式ValhallaMMO integrationを使用; Requires runtime verification |
 | SCore | 5.26.9.17 | [固定URL](https://cdn.modrinth.com/data/ZfcV7L06/versions/EHLoQYh8/SCore-5.26.9.17.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 8以上; Requires runtime verification |
@@ -134,7 +145,9 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | ImageFrame | 2026.1.4 | [固定URL](https://cdn.modrinth.com/data/lJFOpcEj/versions/nt0GWT1y/ImageFrame-2026.1.4.0.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | Backpack Plus | 3.2.0 | [固定URL](https://cdn.modrinth.com/data/lDAFcnRN/versions/vsRfbexG/BackpackPlus-3.2.0-all.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | Enchants Plus | 1.6 | [固定URL](https://cdn.modrinth.com/data/N72bKhby/versions/oeMySJjE/Enchants%2B%20v1.6%201.21%20-%201.21.11.zip) | Data Pack | 26.2（配布metadata） | stable | Requires runtime verification |
-| DeadChest | 4.30.0 | [固定URL](https://cdn.modrinth.com/data/pKqnV03Y/versions/mBSgqYZH/dead-chest-4.30.0.jar) | Paper | 配布metadataは26.1.2まで | stable | Paper 26.2で使用、実機テスト未実施; Requires runtime verification |
+| DeadChest | 4.31.0 | [固定URL](https://cdn.modrinth.com/data/pKqnV03Y/versions/ej8X4AM4/dead-chest-4.31.0.jar) | Paper | 26.2（公式metadata） | stable | Java 25 / Paper 26.2 build 126でenable・正常停止確認。死亡・回収操作と本番は未確認 |
+| ProtocolLib | 5.5.0-SNAPSHOT（asset 608298575） | [固定公式asset](https://api.github.com/repos/dmulloy2/ProtocolLib/releases/assets/608298575) | Paper（Spigot artifact） | 26.2（公式dev changelog #3642） | development | Java 25対応修正 #3566を含む。Java 25 / Paper 26.2 build 126でenableとBetterHorses接続確認 |
+| PlaceholderAPI | 2.12.3 | [固定公式Release](https://github.com/PlaceholderAPI/PlaceholderAPI/releases/download/2.12.3/PlaceholderAPI-2.12.3.jar) | Paper | 26.2（公式Release） | release（Paper版はexperimental表記） | Java 25 / Paper 26.2 build 126でenable確認。追加Expansionなし |
 | Better Horses | 6.4（検証時、動的取得） | [作者配布](https://www.spigotmc.org/resources/better-horses.124223/) | Paper | 26.2（6.4でローカル起動確認） | dynamic author release | Spiget resource 124223の取得方式を維持。2026-10-04に馬術との同時起動確認、プレイヤー操作は未確認。ProtocolLibなしでは一部機能無効 |
 | EssentialsX Core / Spawn | 2.22.1-dev+24-49a2f10（公式CI build 1829） | [Core](https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsX-2.22.1-dev+24-49a2f10.jar) / [Spawn](https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsXSpawn-2.22.1-dev+24-49a2f10.jar) | Paper | 26.2（現行公式support一覧） | development | 2.22.0 stableは26.1.2まで。Paper 26.2で起動確認 |
 | VaultUnlocked | 2.20.3 | [固定URL](https://cdn.modrinth.com/data/ayRaM8J7/versions/qZgRzoYs/VaultUnlocked-2.20.3.jar) | Paper | 26.2（配布metadata） | stable | plugin名は`Vault`。Paper 26.2で起動確認 |
@@ -160,16 +173,20 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 
 JARの標準`config.yml`は`config-version: 2.0.1.9`で、`LanguageFiles/lang-ja.yml`を同梱しています。既存設定とのキー比較では削除キーはなく、新規キーは`bedrock-forms`、`per-player-languages: false`、`enchanted-variants: false`でした。今回追加するForms設定は上流既定を使い、商品を1回の選択で操作するため`use-double-click-for-touch-devices`だけ既定の`true`から`false`へ変更します。目的外の新規optional featureは追加せず、既定の無効状態を維持します。経済Provider・価格・sections/shops・既存のクリックとnavigation設定は維持し、7.3.2の起動・取引・画面遷移は未検証です。
 
-### FIREARMS Bridge 0.1.0確認（2026-10-04）
+### FIREARMS Bridge 0.2.0確認（2026-10-04）
 
-[公開Release v0.1.0](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/tag/v0.1.0)はdraft=false、prerelease=falseです。JAR/ZIPをGETし、公開`SHA256SUMS`との一致、JARの`plugin.yml`（FEATOGunValhallaBridge / 0.1.0 / ValhallaMMO依存）、`bridge.properties`とZIP内markerのrelease ID `2` / protocol `1`の一致を確認しました。ZIPの`pack.mcmeta`はmin/max formatとも`[107, 1]`です。
+[公開Release v0.2.0](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/tag/v0.2.0)はdraft=false、prerelease=falseです。JAR/ZIPをGETし、公開`SHA256SUMS`とGitHub asset digestとの一致、ZIP整合性、JARの`plugin.yml`（FEATOGunValhallaBridge / 0.2.0 / ValhallaMMO依存）、`bridge.properties`とZIP内markerのrelease ID `3` / protocol `1`の一致を確認しました。ZIPの`pack.mcmeta`はmin/max formatとも`[107, 1]`です。
 
 | 配布物 | GET検証済みSHA-256 |
 | --- | --- |
-| feato-gun-valhalla-bridge-plugin-0.1.0.jar | `b37e2b8086d56c4ed056da520950aa44b7cee4d1fac657780afd2c5d01b42558` |
-| feato-gun-valhalla-bridge-datapack-0.1.0.zip | `b077dcd0485de3121f94151023886a1a931d4a24dd408cf3051257ef8348649b` |
+| feato-gun-valhalla-bridge-plugin-0.2.0.jar | `6dc28fd421620d62bd3f8c1b9137f4aa1841fdd05398ec49a77fdffa1af28307` |
+| feato-gun-valhalla-bridge-datapack-0.2.0.zip | `3e6699a3f35e3ac2f06fc68ca954626e5114e840bed25266e198fb19f00ab8db` |
 
-Composeへ[`PAPER_BUILD`](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/server-types/paper/)を追加し、Bridgeが要求するbuild 126を固定しました。`.env`でMinecraft版を変える場合もBridgeの対象26.2との一致が必要です。Gun Core / Modern Gunsのmanifestは既存版を維持しています。初期configは公開JAR同梱と一致し、debugは無効です。配布物の検証と本番動作確認は別で、Phase 1のGUI・SQL保存・再ログイン・完全再起動・respecはRequires runtime verification。適用前の条件は[minecraft/README.md](../minecraft/README.md#銃器スキルfirearms-bridge-010--phase-1-poc)を参照してください。
+Paper build 126 / Minecraft 26.2 / Java 25 / ValhallaMMO 1.10.3 / Gun Core 1.0.15 / Modern Guns 1.9.3は従来どおりです。Composeのbuild固定とBridge旧版だけを対象とするJAR/ZIP整理も維持します。追跡configは0.2.0公開JARの初期設定と完全一致し、debugは無効です。
+
+0.2.0は`/firearms reload`を追加したPhase 1 PoCで、銃撃EXP・Damage連携・Ability効果は未実装です。`plugin.yml`のreload専用権限`feato.gunvalhalla.reload`は既定OP、既存debug権限とは独立し、debug無効時もconsoleから実行できます。管理者グループ向け権限スクリプトへreloadだけを追加し、debugの付与設定は変更しません。
+
+0.1.0ではユーザー実機報告でhandshake・FIREARMS登録・銃器表示・Lv0 Profileの再ログイン維持を確認しました。0.2.0の実機起動と新reload経路、特定XP値・Level Up・完全再起動後の保存・DB値・Perk三択は未確認です。respec/recalculationは未確認のまま後回しとし、後続開発を止める理由にはしません。更新・config反映・実機確認・復旧手順は[minecraft/README.md](../minecraft/README.md#銃器スキルfirearms-bridge-020--phase-1-poc)を参照してください。
 
 ### FEATO Horsemanship 0.2.0（2026-10-04）
 
@@ -179,6 +196,8 @@ Composeへ[`PAPER_BUILD`](https://docker-minecraft-server.readthedocs.io/en/late
 | --- | --- |
 | feato-horsemanship-0.2.0.jar | `613002f811eb7c2ad613cf015fe40c050f879edd2a1561a4c198451c18a52a19` |
 | horsemanship.yml | `a384b5494df865c317686f78d306afb9c81beb87b1d2bb8052409157f0a34677` |
+
+Release asset名と取得URLは小文字のままですが、Git管理・配布時の正本は `minecraft/java/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml` とします。内容・SHA-256は変更せず、ValhallaMMO 1.10.3の大文字ファイル名での読み込みに合わせます。 2026-10-04、隔離したLinux / Java 25 / Paper 26.2 build 126でValhallaMMO 1.10.3とFEATOHorsemanship 0.2.0のenable完了を確認しました。Bridge・本番・育成や保存などの全体動作は未確認です。
 
 Paper 26.2 build 126 / Oracle GraalVM 25.0.4、ValhallaMMO 1.10.3、BetterHorses 6.4、DualHorse 1.5.4、Magic 11.2.4で、Custom Skill登録、5 Pluginの有効化、Magicから馬術Lv・EXPの認識、馬術設定reload、正常停止を隔離したローカル環境で確認しました。43 Perkの報酬・前提・排他条件・座標も静的検証しています。v0.1.0で再現した`horsemanship_first_saddle_set`未登録エラーは解消しました。一般プレイヤーのPerk取得・NG+・騎乗・育成連携、Java/Bedrock操作、本番動作は未確認です。
 
@@ -191,8 +210,8 @@ Paper 26.2 build 126 / Oracle GraalVM 25.0.4、ValhallaMMO 1.10.3、BetterHorses
 | LuckPerms-Bukkit-5.5.71.jar | `188a91f0a543d23bfda32385fca6db63d61e49c8a422bd452a260bd9cbc6a7d7fe45071199e9fca8f3ce43c2b41ee84fd315bd15464577028ff3951a7d4fab27` |
 | LuckPerms-Velocity-5.5.71.jar | `a619da8804727bed7b2b2ee5383974329a3c09181a67745484fdffd0f4b6c5b13c44aa88e0d2b30d13f3068d9b0f3e26863abba9855f80a7eb5f9455ca6c40d4` |
 | lucktags-1.4.jar | `1052d2ea814da732d5e39447384df0427fd14c2e1f206441b3d71a5a65b10733bf30db983cc92e21079503687c9097310d43b237e388db7d8d1129fc56989855` |
-| feato-gun-valhalla-bridge-plugin-0.1.0.jar | `f1b190684cfc3c21b475610d7e3eb68443be3679392b96bc6baf3e8d0af70a6fc733b30659bc456038cce1410f6d20e8054e0636382c45f7afef90bf020a2821` |
-| feato-gun-valhalla-bridge-datapack-0.1.0.zip | `1ab09380da68656da1503bd9a19436e15ebb75ecb28b44d65fcf8dd988f46849199183aa289eb27651a02debc4263bbb51eb49cfd4c69e74fcf07978e42e1976` |
+| feato-gun-valhalla-bridge-plugin-0.2.0.jar | `c19f9f41fa7511ac35ca3e89838654258e6787a78a81bf993efb666ea67e860a961e95a54b235eff9fa9d9178c9a2b6b7070412e3111d7b765acf1df0a522363` |
+| feato-gun-valhalla-bridge-datapack-0.2.0.zip | `9a0f546efbd0e9bef021dd5fcd36486ff6d47b1b2708ccba07b02522fe0baf094e12a6183b00b391f36a3dbe48742cdb40bf49518eba026144ada67fd127bdcb` |
 | ValhallaMMO_1.10.3.jar | `e04a1e8f39e009e141fe8f07dd1eea85ad06c5850e63e5518618c316e3b4822179ab5bab571f1a5fc6ccf35c17de4baaae07c86e7fd9b374b6eb1f6cedd528a6` |
 | Magic-11.2.4.jar | `4eb13cba74a534f6f58ef4dd4a301cac20f58299b4606ff2488c7fa7c4fc6dac69781449669acbef12a30b378771d474fdd58b9e4fa33defa59e9061aeed9e32` |
 | SCore-5.26.9.17.jar | `7d023fa5973ca88acce406581eeb8378b2c14de9a77545d04f87ff79b3049de296f1d67eb0b442977b2e6b4fb5665ec344b8c274b7ccbda942fcc87fa72f57ee` |
@@ -214,7 +233,7 @@ Paper 26.2 build 126 / Oracle GraalVM 25.0.4、ValhallaMMO 1.10.3、BetterHorses
 | DualHorse-1.5.4.jar | `fd70684e9b3263bfc4edb9bde54a5fc1cc08c9f2ca4577434e2517dd7a3e5958029ebb0fd4090faa0545ae957531608cafe5452cb30d87f67344b28ac30e75d2` |
 | BetterHorses-6.3.jar | `d54e921e073eec52dbe81542f0d06713bf1c217a645c4644caf410fcc08ebfa27723866d7de3803a2be7c3d4143c61943849dd9e959f312f8d465426d863e704` |
 | Enchants+ v1.6 1.21 - 1.21.11.zip | `93e507c428287d7e8562a2ddd5a6488e47fcd76282426d683621c947f4fa8dda6a0ed605d458a1fed659ac5aa0909f01c8adb32994664788abe35fce0411083b` |
-| dead-chest-4.30.0.jar | `1cc61288c1c530e0839f7060bd0f670a5b54b18dd70399ca50207ff973ad1f1b5a1effa5da52a18b9f6944ec784913b2798f59ea9b208d3f31643992681e1b9d` |
+| dead-chest-4.31.0.jar | `8f39b4a11c5c4a168fe55f4a9e77e11c3aff9aa778a3a32565990e1de07b5d0fc7c28d14da1720fae08300f8874df89fd5f970c9bb796a7c19e2ceb1e3484028` |
 
 ## 26.2追加構成の起動検証（2026-09-21）
 

@@ -30,6 +30,9 @@ player_allow=(
   deadchest.generate
   deadchest.get
 
+  # GhastMaster
+  ghastmaster.share
+
   # CraftBook: enabled user-facing mechanics.
   craftbook.mech.elevator
   craftbook.mech.elevator.use
@@ -59,6 +62,7 @@ player_deny=(
   EconomyShopGUI.sellgui.all
 )
 admin_allow=(
+  feato.gunvalhalla.reload
   feato.horsemanship.admin
   essentials.balance.others
   essentials.eco

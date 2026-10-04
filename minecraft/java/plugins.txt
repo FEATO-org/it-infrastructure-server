@@ -1,7 +1,7 @@
 https://cdn.modrinth.com/data/Vebnzrzj/versions/b0mk8uS6/LuckPerms-Bukkit-5.5.71.jar
 https://cdn.modrinth.com/data/riEl5GDK/versions/mMmIwg51/lucktags-1.4.jar
 https://cdn.modrinth.com/data/rxrgsoud/versions/GkeSDJSq/ValhallaMMO_1.10.3.jar
-https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.1.0/feato-gun-valhalla-bridge-plugin-0.1.0.jar
+https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.2.0/feato-gun-valhalla-bridge-plugin-0.2.0.jar
 https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.2.0/feato-horsemanship-0.2.0.jar
 https://mediafilez.forgecdn.net/files/8375/702/Magic-11.2.4.jar
 https://cdn.modrinth.com/data/ZfcV7L06/versions/EHLoQYh8/SCore-5.26.9.17.jar
@@ -22,8 +22,11 @@ https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/lates
 https://github.com/jpenilla/squaremap/releases/download/v1.3.15/squaremap-paper-mc26.2-1.3.15.jar
 https://github.com/FEATO-org/feato_ancient_coin/releases/download/v1.1.0/FEATO-Ancient-Coin-1.1.0.jar
 https://github.com/FEATO-org/feato-coin-exchange/releases/download/v1.0.0/FEATO-Coin-Exchange-1.0.0.jar
-https://cdn.modrinth.com/data/pKqnV03Y/versions/mBSgqYZH/dead-chest-4.30.0.jar
+https://cdn.modrinth.com/data/pKqnV03Y/versions/ej8X4AM4/dead-chest-4.31.0.jar
 https://cdn.spiget.org/file/spiget-resources/124223.jar
 https://cdn.spiget.org/file/spiget-resources/40996.jar
 https://download.geysermc.org/v2/projects/hurricane/versions/latest/builds/latest/downloads/spigot
 https://cdn.modrinth.com/data/gvXaGv1n/versions/XmLbPZhp/BreweryX-3.7.1.jar
+https://github.com/PlaceholderAPI/PlaceholderAPI/releases/download/2.12.3/PlaceholderAPI-2.12.3.jar
+# ProtocolLib 5.5.0-SNAPSHOT: fixed official asset, fetched with Accept + SHA-256 by prepare-paper-plugins.sh.
+# https://api.github.com/repos/dmulloy2/ProtocolLib/releases/assets/608298575

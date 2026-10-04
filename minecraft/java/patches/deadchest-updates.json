@@ -1,0 +1,21 @@
+{
+  "file": "/data/plugins/DeadChest/config.yml",
+  "ops": [
+    {
+      "$put": {
+        "path": "$",
+        "key": "updates",
+        "value": {
+          "auto-check": false
+        }
+      }
+    },
+    {
+      "$put": {
+        "path": "$",
+        "key": "auto-update",
+        "value": false
+      }
+    }
+  ]
+}
