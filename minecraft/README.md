@@ -20,6 +20,7 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ FancyNpcs
                      ├ squaremap :8123
                      ├ ValhallaMMO / Magic 11.2.4
+                     ├ FEATO Gun-Valhalla Bridge 0.1.0 (Phase 1 PoC)
                      ├ SCore / ExecutableItems
                      ├ WorldEdit / CraftBook
                      ├ ImageFrame
@@ -29,7 +30,7 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ Hurricane (bamboo / pointed dripstone collision only)
                      ├ FEATO Ancient Coin 1.0.0
                      └ FEATO Coin Exchange 1.1.0
-Data Packs: Enchants Plus
+Data Packs: Enchants Plus / Gun Core 1.0.15 / Modern Guns 1.9.3 / Bridge 0.1.0
 Web: nginx dynmap.feato.jp -> squaremap :8123
 ```
 
@@ -59,6 +60,7 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 - 商店・NPC: EconomyShopGUI Free、FancyNpcs
 - マップ: squaremap
 - RPG・アイテム: ValhallaMMO、Magic 11.2.4、SCore、ExecutableItems
+- 銃器スキル検証: FEATO Gun-Valhalla Bridge 0.1.0（Phase 1 PoC）
 - 建築・表示: WorldEdit、CraftBook、ImageFrame
 - 馬・収納: Better Horses、DualHorse、Backpack Plus
 - 死亡時保護: DeadChest 4.30.0
@@ -119,6 +121,32 @@ Wand販売NPCは、販売位置に立って次を実行します。
 `console_command`はConsoleとして`castp <player> <spell>`を実行するため、一般Playerへ`magic.commands.cast`や`magic.commands.castp`は付与しません。
 
 実機では、MagicとValhallaMMOのenable順、魔術profile作成、Spell XP加算、Skill Point総数、Path upgrade、Mana表示・回復、各Spellの成功判定とCooldown、Spell Shop GUI、日本語表示、Java/Bedrockの魔導具操作、統合resource packの表示を確認してください。
+
+## 銃器スキル（FIREARMS Bridge 0.1.0 / Phase 1 PoC）
+
+[公開Release v0.1.0](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/tag/v0.1.0)のPlugin JARとDatapack ZIPを、`java/plugins.txt`と`java/datapacks.txt`の固定URLから取得します。両方のrelease IDは`2`、protocolは`1`です。更新時は必ず両manifestの版を同時に変更してください。
+
+対象はPaper **26.2 build 126** / Java 25 / ValhallaMMO **1.10.3** / Gun Core **1.0.15** / Modern Guns **1.9.3**です。Composeで`PAPER_BUILD: "126"`を固定し、`.env`の`MINECRAFT_VERSION`も26.2であることを適用前に確認します。Gun CoreとModern Gunsは既存の固定版を維持します。build・対象版・Datapack markerの不一致やheartbeat停止ではBridgeが登録を停止するため、起動ログの確認が必要です。起動中の登録待ちではプレイヤーのログインが一時拒否されます。
+
+0.1.0は専用FIREARMS profile、銃器スキルの検証用ツリー、管理者debug、Datapackの互換性確認だけを実装したPoCです。銃撃によるEXP獲得、通常銃撃・武器殴打のDamage連携、Ability効果、最終スキルツリーは未実装です。`tactical-reload`などの設定は将来用で、Phase 1では効果を発揮しません。ValhallaMMOの既存設定は変更せず、必須の`mining`、`weapons_light`、`armor_light`、`armor_heavy`、`archery`は有効なままです。
+
+| 管理対象 | 起動時の配置先 |
+| --- | --- |
+| Plugin JAR | `/data/plugins/feato-gun-valhalla-bridge-plugin-0.1.0.jar` |
+| `java/plugins/FEATOGunValhallaBridge/config.yml` | `/data/plugins/FEATOGunValhallaBridge/config.yml`（`/plugins`から同期） |
+| Datapack ZIP | `/data/${LEVEL:-world}/datapacks/feato-gun-valhalla-bridge-datapack-0.1.0.zip` |
+
+初期値は公開JAR同梱の設定と同じで、`debug.enabled: false`です。検証時だけ追跡設定を`true`に変更して完全再起動し、対象管理者だけに`feato.gunvalhalla.debug`を与えます（Pluginの既定はOP）。一般グループには付与しません。debugを有効にしても銃撃EXPは自動付与されません。
+
+起動時の旧版削除は、Plugin側では既存FEATO JAR対象にBridge JARのglobを追加し、Datapack側では`feato-gun-valhalla-bridge-datapack-*.zip`だけを対象とします。別の名前の旧版や展開済みBridgeディレクトリがある場合は、停止中に手動で退避してください。Datapackの選択的削除はitzgの[setupスクリプト](https://github.com/itzg/docker-minecraft-server/blob/master/scripts/start-setupDatapack)と[取得helperのprune仕様](https://github.com/itzg/mc-image-helper/blob/main/README.md)に従います。
+
+### 適用前の確認と戻し方
+
+現時点で本番へ適用しておらず、Phase 1の実機検証も未完了です。本番環境しかないため、先に本番DBを使用しない隔離した検証環境を用意し、[上流のPhase 1手順](https://github.com/FEATO-org/feato-gun-valhalla-bridge/blob/v0.1.0/docs/poc.md#reproducible-live-test-procedure-dedicated-test-server)で保存・login・再起動・respecを確認します。共通Skill Pointと既存Skillへの影響も記録してください。`SKILLS_REFUND_EXP`は他SkillのPerkもresetするため、本番プレイヤーへの検証には使いません。
+
+実機検証を終えて適用する際は、サーバーを正常停止してWorldとValhallaMMOのSQLite DB（実際の保存先を確認）をバックアップし、manifest・設定・Composeを配布して完全起動します。`/reload`は使いません。実際のPaper build、ValhallaMMOとBridgeのenable、marker一致・登録完了ログ、`profiles_firearms`の作成、`/skills`の表示、同一UUIDの再接続・完全再起動後の保存値を確認します。markerは`fgv_bridge` objectiveの`#release = 2`、`#protocol = 1`です。導入後も通常設定のdebugは無効へ戻します。
+
+問題が出たら正常停止し、BridgeのJAR/ZIPの両manifest行を外して再起動します。上記globに一致するBridge配布物は起動時に削除されます。削除後に両方が読み込まれていないことをログと配置先で確認してください。旧版へ戻す場合も両方の版を揃えます。Plugin削除だけでは保存済みprofileは戻らないため、データ異常時は停止したままバックアップとの照合・復旧を行います。
 
 ## 経済と通常商店
 
