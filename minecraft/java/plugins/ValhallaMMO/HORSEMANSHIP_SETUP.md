@@ -7,7 +7,7 @@
 | 配布元 | コンテナ内の読み込み先 |
 | --- | --- |
 | `minecraft/java/plugins.txt`の固定Release JAR URL | `/data/plugins/feato-horsemanship-0.2.0.jar` |
-| `minecraft/java/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml`（Release添付） | `/data/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml` |
+| `minecraft/java/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml`（Release添付を基にGUIを調整） | `/data/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml` |
 | `minecraft/java/plugins/FEATOHorsemanship/config.yml`（JAR同梱初期設定） | `/data/plugins/FEATOHorsemanship/config.yml` |
 | `minecraft/java/prepare-paper-plugins.sh`と`patches/betterhorses-horsemanship.json` | `/extras/prepare-paper-plugins.sh`と`/extras/betterhorses-horsemanship.json` |
 
@@ -27,6 +27,39 @@
 - 育成コマンドは取得Perkで制限され、追加の一般権限は不要です。reload用`feato.horsemanship.admin`は既定OPで、`setup_minecraft_permissions.sh`では管理グループだけに付与します。
 
 標準のActionBarとチャットを使用し、専用リソースパックの追加は不要です。
+
+## スキルツリーGUIの配置
+
+Git管理のSkillはv0.2.0の表示を調整したものです。Perk ID・Lv・cost・報酬・前提・排他・NG+と効果設定は維持し、JARやReleaseのSkillをそのまま上書きするとGUI変更が失われます。今後の版更新では表示差分を保持して照合してください。
+
+ValhallaMMO 1.10.3 JAR内のArchery / Mining / Heavy Armor / Farmingを参考に、Lv10ごとにxを2進め、左から右へ進行します。主幹はy=6、機動0、持久3、技術9、馬上戦闘14、馬管理18です。線用の空間を確保し、馬上戦闘のLv70・90は上段13／下段15へ配置します。馬管理のLv40・60・80にノードは追加しません。
+
+```text
+機動 y=0     駿足 ─ 抜け出し ─ 全速駆け ─ 即応 ─ 電光の発進 ─ 風に乗る ─ 疾風一体
+持久 y=3     長駆 ─ 絶えぬ追い ─ 遠乗りの心得 ─ 巡航の極意 ─ 息を吹き返す ─ 不屈の遠乗り ─ 果てなき道
+基礎 y=6     鞍上の第一歩 ─ 手綱の心得 ─ 追う ─ 巧者の手綱 ─ 熟練騎手 ─ 信頼の手綱 ─ 人馬一体
+技術 y=9     確かな手綱 ─ 飛越 ─ 足取り確か ─ 冷静な手綱 ─ 精密操作 ─ 確かな着地 ─ 手綱の達人
+戦闘 y=14    騎兵 ─┬─ 突撃号令
+                  ├─ 騎射の心得
+                  └─ 古参騎兵 ─┬─ 重装騎兵 ─┬─ 鉄騎先鋒
+                               │            └─┐
+                               │               初撃（Lv80、中央）
+                               │            ┌─┘
+                               └─ 軽装騎兵 ─┴─ 疾駆戦騎
+馬管理 y=18  馬を見る目 ─ 生産者の眼 ─ 血統研究 ─ 名伯楽
+```
+
+図は前提の概念図です。Combatの騎射・古参騎兵は騎兵から、鉄騎先鋒／疾駆戦騎は重装／軽装から線を引きます。初撃からLv90への取得前提は追加しません。接続線は対象Perkの標準3状態色（灰・橙・緑）で描き、各slotを1つの線だけに割り当てます。標準設定と公式Magic+ValhallaMMO packの既存モデルで向きを確認し、独自CMDやT字モデルは追加していません。
+
+Lv30の5入口はx=6に揃え、「追う」からの分岐を説明と標準の前提表示で示します。複数レーンを横断する5本の長い線は省き、専門内の前提だけを接続します。飛越・突撃号令は「追う」に追加効果、抜け出し・絶えぬ追いは「追う」を変化させる、と説明冒頭で区別します。駿足・長駆は両立可能、排他はLv40の説明と既存lockで示します。Lv100は基礎の右端x=20、信頼の手綱だけを接続します。NG+は標準Archery同様hiddenの共通座標(0,20)に置き、通常線から外します。
+
+`starting_coordinates: "0,3"`はメニュー内部の中心値ではなく、初期表示の左上に対応します（内部でx+4、y+2）。初期9×5枠のx=0..8、y=3..7に基礎Lv0・10・20と持久Lv30が入り、上下スクロールで残る専門入口、右スクロールで後半へ進みます。6レーン全部を5行に詰めません。ナビゲーションボタンが基礎序盤のノードを隠さない座標です。
+
+説明は現在の`FEATOHorsemanship/config.yml`とv0.2.0実装に基づき、`/n`区切りで最大4行に整理しています。必要Lv・cost・他スキルLv・取得前提はValhalla標準loreへ任せます。設定の数値を変更した場合は説明も同期してください。失速の補助回復には既存の最低水平速度・移動ごとの上限が適用されます。
+
+GUI用の8件の検証テスト（重複・誤った角の向き・効果変更の拒否を含む）と変更前YAML比較が成功しました。Pluginソースの一時コピーへ追跡Skill・効果設定を組み込み、既存14テストと`test`、続けて`clean build`を実行して成功しています。配布JARは更新していません。
+
+ローカル静的検証はPyYAMLのあるPythonで`python script/validate_horsemanship_tree.py --baseline <変更前のhorsemanship.yml>`を実行します。検証テストは`python -m unittest discover -s script -p test_horsemanship_tree.py`です。GUI配置の実クライアント表示は未確認です。適用は既存の起動前同期とPaper再起動を使い、Java/Bedrockで初期表示・スクロール・各lock状態・loreを確認してください。GUIだけ戻す場合は停止中に変更前SkillをGit配布元とVolume側へ戻して再起動し、JAR・効果設定・profileは維持します。
 
 ## BetterHorsesの馬上ダメージ補正
 
