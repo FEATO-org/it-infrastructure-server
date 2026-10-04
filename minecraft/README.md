@@ -179,9 +179,26 @@ Wand販売NPCは、販売位置に立って次を実行します。
 
 [FEATO Horsemanship v0.2.0](https://github.com/FEATO-org/feato_horsemanship/releases/tag/v0.2.0)で、ValhallaMMOに「馬術」（Lv 0-100）と移動・持久・操作・戦闘・育成のスキルツリーを追加します。対象は馬、スケルトンホース、ゾンビホース、ロバ、ラバです。移動EXPは操縦者だけに100ブロックごと10、馬上戦闘EXPは攻撃者本人に2秒間隔で0.5を付与する初期設定です。Lv20の「追う」は操縦中にメインハンドへリードを持って右クリックすると発動し、速度+6%、5秒、再使用35秒です。Perk取得前の操縦速度は-5%、鞍上の第一歩の取得後は-2%、手綱の心得の取得後はペナルティなしです。
 
-JARは`java/plugins.txt`から取得し、Release添付のSkillを`java/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml`、JAR同梱の効果設定を`java/plugins/FEATOHorsemanship/config.yml`として追跡します。起動前に`/plugins`から`/data/plugins`へ同期します。BetterHorsesの馬上ダメージ加算だけを起動前patchで無効化し、ほかの既存設定は保持します。一般プレイヤーの育成コマンドは取得Perkで制限し、reload権限は管理グループだけへ付与します。
+JARは`java/plugins.txt`から取得し、Release添付を基にGUIを調整したSkillを`java/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml`、JAR同梱の効果設定を`java/plugins/FEATOHorsemanship/config.yml`として追跡します。起動前に`/plugins`から`/data/plugins`へ同期します。BetterHorsesの馬上ダメージ加算だけを起動前patchで無効化し、ほかの既存設定は保持します。一般プレイヤーの育成コマンドは取得Perkで制限し、reload権限は管理グループだけへ付与します。
 
 2026-10-04にPaper 26.2 build 126 / Java 25、ValhallaMMO 1.10.3、BetterHorses 6.4、DualHorse 1.5.4、Magic 11.2.4で、スキル登録・5 Pluginの有効化・馬術設定reload・正常停止をローカル確認しました。v0.1.0の報酬未登録エラーは解消しています。本番適用、Java/BedrockのPerk取得・騎乗操作・育成連携は未確認です。配布先、バックアップ、適用・実機確認・戻し方は[馬術の導入手順](java/plugins/ValhallaMMO/HORSEMANSHIP_SETUP.md)を参照してください。
+
+## CraftBook Cauldron（経験抽出）
+
+CraftBook 3.10.13の既存Cauldron mechanicを有効化します。水で満たした大釜の直下に火または溶岩を置き、大釜側面の壁看板の2行目に`[Cauldron]`と記入します。腐った肉16個、クモの目2個、アメジストの欠片1個、ガラス瓶1個を過不足なく投入し、スコップで大釜を右クリックすると経験値の瓶1個を錬成します。`chance: 93`にCraftBook本来のスコップ品質・エンチャント補正が適用されます。失敗時は材料が消費されず、再度かき混ぜて挑戦できます。看板必須、レッドストーン起動無効、item tracking無効です。
+
+追跡設定は`java/plugins/CraftBook/`の`config.yml`、`mechanisms.yml`、`cauldron-recipes.yml`です。Composeの`/plugins` mountから起動時に永続Volumeの`/data/plugins/CraftBook/`へ同期します。3.10.13の配布JARの同梱設定・読み込み処理に合わせ、レシピの最上位キーは`cauldron-recipes`を使用しています。
+
+適用前にPaperを正常停止し、永続Volumeの既存CraftBook設定をバックアップしてください。今回初めて追跡する2ファイルに本番独自の設定・レシピがある場合は、Cauldron以外の設定・既存レシピを保持してGitへ取り込んでから配布します。ファイルの配布だけでは適用済みとせず、再起動後の読み込み先と起動ログでCauldron・レシピの読み込みを確認してください。権限は既存の`craftbook.mech.cauldron`、`craftbook.mech.cauldron.use`、`craftbook.mech.cauldron.recipe.experience_extraction`を使用し、今回LuckPerms設定は変更しません。
+
+実機未確認です。適用後は次を確認してください。
+
+- 看板なしの大釜ではCraftBookが反応せず、側面の看板ありではスコップ操作が成立すること。
+- 材料16/2/1/1から経験値の瓶1個が生成され、成功時だけ材料が消費され、失敗時は再試行できること。
+- レッドストーンで錬成できず、既存権限チェックが機能すること。
+- BreweryX・ValhallaMMOなど他の大釜系機能と実用上競合しないこと。
+
+問題があればPaperを正常停止し、追跡設定と永続Volumeの設定を適用前のバックアップへ戻して再起動します。新規追跡ファイルは配布元から外すだけで永続Volumeから削除されるとは限らないため、両方の復元を確認してください。
 
 ## 経済と通常商店
 
