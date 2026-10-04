@@ -24,6 +24,7 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ SCore / ExecutableItems
                      ├ WorldEdit / CraftBook
                      ├ ImageFrame
+                     ├ BreweryX 3.7.1
                      ├ Better Horses / DualHorse
                      ├ Backpack Plus
                      ├ DeadChest 4.30.0
@@ -63,6 +64,7 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 - 銃器スキル検証: FEATO Gun-Valhalla Bridge 0.1.0（Phase 1 PoC）
 - 建築・表示: WorldEdit、CraftBook、ImageFrame
 - 馬・収納: Better Horses、DualHorse、FEATO Horsemanship 0.2.0、Backpack Plus
+- 醸造・料理: BreweryX 3.7.1（標準レシピ・日本語表示）
 - 死亡時保護: DeadChest 4.30.0
 - 独自機能: FEATO Ancient Coin 1.0.0、FEATO Coin Exchange 1.1.0
 
@@ -73,6 +75,7 @@ Paper 26.2での実機テストは未実施です。
 
 ## 日本語化
 
+- BreweryX: `language: ja`、追跡する`BreweryX/languages/ja.yml`と標準`recipes.yml`の日本語訳
 - EssentialsX: `locale: ja`
 - EconomyShopGUI: `lang-ja.yml`（7.3.2同梱）、通貨ロケール`ja-JP`
 - ValhallaMMO: `language: ja-jp`。Gistを原本として追跡
@@ -88,6 +91,15 @@ ValhallaMMOの訳は、JAR内英語原本とキー・配列・名前付きプレ
 ```
 
 この処理は[日本語Gist](https://gist.github.com/LenTakayama/e8f65dbce8e58baec96c8554a4eba4e5)を一時領域へ取得し、[検証スクリプト](../script/validate_valhallammo_translation.py)を通過してから置換します。
+
+## 醸造・料理（BreweryX）
+
+BreweryX 3.7.1を公式固定URLから取得します。標準SQLite保存とゲーム挙動を維持し、
+操作案内・品質表示・標準飲料と料理の表示だけ日本語化しています。
+Paper 26.2 build 126で起動と日本語ヘルプを確認しましたが、本体はバージョンを
+`Unknown`と警告します。既存全Pluginとの併用と実製造・飲用は未検証です。
+配置先、翻訳仕様、再起動とコーヒーの手動確認は
+[BreweryX運用手順](java/plugins/BreweryX/README.md)を参照してください。
 
 ## 魔術（ValhallaMMO + Magic）
 
