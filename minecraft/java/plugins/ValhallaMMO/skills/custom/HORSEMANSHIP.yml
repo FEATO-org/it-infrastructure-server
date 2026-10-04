@@ -168,7 +168,7 @@ perks:
     requireperk_all:
       - urge
   good_hands:
-    icon: SADDLE
+    icon: GOLDEN_CARROT
     coords: "8,6"
     name: "&e巧者の手綱"
     description: "&7基礎: 追うの応答 -0.1秒/n&7移動EXP +1%、騎手・馬の落下ダメージ -3%"
