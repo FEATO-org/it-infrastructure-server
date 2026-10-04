@@ -3,4 +3,3 @@ https://cdn.modrinth.com/data/E7M57BNU/versions/peRFqXVn/gm4_crossbow_cartridges
 https://cdn.modrinth.com/data/Ti7LgRXJ/versions/X7knYm9t/Gun%20Core%20-%20Data%20V1.0.15.zip
 https://cdn.modrinth.com/data/ufgOyMFr/versions/bcKCNJp2/Modern%20Guns%20-%20Data%20V1.9.3.zip
 https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.1.0/feato-gun-valhalla-bridge-datapack-0.1.0.zip
-/extras/datapacks
