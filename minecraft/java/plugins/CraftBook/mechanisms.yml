@@ -1,0 +1,6 @@
+mechanics:
+  Cauldron:
+    spoons: true
+    enable-redstone: false
+    item-tracking: false
+    require-sign: true

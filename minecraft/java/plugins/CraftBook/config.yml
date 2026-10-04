@@ -11,6 +11,7 @@ enabled-mechanics:
   - BetterPlants
   - Elevator
   - Bridge
+  - Cauldron
   - Gate
   - MinecartBooster
   - MinecartDeposit
@@ -39,7 +40,7 @@ disabled-mechanics:
   - Bookcase
   - BounceBlocks
   # - Bridge
-  - Cauldron
+  # - Cauldron
   - Chairs
   - ChunkAnchor
   - CommandItems
