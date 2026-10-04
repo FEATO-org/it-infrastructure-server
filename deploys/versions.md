@@ -180,6 +180,8 @@ Composeへ[`PAPER_BUILD`](https://docker-minecraft-server.readthedocs.io/en/late
 | feato-horsemanship-0.2.0.jar | `613002f811eb7c2ad613cf015fe40c050f879edd2a1561a4c198451c18a52a19` |
 | horsemanship.yml | `a384b5494df865c317686f78d306afb9c81beb87b1d2bb8052409157f0a34677` |
 
+Release asset名と取得URLは小文字のままですが、Git管理・配布時の正本は `minecraft/java/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml` とします。内容・SHA-256は変更せず、ValhallaMMO 1.10.3の大文字ファイル名での読み込みに合わせます。 2026-10-04、隔離したLinux / Java 25 / Paper 26.2 build 126でValhallaMMO 1.10.3とFEATOHorsemanship 0.2.0のenable完了を確認しました。Bridge・本番・育成や保存などの全体動作は未確認です。
+
 Paper 26.2 build 126 / Oracle GraalVM 25.0.4、ValhallaMMO 1.10.3、BetterHorses 6.4、DualHorse 1.5.4、Magic 11.2.4で、Custom Skill登録、5 Pluginの有効化、Magicから馬術Lv・EXPの認識、馬術設定reload、正常停止を隔離したローカル環境で確認しました。43 Perkの報酬・前提・排他条件・座標も静的検証しています。v0.1.0で再現した`horsemanship_first_saddle_set`未登録エラーは解消しました。一般プレイヤーのPerk取得・NG+・騎乗・育成連携、Java/Bedrock操作、本番動作は未確認です。
 
 既存BetterHorsesのSpiget URLは動的で、2026-10-03のGET結果を使用したローカル起動版は6.4でした。配布元の馬術対象表記は6.3です。取得方式は維持し、実際の本番起動版はログで確認してください。起動前patchは`settings.mounted-damage-boost.enabled`だけを無効化します。配置・停止バックアップ・実機確認・戻し方は[馬術の導入手順](../minecraft/java/plugins/ValhallaMMO/HORSEMANSHIP_SETUP.md)を参照してください。
