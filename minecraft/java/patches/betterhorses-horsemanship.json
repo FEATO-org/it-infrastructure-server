@@ -1,0 +1,11 @@
+{
+  "file": "/data/plugins/BetterHorses/config.yml",
+  "ops": [
+    {
+      "$set": {
+        "path": "$.settings['mounted-damage-boost'].enabled",
+        "value": false
+      }
+    }
+  ]
+}
