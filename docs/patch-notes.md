@@ -19,6 +19,8 @@ Repository Actions secret `DISCORD_PATCHNOTE_WEBHOOK_URL` と `RELEASE_PR_TOKEN`
 3. 有効期限を設定し、Organizationの承認が必要なら承認を完了する。
 4. リポジトリの [Settings → Secrets and variables → Actions](https://github.com/FEATO-org/it-infrastructure-server/settings/secrets/actions) に、名前 `RELEASE_PR_TOKEN` で登録する。期限前に更新し、同じSecretを差し替える。
 
+Resource ownerに `FEATO-org` が出ない場合は、ブラウザのログインアカウントがOrganizationのMember / Ownerか、招待を承諾済みかを確認する。リポジトリだけのoutside collaboratorはfine-grained PATでOrganizationを指定できない。所属済みでもOrganizationがfine-grained PATを禁止していると候補に出ないため、Organization Settings → Personal access tokens → Settings → Fine-grained tokensのポリシーをOwnerが確認する。
+
 PATは準備Workflowのtoken確認と2本のPR作成でだけ使用し、PRの作成者はPAT所有者になる。未登録の場合は最初のstepで停止し、対象リポジトリへのAPIアクセスもブランチ作成前に確認する。承認待ちの `GITHUB_TOKEN` に自動で戻す処理は設けない。tokenの期限切れ、Organization承認、PR書き込み権限も実行前に確認する。既存の承認待ちrunは自動解除されないので、必要ならそのPRで承認する。
 
 GitHubの認証仕様は [GITHUB_TOKEN](https://docs.github.com/en/actions/concepts/security/github_token)、PATの発行手順は [Managing your personal access tokens](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) を参照する。
