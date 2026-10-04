@@ -1,0 +1,896 @@
+{
+  "format_version": 2,
+  "items": {
+    "minecraft:diamond_sword": [
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/diamond_dagger",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_diamond_dagger_icon"
+        },
+        "custom_model_data": 1981820,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/diamond_greataxe",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_diamond_greataxe_icon"
+        },
+        "custom_model_data": 1981827,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/diamond_mace",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_diamond_mace_icon"
+        },
+        "custom_model_data": 1981821,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/diamond_rapier",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_diamond_rapier_icon"
+        },
+        "custom_model_data": 1981822,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/diamond_spear",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_diamond_spear_icon"
+        },
+        "custom_model_data": 1981826,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/diamond_warhammer",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_diamond_warhammer_icon"
+        },
+        "custom_model_data": 1981825,
+        "type": "legacy"
+      }
+    ],
+    "minecraft:wooden_sword": [
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/wooden_dagger",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_wooden_dagger_icon"
+        },
+        "custom_model_data": 1981820,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/wooden_greataxe",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_wooden_greataxe_icon"
+        },
+        "custom_model_data": 1981827,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/wooden_mace",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_wooden_mace_icon"
+        },
+        "custom_model_data": 1981821,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/wooden_rapier",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_wooden_rapier_icon"
+        },
+        "custom_model_data": 1981822,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/wooden_spear",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_wooden_spear_icon"
+        },
+        "custom_model_data": 1981826,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/wooden_warhammer",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_wooden_warhammer_icon"
+        },
+        "custom_model_data": 1981825,
+        "type": "legacy"
+      }
+    ],
+    "minecraft:light_blue_dye": [
+      {
+        "bedrock_identifier": "geyser_mc:item/materials/diamond_shard",
+        "bedrock_options": {
+          "icon": "minecraft.item_materials_diamond_shard"
+        },
+        "custom_model_data": 8892301,
+        "type": "legacy"
+      }
+    ],
+    "minecraft:golden_sword": [
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/golden_dagger",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_golden_dagger_icon"
+        },
+        "custom_model_data": 1981820,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/golden_greataxe",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_golden_greataxe_icon"
+        },
+        "custom_model_data": 1981827,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/golden_mace",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_golden_mace_icon"
+        },
+        "custom_model_data": 1981821,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/golden_rapier",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_golden_rapier_icon"
+        },
+        "custom_model_data": 1981822,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/golden_spear",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_golden_spear_icon"
+        },
+        "custom_model_data": 1981826,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/golden_warhammer",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_golden_warhammer_icon"
+        },
+        "custom_model_data": 1981825,
+        "type": "legacy"
+      }
+    ],
+    "minecraft:iron_sword": [
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/iron_dagger",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_iron_dagger_icon"
+        },
+        "custom_model_data": 1981820,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/iron_greataxe",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_iron_greataxe_icon"
+        },
+        "custom_model_data": 1981827,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/iron_mace",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_iron_mace_icon"
+        },
+        "custom_model_data": 1981821,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/iron_rapier",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_iron_rapier_icon"
+        },
+        "custom_model_data": 1981822,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/iron_spear",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_iron_spear_icon"
+        },
+        "custom_model_data": 1981826,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/iron_warhammer",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_iron_warhammer_icon"
+        },
+        "custom_model_data": 1981825,
+        "type": "legacy"
+      }
+    ],
+    "minecraft:crossbow": [
+      {
+        "bedrock_identifier": "modern_guns:item/gun/aa12",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_aa12_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/aa12",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/ak47",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_ak47_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/ak47",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/barrett_m82",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_barrett_m82_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/barrett_m82",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/beretta_486",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_beretta_486_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/beretta_486",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/beretta_686",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_beretta_686_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/beretta_686",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/colt_python",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_colt_python_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/colt_python",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/desert_eagle",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_desert_eagle_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/desert_eagle",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/fn_scar",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_fn_scar_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/fn_scar",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/gl06",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_gl06_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/gl06",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/glock_17",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_glock_17_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/glock_17",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/heckler_and_koch_mp5",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_heckler_and_koch_mp5_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/heckler_and_koch_mp5",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/luger_p08",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_luger_p08_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/luger_p08",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/m1911",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_m1911_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/m1911",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/m202_flash",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_m202_flash_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/m202_flash",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/m4a1",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_m4a1_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/m4a1",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/m72_law",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_m72_law_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/m72_law",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/m79",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_m79_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/m79",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/milkor_mgl",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_milkor_mgl_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/milkor_mgl",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/p90",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_p90_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/p90",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/remington_870",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_remington_870_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/remington_870",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/rpg_7",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_rpg_7_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/rpg_7",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/sig_p320",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_sig_p320_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/sig_p320",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/smith_and_wesson_model_29",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_smith_and_wesson_model_29_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/smith_and_wesson_model_29",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/spas_12",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_spas_12_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/spas_12",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/springfield_m1a",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_springfield_m1a_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/springfield_m1a",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/thompson_submachine_gun",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_thompson_submachine_gun_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/thompson_submachine_gun",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/gun/winchester_model_70",
+        "bedrock_options": {
+          "icon": "modern_guns.item_gun_winchester_model_70_icon"
+        },
+        "components": {
+          "minecraft:enchantment_glint_override": false,
+          "minecraft:max_damage": 200,
+          "minecraft:max_stack_size": 1
+        },
+        "model": "modern_guns:gun/winchester_model_70",
+        "type": "definition"
+      }
+    ],
+    "minecraft:leather": [
+      {
+        "bedrock_identifier": "geyser_mc:item/materials/choral_leather",
+        "bedrock_options": {
+          "icon": "minecraft.item_materials_choral_leather"
+        },
+        "custom_model_data": 8892630,
+        "type": "legacy"
+      }
+    ],
+    "minecraft:stone_sword": [
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/stone_dagger",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_stone_dagger_icon"
+        },
+        "custom_model_data": 1981820,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/stone_greataxe",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_stone_greataxe_icon"
+        },
+        "custom_model_data": 1981827,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/stone_mace",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_stone_mace_icon"
+        },
+        "custom_model_data": 1981821,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/stone_rapier",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_stone_rapier_icon"
+        },
+        "custom_model_data": 1981822,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/stone_spear",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_stone_spear_icon"
+        },
+        "custom_model_data": 1981826,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/stone_warhammer",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_stone_warhammer_icon"
+        },
+        "custom_model_data": 1981825,
+        "type": "legacy"
+      }
+    ],
+    "minecraft:snowball": [
+      {
+        "bedrock_identifier": "geyser_mc:item/misc/antiheal_vial",
+        "bedrock_options": {
+          "icon": "minecraft.item_misc_antiheal_vial"
+        },
+        "custom_model_data": 9928311,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/misc/empty_vial",
+        "bedrock_options": {
+          "icon": "minecraft.item_misc_empty_vial"
+        },
+        "custom_model_data": 9928310,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/misc/holy_water_vial",
+        "bedrock_options": {
+          "icon": "minecraft.item_misc_holy_water_vial"
+        },
+        "custom_model_data": 9928314,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/misc/hurt_vial",
+        "bedrock_options": {
+          "icon": "minecraft.item_misc_hurt_vial"
+        },
+        "custom_model_data": 9928313,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/misc/poison_vial",
+        "bedrock_options": {
+          "icon": "minecraft.item_misc_poison_vial"
+        },
+        "custom_model_data": 9928312,
+        "type": "legacy"
+      }
+    ],
+    "minecraft:command_block": [
+      {
+        "bedrock_identifier": "modern_guns:item/ammo/assault_rifle_magazine",
+        "bedrock_options": {
+          "icon": "modern_guns.item_ammo_assault_rifle_magazine_icon"
+        },
+        "model": "modern_guns:ammo/assault_rifle_magazine",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/ammo/explosive_rounds",
+        "bedrock_options": {
+          "icon": "modern_guns.item_ammo_explosive_rounds_icon"
+        },
+        "model": "modern_guns:ammo/explosive_rounds",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/ammo/pistol_magazine",
+        "bedrock_options": {
+          "icon": "modern_guns.item_ammo_pistol_magazine_icon"
+        },
+        "model": "modern_guns:ammo/pistol_magazine",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/ammo/revolver_bullets",
+        "bedrock_options": {
+          "icon": "modern_guns.item_ammo_revolver_bullets_icon"
+        },
+        "model": "modern_guns:ammo/revolver_bullets",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/ammo/rocket",
+        "bedrock_options": {
+          "icon": "modern_guns.item_ammo_rocket_icon"
+        },
+        "model": "modern_guns:ammo/rocket",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/ammo/shotgun_shell",
+        "bedrock_options": {
+          "icon": "modern_guns.item_ammo_shotgun_shell_icon"
+        },
+        "model": "modern_guns:ammo/shotgun_shell",
+        "type": "definition"
+      },
+      {
+        "bedrock_identifier": "modern_guns:item/ammo/sniper_rifle_magazine",
+        "bedrock_options": {
+          "icon": "modern_guns.item_ammo_sniper_rifle_magazine_icon"
+        },
+        "model": "modern_guns:ammo/sniper_rifle_magazine",
+        "type": "definition"
+      }
+    ],
+    "minecraft:copper_sword": [
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/copper_dagger",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_copper_dagger_icon"
+        },
+        "custom_model_data": 1981820,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/copper_greataxe",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_copper_greataxe_icon"
+        },
+        "custom_model_data": 1981827,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/copper_mace",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_copper_mace_icon"
+        },
+        "custom_model_data": 1981821,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/copper_rapier",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_copper_rapier_icon"
+        },
+        "custom_model_data": 1981822,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/copper_spear",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_copper_spear_icon"
+        },
+        "custom_model_data": 1981826,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/weapons/copper_warhammer",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_weapons_copper_warhammer_icon"
+        },
+        "custom_model_data": 1981825,
+        "type": "legacy"
+      }
+    ],
+    "minecraft:brown_dye": [
+      {
+        "bedrock_identifier": "geyser_mc:item/backpackplus/backpacks/backpack_tier_1",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_backpackplus_backpacks_backpack_tier_1_icon"
+        },
+        "custom_model_data": 800001,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/backpackplus/backpacks/backpack_tier_2",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_backpackplus_backpacks_backpack_tier_2_icon"
+        },
+        "custom_model_data": 800002,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/backpackplus/backpacks/backpack_tier_3",
+        "bedrock_options": {
+          "icon": "geyser_mc.item_backpackplus_backpacks_backpack_tier_3_icon"
+        },
+        "custom_model_data": 800003,
+        "type": "legacy"
+      }
+    ],
+    "minecraft:acacia_sapling": [
+      {
+        "bedrock_identifier": "magic:broomsticks/broomstick",
+        "bedrock_options": {
+          "icon": "magic.broomsticks_broomstick_icon"
+        },
+        "custom_model_data": 18001,
+        "type": "legacy"
+      }
+    ],
+    "minecraft:arrow": [
+      {
+        "bedrock_identifier": "geyser_mc:item/arrows/arrow_copper",
+        "bedrock_options": {
+          "icon": "minecraft.item_arrows_arrow_copper"
+        },
+        "custom_model_data": 8778216,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/arrows/arrow_diamond",
+        "bedrock_options": {
+          "icon": "minecraft.item_arrows_arrow_diamond"
+        },
+        "custom_model_data": 8778224,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/arrows/arrow_ender",
+        "bedrock_options": {
+          "icon": "minecraft.item_arrows_arrow_ender"
+        },
+        "custom_model_data": 8778226,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/arrows/arrow_flint",
+        "bedrock_options": {
+          "icon": "minecraft.item_arrows_arrow_flint"
+        },
+        "custom_model_data": 8778212,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/arrows/arrow_gold",
+        "bedrock_options": {
+          "icon": "minecraft.item_arrows_arrow_gold"
+        },
+        "custom_model_data": 8778218,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/arrows/arrow_iron",
+        "bedrock_options": {
+          "icon": "minecraft.item_arrows_arrow_iron"
+        },
+        "custom_model_data": 8778220,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/arrows/arrow_netherite",
+        "bedrock_options": {
+          "icon": "minecraft.item_arrows_arrow_netherite"
+        },
+        "custom_model_data": 8778228,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/arrows/arrow_stone",
+        "bedrock_options": {
+          "icon": "minecraft.item_arrows_arrow_stone"
+        },
+        "custom_model_data": 8778214,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/arrows/arrow_unholy",
+        "bedrock_options": {
+          "icon": "minecraft.item_arrows_arrow_unholy"
+        },
+        "custom_model_data": 8778232,
+        "type": "legacy"
+      },
+      {
+        "bedrock_identifier": "geyser_mc:item/arrows/arrow_wood",
+        "bedrock_options": {
+          "icon": "minecraft.item_arrows_arrow_wood"
+        },
+        "custom_model_data": 8778210,
+        "type": "legacy"
+      }
+    ]
+  }
+}

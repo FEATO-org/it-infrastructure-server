@@ -34,7 +34,7 @@ Data Packs: Enchants Plus / Gun Core 1.0.15 / Modern Guns 1.9.3 / Bridge 0.1.0
 Web: nginx dynmap.feato.jp -> squaremap :8123
 ```
 
-対象バージョンは26.2です。`.env`の`MINECRAFT_VERSION`が既定値を上書きするため、デプロイ前に26.2であることを確認してください。
+対象バージョンは26.2です。Portainer app stack の`MINECRAFT_VERSION`が既定値を上書きするため、デプロイ前に26.2であることを確認してください。
 
 GeyserとFloodgateはVelocityへ配置し、Bedrock判定をPaper側Pluginでも利用できるようFloodgate-SpigotもPaperへ配置します。Velocity側は`send-floodgate-data: true`で暗号化したBedrock player dataを転送します。両Floodgateは同一のDocker Swarm secret `floodgate_key`を使用します。Paperコンテナは起動時に`/run/secrets/floodgate_key`を`/data/plugins/floodgate/key.pem`へコピーし、Floodgateは`key-file-name: key.pem`で参照します。Velocityのmodern forwarding、共有forwarding secret、Paperのoffline modeは維持します。Paper、MariaDB、squaremapはホストへ直接公開しません。
 
@@ -49,6 +49,10 @@ HurricaneはPaper Pluginとして`plugins.txt`から公式APIで取得します�
 `java/plugins/Hurricane/hurricane.conf`では、Bedrockの移動補正に必要なbambooと
 pointed dripstoneだけを有効にしています。両回避策は対象ブロックのサーバー側衝突を
 なくすため、改造クライアントによる通過リスクと設置時の不安定さを理解したうえで運用してください。
+
+通常更新は [Portainer Git Stack 手順](../deploys/README.md)に従います。Paper/Velocity の
+静的設定は custom image に同梱し、既存 `/data`・`/server` Volume は維持します。
+pack/mapping の変更は Git に取り込んで image を更新し、VPS へコピーするだけでは反映しません。
 
 ## 採用Plugin
 

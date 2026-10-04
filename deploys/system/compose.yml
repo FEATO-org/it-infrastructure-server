@@ -8,7 +8,7 @@ x-default-logging: &default-logging
 
 services:
   mariadb:
-    image: mariadb:13.0.2
+    image: ${MARIADB_IMAGE:-ghcr.io/feato-org/feato-mariadb:main}
     environment:
       MARIADB_DATABASE: ${MARIADB_DATABASE:-app}
       MARIADB_USER: ${MARIADB_USER:-app}
@@ -20,7 +20,6 @@ services:
       - luckperms_db_password
     volumes:
       - mariadb_data:/var/lib/mysql
-      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/deploys/system/mariadb/init-luckperms.sh:/docker-entrypoint-initdb.d/20-luckperms.sh:ro
     networks:
       - database-network
     healthcheck:
@@ -55,18 +54,11 @@ services:
     logging: *default-logging
 
   fluent-bit:
-    image: cr.fluentbit.io/fluent/fluent-bit:5.1.2
+    image: ${FLUENT_BIT_IMAGE:-ghcr.io/feato-org/feato-fluent-bit:main}
     command:
       - /fluent-bit/bin/fluent-bit
       - -c
       - /fluent-bit/etc/fluent-bit.conf
-    configs:
-      - source: fluent_bit_config
-        target: /fluent-bit/etc/fluent-bit.conf
-      - source: fluent_bit_parsers
-        target: /fluent-bit/etc/parsers.conf
-      - source: fluent_bit_discord_lua
-        target: /fluent-bit/etc/discord.lua
     environment:
       NOTIFY_WEBHOOK_URL: ${NOTIFY_WEBHOOK_URL}
       ERROR_WEBHOOK_URL: ${ERROR_WEBHOOK_URL}
@@ -167,7 +159,7 @@ services:
     logging: *default-logging
 
   nginx:
-    image: nginx:1.30.5
+    image: ${NGINX_IMAGE:-ghcr.io/feato-org/feato-nginx:main}
     ports:
       - target: 80
         published: 80
@@ -193,13 +185,6 @@ services:
         published: 19133
         protocol: udp
         mode: host
-    configs:
-      - source: nginx_main_config
-        target: /etc/nginx/nginx.conf
-      - source: nginx_public_http_config
-        target: /etc/nginx/conf.d/default.conf
-      - source: nginx_minecraft_stream_config
-        target: /etc/nginx/stream.conf
     secrets:
       - source: tls_fullchain
         target: tls_fullchain.pem
@@ -262,26 +247,6 @@ volumes:
   minecraft_server_data:
     external: true
     name: app_minecraft_server_data
-
-configs:
-  fluent_bit_config:
-    name: system_fluent_bit_config_${CONFIG_VERSION:-v1}
-    file: ../../fluentbit/fluent-bit.conf
-  fluent_bit_parsers:
-    name: system_fluent_bit_parsers_${CONFIG_VERSION:-v1}
-    file: ../../fluentbit/parsers.conf
-  fluent_bit_discord_lua:
-    name: system_fluent_bit_discord_lua_${CONFIG_VERSION:-v1}
-    file: ../../fluentbit/discord.lua
-  nginx_main_config:
-    name: system_nginx_main_config_${CONFIG_VERSION:-v1}
-    file: ../../nginx/nginx.conf
-  nginx_public_http_config:
-    name: system_nginx_public_http_config_${CONFIG_VERSION:-v1}
-    file: ../../nginx/http.d/public.conf
-  nginx_minecraft_stream_config:
-    name: system_nginx_minecraft_stream_config_${CONFIG_VERSION:-v1}
-    file: ../../nginx/stream.d/minecraft.conf
 
 secrets:
   mariadb_root_password:

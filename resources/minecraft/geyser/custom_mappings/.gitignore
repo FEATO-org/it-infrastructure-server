@@ -1,2 +1,1 @@
-# Third-party mappings are downloaded locally and copied by script/copy_plugins_to_remote.sh.
-*.json
+# Runtime assets in this directory are tracked for reproducible image builds.

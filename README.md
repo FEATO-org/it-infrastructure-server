@@ -1,63 +1,27 @@
 # it-infrastructure-server
 
-## 構成図
+Docker Swarm 上の本番インフラと Minecraft サーバーを管理します。
 
 ```mermaid
 flowchart TB
-
-OU0[Admin]
-OU1[User]
-OU2[Discord]
-DNS{{value domain DNS \n feato.jp}}
-subgraph S1[indigo]
-  MC["host machine"]
-  subgraph DC[Docker]
-    C1[Nginx]
-    C2[certbot]
-    C9[Swarmpit]
-    C3[MineCraft]
-    C8[mc-backup]
-    C4[fluent-bit]
-    C5[mc-monitor]
-    C6[cadvisor]
-    C7[SFS-susanoo]
-  end
-end
-subgraph S2[CORESERVER]
-  SS0[Reverse Proxy]
-  SS1[Wordpress]
-  SS2[Piwigo]
-  SS3[NextCloud]
-end
-subgraph OS1["Grafana Labs"]
-  OSS1[Grafana]
-  OSS2[Loki]
-end
-
-OU1-->OU2
-OU2-->C7
-OU1-->DNS
-DNS-->SS0
-DNS-->C1
-C1--証明書取得-->C2
-C1--minecraft.feato.jp-->C3
-C1-->C9
-C8-.->C3
-C5-.->C3
-C4-.->C5
-C4-.->C6
-C4-.->MC
-C4-->OSS1
-C9-->MC
-SS0--www.feato.jp-->SS1
-SS0--photo.feato.jp-->SS2
-SS0--storage.feato.jp-->SS3
-OU0-->C1-->C9
-OU0-->OSS1
+    Git[Git push] --> Actions[GitHub Actions]
+    Actions --> GHCR[GHCR custom images]
+    Actions --> Portainer
+    Bootstrap[Swarm bootstrap] --> Infra[infra: Portainer / Agent / Cloudflare Tunnel]
+    Infra --> Portainer
+    Portainer --> App[app: Discord Bot / Velocity / Paper]
+    Portainer --> System[system: nginx / MariaDB / Fluent Bit / cAdvisor / mc-monitor]
+    Player[Java / Bedrock / Web] --> Nginx[nginx]
+    Nginx --> Velocity[Velocity / Geyser / Floodgate]
+    Velocity --> Paper[Paper / squaremap]
+    FluentBit[Fluent Bit] --> Grafana[Grafana Cloud: Loki / Prometheus]
+    Certbot[manager: Certbot timer] --> TLS[Swarm TLS secrets / Portainer environment]
 ```
 
+日常更新は Git push → GitHub Actions → GHCR → Portainer → app/system です。
+初期構築と infra の更新は bootstrap から行います。
 
-現在のSwarm運用は [deploys/README.md](deploys/README.md)、
-Minecraft確定構成と移行手順は [minecraft/README.md](minecraft/README.md) を参照してください。
-ユーザー向け変更記録の運用は [changes/README.md](changes/README.md) を参照してください。
-上の図は旧構成です。
+- [本番構築・Portainer 設定・移行・rollback](deploys/README.md)
+- [Minecraft 構成と実機確認](minecraft/README.md)
+- [採用バージョン](deploys/versions.md)
+- [ユーザー向け変更記録](changes/README.md)
