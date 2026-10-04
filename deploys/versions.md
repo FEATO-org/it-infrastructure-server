@@ -15,7 +15,7 @@ nginxはMainlineではなくStable系列です。
 | Certbot / DNS Cloudflare | 5.8.0（変更なし） | https://github.com/certbot/certbot/releases/tag/v5.8.0 |
 | Minecraft server image | itzg/minecraft-server:java25-graalvm（公式イメージ） | https://docker-minecraft-server.readthedocs.io/en/latest/versions/java/ |
 | Minecraft proxy image | itzg/mc-proxy:java25（公式HotSpotイメージ） | https://github.com/itzg/docker-mc-proxy/blob/main/README.md |
-| Paper / Minecraft | 26.2 build 126（STABLE）、Java 25 | https://fill.papermc.io/v3/projects/paper/versions/26.2/builds/latest |
+| Paper / Minecraft | 26.2 build 126（STABLE）、Java 25 | https://fill.papermc.io/v3/projects/paper/versions/26.2/builds/126 |
 
 GitHub Release採用品は`releases/latest`の`prerelease=false`を確認しています。EssentialsXは26.2対応を優先し、公式CIの固定development buildを採用します。
 Docker HubでMariaDB・nginx・Portainer・itzgの採用タグの存在も確認しました。
@@ -100,6 +100,8 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | LuckPerms | v5.5.71-velocity | [固定URL](https://cdn.modrinth.com/data/Vebnzrzj/versions/tamnmXad/LuckPerms-Velocity-5.5.71.jar) | Velocity | 26.2（配布metadata） | stable | 同梱Java 11以上; Requires runtime verification |
 | LuckTags | 1.4 | [固定URL](https://cdn.modrinth.com/data/riEl5GDK/versions/mMmIwg51/lucktags-1.4.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | ValhallaMMO | 1.10.3 | [固定URL](https://cdn.modrinth.com/data/rxrgsoud/versions/GkeSDJSq/ValhallaMMO_1.10.3.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
+| FEATO Gun-Valhalla Bridge Plugin | 0.1.0 | [固定JAR](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.1.0/feato-gun-valhalla-bridge-plugin-0.1.0.jar) | Paper | 26.2 build 126（Bridge固定対象） | 公開Release（Phase 1 PoC） | Java 25、ValhallaMMO 1.10.3必須。release ID 2 / protocol 1。実機起動・保存・respec未検証 |
+| FEATO Gun-Valhalla Bridge Datapack | 0.1.0 | [固定ZIP](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.1.0/feato-gun-valhalla-bridge-datapack-0.1.0.zip) | Data Pack | 26.2（pack format 107.1） | 公開Release（Phase 1 PoC） | 同版Pluginと対で配置。Gun Core 1.0.15 / Modern Guns 1.9.3。実機未検証 |
 | Magic | 11.2.4 | [固定URL](https://mediafilez.forgecdn.net/files/8375/702/Magic-11.2.4.jar) | Paper | 26.2（公式配布対象） | stable | 公式ValhallaMMO integrationを使用; Requires runtime verification |
 | SCore | 5.26.9.17 | [固定URL](https://cdn.modrinth.com/data/ZfcV7L06/versions/EHLoQYh8/SCore-5.26.9.17.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 8以上; Requires runtime verification |
 | ExecutableItems | 7.26.9.17 | [固定URL](https://cdn.modrinth.com/data/g8Zwnnmn/versions/XrhxAt8x/ExecutableItems-7.26.9.17.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 8以上; Requires runtime verification |
@@ -134,6 +136,17 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 
 JARの標準`config.yml`は`config-version: 2.0.1.9`で、`LanguageFiles/lang-ja.yml`を同梱しています。既存設定とのキー比較では削除キーはなく、新規キーは`bedrock-forms`、`per-player-languages: false`、`enchanted-variants: false`でした。今回追加するForms設定は上流既定を使い、商品を1回の選択で操作するため`use-double-click-for-touch-devices`だけ既定の`true`から`false`へ変更します。目的外の新規optional featureは追加せず、既定の無効状態を維持します。経済Provider・価格・sections/shops・既存のクリックとnavigation設定は維持し、7.3.2の起動・取引・画面遷移は未検証です。
 
+### FIREARMS Bridge 0.1.0確認（2026-10-04）
+
+[公開Release v0.1.0](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/tag/v0.1.0)はdraft=false、prerelease=falseです。JAR/ZIPをGETし、公開`SHA256SUMS`との一致、JARの`plugin.yml`（FEATOGunValhallaBridge / 0.1.0 / ValhallaMMO依存）、`bridge.properties`とZIP内markerのrelease ID `2` / protocol `1`の一致を確認しました。ZIPの`pack.mcmeta`はmin/max formatとも`[107, 1]`です。
+
+| 配布物 | GET検証済みSHA-256 |
+| --- | --- |
+| feato-gun-valhalla-bridge-plugin-0.1.0.jar | `b37e2b8086d56c4ed056da520950aa44b7cee4d1fac657780afd2c5d01b42558` |
+| feato-gun-valhalla-bridge-datapack-0.1.0.zip | `b077dcd0485de3121f94151023886a1a931d4a24dd408cf3051257ef8348649b` |
+
+Composeへ[`PAPER_BUILD`](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/server-types/paper/)を追加し、Bridgeが要求するbuild 126を固定しました。`.env`でMinecraft版を変える場合もBridgeの対象26.2との一致が必要です。Gun Core / Modern Gunsのmanifestは既存版を維持しています。初期configは公開JAR同梱と一致し、debugは無効です。配布物の検証と本番動作確認は別で、Phase 1のGUI・SQL保存・再ログイン・完全再起動・respecはRequires runtime verification。適用前の条件は[minecraft/README.md](../minecraft/README.md#銃器スキルfirearms-bridge-010--phase-1-poc)を参照してください。
+
 ### GET検証済みSHA-512
 
 | Distribution | SHA-512 |
@@ -141,6 +154,8 @@ JARの標準`config.yml`は`config-version: 2.0.1.9`で、`LanguageFiles/lang-ja
 | LuckPerms-Bukkit-5.5.71.jar | `188a91f0a543d23bfda32385fca6db63d61e49c8a422bd452a260bd9cbc6a7d7fe45071199e9fca8f3ce43c2b41ee84fd315bd15464577028ff3951a7d4fab27` |
 | LuckPerms-Velocity-5.5.71.jar | `a619da8804727bed7b2b2ee5383974329a3c09181a67745484fdffd0f4b6c5b13c44aa88e0d2b30d13f3068d9b0f3e26863abba9855f80a7eb5f9455ca6c40d4` |
 | lucktags-1.4.jar | `1052d2ea814da732d5e39447384df0427fd14c2e1f206441b3d71a5a65b10733bf30db983cc92e21079503687c9097310d43b237e388db7d8d1129fc56989855` |
+| feato-gun-valhalla-bridge-plugin-0.1.0.jar | `f1b190684cfc3c21b475610d7e3eb68443be3679392b96bc6baf3e8d0af70a6fc733b30659bc456038cce1410f6d20e8054e0636382c45f7afef90bf020a2821` |
+| feato-gun-valhalla-bridge-datapack-0.1.0.zip | `1ab09380da68656da1503bd9a19436e15ebb75ecb28b44d65fcf8dd988f46849199183aa289eb27651a02debc4263bbb51eb49cfd4c69e74fcf07978e42e1976` |
 | ValhallaMMO_1.10.3.jar | `e04a1e8f39e009e141fe8f07dd1eea85ad06c5850e63e5518618c316e3b4822179ab5bab571f1a5fc6ccf35c17de4baaae07c86e7fd9b374b6eb1f6cedd528a6` |
 | Magic-11.2.4.jar | `4eb13cba74a534f6f58ef4dd4a301cac20f58299b4606ff2488c7fa7c4fc6dac69781449669acbef12a30b378771d474fdd58b9e4fa33defa59e9061aeed9e32` |
 | SCore-5.26.9.17.jar | `7d023fa5973ca88acce406581eeb8378b2c14de9a77545d04f87ff79b3049de296f1d67eb0b442977b2e6b4fb5665ec344b8c274b7ccbda942fcc87fa72f57ee` |
