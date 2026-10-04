@@ -30,6 +30,9 @@ player_allow=(
   deadchest.generate
   deadchest.get
 
+  # GhastMaster
+  ghastmaster.share
+
   # CraftBook: enabled user-facing mechanics.
   craftbook.mech.elevator
   craftbook.mech.elevator.use

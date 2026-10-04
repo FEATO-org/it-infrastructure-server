@@ -25,9 +25,10 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ WorldEdit / CraftBook
                      ├ ImageFrame
                      ├ BreweryX 3.7.1
+                     ├ ProtocolLib 5.5.0-SNAPSHOT / PlaceholderAPI 2.12.3
                      ├ Better Horses / DualHorse
                      ├ Backpack Plus
-                     ├ DeadChest 4.30.0
+                     ├ DeadChest 4.31.0
                      ├ Hurricane (bamboo / pointed dripstone collision only)
                      ├ FEATO Ancient Coin 1.0.0
                      └ FEATO Coin Exchange 1.1.0
@@ -65,11 +66,25 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 - 建築・表示: WorldEdit、CraftBook、ImageFrame
 - 馬・収納: Better Horses、DualHorse、FEATO Horsemanship 0.2.0、Backpack Plus
 - 醸造・料理: BreweryX 3.7.1（標準レシピ・日本語表示）
-- 死亡時保護: DeadChest 4.30.0
+- 死亡時保護: DeadChest 4.31.0
 - 独自機能: FEATO Ancient Coin 1.0.0、FEATO Coin Exchange 1.1.0
 
-DeadChest 4.30.0をPaper 26.2環境で使用します。公式の対応表記は26.1.xまでで、
-Paper 26.2での実機テストは未実施です。
+DeadChest 4.31.0は公式metadataでPaper 26.2に対応し、Java 25で起動を確認しています。
+死亡・回収のプレイヤー操作と本番は未確認です。旧JARは既存の`REMOVE_OLD_MODS_INCLUDE`で
+`/data/plugins/dead-chest-*.jar`だけを除去し、4.31.0を再取得します。
+起動前にDeadChestの自動更新を無効化し、`/data/plugins/update/dead-chest-*.jar`も除去します。
+運用中の死亡保護設定は保持し、JARの版はインフラ側で管理します。
+
+ProtocolLibは公式Development Buildのasset IDとSHA-256を固定して起動前に取得します。
+一覧と固定取得元は`plugins.txt`、詳細は[versions.md](../deploys/versions.md)を参照してください。
+PlaceholderAPIは2.12.3本体だけを導入し、外部Expansionは追加しません。
+GhastMasterは運用版を特定できないため、今回の本体管理化は未実施です。
+既存の手動JARの正式版・公式配布元を確認するまで、そのJARを維持してください。
+`setup_minecraft_permissions.sh`には一般グループの`ghastmaster.share`だけを追加しています。
+
+Magicの`vengeance.variables: bubble`追加とMineGamesの外部YAMLの重複削除を反映しました。
+ただしMagic 11.2.4の式評価警告とMineGames 1.0.5のJAR内既定YAMLの重複警告は
+ローカル起動で残っています。本体版、式、メッセージ文言は変更していません。
 
 旧Vault、XConomy、XConomy_Reload、SetSpawn、Genius Shop、Dynmapは採用しません。既存VolumeからJARが自動削除されるとは限らないため、停止中に退避してください。Dynmapのタイルはバックアップ後に残して構いませんが、squaremapは別形式で再描画します。
 
@@ -380,4 +395,4 @@ EconomyShopGUI 7.3.2の起動と以下の実クライアント操作は未確認
 - Bedrock: `/shop`が標準Form UIで開くこと、商品を1回選択して購入数量指定へ進めること、購入・売却対象の選択と取引が成立すること、購入→売却・売却→購入の両方向と戻る操作が正常なことを確認する。残高・Inventoryの増減と、サーバーログに例外がないことも確認する。
 - Java: 従来のInventory GUIで商品選択・購入・売却・数量指定・navigationが7.2.1から退行していないことを確認する。
 
-クライアント操作が必要なJava/Bedrockログイン、NPCクリック、100G徴収、帰還札の消費とteleport、商品売買、馬の二人乗り、各Data Pack、古銭dropは本番公開前の実機確認事項です。Better HorsesはProtocolLibなしでも起動しますが、一部機能が無効になるという通知があります。今回ProtocolLibは追加していません。
+クライアント操作が必要なJava/Bedrockログイン、NPCクリック、100G徴収、帰還札の消費とteleport、商品売買、馬の二人乗り、各Data Pack、古銭dropは本番公開前の実機確認事項です。Better HorsesはProtocolLibなしでも起動しますが、一部機能が無効になるという通知があります。現在は固定したProtocolLibを導入し、隔離起動でBetterHorsesの接続を確認しています。プレイヤー操作は未確認です。
