@@ -365,3 +365,368 @@ recipes:
     effects:
     - REGENERATION/30
     - SPEED/10
+  feato_black_tea:
+    name: 薄い紅茶/紅茶/上質な紅茶
+    ingredients:
+    - feato_tea_leaves/6
+    cookingtime: 2
+    distillruns: 0
+    age: 0
+    color: a65f28
+    difficulty: 2
+    alcohol: 0
+    lore:
+    - '&7紅茶の醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: 紅茶を味わった。
+    effects:
+    - HASTE/1-1/15-30
+  feato_milk_tea:
+    name: 薄いミルクティー/ミルクティー/上質なミルクティー
+    ingredients:
+    - feato_tea_leaves/6
+    - MILK_BUCKET/1
+    - SUGAR/2
+    cookingtime: 2
+    distillruns: 0
+    age: 0
+    color: c89b6d
+    difficulty: 2
+    alcohol: 0
+    lore:
+    - '&7ミルクティーの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: ミルクティーを味わった。
+    effects:
+    - HASTE/1-1/15-30
+    - REGENERATION/1-1/3-5
+  feato_royal_milk_tea:
+    name: 薄いロイヤルミルクティー/ロイヤルミルクティー/上質なロイヤルミルクティー
+    ingredients:
+    - feato_tea_leaves/10
+    - MILK_BUCKET/3
+    - SUGAR/3
+    cookingtime: 4
+    distillruns: 0
+    age: 0
+    color: e6c39a
+    difficulty: 4
+    alcohol: 0
+    lore:
+    - '&7ロイヤルミルクティーの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: ロイヤルミルクティーを味わった。
+    effects:
+    - HASTE/1-1/30-60
+    - REGENERATION/1-1/4-8
+  feato_apple_tea:
+    name: 薄いアップルティー/アップルティー/上質なアップルティー
+    ingredients:
+    - feato_tea_leaves/6
+    - APPLE/2
+    cookingtime: 3
+    distillruns: 0
+    age: 0
+    color: db983f
+    difficulty: 3
+    alcohol: 0
+    lore:
+    - '&7アップルティーの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: アップルティーを味わった。
+    effects:
+    - HASTE/1-1/15-30
+    - SPEED/1-1/15-30
+  feato_berry_tea:
+    name: 薄いベリーティー/ベリーティー/上質なベリーティー
+    ingredients:
+    - feato_tea_leaves/6
+    - SWEET_BERRIES/4
+    cookingtime: 3
+    distillruns: 0
+    age: 0
+    color: a84160
+    difficulty: 3
+    alcohol: 0
+    lore:
+    - '&7ベリーティーの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: ベリーティーを味わった。
+    effects:
+    - HASTE/1-1/15-30
+    - REGENERATION/1-1/4-8
+  feato_honey_tea:
+    name: 薄いハニーティー/ハニーティー/上質なハニーティー
+    ingredients:
+    - feato_tea_leaves/6
+    - HONEY_BOTTLE/1
+    cookingtime: 3
+    distillruns: 0
+    age: 0
+    color: dfa532
+    difficulty: 3
+    alcohol: 0
+    lore:
+    - '&7ハニーティーの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: ハニーティーを味わった。
+    effects:
+    - HASTE/1-1/22-45
+    - REGENERATION/1-1/3-5
+  feato_iced_tea:
+    name: 薄いアイスティー/アイスティー/上質なアイスティー
+    ingredients:
+    - feato_tea_leaves/6
+    - SNOWBALL/4
+    - SUGAR/1
+    cookingtime: 1
+    distillruns: 0
+    age: 0
+    color: bc7c3a
+    difficulty: 3
+    alcohol: 0
+    lore:
+    - '&7アイスティーの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: アイスティーを味わった。
+    effects:
+    - SPEED/1-1/15-30
+    - HASTE/1-1/10-20
+  feato_caffe_latte:
+    name: 薄いカフェラテ/カフェラテ/上質なカフェラテ
+    ingredients:
+    - COCOA_BEANS/8
+    - MILK_BUCKET/3
+    cookingtime: 2
+    distillruns: 0
+    age: 0
+    color: b68a64
+    difficulty: 2
+    alcohol: 0
+    lore:
+    - '&7カフェラテの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: カフェラテを味わった。
+    effects:
+    - SPEED/1-1/30-60
+    - REGENERATION/1-1/3-5
+  feato_caffe_mocha:
+    name: 薄いカフェモカ/カフェモカ/上質なカフェモカ
+    ingredients:
+    - COCOA_BEANS/8
+    - MILK_BUCKET/2
+    - COOKIE/3
+    cookingtime: 3
+    distillruns: 0
+    age: 0
+    color: '784832'
+    difficulty: 3
+    alcohol: 0
+    lore:
+    - '&7カフェモカの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: カフェモカを味わった。
+    effects:
+    - SPEED/1-1/22-45
+    - HASTE/1-1/22-45
+  feato_honey_latte:
+    name: 薄いハニーラテ/ハニーラテ/上質なハニーラテ
+    ingredients:
+    - COCOA_BEANS/8
+    - MILK_BUCKET/2
+    - HONEY_BOTTLE/1
+    cookingtime: 3
+    distillruns: 0
+    age: 0
+    color: c29b64
+    difficulty: 3
+    alcohol: 0
+    lore:
+    - '&7ハニーラテの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: ハニーラテを味わった。
+    effects:
+    - SPEED/1-1/22-45
+    - REGENERATION/1-1/4-8
+  feato_hot_milk:
+    name: 薄いホットミルク/ホットミルク/上質なホットミルク
+    ingredients:
+    - MILK_BUCKET/2
+    cookingtime: 1
+    distillruns: 0
+    age: 0
+    color: fff1dc
+    difficulty: 2
+    alcohol: 0
+    lore:
+    - '&7ホットミルクの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: ホットミルクを味わった。
+    effects:
+    - REGENERATION/1-1/3-5
+  feato_honey_milk:
+    name: 薄いハニーミルク/ハニーミルク/上質なハニーミルク
+    ingredients:
+    - MILK_BUCKET/2
+    - HONEY_BOTTLE/1
+    cookingtime: 2
+    distillruns: 0
+    age: 0
+    color: ffe0a1
+    difficulty: 2
+    alcohol: 0
+    lore:
+    - '&7ハニーミルクの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: ハニーミルクを味わった。
+    effects:
+    - REGENERATION/1-1/5-10
+  feato_sansai_soup:
+    name: 薄い山菜スープ/山菜スープ/上質な山菜スープ
+    ingredients:
+    - FERN/4
+    - POTATO/3
+    cookingtime: 4
+    distillruns: 0
+    age: 0
+    color: 84995c
+    difficulty: 3
+    alcohol: 0
+    lore:
+    - '&7山菜スープの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: 山菜スープを味わった。
+    effects:
+    - REGENERATION/1-1/6-12
+  feato_berry_compote:
+    name: 薄いベリーコンポート/ベリーコンポート/上質なベリーコンポート
+    ingredients:
+    - SWEET_BERRIES/12
+    - SUGAR/4
+    cookingtime: 3
+    distillruns: 0
+    age: 0
+    color: ad345c
+    difficulty: 3
+    alcohol: 0
+    lore:
+    - '&7ベリーコンポートの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: ベリーコンポートを味わった。
+    effects:
+    - REGENERATION/1-1/5-10
+  feato_panna_cotta:
+    name: 薄いパンナコッタ/パンナコッタ/上質なパンナコッタ
+    ingredients:
+    - MILK_BUCKET/4
+    - SUGAR/2
+    - SLIME_BALL/1
+    - SNOWBALL/2
+    cookingtime: 3
+    distillruns: 0
+    age: 0
+    color: fff4e3
+    difficulty: 4
+    alcohol: 0
+    lore:
+    - '&7パンナコッタの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: パンナコッタを味わった。
+    effects:
+    - REGENERATION/1-1/6-12
+  feato_coffee_jelly:
+    name: 薄いコーヒーゼリー/コーヒーゼリー/上質なコーヒーゼリー
+    ingredients:
+    - COCOA_BEANS/8
+    - SUGAR/3
+    - SLIME_BALL/1
+    - SNOWBALL/2
+    cookingtime: 3
+    distillruns: 0
+    age: 0
+    color: 563c2e
+    difficulty: 3
+    alcohol: 0
+    lore:
+    - '&7コーヒーゼリーの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: コーヒーゼリーを味わった。
+    effects:
+    - SPEED/1-1/22-45
+    - HASTE/1-1/15-30
+  feato_nutrition_jelly:
+    name: 薄い栄養補給ゼリー/栄養補給ゼリー/上質な栄養補給ゼリー
+    ingredients:
+    - APPLE/2
+    - HONEY_BOTTLE/1
+    - SUGAR/2
+    - SLIME_BALL/1
+    - SNOWBALL/2
+    cookingtime: 3
+    distillruns: 0
+    age: 0
+    color: edbf67
+    difficulty: 4
+    alcohol: 0
+    lore:
+    - '&7栄養補給ゼリーの醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: 栄養補給ゼリーを味わった。
+    effects:
+    - REGENERATION/1-1/5-10
+    - SPEED/1-1/10-20
+  feato_imo_shochu:
+    name: 薄い芋焼酎/芋焼酎/上質な芋焼酎
+    ingredients:
+    - POTATO/12
+    - WHEAT/3
+    cookingtime: 12
+    distillruns: 2
+    distilltime: 60
+    age: 0
+    color: eee6d6
+    difficulty: 4
+    alcohol: 18
+    lore:
+    - '&7芋焼酎の醸造品'
+    - + &7控えめな味わい
+    - ++ &7ほどよい味わい
+    - +++ &7豊かな味わい
+    drinkmessage: 芋焼酎を味わった。
+    effects:
+    - RESISTANCE/1-1/7-15
+    - WEAKNESS/1-1/60-30
