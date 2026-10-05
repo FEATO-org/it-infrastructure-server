@@ -120,11 +120,12 @@ Paper 26.2 build 126で起動と日本語ヘルプを確認しましたが、本
 
 Magic 11.2.4の公式`valhalla` exampleを使用し、ValhallaMMOへ`魔術` Skill（Lv 0-100）を追加します。成長の主体はValhallaMMOの魔術Lv、EXP、Skill Point、Skill Treeです。MagicはSpell、Mana、Cooldown、Casting、魔導具UI、演出だけを担当し、独立した第二のMMOレベルやSpell Pointを使いません。
 
-- EXPは公式曲線`(%level% + 75 * 2^(%level%/7.6)) + 300`を変更せず、successful castの`earns_type: valhalla_xp_magic`と`earns_multiplier: 10`でValhalla魔術EXPへ変換します。
-- Spell Shopは公式`OpenValhallaSkillTreeAction`でValhallaのSkill Treeを開きます。戦闘、防護、秘術の3分岐とMana系統を設け、全取得コストは30です。Skill PointはValhallaMMOの既存Power profileで全Skill共通管理されるため、魔術専用の約20ポイント上限は独自integrationなしでは強制できません。運用上は他Skillとの配分を含め約20を目安にします。
+- 魔術のEXP曲線は`(%level% + 75 * 2^(%level%/8.5)) + 300`です。successful castの`earns_type: valhalla_xp_magic`と`earns_multiplier: 10`でValhalla魔術EXPへ変換し、Spell別の`earns`と共通`earns_cooldown: 2 minutes`を固定します。Missileの初心者向けXP回復短縮はRank I/IIとも使用しません。daily limitは設けません。
+- Spell Shopは公式`OpenValhallaSkillTreeAction`でValhallaのSkill Treeを開きます。戦闘、防護、秘術の3分岐とMana系統を設け、Rank IIを含む全取得コストは39です。Skill PointはValhallaMMOの既存Power profileで全Skill共通管理されるため、魔術専用の約20ポイント上限は独自integrationなしでは強制できません。運用上は他Skillとの配分を含め約20を目安にします。
 - Manaは100、回復4/秒から開始します。Path upgradeとMana perkを同じ公式rewardにまとめ、Lv10で115、Lv30で135、Lv60で165、Lv100で185へ増加し、回復は最終6/秒です。Magic 11.2.4のMana値は整数のため、指定目安5.8/秒は6/秒へ丸めています。
 - Pathは`beginner`、`student`、`apprentice`、`master`を内部進行に使用し、Lv100補正だけ`feato_archmage`を追加します。プレイヤーには魔術LvとSkill Treeを主表示します。
 - Cooldownはすべてミリ秒です。Magic MissileとFireballはブロックを破壊せず、高位戦闘魔法を含め通常武器の継続火力を置き換えない設定です。
+- `enable_spell_upgrades: true`でRank variantを読み込み、`enable_automatic_spell_upgrades: false`で使用回数によるSpell・Pathの自動進行を止めます。Rank IIは元Spell取得を条件に各1ポイントで解放します（Missile Lv20、Leap Lv25、Heal Lv30、Fireball Lv35、Blink Lv40、Shield Lv45、Push Lv50、Gills Lv55、Lightning Lv65）。公式rewardは元Spellの使用Rankを更新します。Rank I/IIを独立したSpellとして選択する方式ではありません。Recall・Light・天候・WoundのRank perkやRank III以降は追加しません。
 - 魔術Lvによる直接Damage倍率は追加しません（0%）。成長はSpell解放、Mana、Mana回復、移動・探索・防御の選択を主体にします。
 - 天象術は晴天祈願、雨乞い、嵐の招来です。すべてMagicの`WeatherAction`でワールド天候だけを変更し、コマンド、追加落雷攻撃、Mob spawnは使いません。
 - WandはSpell選択・発動UIとしてのみ使用します。rarity、ランダム性能、恒常的な攻撃強化、Magic Armorは採用しません。
@@ -148,6 +149,34 @@ Wand販売NPCは、販売位置に立って次を実行します。
 `console_command`はConsoleとして`castp <player> <spell>`を実行するため、一般Playerへ`magic.commands.cast`や`magic.commands.castp`は付与しません。
 
 実機では、MagicとValhallaMMOのenable順、魔術profile作成、Spell XP加算、Skill Point総数、Path upgrade、Mana表示・回復、各Spellの成功判定とCooldown、Spell Shop GUI、日本語表示、Java/Bedrockの魔導具操作、統合resource packの表示を確認してください。
+
+### XP・Rank II調整の適用確認
+
+Fishing/Smithingの標準progressionは、[versions.md](../deploys/versions.md)のSHA-512と一致するValhallaMMO 1.10.3 JAR内の`skills/`を原本として追加しました。FishingはチャンクXP減衰の対象外、Smithingの耐久スタック上限は同一チャンク・素材ごとに300です。素材倍率は以下のとおりで、SmithingのEXP曲線と耐久スタック倍率・最大値は標準値を維持します。
+
+| 素材 | Lv0–19 | Lv20–39 | Lv40–59 | Lv60–79 | Lv80+ |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Wood / Leather | 100% | 75% | 50% | 25% | 10% |
+| Stone / Copper / Chain | 100% | 100% | 75% | 50% | 25% |
+| Iron / Gold | 80% | 100% | 100% | 100% | 100% |
+| Diamond | 50% | 75% | 100% | 125% | 125% |
+| Netherite | 25% | 50% | 75% | 100% | 125% |
+
+共通チャンク減衰は300イベント後にスキルXPを80%、EXP orbを50%にします。通常活動への過度な減衰を緩和しつつ、Grinder対策を残します。
+
+適用時はPaperを停止してValhallaMMO/Magicの設定とプレイヤーprofileをバックアップし、追跡設定を通常デプロイで`/plugins`から永続Volumeの`/data/plugins`へ同期して再起動します。VPSへのファイルコピーだけでは適用確認になりません。既存プレイヤーのSmithing倍率が新しいstarting/special perk値に再計算されることも確認し、差が残る場合は公開を止めて公式のprofile再計算手順を確認してください。
+
+今回の設定は隔離したPaper 26.2 build 126 / Java 25でMagic 11.2.4とValhallaMMO 1.10.3の起動・正常停止、全9種のRank IIの`spells`一覧への登録、`valhalla_xp_magic`通貨登録を確認しました。Gills IIはMagic標準のRank継承を使用し、明示的な`inherit: gills`は循環参照になるため指定しません。既存の上流YAML重複警告とVengeanceの式評価警告は残ります。プレイヤー操作と本番profileへの適用は未確認です。
+
+公開前にJava/Bedrockで次を確認します。
+
+- Magic/Valhallaの起動、全9種のRank II（カスタム`gills|2`を含む）の読み込みとperk reward解決、ツリーのノード・線・日本語表示。
+- 未取得時はRank I、取得後は同じSpellでRank IIの性能・Mana・Cooldownとなり、使用だけでRank/Pathが進まないこと。既存profileに以前の上位Rankが残っていないこと。
+- successful castのXPがValhalla `MAGIC` profileに加算されること。Missile Rank I/IIのXP回復が2分であり、Missileだけ異常に高速なXP源にならないこと。
+- Fireball IIの地形破壊・着火なし、Recallが同一ワールドのhomeのみ、Gills IIが60秒持続し水中移動の付加効果も保持、magicbow/magicswordが無効であること。
+- Fishingの同一地点での通常XP、Smithingの300スタック制限と各レベル帯の素材倍率（特にLv20以降のIron/Gold 100%）。
+
+問題があればPaperを停止し、旧追跡設定と変更前profileのバックアップを戻して再起動します。Rank II取得後に設定だけを戻すと取得済みperkとSpell Rankが食い違うため、profileも同じ時点に戻します。
 
 ## 銃器スキル（FIREARMS Bridge 0.2.0 / Phase 1 PoC）
 

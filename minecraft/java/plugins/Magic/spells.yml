@@ -1,6 +1,7 @@
 override:
   earns_type: valhalla_xp_magic
   earns_multiplier: 10
+  earns_cooldown: 2 minutes
 
 spellshop:
   actions:
@@ -21,6 +22,9 @@ feato_wand_shop:
         cost: 150
 
 missile:
+  # Use the common XP recovery period instead of the upstream beginner bonus.
+  earns_cooldown_scale: 1
+  earns: 4
   actions:
     cast:
       - class: CustomProjectile
@@ -49,6 +53,7 @@ feato_light:
     mana: 5
 
 heal:
+  earns: 4
   actions:
     cast:
       - class: Heal
@@ -60,6 +65,7 @@ heal:
     mana: 20
 
 fling:
+  earns: 2
   parameters:
     cooldown: 6000
     min_speed: 1.2
@@ -68,6 +74,7 @@ fling:
     mana: 10
 
 fireball:
+  earns: 6
   parameters:
     break_blocks: false
     fire: false
@@ -76,6 +83,7 @@ fireball:
     mana: 25
 
 blink:
+  earns: 3
   parameters:
     range: 12
     cooldown: 10000
@@ -83,6 +91,7 @@ blink:
     mana: 20
 
 reflect:
+  earns: 5
   parameters:
     radius: 1
     undo: 1200
@@ -92,12 +101,14 @@ reflect:
     mana: 30
 
 gills:
+  earns: 2
   parameters:
     cooldown: 30000
   costs:
     mana: 20
 
 push:
+  earns: 4
   parameters:
     range: 8
     target_count: 2
@@ -106,6 +117,7 @@ push:
     mana: 15
 
 recall:
+  earns: 10
   parameters:
     options:
       - type: home
@@ -124,6 +136,7 @@ recall:
     mana: 40
 
 chainlightning:
+  earns: 8
   parameters:
     radius: 3
     target_count: 1
@@ -138,7 +151,7 @@ chainlightning:
 feato_clear_skies:
   icon: sunflower
   category: utility
-  earns: 2
+  earns: 20
   actions:
     cast:
       - class: Weather
@@ -152,7 +165,7 @@ feato_clear_skies:
 feato_call_rain:
   icon: water_bucket
   category: utility
-  earns: 2
+  earns: 30
   actions:
     cast:
       - class: Weather
@@ -166,7 +179,7 @@ feato_call_rain:
 feato_call_storm:
   icon: lightning_rod
   category: utility
-  earns: 2
+  earns: 45
   actions:
     cast:
       - class: Weather
@@ -178,6 +191,7 @@ feato_call_storm:
     mana: 90
 
 wound:
+  earns: 16
   parameters:
     range: 8
     damage: 10
@@ -188,3 +202,103 @@ wound:
 
 vengeance:
   variables: bubble
+
+# Rank II is granted by Valhalla perks; automatic progression remains disabled.
+# DamageAction prioritizes upstream target-specific damage over generic damage.
+missile|2:
+  earns: 4
+  earns_cooldown_scale: 1
+  parameters:
+    damage: 2.5
+    player_damage: 2.5
+    entity_damage: 2.5
+    range: 28
+    cooldown: 1500
+    target_breakables: 0
+  costs:
+    mana: 9
+
+# Keep the upstream sneak variant within the same speed limits.
+fling|2:
+  earns: 2
+  alternate_sneak_parameters:
+    min_speed: 1.4
+    max_speed: 1.9
+  parameters:
+    min_speed: 1.4
+    max_speed: 1.9
+    cooldown: 5000
+  costs:
+    mana: 12
+
+heal|2:
+  earns: 4
+  parameters:
+    target: self
+    amount: 5
+    cooldown: 13000
+  costs:
+    mana: 22
+
+fireball|2:
+  earns: 6
+  parameters:
+    break_blocks: false
+    fire: false
+    size: 1
+    cooldown: 7000
+  costs:
+    mana: 25
+
+blink|2:
+  earns: 3
+  parameters:
+    range: 16
+    cooldown: 9000
+  costs:
+    mana: 22
+
+reflect|2:
+  earns: 5
+  parameters:
+    radius: 1.25
+    undo: 1500
+    breakable: 1
+    reflect_chance: 0.5
+    cooldown: 22000
+  costs:
+    mana: 32
+
+push|2:
+  earns: 4
+  parameters:
+    range: 10
+    target_count: 3
+    cooldown: 5500
+  costs:
+    mana: 16
+
+gills|2:
+  earns: 2
+  parameters:
+    target_type: LivingEntity
+    target: self
+    duration: 60000
+    undo: 60000
+    cooldown: 30000
+    effect_water_breathing: 1
+  costs:
+    mana: 20
+
+chainlightning|2:
+  earns: 8
+  parameters:
+    radius: 4
+    target_count: 2
+    repeat: 2
+    player_damage: 1
+    entity_damage: 2
+    target_breakables: 0
+    cooldown: 14000
+  costs:
+    mana: 45

@@ -1,9 +1,6 @@
 experience:
   max_level: 100
-  exp_level_curve: "(%level% + 75 * 2^(%level%/7.6)) + 300"
-  exp_multiplier_quality: 0.00334
-  multiplier_automated: 0.25
-  multiplier_manual: 2
+  exp_level_curve: "(%level% + 75 * 2^(%level%/8.5)) + 300"
   daily_limit: -1
   daily_limit_warning: "&c今日はこれ以上、魔術を修練できません"
 
@@ -567,3 +564,201 @@ perks:
       - "&d魔術完成"
       - "&7最大Mana: &b185"
       - "&7Mana回復: &b6/秒"
+
+  missile_rank_2:
+    icon: SPECTRAL_ARROW
+    name: "Magic Missile II"
+    description: "威力2.5、射程28ブロック、Mana 9、Cooldown 1.5秒"
+    coords: "-5,1"
+    cost: 1
+    required_lv: 20
+    perk_rewards:
+      p:learn_spell: missile|2
+    requireperk_all: [missile]
+    connection_line:
+      '1':
+        position: "-4,1"
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dMagic Missile II"
+      - "&7威力2.5、射程28ブロック"
+      - "&7消費Mana: &b9"
+      - "&7Cooldown: &e1.5秒"
+
+  fling_rank_2:
+    icon: FEATHER
+    name: "Leap II"
+    description: "速度1.4〜1.9、Mana 12、Cooldown 5秒"
+    coords: "6,3"
+    cost: 1
+    required_lv: 25
+    perk_rewards:
+      p:learn_spell: fling|2
+    requireperk_all: [fling]
+    connection_line:
+      '1':
+        position: "5,3"
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dLeap II"
+      - "&7速度1.4〜1.9"
+      - "&7消費Mana: &b12"
+      - "&7Cooldown: &e5秒"
+
+  heal_rank_2:
+    icon: GLISTERING_MELON_SLICE
+    name: "Heal II"
+    description: "自身を5回復、Mana 22、Cooldown 13秒"
+    coords: "-3,3"
+    cost: 1
+    required_lv: 30
+    perk_rewards:
+      p:learn_spell: heal|2
+    requireperk_all: [heal]
+    connection_line:
+      '1':
+        position: "-2,3"
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dHeal II"
+      - "&7自身を5回復"
+      - "&7消費Mana: &b22"
+      - "&7Cooldown: &e13秒"
+
+  fireball_rank_2:
+    icon: FIRE_CHARGE
+    name: "Fireball II"
+    description: "爆発サイズ1、地形破壊・着火なし、Mana 25、Cooldown 7秒"
+    coords: "-7,4"
+    cost: 1
+    required_lv: 35
+    perk_rewards:
+      p:learn_spell: fireball|2
+    requireperk_all: [fireball]
+    connection_line:
+      '1':
+        position: "-6,4"
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dFireball II"
+      - "&7爆発サイズ1、地形破壊・着火なし"
+      - "&7消費Mana: &b25"
+      - "&7Cooldown: &e7秒"
+
+  blink_rank_2:
+    icon: ENDER_PEARL
+    name: "Blink II"
+    description: "射程16ブロック、Mana 22、Cooldown 9秒"
+    coords: "6,5"
+    cost: 1
+    required_lv: 40
+    perk_rewards:
+      p:learn_spell: blink|2
+    requireperk_all: [blink]
+    connection_line:
+      '1':
+        position: "6,4"
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dBlink II"
+      - "&7射程16ブロック"
+      - "&7消費Mana: &b22"
+      - "&7Cooldown: &e9秒"
+
+  reflect_rank_2:
+    icon: SHIELD
+    name: "Shield II"
+    description: "半径1.25、持続1.5秒、反射率50%、耐久1、Mana 32、Cooldown 22秒"
+    coords: "1,5"
+    cost: 1
+    required_lv: 45
+    perk_rewards:
+      p:learn_spell: reflect|2
+    requireperk_all: [reflect]
+    connection_line:
+      '1':
+        position: "1,4"
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dShield II"
+      - "&7半径1.25、持続1.5秒、反射率50%、耐久1"
+      - "&7消費Mana: &b32"
+      - "&7Cooldown: &e22秒"
+
+  push_rank_2:
+    icon: PISTON
+    name: "Push II"
+    description: "射程10ブロック、対象3体、Mana 16、Cooldown 5.5秒"
+    coords: "-5,6"
+    cost: 1
+    required_lv: 50
+    perk_rewards:
+      p:learn_spell: push|2
+    requireperk_all: [push]
+    connection_line:
+      '1':
+        position: "-4,6"
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dPush II"
+      - "&7射程10ブロック、対象3体"
+      - "&7消費Mana: &b16"
+      - "&7Cooldown: &e5.5秒"
+
+  gills_rank_2:
+    icon: HEART_OF_THE_SEA
+    name: "Gills II"
+    description: "水中呼吸を60秒間付与、Mana 20、Cooldown 30秒"
+    coords: "7,6"
+    cost: 1
+    required_lv: 55
+    perk_rewards:
+      p:learn_spell: gills|2
+    requireperk_all: [gills]
+    connection_line:
+      '1':
+        position: "6,6"
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dGills II"
+      - "&7水中呼吸を60秒間付与"
+      - "&7消費Mana: &b20"
+      - "&7Cooldown: &e30秒"
+
+  chainlightning_rank_2:
+    icon: LIGHTNING_ROD
+    name: "Lightning II"
+    description: "範囲4、対象2体、連鎖2回、対Player威力1・対Mob威力2、Mana 45、Cooldown 14秒"
+    coords: "-6,8"
+    cost: 1
+    required_lv: 65
+    perk_rewards:
+      p:learn_spell: chainlightning|2
+    requireperk_all: [chainlightning]
+    connection_line:
+      '1':
+        position: "-5,8"
+        locked: GRAY_DYE:1172700
+        unlockable: ORANGE_DYE:1172800
+        unlocked: LIME_DYE:1172900
+    messages:
+      - "&dLightning II"
+      - "&7範囲4、対象2体、連鎖2回、対Player威力1・対Mob威力2"
+      - "&7消費Mana: &b45"
+      - "&7Cooldown: &e14秒"
