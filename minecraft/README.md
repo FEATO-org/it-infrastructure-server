@@ -230,8 +230,8 @@ health 0.5（0.25ハート）回復し、通常の20 TPSでは約4秒で1ハー�
 一般グループには`craftbook.mech.chair.use`だけを追加します。既存の公式ProtocolLib
 5.5.0-SNAPSHOT固定assetを使用し、CraftBook・WorldEditの版は維持します。
 
-`mechanisms.yml`全体の同期による既存設定のリセットを避けるため、従来のCauldron設定を
-`java/config-seeds/craftbook-mechanisms.yml`へ移し、`/plugins`の通常同期から外しています。
+`mechanisms.yml`全体の同期による既存設定のリセットを避けるため、初回用の空の設定を
+`java/config-seeds/craftbook-mechanisms.yml`で管理し、`/plugins`の通常同期から外しています。
 起動前スクリプトは`/data/plugins/CraftBook/mechanisms.yml`が存在しない場合だけseedを
 コピーし、`java/patches/craftbook-chairs.json`でChairsの7キーだけを更新します。
 既存の`blocks`と他mechanicの値は保持します。`blocks`が未設定なら3.10.13の
@@ -249,22 +249,18 @@ Requires runtime verification:
 - Java版とGeyser経由のBedrock版での着席・離席。
 - 既存全Pluginとの併用時にProtocolLibによる回帰がないこと。
 
-## CraftBook Cauldron（経験抽出）
+## CraftBook Cauldronの無効化
 
-CraftBook 3.10.13の既存Cauldron mechanicを有効化します。水で満たした大釜の直下に火または溶岩を置き、大釜側面の壁看板の2行目に`[Cauldron]`と記入します。腐った肉16個、クモの目2個、アメジストの欠片1個、ガラス瓶1個を過不足なく投入し、スコップで大釜を右クリックすると経験値の瓶1個を錬成します。`chance: 93`にCraftBook本来のスコップ品質・エンチャント補正が適用されます。失敗時は材料が消費されず、再度かき混ぜて挑戦できます。看板必須、レッドストーン起動無効、item tracking無効です。
+BreweryXとの大釜利用の競合が疑われ、経験抽出が実運用で正常に利用できなかったため、CraftBookのCauldronを無効化し、経験抽出レシピと専用設定を撤去しました。経験値の瓶はFEATO商店で購入できます。
 
-追跡設定は`java/plugins/CraftBook/`の`config.yml`と`cauldron-recipes.yml`、初回用の`java/config-seeds/craftbook-mechanisms.yml`です。前者はComposeの`/plugins` mountから起動時に永続Volumeの`/data/plugins/CraftBook/`へ同期します。`mechanisms.yml`は既存ファイルを保持し、存在しない場合だけ初回用設定をコピーします。既存環境へのCauldron設定変更は、運用設定との差分を確認して取り込んでください。3.10.13の配布JARの同梱設定・読み込み処理に合わせ、レシピの最上位キーは`cauldron-recipes`を使用しています。
-
-適用前にPaperを正常停止し、永続Volumeの既存CraftBook設定をバックアップしてください。追跡するレシピに本番独自の内容がある場合は、Cauldron以外の設定・既存レシピを保持してGitへ取り込んでから配布します。ファイルの配布だけでは適用済みとせず、再起動後の読み込み先と起動ログでCauldron・レシピの読み込みを確認してください。権限は既存の`craftbook.mech.cauldron`、`craftbook.mech.cauldron.use`、`craftbook.mech.cauldron.recipe.experience_extraction`を使用し、今回LuckPerms設定は変更しません。
+適用前にPaperを正常停止して既存CraftBook設定をバックアップし、再起動後に`/data/plugins/CraftBook/config.yml`でCauldronが無効であることを確認してください。配布元で削除したファイルは永続Volumeに残る場合があります。`mechanisms.yml`にはChairsや本番独自の設定があり得るため、ファイル全体を削除せず、Cauldron専用設定・レシピだけを確認して撤去してください。戻す場合はPaperを正常停止し、配布元と永続Volumeの設定を適用前のバックアップへ戻して再起動します。
 
 実機未確認です。適用後は次を確認してください。
 
-- 看板なしの大釜ではCraftBookが反応せず、側面の看板ありではスコップ操作が成立すること。
-- 材料16/2/1/1から経験値の瓶1個が生成され、成功時だけ材料が消費され、失敗時は再試行できること。
-- レッドストーンで錬成できず、既存権限チェックが機能すること。
-- BreweryX・ValhallaMMOなど他の大釜系機能と実用上競合しないこと。
-
-問題があればPaperを正常停止し、追跡設定と永続Volumeの設定を適用前のバックアップへ戻して再起動します。新規追跡ファイルは配布元から外すだけで永続Volumeから削除されるとは限らないため、両方の復元を確認してください。
+- CraftBook Cauldronが動作せず、BreweryXの大釜利用に影響がないこと。
+- FEATO商店の販売ページに経験値の瓶が表示され、200Gで16個購入でき、所持金が200G減少すること。
+- 経験値の瓶をショップへ売却できないこと。
+- Java版GUIとBedrock版Formsの両方で正常に購入できること。
 
 ## 経済と通常商店
 
@@ -283,6 +279,7 @@ EconomyShopGUI Free 7.3.2では、Java Editionは従来のInventory GUI、Bedroc
 | Player Head | 購入 | 1 | 100G |
 | Mending Enchanted Book | 購入 | 1 | 2,000G |
 | Villager Spawn Egg | 購入 | 1 | 2,000G |
+| Experience Bottle | 購入 | 16 | 200G |
 
 買取品はすべて1個から売却できます。以下の価格は64個あたりです（設定上は64で割った1個価格）。
 
