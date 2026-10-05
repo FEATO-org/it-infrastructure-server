@@ -6,53 +6,6 @@ description: '&fHorsemanship: 騎手の技術を育てる'
 levelbar_title: '&6馬術 Lv %lv_current% &7%exp_current%/%exp_next%'
 levelbar_color: YELLOW
 levelbar_style: SOLID
-stats:
-  ints:
-    first_saddle: 0
-    rein_sense: 0
-    urge: 0
-    fleetfoot: 0
-    long_haul: 0
-    steady_hands: 0
-    cavalier: 0
-    horse_sense: 0
-    good_hands: 0
-    breakaway: 0
-    relentless_pace: 0
-    over_the_fence: 0
-    charge: 0
-    full_gallop: 0
-    trailwise: 0
-    surefooted: 0
-    mounted_marksman: 0
-    breeders_insight: 0
-    seasoned_rider: 0
-    quick_response: 0
-    steady_pace: 0
-    calm_rein: 0
-    veteran_cavalry: 0
-    lightning_start: 0
-    second_wind: 0
-    fine_control: 0
-    heavy_cavalry: 0
-    light_cavalry: 0
-    bloodline_study: 0
-    mutual_trust: 0
-    ride_the_wind: 0
-    iron_journey: 0
-    sure_landing: 0
-    first_impact: 0
-    windborne: 0
-    endless_road: 0
-    master_of_reins: 0
-    iron_vanguard: 0
-    swift_rider: 0
-    horse_whisperer: 0
-    one_as_one: 0
-  floats: {}
-  doubles: {}
-  booleans: {}
-  sets: {}
 starting_perks: {}
 experience:
   max_level: 100

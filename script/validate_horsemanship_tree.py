@@ -11,7 +11,7 @@ import sys
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILL = ROOT / 'minecraft/java/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml'
+SKILL = ROOT / 'minecraft/java/plugins/FEATOHorsemanship/horsemanship.yml'
 PRESENTATION = {'coords', 'icon', 'description', 'connection_line'}
 LANES = {
     0: 'fleetfoot breakaway full_gallop quick_response lightning_start ride_the_wind windborne',
