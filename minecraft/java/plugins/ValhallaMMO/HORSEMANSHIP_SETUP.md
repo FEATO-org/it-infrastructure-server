@@ -15,6 +15,21 @@
 
 `REMOVE_OLD_MODS_INCLUDE`には`feato-horsemanship-*.jar`を追加して、起動前に旧版JARを除去します。更新時は実在するRelease tagとasset名へURLを更新し、Skillと効果設定も同じ版の差分を確認してください。`/horsemanship reload`は効果設定の再読込だけで、Skill定義の変更にはPaper再起動が必要です。本番でGit管理設定を調整した場合は、次のデプロイ前に取り込みます。
 
+## 専用 Skill/Profile 修正版への移行（公開待ち）
+
+v0.2.0には、YAML Custom Skillの共通Profile型が標準EXP経路で解決されず、馬術EXP付与時に例外が発生する問題があります。enable成功はEXP・永続化の正常性を保証しません。配布元Pluginで専用Java Skill/Profileへの修正を準備しています。修正版の公開Release URLが確定するまで、このリポジトリのJAR manifestと旧Skill配置はv0.2.0のままです。旧JARへ新配置だけを適用しないでください。
+
+修正版を採用する際は、以下を同じ作業ブランチで反映します。
+
+1. `minecraft/java/plugins.txt`を実在する修正版Release JARの固定URLへ更新し、`deploys/versions.md`へ取得URL・対応版・確認結果を記録します。
+2. 現在のGUI調整済み `minecraft/java/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml` を `minecraft/java/plugins/FEATOHorsemanship/horsemanship.yml` へ移し、未使用の `stats` セクションだけを除去します。Perk ID・表示・座標・条件・報酬・EXP曲線を維持します。新しい読み込み先は `/data/plugins/FEATOHorsemanship/horsemanship.yml` です。
+3. `minecraft-data`ノードのPaperを正常停止し、ValhallaMMO DBと設定・旧JARを整合した組としてバックアップします。旧 `ValhallaMMO/skills/custom/horsemanship.yml` と `HORSEMANSHIP.yml`、別名でHORSEMANSHIPを定義する旧YAMLをVolume外へ退避します。Git側の削除だけではVolumeから消えません。管理元の `/plugins` にも旧ファイルを残さないでください。
+4. 修正版JARと新配置の設定を配布し、起動前同期と完全再起動で適用します。MinecraftやValhallaMMOの `/reload`、Pluginのdisable/enableは使用しません。`/horsemanship reload`は引き続き効果設定だけが対象です。
+5. `HORSEMANSHIP registered with dedicated HorsemanshipSkill/HorsemanshipProfile`を確認します。旧Skillとの重複や登録失敗ではPluginがdisableし、移動・戦闘Listenerは登録されません。
+6. 管理者で `/skills`、`/valhalla profile HORSEMANSHIP`、`/valhalla exp HORSEMANSHIP 10`を実行し、EXP増分を確認します。鞍上の第一歩の未取得状態で100ブロック約10 EXP、取得後約10.5 EXP、馬上戦闘は2秒間隔0.5 EXPを確認します。対象馬・操縦者・後席・ログインし直し・完全再起動後の保存、標準reset/refund・NG+・排他条件も確認します。テストには本番プレイヤーデータを使用しません。
+
+修正版はValhallaMMOのDB初期化後にUnlockCondition → 専用Profile → 専用Skillの順で公開API登録します。標準のLv・EXP・累積EXP・NG+、共通スキルポイント、PowerProfileの通常/永続取得PerkとPerk IDを維持し、データを削除・resetせず、独自DB/PDCへ移しません。旧EXPの独自移行は行いません。切り戻しは停止中に移行前の整合したDB・設定・JARを復元します。
+
 ## スキルと権限
 
 馬術はLv 0-100、移動・持久・操作・戦闘・育成の5系統です。初期設定とPerkのLv・コスト・他スキルLv・排他条件は配布元の値を維持します。v0.2.0は通常PerkをValhallaMMOの永続profile内の取得リストで判定し、NG+効果は永続取得したMaster / Legendから判定します。共通スキルポイントは他スキルと共有します。
