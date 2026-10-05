@@ -152,7 +152,7 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | ValhallaMMO | 1.10.3 | [固定URL](https://cdn.modrinth.com/data/rxrgsoud/versions/GkeSDJSq/ValhallaMMO_1.10.3.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | FEATO Gun-Valhalla Bridge Plugin | 0.2.0 | [固定JAR](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.2.0/feato-gun-valhalla-bridge-plugin-0.2.0.jar) | Paper | 26.2 build 126（Bridge固定対象） | 公開Release（Phase 1 PoC） | Java 25、ValhallaMMO 1.10.3必須。release ID 3 / protocol 1。config reloadを追加。0.2.0の実機起動・reloadは未確認 |
 | FEATO Gun-Valhalla Bridge Datapack | 0.2.0 | [固定ZIP](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.2.0/feato-gun-valhalla-bridge-datapack-0.2.0.zip) | Data Pack | 26.2（pack format 107.1） | 公開Release（Phase 1 PoC） | 同版Pluginと対で配置。Gun Core 1.0.15 / Modern Guns 1.9.3。release ID 3 / protocol 1。0.2.0は実機未確認 |
-| FEATO Horsemanship | 0.2.0 | [固定JAR](https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.2.0/feato-horsemanship-0.2.0.jar) / [Custom Skill](https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.2.0/horsemanship.yml) | Paper | 26.2 build 126（配布元対象、api-version 26.2） | stable release（draft=false、prerelease=false） | Java 25、ValhallaMMO 1.10.3必須。BetterHorses 6.4 / DualHorse 1.5.4 / Magic 11.2.4との同時起動・reload・正常停止を2026-10-04にローカル確認。プレイヤー操作・本番は未確認 |
+| FEATO Horsemanship | 0.3.0 | [固定JAR](https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.3.0/feato-horsemanship-0.3.0.jar) / [Skill設定](https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.3.0/horsemanship.yml) | Paper | 26.2 build 126（配布元対象、api-version 26.2） | stable release（draft=false、prerelease=false） | Java 25、ValhallaMMO 1.10.3必須。専用Java Skill/Profile登録。旧Custom Skill退避と完全再起動が必要。公開アセット・設定の一致を確認、v0.3.0実機確認は下記参照。本番・プレイヤー操作は未確認 |
 | Magic | 11.2.4 | [固定URL](https://mediafilez.forgecdn.net/files/8375/702/Magic-11.2.4.jar) | Paper | 26.2（公式配布対象） | stable | 公式ValhallaMMO integrationを使用; Requires runtime verification |
 | SCore | 5.26.9.17 | [固定URL](https://cdn.modrinth.com/data/ZfcV7L06/versions/EHLoQYh8/SCore-5.26.9.17.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 8以上; Requires runtime verification |
 | ExecutableItems | 7.26.9.17 | [固定URL](https://cdn.modrinth.com/data/g8Zwnnmn/versions/XrhxAt8x/ExecutableItems-7.26.9.17.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 8以上; Requires runtime verification |
@@ -204,7 +204,20 @@ Paper build 126 / Minecraft 26.2 / Java 25 / ValhallaMMO 1.10.3 / Gun Core 1.0.1
 
 0.1.0ではユーザー実機報告でhandshake・FIREARMS登録・銃器表示・Lv0 Profileの再ログイン維持を確認しました。0.2.0の実機起動と新reload経路、特定XP値・Level Up・完全再起動後の保存・DB値・Perk三択は未確認です。respec/recalculationは未確認のまま後回しとし、後続開発を止める理由にはしません。更新・config反映・実機確認・復旧手順は[minecraft/README.md](../minecraft/README.md#銃器スキルfirearms-bridge-020--phase-1-poc)を参照してください。
 
-### FEATO Horsemanship 0.2.0（2026-10-04）
+### FEATO Horsemanship 0.3.0（2026-10-05）
+
+[公開Release](https://github.com/FEATO-org/feato_horsemanship/releases/tag/v0.3.0)のJAR・Skill YAML・SHA256SUMSを認証なしでGETし、公開asset digestとSHA-256を照合しました。JAR内のplugin.ymlは0.3.0 / api-version 26.2 / ValhallaMMO必須、最大class majorは69（Java 25）です。同梱SkillとRelease YAMLは一致し、効果設定は追跡configと一致します。最新GUI、43 PerkのID・条件・報酬・座標・EXP曲線を維持し、未使用statsだけを除去しています。
+
+| Asset | 検証済みSHA-256 |
+| --- | --- |
+| feato-horsemanship-0.3.0.jar | `302d0395f8fc3cfa027efa5dc074d42e4332f3bcb76af32d721d359441cda395` |
+| horsemanship.yml | `6606ed03dccb8102ed8f6363d43513bee9b537550eddbaab183b3f2f0cbcbd0c` |
+
+正本は `minecraft/java/plugins/FEATOHorsemanship/horsemanship.yml`、読み込み先は `/data/plugins/FEATOHorsemanship/horsemanship.yml` です。v0.3.0の専用Java Skill/Profileと同時に配布し、旧ValhallaMMO Custom Skillは管理元と永続Volumeから退避します。Perk取得データの削除やresetは行いません。移行・バックアップ・受入試験・切り戻しは[導入手順](../minecraft/java/plugins/ValhallaMMO/HORSEMANSHIP_SETUP.md)を参照してください。
+
+2026-10-05、公開v0.3.0 JARを隔離localhostのPaper 26.2 build 126 / Oracle GraalVM Java 25.0.4 / ValhallaMMO 1.10.3で起動し、専用Skill/Profile登録、43 Perk・6排他条件、標準reset/refund報酬の登録、SQLiteへの合成UUIDのProfile/PowerProfileの保存・読込み、既存の合成Profile値（Lv・EXP・累積EXP・NG+）の保持、正常停止を確認しました。公開JARの全classは前段で17テストとclean buildを通した修正ソースのclassと一致します。GUI検証8テストとgit diff --checkも成功しました。BetterHorses/DualHorse/Magicを含む同時起動、実プレイヤーの標準EXP/Profileコマンド、騎乗・戦闘、logout/login、reset/refund実行・NG+取得、本番はv0.3.0では未確認です。
+
+#### 旧0.2.0の確認履歴（現行配置には使用しない）
 
 [指定Release](https://github.com/FEATO-org/feato_horsemanship/releases/tag/v0.2.0)のJARとCustom SkillをGETし、GitHub Release asset digest、同梱`SHA256SUMS`とSHA-256を照合しました。認証なしのJAR取得はHTTP 200です。JAR内の`plugin.yml`でdata folder名`FEATOHorsemanship`、ValhallaMMO必須、BetterHorses / DualHorse任意を確認し、クラスの最大major versionは69（Java 25）です。Release添付のSkillとJAR内のSkillは同一です。
 
@@ -213,7 +226,7 @@ Paper build 126 / Minecraft 26.2 / Java 25 / ValhallaMMO 1.10.3 / Gun Core 1.0.1
 | feato-horsemanship-0.2.0.jar | `613002f811eb7c2ad613cf015fe40c050f879edd2a1561a4c198451c18a52a19` |
 | horsemanship.yml | `a384b5494df865c317686f78d306afb9c81beb87b1d2bb8052409157f0a34677` |
 
-Release asset名と取得URLは小文字のままですが、Git管理・配布時の正本は `minecraft/java/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml` とします。内容・SHA-256は変更せず、ValhallaMMO 1.10.3の大文字ファイル名での読み込みに合わせます。 2026-10-04、隔離したLinux / Java 25 / Paper 26.2 build 126でValhallaMMO 1.10.3とFEATOHorsemanship 0.2.0のenable完了を確認しました。Bridge・本番・育成や保存などの全体動作は未確認です。
+Release asset名と取得URLは小文字のままですが、旧0.2.0ではGit管理・配布時の正本を `minecraft/java/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml` としていました。内容・SHA-256は変更せず、ValhallaMMO 1.10.3の大文字ファイル名での読み込みに合わせていました。 2026-10-04、隔離したLinux / Java 25 / Paper 26.2 build 126でValhallaMMO 1.10.3とFEATOHorsemanship 0.2.0のenable完了を確認しました。Bridge・本番・育成や保存などの全体動作は未確認です。
 
 Paper 26.2 build 126 / Oracle GraalVM 25.0.4、ValhallaMMO 1.10.3、BetterHorses 6.4、DualHorse 1.5.4、Magic 11.2.4で、Custom Skill登録、5 Pluginの有効化、Magicから馬術Lv・EXPの認識、馬術設定reload、正常停止を隔離したローカル環境で確認しました。43 Perkの報酬・前提・排他条件・座標も静的検証しています。v0.1.0で再現した`horsemanship_first_saddle_set`未登録エラーは解消しました。一般プレイヤーのPerk取得・NG+・騎乗・育成連携、Java/Bedrock操作、本番動作は未確認です。
 

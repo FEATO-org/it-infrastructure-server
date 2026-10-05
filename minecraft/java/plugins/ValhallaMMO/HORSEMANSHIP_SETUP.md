@@ -2,22 +2,32 @@
 
 ## 採用版と配布先
 
-[FEATO Horsemanship v0.2.0](https://github.com/FEATO-org/feato_horsemanship/releases/tag/v0.2.0)を使用します。配布元の対象はPaper 26.2 build 126 / Java 25、ValhallaMMO 1.10.3、任意連携はBetterHorses 6.3とDualHorse 1.5.4です。既存Spiget URLは動的で、ローカル検証で実際に使用したBetterHorsesは6.4でした。本番でも起動ログで版を確認してください。
+[FEATO Horsemanship v0.3.0](https://github.com/FEATO-org/feato_horsemanship/releases/tag/v0.3.0)を使用します。配布元の対象はPaper 26.2 build 126 / Java 25、ValhallaMMO 1.10.3、任意連携はBetterHorses 6.3とDualHorse 1.5.4です。既存Spiget URLは動的で、ローカル検証で実際に使用したBetterHorsesは6.4でした。本番でも起動ログで版を確認してください。
 
 | 配布元 | コンテナ内の読み込み先 |
 | --- | --- |
-| `minecraft/java/plugins.txt`の固定Release JAR URL | `/data/plugins/feato-horsemanship-0.2.0.jar` |
-| `minecraft/java/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml`（Release添付を基にGUIを調整） | `/data/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml` |
+| `minecraft/java/plugins.txt`の固定Release JAR URL | `/data/plugins/feato-horsemanship-0.3.0.jar` |
+| `minecraft/java/plugins/FEATOHorsemanship/horsemanship.yml`（v0.3.0 Release添付・最新GUIと一致） | `/data/plugins/FEATOHorsemanship/horsemanship.yml` |
 | `minecraft/java/plugins/FEATOHorsemanship/config.yml`（JAR同梱初期設定） | `/data/plugins/FEATOHorsemanship/config.yml` |
 | `minecraft/java/prepare-paper-plugins.sh`と`patches/betterhorses-horsemanship.json` | `/extras/prepare-paper-plugins.sh`と`/extras/betterhorses-horsemanship.json` |
 
-追跡するPlugin設定はComposeの`/plugins` mountから起動前に`/data/plugins`へ同期されます。ValhallaMMOが起動時にSkillを`HORSEMANSHIP`として登録するため、JARとSkillを同時に配布してPaperを再起動します。通常の配布ではGit管理の設定と`plugins.txt`を配置すればよく、Git管理外アセット用の`copy_plugins_to_remote.sh`による馬術JARの手動コピーは不要です。
+追跡するPlugin設定はComposeの`/plugins` mountから起動前に`/data/plugins`へ同期されます。FEATO HorsemanshipがValhallaMMOのDB初期化後に専用ProfileとSkillを登録するため、JARとSkillを同時に配布してPaperを再起動します。通常の配布ではGit管理の設定と`plugins.txt`を配置すればよく、Git管理外アセット用の`copy_plugins_to_remote.sh`による馬術JARの手動コピーは不要です。
 
 `REMOVE_OLD_MODS_INCLUDE`には`feato-horsemanship-*.jar`を追加して、起動前に旧版JARを除去します。更新時は実在するRelease tagとasset名へURLを更新し、Skillと効果設定も同じ版の差分を確認してください。`/horsemanship reload`は効果設定の再読込だけで、Skill定義の変更にはPaper再起動が必要です。本番でGit管理設定を調整した場合は、次のデプロイ前に取り込みます。
 
+## v0.2.0からの専用 Skill/Profile 移行
+
+v0.2.0には、YAML Custom Skillの共通Profile型が標準EXP経路で解決されず、馬術EXP付与時に例外が発生する問題があります。v0.3.0は専用Java Skill/Profileで登録します。SkillはPlugin自身の `FEATOHorsemanship/horsemanship.yml` から読み込み、ValhallaMMOの `skills/custom/` へ置きません。
+
+停止中に管理元の `/plugins/ValhallaMMO/skills/custom/` と永続Volumeの `/data/plugins/ValhallaMMO/skills/custom/` にある旧 `horsemanship.yml`・`HORSEMANSHIP.yml`、別名でHORSEMANSHIPを定義する旧YAMLをバックアップしてVolume外へ退避してください。Git側の削除だけではVolumeから消えません。旧JARへ新配置だけを適用せず、v0.3.0 JARと新Skill配置を同時に配布して完全再起動します。
+
+DB初期化後の登録順はUnlockCondition → 専用Profile → 専用Skillです。標準のLv・EXP・累積EXP・NG+、共通スキルポイント、PowerProfileの通常/永続取得PerkとPerk IDを維持し、データを削除・resetせず、独自DB/PDCへ移しません。旧EXPの独自移行は行いません。旧Skillとの重複や登録失敗では明確なエラーログを出してPluginをdisableし、移動・戦闘Listenerは登録されません。
+
+MinecraftやValhallaMMOの `/reload`、Pluginのdisable/enableは更新に使用しません。`/horsemanship reload`は引き続き効果設定だけが対象です。切り戻しは停止中に移行前の整合したDB・設定・JARを復元します。
+
 ## スキルと権限
 
-馬術はLv 0-100、移動・持久・操作・戦闘・育成の5系統です。初期設定とPerkのLv・コスト・他スキルLv・排他条件は配布元の値を維持します。v0.2.0は通常PerkをValhallaMMOの永続profile内の取得リストで判定し、NG+効果は永続取得したMaster / Legendから判定します。共通スキルポイントは他スキルと共有します。
+馬術はLv 0-100、移動・持久・操作・戦闘・育成の5系統です。初期設定とPerkのLv・コスト・他スキルLv・排他条件は配布元の値を維持します。v0.3.0は通常PerkをValhallaMMOの永続profile内の取得リストで判定し、NG+効果は永続取得したMaster / Legendから判定します。共通スキルポイントは他スキルと共有します。
 
 - 対象mountは馬、スケルトンホース、ゾンビホース、ロバ、ラバ。ラクダとラマは初期設定で対象外です。
 - 移動EXPは操縦者に100ブロックごと10、後席には付与しません。馬上戦闘EXPは攻撃者本人に2秒間隔で0.5を付与します。
@@ -30,7 +40,7 @@
 
 ## スキルツリーGUIの配置
 
-Git管理のSkillはv0.2.0の表示を調整したものです。Perk ID・Lv・cost・報酬・前提・排他・NG+と効果設定は維持し、JARやReleaseのSkillをそのまま上書きするとGUI変更が失われます。今後の版更新では表示差分を保持して照合してください。
+Git管理のSkillは既存GUI調整を維持したv0.3.0の同梱・Release添付設定と一致します。Perk ID・Lv・cost・報酬・前提・排他・NG+と効果設定を維持しています。今後の版更新では既存GUIとの差分を照合し、表示調整を保持してください。
 
 ValhallaMMO 1.10.3 JAR内のArchery / Mining / Heavy Armor / Farmingを参考に、Lv10ごとにxを2進め、左から右へ進行します。主幹はy=6、機動0、持久3、技術9、馬上戦闘14、馬管理18です。線用の空間を確保し、馬上戦闘のLv70・90は上段13／下段15へ配置します。馬管理のLv40・60・80にノードは追加しません。
 
@@ -55,9 +65,9 @@ Lv30の5入口はx=6に揃え、「追う」からの分岐を説明と標準の
 
 `starting_coordinates: "0,3"`はメニュー内部の中心値ではなく、初期表示の左上に対応します（内部でx+4、y+2）。初期9×5枠のx=0..8、y=3..7に基礎Lv0・10・20と持久Lv30が入り、上下スクロールで残る専門入口、右スクロールで後半へ進みます。6レーン全部を5行に詰めません。ナビゲーションボタンが基礎序盤のノードを隠さない座標です。
 
-説明は現在の`FEATOHorsemanship/config.yml`とv0.2.0実装に基づき、`/n`区切りで最大4行に整理しています。必要Lv・cost・他スキルLv・取得前提はValhalla標準loreへ任せます。設定の数値を変更した場合は説明も同期してください。失速の補助回復には既存の最低水平速度・移動ごとの上限が適用されます。
+説明は現在の`FEATOHorsemanship/config.yml`とv0.3.0実装に基づき、`/n`区切りで最大4行に整理しています。必要Lv・cost・他スキルLv・取得前提はValhalla標準loreへ任せます。設定の数値を変更した場合は説明も同期してください。失速の補助回復には既存の最低水平速度・移動ごとの上限が適用されます。
 
-GUI用の8件の検証テスト（重複・誤った角の向き・効果変更の拒否を含む）と変更前YAML比較が成功しました。Pluginソースの一時コピーへ追跡Skill・効果設定を組み込み、既存14テストと`test`、続けて`clean build`を実行して成功しています。配布JARは更新していません。
+GUI用の8件の検証テスト（重複・誤った角の向き・効果変更の拒否を含む）と変更前YAML比較が成功しました。Pluginソースの一時コピーへ追跡Skill・効果設定を組み込み、既存14テストと`test`、続けて`clean build`を実行して成功しています。このGUI調整はv0.3.0の公開JARにも同梱されています。
 
 ローカル静的検証はPyYAMLのあるPythonで`python script/validate_horsemanship_tree.py --baseline <変更前のhorsemanship.yml>`を実行します。検証テストは`python -m unittest discover -s script -p test_horsemanship_tree.py`です。GUI配置の実クライアント表示は未確認です。適用は既存の起動前同期とPaper再起動を使い、Java/Bedrockで初期表示・スクロール・各lock状態・loreを確認してください。GUIだけ戻す場合は停止中に変更前SkillをGit配布元とVolume側へ戻して再起動し、JAR・効果設定・profileは維持します。
 
@@ -70,13 +80,17 @@ GUI用の8件の検証テスト（重複・誤った角の向き・効果変更�
 ## 適用順
 
 1. `minecraft-data`ノードでPaperを停止し、Paper Volume（ValhallaMMO profile・共通スキルポイント・取得Perkを含む）と既存BetterHorses設定をバックアップします。
-2. 既存Volumeの `ValhallaMMO/skills/custom/` に小文字名の旧Skill設定がある場合は、Paper停止中にバックアップしてVolume外へ退避します。同期で旧名が削除されるとは限りません。正本は `HORSEMANSHIP.yml` の1ファイルだけにします。Git管理のSkill・効果設定・`plugins.txt`・追加の起動スクリプトとpatch・Composeを同じ版で配置します。起動スクリプトの実行権限を保持してください。
+2. 既存Volumeの `ValhallaMMO/skills/custom/` に旧Skill設定がある場合は、Paper停止中にバックアップしてVolume外へ退避します。同期で旧名が削除されるとは限りません。大文字名も含め、HORSEMANSHIPを定義する旧YAMLを残さないでください。正本は `FEATOHorsemanship/horsemanship.yml` です。Git管理のSkill・効果設定・`plugins.txt`・追加の起動スクリプトとpatch・Composeを同じ版で配置します。起動スクリプトの実行権限を保持してください。
 3. 必要な環境変数がある環境でCompose / Swarm設定を検証し、Paper taskを更新します。bind mountファイルの更新だけでSwarmが再起動したと判断せず、taskの再作成と起動前同期を確認します。
-4. `/data/plugins/ValhallaMMO/skills/custom/HORSEMANSHIP.yml` の配置と旧名が残っていないことを確認します。ValhallaMMOの`Registered custom skill HORSEMANSHIP.yml`、`FEATO Horsemanship enabled`、BetterHorses連携・排他条件登録の警告がないこと、実際の各Plugin版を確認します。Volume側の馬上ダメージ加算が`false`であることも確認します。
+4. `/data/plugins/FEATOHorsemanship/horsemanship.yml` の配置と旧Custom Skillが残っていないことを確認します。`HORSEMANSHIP registered with dedicated HorsemanshipSkill/HorsemanshipProfile`、`FEATO Horsemanship enabled`、BetterHorses連携・排他条件登録の警告がないこと、実際の各Plugin版を確認します。Volume側の馬上ダメージ加算が`false`であることも確認します。
 5. 権限設定スクリプトを実行する場合は、`minecraft-data`ノードで実際の一般・管理グループ名を指定します。このスクリプトは既存の商店・経済・役職権限も適用します。
 6. 次のプレイヤー操作を確認してから利用を開始します。
 
 ## 確認済みと未確認
+
+2026-10-05、公開v0.3.0 JARを隔離localhostのPaper 26.2 build 126 / Oracle GraalVM Java 25.0.4 / ValhallaMMO 1.10.3で起動し、専用Skill/Profile登録、43 Perk・6排他条件、標準reset/refund報酬の登録、SQLiteへの合成UUIDのProfile/PowerProfileの保存・読込み、既存の合成Profile値（Lv・EXP・累積EXP・NG+）の保持、正常停止を確認しました。公開JARの全classは前段で17テストとclean buildを通した修正ソースのclassと一致します。GUI検証8テストとgit diff --checkも成功しました。BetterHorses/DualHorse/Magicを含む同時起動、実プレイヤーの標準EXP/Profileコマンド、騎乗・戦闘、logout/login、reset/refund実行・NG+取得、本番はv0.3.0では未確認です。
+
+### 旧v0.2.0の起動履歴
 
 2026-10-04、隔離したlocalhost限定のPaper 26.2 build 126 / Oracle GraalVM 25.0.4、ValhallaMMO 1.10.3、FEATO Horsemanship 0.2.0、BetterHorses 6.4、DualHorse 1.5.4、Magic 11.2.4で確認しました。
 
@@ -87,20 +101,18 @@ GUI用の8件の検証テスト（重複・誤った角の向き・効果変更�
 
 このローカル検証はMinecraft全Plugin構成やVault Economyを含めた検証ではありません。Magic側には既存exampleの重複キー・式警告がありましたが、馬術の報酬未登録エラー・連携初期化・排他条件登録の警告はありませんでした。
 
-過去のmacOS上の起動確認は、Linuxでのファイル名の大小文字を区別した読み込みを保証しません。ValhallaMMO 1.10.3が大文字のSkill typeを設定ファイル名として使うため、Release添付の小文字名を配布時には `HORSEMANSHIP.yml` とします。ConfigurableProfile・EXP付与・Profile Registry・progression再計算の既知の懸念は今回未対応で、enable成功だけでは育成・保存・EXP処理全体の正常性を判断しません。
-
-2026-10-04、隔離したLinux / Java 25 / Paper 26.2 build 126で、大文字名の追跡設定を使いValhallaMMO 1.10.3とFEATOHorsemanship 0.2.0のenable完了を確認しました。埋め込みリソース欠落・ValhallaMMOのenable失敗・起動中のdisableは発生していません。この検証にはFEATOGunValhallaBridgeと本番の全Plugin構成を含めていません。
+上記はv0.2.0の起動確認であり、EXP付与とProfile永続化の正常性を保証しません。v0.3.0の公開アセットではJAR/SHA256SUMSの一致、同梱SkillとRelease YAMLの一致、既存GUI・Perk条件・EXP曲線の維持、効果設定の一致、Java 25 / api-version 26.2を確認しました。Skillの差分は未使用statsの除去だけです。
 
 本番とJava/Bedrockの実プレイヤー操作は未確認です。以下を実機で確認してください。
 
-- スキルツリーと日本語表示、Lv・EXP・共通スキルポイント、通常Perk取得・返却・reset、NG+、排他Perk、他スキルLv条件。
-- 対象mountの操縦者への移動EXP、DualHorse後席への移動EXP抑止、攻撃者本人への戦闘EXP。
+- `/skills` と標準 `/valhalla profile HORSEMANSHIP` の表示、`/valhalla exp HORSEMANSHIP 10` 前後のEXP増分10、共通スキルポイント、通常Perk取得・返却・reset、NG+、排他Perk、他スキルLv条件。
+- First Saddle未取得で100ブロック約10 EXP、取得後約10.5 EXP、DualHorse後席への移動EXP抑止、攻撃者本人への戦闘EXP（2秒間隔0.5）、logout/login・完全再起動後の保存。
 - Perk取得前後の速度、「追う」、疲労・クールダウン、降車・再接続時の一時効果解除、馬上攻撃補正の重複がないこと。
 - 育成コマンドの取得条件、BetterHorses Training・回復補助、一般プレイヤーのreload拒否。
 - 既存のMagic、BetterHorses、DualHorseと本番の全Pluginを含めた併用。
 
 ## 戻し方
 
-Paperを停止し、導入前の配布設定・旧JAR除去対象・管理権限設定へ戻します。`PRE_START_SCRIPT`を`/extras/copy-floodgate-key.sh`へ戻し、馬術用の準備スクリプトとpatchのmountを外します。Volume内の`feato-horsemanship-*.jar`と`ValhallaMMO/skills/custom/HORSEMANSHIP.yml`をVolume外へ退避し、BetterHorses設定をバックアップから戻してから再起動します。Gitからの削除だけではVolume内のファイルは消えません。付与済みの`feato.horsemanship.admin`も必要に応じて管理グループから外します。
+Paperを停止し、導入前の配布設定・旧JAR除去対象・管理権限設定へ戻します。`PRE_START_SCRIPT`を`/extras/copy-floodgate-key.sh`へ戻し、馬術用の準備スクリプトとpatchのmountを外します。Volume内の`feato-horsemanship-*.jar`と`FEATOHorsemanship/horsemanship.yml`をVolume外へ退避し、BetterHorses設定をバックアップから戻してから再起動します。Gitからの削除だけではVolume内のファイルは消えません。付与済みの`feato.horsemanship.admin`も必要に応じて管理グループから外します。
 
 導入後に消費した共通スキルポイント・profileも戻す場合は、導入前の整合したバックアップから復旧します。馬術v0.1.0へのダウングレードは行わないでください。2026-10-03の同じPaper / ValhallaMMO構成では`horsemanship_first_saddle_set`の未登録エラーでValhallaMMOと馬術が無効化されました。v0.2.0では通常Perk報酬と取得状態の参照先を揃え、この起動エラーは解消しています。
