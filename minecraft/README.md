@@ -110,7 +110,8 @@ ValhallaMMOの訳は、JAR内英語原本とキー・配列・名前付きプレ
 ## 醸造・料理（BreweryX）
 
 BreweryX 3.7.1を公式固定URLから取得します。標準SQLite保存とゲーム挙動を維持し、
-操作案内・品質表示・標準飲料と料理の表示だけ日本語化しています。
+操作案内・品質表示・標準飲料と料理の表示を日本語化し、紅茶・ミルク系・料理・
+デザートなど17品と芋焼酎の追加レシピを設定しています。標準23品の設定は維持しています。
 Paper 26.2 build 126で起動と日本語ヘルプを確認しましたが、本体はバージョンを
 `Unknown`と警告します。既存全Pluginとの併用と実製造・飲用は未検証です。
 配置先、翻訳仕様、再起動とコーヒーの手動確認は
@@ -120,11 +121,12 @@ Paper 26.2 build 126で起動と日本語ヘルプを確認しましたが、本
 
 Magic 11.2.4の公式`valhalla` exampleを使用し、ValhallaMMOへ`魔術` Skill（Lv 0-100）を追加します。成長の主体はValhallaMMOの魔術Lv、EXP、Skill Point、Skill Treeです。MagicはSpell、Mana、Cooldown、Casting、魔導具UI、演出だけを担当し、独立した第二のMMOレベルやSpell Pointを使いません。
 
-- EXPは公式曲線`(%level% + 75 * 2^(%level%/7.6)) + 300`を変更せず、successful castの`earns_type: valhalla_xp_magic`と`earns_multiplier: 10`でValhalla魔術EXPへ変換します。
-- Spell Shopは公式`OpenValhallaSkillTreeAction`でValhallaのSkill Treeを開きます。戦闘、防護、秘術の3分岐とMana系統を設け、全取得コストは30です。Skill PointはValhallaMMOの既存Power profileで全Skill共通管理されるため、魔術専用の約20ポイント上限は独自integrationなしでは強制できません。運用上は他Skillとの配分を含め約20を目安にします。
+- 魔術のEXP曲線は`(%level% + 75 * 2^(%level%/8.5)) + 300`です。successful castの`earns_type: valhalla_xp_magic`と`earns_multiplier: 10`でValhalla魔術EXPへ変換し、Spell別の`earns`と共通`earns_cooldown: 2 minutes`を固定します。Missileの初心者向けXP回復短縮はRank I/IIとも使用しません。daily limitは設けません。
+- Spell Shopは公式`OpenValhallaSkillTreeAction`でValhallaのSkill Treeを開きます。戦闘、防護、秘術の3分岐とMana系統を設け、Rank IIを含む全取得コストは39です。Skill PointはValhallaMMOの既存Power profileで全Skill共通管理されるため、魔術専用の約20ポイント上限は独自integrationなしでは強制できません。運用上は他Skillとの配分を含め約20を目安にします。
 - Manaは100、回復4/秒から開始します。Path upgradeとMana perkを同じ公式rewardにまとめ、Lv10で115、Lv30で135、Lv60で165、Lv100で185へ増加し、回復は最終6/秒です。Magic 11.2.4のMana値は整数のため、指定目安5.8/秒は6/秒へ丸めています。
 - Pathは`beginner`、`student`、`apprentice`、`master`を内部進行に使用し、Lv100補正だけ`feato_archmage`を追加します。プレイヤーには魔術LvとSkill Treeを主表示します。
 - Cooldownはすべてミリ秒です。Magic MissileとFireballはブロックを破壊せず、高位戦闘魔法を含め通常武器の継続火力を置き換えない設定です。
+- `enable_spell_upgrades: true`でRank variantを読み込み、`enable_automatic_spell_upgrades: false`で使用回数によるSpell・Pathの自動進行を止めます。Rank IIは元Spell取得を条件に各1ポイントで解放します（Missile Lv20、Leap Lv25、Heal Lv30、Fireball Lv35、Blink Lv40、Shield Lv45、Push Lv50、Gills Lv55、Lightning Lv65）。公式rewardは元Spellの使用Rankを更新します。Rank I/IIを独立したSpellとして選択する方式ではありません。Recall・Light・天候・WoundのRank perkやRank III以降は追加しません。
 - 魔術Lvによる直接Damage倍率は追加しません（0%）。成長はSpell解放、Mana、Mana回復、移動・探索・防御の選択を主体にします。
 - 天象術は晴天祈願、雨乞い、嵐の招来です。すべてMagicの`WeatherAction`でワールド天候だけを変更し、コマンド、追加落雷攻撃、Mob spawnは使いません。
 - WandはSpell選択・発動UIとしてのみ使用します。rarity、ランダム性能、恒常的な攻撃強化、Magic Armorは採用しません。
@@ -148,6 +150,34 @@ Wand販売NPCは、販売位置に立って次を実行します。
 `console_command`はConsoleとして`castp <player> <spell>`を実行するため、一般Playerへ`magic.commands.cast`や`magic.commands.castp`は付与しません。
 
 実機では、MagicとValhallaMMOのenable順、魔術profile作成、Spell XP加算、Skill Point総数、Path upgrade、Mana表示・回復、各Spellの成功判定とCooldown、Spell Shop GUI、日本語表示、Java/Bedrockの魔導具操作、統合resource packの表示を確認してください。
+
+### XP・Rank II調整の適用確認
+
+Fishing/Smithingの標準progressionは、[versions.md](../deploys/versions.md)のSHA-512と一致するValhallaMMO 1.10.3 JAR内の`skills/`を原本として追加しました。FishingはチャンクXP減衰の対象外、Smithingの耐久スタック上限は同一チャンク・素材ごとに300です。素材倍率は以下のとおりで、SmithingのEXP曲線と耐久スタック倍率・最大値は標準値を維持します。
+
+| 素材 | Lv0–19 | Lv20–39 | Lv40–59 | Lv60–79 | Lv80+ |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Wood / Leather | 100% | 75% | 50% | 25% | 10% |
+| Stone / Copper / Chain | 100% | 100% | 75% | 50% | 25% |
+| Iron / Gold | 80% | 100% | 100% | 100% | 100% |
+| Diamond | 50% | 75% | 100% | 125% | 125% |
+| Netherite | 25% | 50% | 75% | 100% | 125% |
+
+共通チャンク減衰は300イベント後にスキルXPを80%、EXP orbを50%にします。通常活動への過度な減衰を緩和しつつ、Grinder対策を残します。
+
+適用時はPaperを停止してValhallaMMO/Magicの設定とプレイヤーprofileをバックアップし、追跡設定を通常デプロイで`/plugins`から永続Volumeの`/data/plugins`へ同期して再起動します。VPSへのファイルコピーだけでは適用確認になりません。既存プレイヤーのSmithing倍率が新しいstarting/special perk値に再計算されることも確認し、差が残る場合は公開を止めて公式のprofile再計算手順を確認してください。
+
+今回の設定は隔離したPaper 26.2 build 126 / Java 25でMagic 11.2.4とValhallaMMO 1.10.3の起動・正常停止、全9種のRank IIの`spells`一覧への登録、`valhalla_xp_magic`通貨登録を確認しました。Gills IIはMagic標準のRank継承を使用し、明示的な`inherit: gills`は循環参照になるため指定しません。既存の上流YAML重複警告とVengeanceの式評価警告は残ります。プレイヤー操作と本番profileへの適用は未確認です。
+
+公開前にJava/Bedrockで次を確認します。
+
+- Magic/Valhallaの起動、全9種のRank II（カスタム`gills|2`を含む）の読み込みとperk reward解決、ツリーのノード・線・日本語表示。
+- 未取得時はRank I、取得後は同じSpellでRank IIの性能・Mana・Cooldownとなり、使用だけでRank/Pathが進まないこと。既存profileに以前の上位Rankが残っていないこと。
+- successful castのXPがValhalla `MAGIC` profileに加算されること。Missile Rank I/IIのXP回復が2分であり、Missileだけ異常に高速なXP源にならないこと。
+- Fireball IIの地形破壊・着火なし、Recallが同一ワールドのhomeのみ、Gills IIが60秒持続し水中移動の付加効果も保持、magicbow/magicswordが無効であること。
+- Fishingの同一地点での通常XP、Smithingの300スタック制限と各レベル帯の素材倍率（特にLv20以降のIron/Gold 100%）。
+
+問題があればPaperを停止し、旧追跡設定と変更前profileのバックアップを戻して再起動します。Rank II取得後に設定だけを戻すと取得済みperkとSpell Rankが食い違うため、profileも同じ時点に戻します。
 
 ## 銃器スキル（FIREARMS Bridge 0.2.0 / Phase 1 PoC）
 
@@ -191,22 +221,49 @@ BetterHorsesの馬上ダメージ加算だけを起動前patchで無効化し、
 
 公開アセットのハッシュ・同梱Skill・効果設定と既存GUIの一致を確認しました。v0.3.0の隔離起動確認と実機未確認事項は[馬術の導入手順](java/plugins/ValhallaMMO/HORSEMANSHIP_SETUP.md)を参照してください。本番適用とJava/Bedrockのプレイヤー操作は未確認です。
 
-## CraftBook Cauldron（経験抽出）
+## CraftBook Chairs（休憩）
 
-CraftBook 3.10.13の既存Cauldron mechanicを有効化します。水で満たした大釜の直下に火または溶岩を置き、大釜側面の壁看板の2行目に`[Cauldron]`と記入します。腐った肉16個、クモの目2個、アメジストの欠片1個、ガラス瓶1個を過不足なく投入し、スコップで大釜を右クリックすると経験値の瓶1個を錬成します。`chance: 93`にCraftBook本来のスコップ品質・エンチャント補正が適用されます。失敗時は材料が消費されず、再度かき混ぜて挑戦できます。看板必須、レッドストーン起動無効、item tracking無効です。
+CraftBook 3.10.13のChairsを有効化します。階段に看板を付け、ブロックを持たずに
+右クリックすると階段の向きに合わせて着席できます。着席中は20 tickごとに
+health 0.5（0.25ハート）回復し、通常の20 TPSでは約4秒で1ハートです。
+回復は最大HPを超えません。看板必須、`max-distance: 3`、`max-click-radius: 5`です。
 
-追跡設定は`java/plugins/CraftBook/`の`config.yml`、`mechanisms.yml`、`cauldron-recipes.yml`です。Composeの`/plugins` mountから起動時に永続Volumeの`/data/plugins/CraftBook/`へ同期します。3.10.13の配布JARの同梱設定・読み込み処理に合わせ、レシピの最上位キーは`cauldron-recipes`を使用しています。
+3.10.13の[Chair実装](https://github.com/EngineHub/CraftBook/blob/3.10.13/src/main/java/com/sk89q/craftbook/mechanics/Chair.java)と
+[設定ロード処理](https://github.com/EngineHub/CraftBook/blob/3.10.13/src/main/java/com/sk89q/craftbook/bukkit/CraftBookPlugin.java)を確認しています。
+一般グループには`craftbook.mech.chair.use`だけを追加します。既存の公式ProtocolLib
+5.5.0-SNAPSHOT固定assetを使用し、CraftBook・WorldEditの版は維持します。
 
-適用前にPaperを正常停止し、永続Volumeの既存CraftBook設定をバックアップしてください。今回初めて追跡する2ファイルに本番独自の設定・レシピがある場合は、Cauldron以外の設定・既存レシピを保持してGitへ取り込んでから配布します。ファイルの配布だけでは適用済みとせず、再起動後の読み込み先と起動ログでCauldron・レシピの読み込みを確認してください。権限は既存の`craftbook.mech.cauldron`、`craftbook.mech.cauldron.use`、`craftbook.mech.cauldron.recipe.experience_extraction`を使用し、今回LuckPerms設定は変更しません。
+`mechanisms.yml`全体の同期による既存設定のリセットを避けるため、初回用の空の設定を
+`java/config-seeds/craftbook-mechanisms.yml`で管理し、`/plugins`の通常同期から外しています。
+起動前スクリプトは`/data/plugins/CraftBook/mechanisms.yml`が存在しない場合だけseedを
+コピーし、`java/patches/craftbook-chairs.json`でChairsの7キーだけを更新します。
+既存の`blocks`と他mechanicの値は保持します。`blocks`が未設定なら3.10.13の
+`BlockCategories.STAIRS`による既定一覧をCraftBook自身が補完します。
+空ファイル・不正な構造は起動前処理の失敗として扱います。
+
+適用時はPaperを正常停止して既存CraftBook設定をバックアップし、seed・patchのmountと
+起動後の読み込み先を確認してください。戻す場合はChairsを無効化し、Chairs patchと
+利用権限を外して、停止中にバックアップの`mechanisms.yml`を戻します。
+
+Requires runtime verification:
+
+- 看板付き階段で着席でき、看板なし・ブロックを持った状態では着席しないこと。
+- 着席方向、health 0.5 / 20 tickの回復、最大HPの上限、Sneak等による離席。
+- Java版とGeyser経由のBedrock版での着席・離席。
+- 既存全Pluginとの併用時にProtocolLibによる回帰がないこと。
+
+## CraftBook Cauldronの無効化
+
+BreweryXとの大釜利用の競合が疑われ、経験抽出が実運用で正常に利用できなかったため、CraftBookのCauldronを無効化し、経験抽出レシピと専用設定を撤去しました。経験値の瓶はFEATO商店で購入できます。
+
+適用前にPaperを正常停止して既存CraftBook設定をバックアップし、再起動後に`/data/plugins/CraftBook/config.yml`でCauldronが無効であることを確認してください。配布元で削除したファイルは永続Volumeに残る場合があります。`mechanisms.yml`にはChairsや本番独自の設定があり得るため、ファイル全体を削除せず、Cauldron専用設定・レシピだけを確認して撤去してください。戻す場合はPaperを正常停止し、配布元と永続Volumeの設定を適用前のバックアップへ戻して再起動します。
 
 実機未確認です。適用後は次を確認してください。
 
-- 看板なしの大釜ではCraftBookが反応せず、側面の看板ありではスコップ操作が成立すること。
-- 材料16/2/1/1から経験値の瓶1個が生成され、成功時だけ材料が消費され、失敗時は再試行できること。
-- レッドストーンで錬成できず、既存権限チェックが機能すること。
-- BreweryX・ValhallaMMOなど他の大釜系機能と実用上競合しないこと。
-
-問題があればPaperを正常停止し、追跡設定と永続Volumeの設定を適用前のバックアップへ戻して再起動します。新規追跡ファイルは配布元から外すだけで永続Volumeから削除されるとは限らないため、両方の復元を確認してください。
+- CraftBook Cauldronが動作せず、BreweryXの大釜利用に影響がないこと。
+- FEATO商店の販売ページに経験値の瓶が表示され、200Gで16個購入でき、所持金が200G減少すること。
+- 経験値の瓶をショップへ売却できないこと。
+- Java版GUIとBedrock版Formsの両方で正常に購入できること。
 
 ## 経済と通常商店
 
@@ -225,6 +282,7 @@ EconomyShopGUI Free 7.3.2では、Java Editionは従来のInventory GUI、Bedroc
 | Player Head | 購入 | 1 | 100G |
 | Mending Enchanted Book | 購入 | 1 | 2,000G |
 | Villager Spawn Egg | 購入 | 1 | 2,000G |
+| Experience Bottle | 購入 | 16 | 200G |
 
 買取品はすべて1個から売却できます。以下の価格は64個あたりです（設定上は64で割った1個価格）。
 

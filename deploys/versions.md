@@ -1,5 +1,21 @@
 # バージョン確認（2026-09-22）
 
+## CraftBook Chairs有効化（2026-10-04）
+
+CraftBook 3.10.13 / WorldEdit 7.4.5は変更せず、Chairsを有効化します。
+3.10.13の[公式Chairソース](https://github.com/EngineHub/CraftBook/blob/3.10.13/src/main/java/com/sk89q/craftbook/mechanics/Chair.java)と
+固定配布JARで、`mechanics.Chairs`の7キー、`craftbook.mech.chair.use`、
+20 tickごとの回復処理と最大HP上限を確認しました。回復量は既定1.0から0.5にし、看板を必須にします。
+`blocks`はpatchせず、既存値またはCraftBook自身の既定一覧を維持します。
+
+ProtocolLibは追加済みの公式5.5.0-SNAPSHOT / asset ID `608298575`を維持します。
+[公式Development Build](https://github.com/dmulloy2/ProtocolLib/releases/tag/dev-build)の
+26.2対応（#3642）・Java 25修正（#3566）を再確認し、公式asset metadataのSHA-256も
+既存の固定値と一致しました。配布元と起動前取得方式は下記「Plugin運用整理」のとおりです。
+同節の隔離Paper 26.2 / Java 25起動確認は既存の記録です。今回のChairsの起動・
+クライアント操作・本番確認は未実施です。設定保持方式と手動確認項目は
+[Minecraft運用](../minecraft/README.md#craftbook-chairs休憩)を参照してください。
+
 ## Plugin運用整理（2026-10-04）
 
 - DeadChest 4.31.0: [作者公式配布](https://modrinth.com/plugin/dead-chest/version/ej8X4AM4)はPaper / 26.2を列挙。GETしたJARのSHA-512は公式metadataと一致しました。旧`dead-chest-*.jar`は既存の起動前除去対象に追加し、`plugins/update/`の同名パターンも除去します。`prepare-paper-plugins.sh`で運用設定の`updates.auto-check`と旧形式`auto-update`だけをfalseへpatchし、死亡保護設定は保持します。
