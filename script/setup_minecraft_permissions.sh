@@ -34,6 +34,7 @@ player_allow=(
   ghastmaster.share
 
   # CraftBook: enabled user-facing mechanics.
+  craftbook.mech.chair.use
   craftbook.mech.elevator
   craftbook.mech.elevator.use
   craftbook.mech.bridge
