@@ -73,7 +73,9 @@ DeadChest 4.31.0は公式metadataでPaper 26.2に対応し、Java 25で起動を
 死亡・回収のプレイヤー操作と本番は未確認です。旧JARは既存の`REMOVE_OLD_MODS_INCLUDE`で
 `/data/plugins/dead-chest-*.jar`だけを除去し、4.31.0を再取得します。
 起動前にDeadChestの自動更新を無効化し、`/data/plugins/update/dead-chest-*.jar`も除去します。
-運用中の死亡保護設定は保持し、JARの版はインフラ側で管理します。
+起動時patchで`/data/plugins/DeadChest/config.yml`の`chest.duration-seconds`を`0`（無期限）へ固定し、
+死亡チェストは時間経過では期限切れにしません。他の死亡保護設定（`chest.max-per-player`を含む）は
+既存値を保持し、JARの版は4.31.0のままインフラ側で管理します。本変更の本番動作は未確認です。
 
 ProtocolLibは公式Development Buildのasset IDとSHA-256を固定して起動前に取得します。
 一覧と固定取得元は`plugins.txt`、詳細は[versions.md](../deploys/versions.md)を参照してください。
