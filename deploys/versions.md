@@ -173,6 +173,7 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | FEATO Ancient Coin | 1.0.0 | [固定Release](https://github.com/FEATO-org/feato_ancient_coin/releases/tag/v1.0.0) | Paper | 26.2（plugin api-version） | stable release | GitHub latest release（draft=false、prerelease=false）。Paper 26.2で起動確認 |
 | FEATO Coin Exchange | 1.1.0 | [公開予定Release](https://github.com/FEATO-org/feato-coin-exchange/releases/tag/v1.1.0) | Paper | 26.2（plugin api-version） | release pending | `FEATO-Coin-Exchange-1.1.0.jar`を取得対象として事前設定。data folderは`FEATOCoinExchange`、`exchange-value: 10.0` |
 | FancyNpcs | 2.12.0 | [固定URL](https://cdn.modrinth.com/data/EeyAn23L/versions/53lykMXY/FancyNpcs-2.12.0.jar) | Paper | 26.2（配布metadata、起動確認） | stable | 依存なし。帰還札はplayer_command、古銭換金はconsole_command 1回を使用し、一時OPは禁止 |
+| FancyHolograms | 2.12.0 | [固定URL](https://mediafilez.forgecdn.net/files/8887/168/FancyHolograms-2.12.0.jar) | Paper Plugin | Paper 26.2対象（build 126、実起動未確認） | stable Release | Java 25で運用予定。必須追加dependencyなし。PlaceholderAPI / FancyNpcsはoptional integration。JAR GET・metadata・ZIP整合性のみ確認。本番動作・Java / Bedrock client表示は未確認 |
 | squaremap | 1.3.15 | [固定Release](https://github.com/jpenilla/squaremap/releases/tag/v1.3.15) | Paper | 26.2（api-version、起動確認） | stable | 内部Webサーバー8123、既存dynmap.feato.jp経路を再利用 |
 | DualHorse | 1.5.4 | [固定URL](https://cdn.modrinth.com/data/mgoLZ3st/versions/9jTb2KHl/DualHorse-1.5.4.jar) | Paper | 配布metadataは26.1.2まで、26.2で起動確認 | stable | 26.2の実プレイヤー二人乗りとBetter Horses併用は要確認 |
 | Velocity | 4.2.0 build 30 | [公式配布](https://papermc.io/downloads/velocity) | Velocity | 接続を実機検証 | stable（公式API STABLE） | VELOCITY_VERSIONとBUILD_IDで固定。JAR GETは403、Requires runtime verification |
@@ -180,6 +181,16 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | Floodgate | 既存latest | [公式配布](https://download.geysermc.org/) | Velocity | 接続を実機検証 | 取得build要確認 | 既存UUID維持、username-prefixは`.`へ変更、Requires runtime verification |
 | EmoteOffhand | Version ID: YiejycoE | [Modrinth](https://modrinth.com/plugin/pVsz9nZm/version/YiejycoE) | Geyser Extension（Velocity上のGeyser） | 1.21.11（配布metadata） | fixed artifact | Source: Modrinth。Project ID: pVsz9nZm。`resources/minecraft/geyser/extensions/EmoteOffhand.jar` を管理側で用意し、更新時のみ `script/copy_plugins_to_remote.sh` で配布。通常deploy時に再取得しない。Velocity Pluginとしては配置しない |
 | Hurricane | latest（確認時 build 4） | [公式Downloads API](https://download.geysermc.org/v2/projects/hurricane/versions/latest/builds/latest/downloads/spigot) | Paper | 公式README表記は26.1まで | dynamic build | bamboo / pointed dripstone collisionのみ。Paper 26.2ではRequires runtime verification |
+
+### FancyHolograms 2.12.0追加（2026-10-07）
+
+CurseForge Project ID `1480051` / File ID `8887168` の固定URLをHTTP GETし、
+JARのZIP整合性と `paper-plugin.yml` の `name: FancyHolograms` / `version: 2.12.0` を確認しました。
+`PLUGINS_FILE` の既存導入経路を使用し、設定seedは作らず、初回起動時にupstream defaultを永続Volumeの `/data/plugins/FancyHolograms/` へ生成させます。
+取得した2.12.0 JARの `BrightnessCMD` を `javap -c -p` で局所確認したところ、個別permission checkがないため `fancyholograms.hologram.edit.brightness` は付与一覧から除外しています。
+`see_trough` は指定の綴りを維持し、ホログラムごとの `fancyholograms.viewhologram.<hologram-name>` は必要時に個別設定します。
+Paper 26.2 build 126 / Java 25での起動、操作・保存、任意連携とJava / Bedrock表示は未確認です。
+公開前の受入確認は [LuckPerms運用](../minecraft/README.md#luckperms) を参照してください。
 
 ### EconomyShopGUI 7.3.2確認（2026-10-03）
 
@@ -258,6 +269,7 @@ Paper 26.2 build 126 / Oracle GraalVM 25.0.4、ValhallaMMO 1.10.3、BetterHorses
 | FEATO-Ancient-Coin-1.0.0.jar | `d4e7608d9d1f2614a6e420f3ee7e02a84b96e8c638cc9f5c6fa17f554aaaa99ef6af3d54a180a7002f0b87959ff249420c255a6bd48bfe8f81017d44e106e238` |
 | FEATO-Coin-Exchange-1.1.0.jar | Release公開後にGitHub Release asset digestを記録 |
 | FancyNpcs-2.12.0.jar | `f7a52c7e44d004e4235c12bf8d6936b25188ae7259b375d8b310b56538e724452805173e3781f9326c8fa794802f329c18416cbafccf5b5fab5016a628027399` |
+| FancyHolograms-2.12.0.jar | `93ea248525fa2bf8efcd13456e35833c069a0bea2bdddc1cc6a61b68f00681b91f928443dbe82a974041253a9393eca8203743382063cda56c6fb39259ed4a21` |
 | squaremap-paper-mc26.2-1.3.15.jar | `a6f00e0ea57268ed30b4aa2246b8ea3424f1210daab01bd47b217ec334199e792605f9419b7cfed7ed07cac20ad125593ddaf181c0ee72a129255563c75ab11e` |
 | DualHorse-1.5.4.jar | `fd70684e9b3263bfc4edb9bde54a5fc1cc08c9f2ca4577434e2517dd7a3e5958029ebb0fd4090faa0545ae957531608cafe5452cb30d87f67344b28ac30e75d2` |
 | BetterHorses-6.3.jar | `d54e921e073eec52dbe81542f0d06713bf1c217a645c4644caf410fcc08ebfa27723866d7de3803a2be7c3d4143c61943849dd9e959f312f8d465426d863e704` |
