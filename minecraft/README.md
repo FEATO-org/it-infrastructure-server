@@ -20,7 +20,7 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ FancyNpcs / FancyHolograms 2.12.0
                      ├ squaremap :8123
                      ├ ValhallaMMO / Magic 11.2.4 / FEATO Horsemanship 0.2.0
-                     ├ FEATO Gun-Valhalla Bridge 0.2.0 (Phase 1 PoC)
+                     ├ FEATO Gun-Valhalla Bridge 0.3.0 (Phase 1 PoC)
                      ├ SCore / ExecutableItems
                      ├ WorldEdit / CraftBook
                      ├ ImageFrame
@@ -32,7 +32,7 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ Hurricane (bamboo / pointed dripstone collision only)
                      ├ FEATO Ancient Coin 1.0.0
                      └ FEATO Coin Exchange 1.1.0
-Data Packs: Enchants Plus / Gun Core 1.0.15 / Modern Guns 1.9.3 / Bridge 0.2.0
+Data Packs: Enchants Plus / Gun Core 1.0.15 / Modern Guns 1.9.3 / Bridge 0.3.0
 Web: nginx dynmap.feato.jp -> squaremap :8123
 ```
 
@@ -62,7 +62,7 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 - 商店・NPC: EconomyShopGUI Free、FancyNpcs
 - マップ: squaremap
 - RPG・アイテム: ValhallaMMO、Magic 11.2.4、SCore、ExecutableItems
-- 銃器スキル検証: FEATO Gun-Valhalla Bridge 0.2.0（Phase 1 PoC）
+- 銃器スキル検証: FEATO Gun-Valhalla Bridge 0.3.0（Phase 1 PoC）
 - 建築・表示: WorldEdit、CraftBook、ImageFrame、FancyHolograms 2.12.0
 - 馬・収納: Better Horses、DualHorse、FEATO Horsemanship 0.2.0、Backpack Plus
 - 醸造・料理: BreweryX 3.7.1（標準レシピ・日本語表示）
@@ -181,21 +181,21 @@ Fishing/Smithingの標準progressionは、[versions.md](../deploys/versions.md)�
 
 問題があればPaperを停止し、旧追跡設定と変更前profileのバックアップを戻して再起動します。Rank II取得後に設定だけを戻すと取得済みperkとSpell Rankが食い違うため、profileも同じ時点に戻します。
 
-## 銃器スキル（FIREARMS Bridge 0.2.0 / Phase 1 PoC）
+## 銃器スキル（FIREARMS Bridge 0.3.0 / Phase 1 PoC）
 
-[公開Release v0.2.0](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/tag/v0.2.0)のPlugin JARとDatapack ZIPを、`java/plugins.txt`と`java/datapacks.txt`の固定URLから取得します。両方のrelease IDは`3`、protocolは`1`です。更新時は必ず両manifestの版を同時に変更してください。
+[公開Release v0.3.0](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/tag/v0.3.0)のPlugin JARとDatapack ZIPを、`java/plugins.txt`と`java/datapacks.txt`の固定URLから取得します。両方のrelease IDは`4`、protocolは`1`です。更新時は必ず両manifestの版を同時に変更してください。
 
 対象はPaper **26.2 build 126** / Java 25 / ValhallaMMO **1.10.3** / Gun Core **1.0.15** / Modern Guns **1.9.3**です。Composeで`PAPER_BUILD: "126"`を固定し、`.env`の`MINECRAFT_VERSION`も26.2であることを適用前に確認します。Gun CoreとModern Gunsは既存の固定版を維持します。build・対象版・Datapack markerの不一致やheartbeat停止ではBridgeが登録を停止するため、起動ログの確認が必要です。起動中の登録待ちではプレイヤーのログインが一時拒否されます。
 
-0.2.0は専用FIREARMS profile、銃器スキルの検証用ツリー、管理者debug、Datapackの互換性確認、Bridge設定の再読み込みを実装したPoCです。銃撃によるEXP獲得、通常銃撃・武器殴打のDamage連携、Ability効果、最終スキルツリーは未実装です。`tactical-reload`などの設定は将来用で、Phase 1では効果を発揮しません。ValhallaMMOの既存設定は変更せず、必須の`mining`、`weapons_light`、`armor_light`、`armor_heavy`、`archery`は有効なままです。
+0.3.0は専用FIREARMS profile、銃器スキルの検証用ツリー、管理者debug、Datapackの互換性確認、Bridge設定の再読み込みを実装したPoCです。銃撃によるEXP獲得、通常銃撃・武器殴打のDamage連携、Ability効果、最終スキルツリーは未実装です。`tactical-reload`などの設定は将来用で、Phase 1では効果を発揮しません。ValhallaMMOの既存設定は変更せず、必須の`mining`、`weapons_light`、`armor_light`、`armor_heavy`、`archery`は有効なままです。
 
 | 管理対象 | 起動時の配置先 |
 | --- | --- |
-| Plugin JAR | `/data/plugins/feato-gun-valhalla-bridge-plugin-0.2.0.jar` |
+| Plugin JAR | `/data/plugins/feato-gun-valhalla-bridge-plugin-0.3.0.jar` |
 | `java/plugins/FEATOGunValhallaBridge/config.yml` | `/data/plugins/FEATOGunValhallaBridge/config.yml`（`/plugins`から同期） |
-| Datapack ZIP | `/data/${LEVEL:-world}/datapacks/feato-gun-valhalla-bridge-datapack-0.2.0.zip` |
+| Datapack ZIP | `/data/${LEVEL:-world}/datapacks/feato-gun-valhalla-bridge-datapack-0.3.0.zip` |
 
-初期値は0.2.0の公開JAR同梱の設定と同じで、`debug.enabled: false`を維持します。0.2.0では`/firearms reload`を追加し、Bridgeの`config.yml`だけを安全に再読み込みできます。debug無効時も実行でき、成功時は現在のdebug状態を表示します。YAML・必須キー・型・有限値・範囲の検証失敗時は、有効な旧設定とファイルを保持して理由とWARNを返します。
+初期値は0.3.0の公開JAR同梱の設定と同じで、`debug.enabled: false`を維持します。0.2.0で追加された`/firearms reload`により、Bridgeの`config.yml`だけを安全に再読み込みできます。debug無効時も実行でき、成功時は現在のdebug状態を表示します。YAML・必須キー・型・有限値・範囲の検証失敗時は、有効な旧設定とファイルを保持して理由とWARNを返します。
 
 `feato.gunvalhalla.reload`はPluginの既定OPで、`setup_minecraft_permissions.sh`の管理者グループへの許可対象に追加します。consoleからも利用できます。一般・役職グループには追加しません。debug用の`feato.gunvalhalla.debug`は独立した権限で、検証対象の管理者だけに付与します。reload権限だけでは検証用EXPを付与できず、debugを有効にしても銃撃EXPは自動付与されません。
 
@@ -207,9 +207,9 @@ reloadでSkill/Profile、ValhallaMMO Registry、Perk tree、Datapack handshake�
 
 ### 適用前の確認と戻し方
 
-0.1.0ではユーザーから完全起動・Datapack handshake・FIREARMS登録・銃器表示・Lv0 Profileの再ログイン維持を確認したと報告を受けています。今回の0.2.0更新と新しいreload経路の実機確認は未実施です。特定XP値の保存一致、Level Up、完全再起動後の永続化、DB上の値、Perk三択排他は未確認のままです。respec/recalculationは未確認のまま後回しとし、その検証待ちで後続開発を止めません。残る検証は本番DBを使わない隔離環境で、[上流のPhase 1手順](https://github.com/FEATO-org/feato-gun-valhalla-bridge/blob/v0.2.0/docs/poc.md#reproducible-live-test-procedure-dedicated-test-server)で保存・login・再起動を確認し、respecは後日検証します。共通Skill Pointと既存Skillへの影響も記録してください。`SKILLS_REFUND_EXP`は他SkillのPerkもresetするため、本番プレイヤーへの検証には使いません。
+0.1.0ではユーザーから完全起動・Datapack handshake・FIREARMS登録・銃器表示・Lv0 Profileの再ログイン維持を確認したと報告を受けています。今回の0.3.0更新とreload経路の実機確認は未実施です。特定XP値の保存一致、Level Up、完全再起動後の永続化、DB上の値、Perk三択排他は未確認のままです。respec/recalculationは未確認のまま後回しとし、その検証待ちで後続開発を止めません。残る検証は本番DBを使わない隔離環境で、[上流のPhase 1手順](https://github.com/FEATO-org/feato-gun-valhalla-bridge/blob/v0.3.0/docs/poc.md#reproducible-live-test-procedure-dedicated-test-server)で保存・login・再起動を確認し、respecは後日検証します。共通Skill Pointと既存Skillへの影響も記録してください。`SKILLS_REFUND_EXP`は他SkillのPerkもresetするため、本番プレイヤーへの検証には使いません。
 
-0.2.0へ更新する際は、サーバーを正常停止してWorldとValhallaMMOのSQLite DB（実際の保存先を確認）をバックアップし、manifest・設定・Composeを配布して完全起動します。`/reload`は使いません。実際のPaper build、ValhallaMMOとBridgeのenable、marker一致・登録完了ログ、`profiles_firearms`の作成、`/skills`の表示、同一UUIDの再接続・完全再起動後の保存値を確認します。markerは`fgv_bridge` objectiveの`#release = 3`、`#protocol = 1`です。新しいreloadは、console・対象管理者からdebugのON/OFFと表示、不正設定拒否・旧設定保持、一般プレイヤーの拒否、Profile・handshakeの継続を確認します。通常設定のdebugは無効へ戻します。
+0.3.0へ更新する際は、サーバーを正常停止してWorldとValhallaMMOのSQLite DB（実際の保存先を確認）をバックアップし、manifest・設定・Composeを配布して完全起動します。`/reload`は使いません。実際のPaper build、ValhallaMMOとBridgeのenable、marker一致・登録完了ログ、`profiles_firearms`の作成、`/skills`の表示、同一UUIDの再接続・完全再起動後の保存値を確認します。markerは`fgv_bridge` objectiveの`#release = 4`、`#protocol = 1`です。reloadは、console・対象管理者からdebugのON/OFFと表示、不正設定拒否・旧設定保持、一般プレイヤーの拒否、Profile・handshakeの継続を確認します。通常設定のdebugは無効へ戻します。
 
 問題が出たら正常停止し、BridgeのJAR/ZIPの両manifest行を外して再起動します。上記globに一致するBridge配布物は起動時に削除されます。削除後に両方が読み込まれていないことをログと配置先で確認してください。旧版へ戻す場合も両方の版を揃えます。Plugin削除だけでは保存済みprofileは戻らないため、データ異常時は停止したままバックアップとの照合・復旧を行います。
 
