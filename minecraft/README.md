@@ -285,6 +285,7 @@ EconomyShopGUI Free 7.3.2では、Java Editionは従来のInventory GUI、Bedroc
 | Mending Enchanted Book | 購入 | 1 | 2,000G |
 | Villager Spawn Egg | 購入 | 1 | 2,000G |
 | Experience Bottle | 購入 | 16 | 200G |
+| Blaze Powder（買取不可） | 購入 | 1 | 3,000G |
 
 買取品はすべて1個から売却できます。以下の価格は64個あたりです（設定上は64で割った1個価格）。
 
