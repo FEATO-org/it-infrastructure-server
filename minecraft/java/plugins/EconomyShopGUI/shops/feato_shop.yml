@@ -45,6 +45,12 @@ pages:
         buy: 1000
         stack-size: 1
         slot: 9
+      blaze_powder:
+        material: BLAZE_POWDER
+        buy: 3000
+        sell: -1
+        stack-size: 1
+        slot: 10
       back_to_main:
         material: ARROW
         name: "&c商店一覧へ戻る"
