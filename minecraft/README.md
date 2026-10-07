@@ -17,7 +17,7 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ VaultUnlocked / EssentialsUnlocked
                      ├ Floodgate (backend API / Bedrock detection)
                      ├ EconomyShopGUI Free
-                     ├ FancyNpcs
+                     ├ FancyNpcs / FancyHolograms 2.12.0
                      ├ squaremap :8123
                      ├ ValhallaMMO / Magic 11.2.4 / FEATO Horsemanship 0.2.0
                      ├ FEATO Gun-Valhalla Bridge 0.3.0 (Phase 1 PoC)
@@ -63,7 +63,7 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 - マップ: squaremap
 - RPG・アイテム: ValhallaMMO、Magic 11.2.4、SCore、ExecutableItems
 - 銃器スキル検証: FEATO Gun-Valhalla Bridge 0.3.0（Phase 1 PoC）
-- 建築・表示: WorldEdit、CraftBook、ImageFrame
+- 建築・表示: WorldEdit、CraftBook、ImageFrame、FancyHolograms 2.12.0
 - 馬・収納: Better Horses、DualHorse、FEATO Horsemanship 0.2.0、Backpack Plus
 - 醸造・料理: BreweryX 3.7.1（標準レシピ・日本語表示）
 - 死亡時保護: DeadChest 4.31.0
@@ -285,6 +285,7 @@ EconomyShopGUI Free 7.3.2では、Java Editionは従来のInventory GUI、Bedroc
 | Mending Enchanted Book | 購入 | 1 | 2,000G |
 | Villager Spawn Egg | 購入 | 1 | 2,000G |
 | Experience Bottle | 購入 | 16 | 200G |
+| Blaze Powder（買取不可） | 購入 | 1 | 3,000G |
 
 買取品はすべて1個から売却できます。以下の価格は64個あたりです（設定上は64で割った1個価格）。
 
@@ -421,6 +422,16 @@ FEATO Coin Exchange
 ```
 
 スクリプトは一般グループへ残高確認、送金、EIアイテム使用、FEATO商店だけを許可し、一般`/spawn`、`essentials.kits.return_ticket`、EconomyShopGUIの一括売却コマンドを拒否します。`featocoinexchange.execute`などFEATO Coin Exchangeの実行権限は一般・管理のいずれにも付与しません。管理グループへ経済、spawn、kit、商店編集、NPC作成と`console_command`を含む必要なaction種別だけを個別付与します。ワイルドカード権限、prefix、suffix、継承は変更しません。
+
+FancyHolograms 2.12.0の管理操作は、指定した管理グループ・村長 (`mayor`)・役場職員 (`town_clerk`) に同じ34個の権限を個別付与します。コマンド入口に必要な `fancyholograms.admin` も含みます。一般プレイヤーと警備隊長 (`guard_captain`) には管理権限を付与しません。ワイルドカードは使用せず、村長・役場職員へOPや管理者グループの継承を追加しないため、サーバー管理者になるわけではありません。`PERMISSION_NEEDED` の閲覧権限はホログラムごとに必要時だけ付与します。
+
+FancyHologramsは既存の `PLUGINS_FILE: /extras/plugins.txt` から `/data/plugins` へ導入し、設定は初回起動時に永続Volumeの `/data/plugins/FancyHolograms/` へ生成させます。設定seedや追加dependencyは導入しません。
+公開前に以下を確認してください。今回はいずれも未確認です。
+
+- Paper 26.2 build 126 / Java 25でFancyHolograms 2.12.0がenableされること。
+- 管理者・村長・役場職員それぞれで `/hologram list`、`/hologram create text <test-name>`、`/hologram edit <test-name> ...`、`/hologram remove <test-name>` が利用でき、一般プレイヤーの `/hologram` による管理操作は拒否されること。
+- Java / Bedrock（Geyser）clientで表示され、再起動後もpersistent hologramが保持されること。
+- FancyNpcsとのlink / unlinkが必要な場合に正常動作し、PlaceholderAPI placeholderを使う場合に展開されること。
 
 LuckPermsはVelocity/Paper共通MariaDBを使います。SQL messagingによる反映のため、両側で`/lp info`、Velocityで`/lpv info`を確認します。
 
