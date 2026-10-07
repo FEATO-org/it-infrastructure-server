@@ -3,6 +3,13 @@
   "ops": [
     {
       "$put": {
+        "path": "$.chest",
+        "key": "duration-seconds",
+        "value": 0
+      }
+    },
+    {
+      "$put": {
         "path": "$",
         "key": "updates",
         "value": {
