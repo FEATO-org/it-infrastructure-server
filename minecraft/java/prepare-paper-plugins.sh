@@ -59,11 +59,21 @@ if ! echo "$protocol_sha256  $protocol_jar" | sha256sum -c - >/dev/null 2>&1; th
   trap - EXIT
 fi
 
-# Preserve runtime chest settings; disable only the built-in updater.
+# Prevent loss of unclaimed items on timeout; preserve other chest settings.
 deadchest_config=/data/plugins/DeadChest/config.yml
 mkdir -p /data/plugins/DeadChest
 if [ ! -e "$deadchest_config" ]; then
-  printf 'updates:\n  auto-check: false\n' > "$deadchest_config"
+  printf 'updates:\n  auto-check: false\nchest:\n  duration-seconds: 0\n' > "$deadchest_config"
+fi
+if ! mc-image-helper yaml-path --file "$deadchest_config" '$.chest' >/dev/null 2>&1; then
+  chest_init=$(mktemp /tmp/deadchest-chest.XXXXXX.json)
+  trap 'rm -f -- "$chest_init"' EXIT
+  cat > "$chest_init" <<'JSON'
+{"file":"/data/plugins/DeadChest/config.yml","ops":[{"$put":{"path":"$","key":"chest","value":{}}}]}
+JSON
+  mc-image-helper patch "$chest_init"
+  rm -f -- "$chest_init"
+  trap - EXIT
 fi
 mc-image-helper patch /extras/deadchest-updates.json
 
