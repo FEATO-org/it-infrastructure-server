@@ -10,7 +10,7 @@ pages:
         slot: 2
       oxidized_copper:
         material: OXIDIZED_COPPER
-        buy: 100
+        buy: 300
         stack-size: 32
         slot: 3
       player_head:
@@ -30,6 +30,27 @@ pages:
         buy: 2000
         stack-size: 1
         slot: 6
+      experience_bottle:
+        material: EXPERIENCE_BOTTLE
+        buy: 200
+        stack-size: 16
+        slot: 7
+      iron_ingot:
+        material: IRON_INGOT
+        buy: 200
+        stack-size: 64
+        slot: 8
+      brewing_stand:
+        material: BREWING_STAND
+        buy: 1000
+        stack-size: 1
+        slot: 9
+      blaze_powder:
+        material: BLAZE_POWDER
+        buy: 3000
+        sell: -1
+        stack-size: 1
+        slot: 10
       back_to_main:
         material: ARROW
         name: "&c商店一覧へ戻る"
@@ -191,6 +212,11 @@ pages:
         sell: 0.046875
         stack-size: 1
         slot: 28
+      copper_ingot:
+        material: COPPER_INGOT
+        sell: 0.78125
+        stack-size: 1
+        slot: 29
       back_to_sale_page:
         material: RED_DYE
         name: "&c販売ページへ"

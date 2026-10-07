@@ -34,6 +34,7 @@ player_allow=(
   ghastmaster.share
 
   # CraftBook: enabled user-facing mechanics.
+  craftbook.mech.chair.use
   craftbook.mech.elevator
   craftbook.mech.elevator.use
   craftbook.mech.bridge
@@ -98,6 +99,43 @@ admin_allow=(
   fancynpcs.command.fancynpcs.save
 )
 
+fancyholograms_manage=(
+  fancyholograms.admin
+  fancyholograms.hologram.list
+  fancyholograms.hologram.nearby
+  fancyholograms.hologram.create
+  fancyholograms.hologram.remove
+  fancyholograms.hologram.copy
+  fancyholograms.hologram.info
+  fancyholograms.hologram.teleport
+  fancyholograms.hologram.edit.move_here
+  fancyholograms.hologram.edit.center
+  fancyholograms.hologram.edit.move_to
+  fancyholograms.hologram.edit.rotate
+  fancyholograms.hologram.edit.rotate_pitch
+  fancyholograms.hologram.edit.translate
+  fancyholograms.hologram.edit.scale
+  fancyholograms.hologram.edit.billboard
+  fancyholograms.hologram.edit.visibility_distance
+  fancyholograms.hologram.edit.visibility
+  fancyholograms.hologram.edit.shadow_radius
+  fancyholograms.hologram.edit.shadow_strength
+  fancyholograms.hologram.edit.background
+  fancyholograms.hologram.edit.text_shadow
+  fancyholograms.hologram.edit.text_alignment
+  fancyholograms.hologram.edit.see_trough
+  fancyholograms.hologram.edit.block
+  fancyholograms.hologram.edit.item
+  fancyholograms.hologram.edit.insert_before
+  fancyholograms.hologram.edit.insert_after
+  fancyholograms.hologram.edit.text_interval
+  fancyholograms.hologram.edit.line.add
+  fancyholograms.hologram.edit.line.remove
+  fancyholograms.hologram.line.set
+  fancyholograms.hologram.link
+  fancyholograms.hologram.unlink
+)
+
 for permission in "${player_allow[@]}"; do set_permission "$player_group" "$permission" true; done
 for permission in "${player_deny[@]}"; do set_permission "$player_group" "$permission" false; done
 for permission in "${admin_allow[@]}"; do set_permission "$admin_group" "$permission" true; done
@@ -112,5 +150,11 @@ set_permission guard_captain feato.guard_captain true
 set_permission guard_captain ei.item.guard_captain_flag true
 set_permission town_clerk feato.town_clerk true
 set_permission town_clerk essentials.kits.administrative_enforcement_order true
+
+for permission in "${fancyholograms_manage[@]}"; do
+  set_permission "$admin_group" "$permission" true
+  set_permission mayor "$permission" true
+  set_permission town_clerk "$permission" true
+done
 
 echo "Permissions applied to player group '$player_group' and admin group '$admin_group'."
