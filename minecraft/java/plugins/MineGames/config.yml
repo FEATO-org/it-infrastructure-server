@@ -130,7 +130,7 @@ slots:
   lever-placement: front_right_middle
   spin-light-mode: flashing_fast
   max-payout: 10000.0
-  fireworks-per-win: 1
+  fireworks-per-win: 2
   hologram-height: 5.8
   hologram-line-spacing: 0.6
   hologram-view-range: 20.0
