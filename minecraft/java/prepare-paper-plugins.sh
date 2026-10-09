@@ -77,7 +77,11 @@ JSON
 fi
 mc-image-helper patch /extras/deadchest-updates.json
 
-# Paper can promote staged updater JARs at startup. Remove only DeadChest builds.
-for staged_jar in /data/plugins/update/dead-chest-*.jar; do
-  [ ! -f "$staged_jar" ] || rm -f -- "$staged_jar"
+# FAWE provides WorldEdit. Never leave the old standalone JAR in the persistent volume.
+# Paper can promote staged updater JARs at startup; retain configuration and schematics.
+for obsolete_jar in /data/plugins/worldedit-bukkit-*.jar \
+    /data/plugins/update/worldedit-bukkit-*.jar \
+    /data/plugins/.paper-remapped/worldedit-bukkit-*.jar \
+    /data/plugins/update/dead-chest-*.jar; do
+  [ ! -f "$obsolete_jar" ] || rm -f -- "$obsolete_jar"
 done
