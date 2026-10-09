@@ -491,7 +491,7 @@ FEATO Coin Exchange
 ./script/setup_minecraft_permissions.sh <player-group> <admin-group>
 ```
 
-スクリプトは一般グループへ残高確認、送金、EIアイテム使用、FEATO商店だけを許可し、一般`/spawn`、`essentials.kits.return_ticket`、EconomyShopGUIの一括売却コマンドを拒否します。`featocoinexchange.execute`などFEATO Coin Exchangeの実行権限は一般・管理のいずれにも付与しません。管理グループへ経済、spawn、kit、商店編集、NPC作成と`console_command`を含む必要なaction種別だけを個別付与します。ワイルドカード権限、prefix、suffix、継承は変更しません。
+スクリプトは一般グループへ残高確認、送金、EIアイテム使用、FEATO商店だけを許可し、一般`/spawn`、`essentials.kits.return_ticket`、EconomyShopGUIの一括売却コマンドを拒否します。`featocoinexchange.execute`などFEATO Coin Exchangeの実行権限は一般・管理のいずれにも付与しません。管理グループへ経済、spawn、kit、商店編集、NPC作成と`console_command`を含む必要なaction種別だけを個別付与します。村長グループ`mayor`のprefixは優先度100で`&9[村長] `に設定します。LuckTagsでのprefix表示は実機確認済みです（運用者確認）。その他のprefix、suffix、継承は変更せず、ワイルドカード権限も付与しません。
 
 FancyHolograms 2.12.0の管理操作は、指定した管理グループ・村長 (`mayor`)・役場職員 (`town_clerk`) に同じ34個の権限を個別付与します。コマンド入口に必要な `fancyholograms.admin` も含みます。一般プレイヤーと警備隊長 (`guard_captain`) には管理権限を付与しません。ワイルドカードは使用せず、村長・役場職員へOPや管理者グループの継承を追加しないため、サーバー管理者になるわけではありません。`PERMISSION_NEEDED` の閲覧権限はホログラムごとに必要時だけ付与します。
 

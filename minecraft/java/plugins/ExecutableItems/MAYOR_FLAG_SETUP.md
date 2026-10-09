@@ -69,7 +69,7 @@ Weakness I は、村長旗を遠征・戦闘用の恒常強化へ転用しにく
 /lp group mayor permission set slots.admin true
 ```
 
-統合セットアップも上記3権限を設定する。`setup_mayor_role.sh` 単体は従来どおり旗アイテム権限を扱わず、`feato.mayor` と `slots.admin` を設定する。表示用prefixは既存のLuckTags表示方式を実機確認したうえで設定する。村長をprimary groupへ変更せず、既存プレイヤーグループへ追加parentとして付与する。
+`script/setup_minecraft_permissions.sh <player-group> <admin-group>` は上記3権限に加え、ホログラム管理権限と表示用prefix（優先度100、`&9[村長] `）を設定する。村長専用セットアップはこのスクリプトへ統合した。LuckTagsでのprefix表示は実機確認済み（運用者確認）。村長をprimary groupへ変更せず、既存プレイヤーグループへ追加parentとして付与する。
 
 就任:
 
