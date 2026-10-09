@@ -146,6 +146,7 @@ done
 set_permission mayor feato.mayor true
 set_permission mayor ei.item.mayor_flag true
 set_permission mayor slots.admin true
+docker exec "$container_id" rcon-cli "lp group mayor meta setprefix 100 &9[村長] "
 set_permission guard_captain feato.guard_captain true
 set_permission guard_captain ei.item.guard_captain_flag true
 set_permission town_clerk feato.town_clerk true
@@ -158,3 +159,6 @@ for permission in "${fancyholograms_manage[@]}"; do
 done
 
 echo "Permissions applied to player group '$player_group' and admin group '$admin_group'."
+echo "Mayor prefix configured: '[村長]'."
+echo "Assign with: lp user <player> parent add mayor"
+echo "Remove with: lp user <player> parent remove mayor"
