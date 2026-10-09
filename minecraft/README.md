@@ -270,6 +270,19 @@ reloadでSkill/Profile、ValhallaMMO Registry、Perk tree、Datapack handshake�
 
 問題が出たら正常停止し、BridgeのJAR/ZIPの両manifest行を外して再起動します。上記globに一致するBridge配布物は起動時に削除されます。削除後に両方が読み込まれていないことをログと配置先で確認してください。旧版へ戻す場合も両方の版を揃えます。Plugin削除だけでは保存済みprofileは戻らないため、データ異常時は停止したままバックアップとの照合・復旧を行います。
 
+## EnchantingのXP調整
+
+`java/plugins/ValhallaMMO/skills/enchanting_progression.yml`は、[versions.md](../deploys/versions.md)のSHA-512と一致するValhallaMMO 1.10.3 JAR同梱設定を原本として管理します。必要XP曲線は`/8.5`、消費Minecraft XPの換算は`1.0`、Mob討伐由来の減衰は`amount: 300` / `multiplier: 0.8`です。その他の値・全21 Perk・Lv20の全Skill XP +5%・Lv60の+15%・New Game+は原本を維持します。
+
+同JARの`EnchantingSkill`を`javap -p -c`で確認し、実際の読み込みキーが`experience.mob_exp_chunk_nerfed`であるため`true`を明示しました。原本の`is_chunk_nerfed: true`も維持します。`experience.exp_gain.experience_spent_conversion`、`experience.diminishing_returns.multiplier` / `amount` / `mob_experience`の読み込みも確認しています。Magic・Smithing・Fishing・共通チャンクXP減衰は変更しません。金床使用への新規XP付与もありません。
+
+本番適用・プレイヤー操作は要実機確認です。Paper停止中に既存のruntime設定とValhallaMMO profileをバックアップし、runtime側に独自設定がある場合は原本との差分を確認して今回対象外の値を管理元へ取り込みます。通常デプロイで管理元を`/plugins`から永続Volumeの`/data/plugins/ValhallaMMO/skills/enchanting_progression.yml`へ同期して完全再起動し、読み込みエラーがないことと実ファイルの値を確認します。切り戻しは停止中に管理元・runtime設定を適用前へ戻して完全再起動し、profileへの影響も確認します。
+
+1. 調整前後でプレイヤーLv・Perk・Minecraft XP・アイテム・付呪結果・討伐履歴を揃え、同一エンチャントによるEnchanting Skill XP増加量を比較します。必要XP曲線とスキルツリー、Lv20 / Lv60ボーナスの維持も確認します。
+2. `valhalla.ignorediminishingreturns`を持たない検証プレイヤーで、同一チャンク・同一Mob種を多数討伐してから付呪します。1.10.3はチャンク内の討伐カウントが閾値に達した後にプレイヤーのMob種別tallyを増やし、tallyが300以上になると減衰するため、単純な300体討伐だけで発動するとは限りません。
+3. 減衰条件成立時、エンチャント基礎XP部分が従来の10%から80%になることを比較します。1.10.3ではその後に消費Minecraft XP × 換算値を加算するため、合計Skill XPの比率は厳密な80%ではありません。その他のXP補正条件も揃えて比較します。
+4. Java / Bedrockで付呪・金床・Perk表示に退行がないことを確認します。
+
 ## 馬術（ValhallaMMO + FEATO Horsemanship）
 
 [FEATO Horsemanship v0.3.0](https://github.com/FEATO-org/feato_horsemanship/releases/tag/v0.3.0)で、ValhallaMMOに「馬術」（Lv 0-100）と移動・持久・操作・戦闘・育成のスキルツリーを追加します。専用Java Skill/ProfileをDB初期化後に登録し、v0.2.0のEXP付与時のProfile解決エラーに対応します。対象は馬、スケルトンホース、ゾンビホース、ロバ、ラバです。移動EXPは操縦者だけに100ブロックごと10、鞍上の第一歩取得後は+5%、馬上戦闘EXPは攻撃者本人に2秒間隔で0.5を付与する初期設定です。Lv20の「追う」は操縦中にメインハンドへリードを持って右クリックすると発動し、速度+6%、5秒、再使用35秒です。Perk取得前の操縦速度は-5%、鞍上の第一歩の取得後は-2%、手綱の心得の取得後はペナルティなしです。
