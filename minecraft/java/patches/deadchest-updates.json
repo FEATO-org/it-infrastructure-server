@@ -10,18 +10,16 @@
     },
     {
       "$put": {
-        "path": "$",
-        "key": "updates",
-        "value": {
-          "auto-check": false
-        }
+        "path": "$.updates",
+        "key": "auto-check",
+        "value": false
       }
     },
     {
       "$put": {
         "path": "$",
         "key": "auto-update",
-        "value": false
+        "value": null
       }
     }
   ]

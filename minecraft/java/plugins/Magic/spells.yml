@@ -201,7 +201,9 @@ wound:
     mana: 85
 
 vengeance:
-  variables: bubble
+  # Magic 11.2.4 accepts a map; defaults to CAST scope, matching ModifyVariable.
+  variables:
+    bubble: 0
 
 # Rank II is granted by Valhalla perks; automatic progression remains disabled.
 # DamageAction prioritizes upstream target-specific damage over generic damage.

@@ -63,8 +63,13 @@ fi
 deadchest_config=/data/plugins/DeadChest/config.yml
 mkdir -p /data/plugins/DeadChest
 if [ ! -e "$deadchest_config" ]; then
-  printf 'updates:\n  auto-check: false\nchest:\n  duration-seconds: 0\n' > "$deadchest_config"
+  cp /extras/deadchest-config.yml "$deadchest_config"
 fi
+if [ ! -f "$deadchest_config" ] || [ ! -s "$deadchest_config" ]; then
+  echo "ERROR: DeadChest config is missing, empty, or not a regular file." >&2
+  exit 1
+fi
+# Let DeadChest migrate legacy protection settings once; never overlay defaults.
 if ! mc-image-helper yaml-path --file "$deadchest_config" '$.chest' >/dev/null 2>&1; then
   chest_init=$(mktemp /tmp/deadchest-chest.XXXXXX.json)
   trap 'rm -f -- "$chest_init"' EXIT
@@ -75,6 +80,17 @@ JSON
   rm -f -- "$chest_init"
   trap - EXIT
 fi
+if ! mc-image-helper yaml-path --file "$deadchest_config" '$.updates' >/dev/null 2>&1; then
+  updates_init=$(mktemp /tmp/deadchest-updates.XXXXXX.json)
+  trap 'rm -f -- "$updates_init"' EXIT
+  cat > "$updates_init" <<'JSON'
+{"file":"/data/plugins/DeadChest/config.yml","ops":[{"$put":{"path":"$","key":"updates","value":{}}}]}
+JSON
+  mc-image-helper patch "$updates_init"
+  rm -f -- "$updates_init"
+  trap - EXIT
+fi
+# Bukkit treats null as unset: a false legacy alias still triggers migration.
 mc-image-helper patch /extras/deadchest-updates.json
 
 # Paper can promote staged updater JARs at startup. Remove only DeadChest builds.
