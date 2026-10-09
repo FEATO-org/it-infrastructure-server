@@ -22,7 +22,7 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ ValhallaMMO / Magic 11.2.4 / FEATO Horsemanship 0.2.0
                      ├ FEATO Gun-Valhalla Bridge 0.3.0 (Phase 1 PoC)
                      ├ SCore / ExecutableItems
-                     ├ WorldEdit / CraftBook
+                     ├ FastAsyncWorldEdit (WorldEdit互換) / CraftBook
                      ├ ImageFrame
                      ├ BreweryX 3.7.1
                      ├ ProtocolLib 5.5.0-SNAPSHOT / PlaceholderAPI 2.12.3
@@ -63,7 +63,7 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 - マップ: squaremap
 - RPG・アイテム: ValhallaMMO、Magic 11.2.4、SCore、ExecutableItems
 - 銃器スキル検証: FEATO Gun-Valhalla Bridge 0.3.0（Phase 1 PoC）
-- 建築・表示: WorldEdit、CraftBook、ImageFrame、FancyHolograms 2.12.0
+- 建築・表示: FastAsyncWorldEdit 2.16.0（WorldEdit互換）、CraftBook、ImageFrame、FancyHolograms 2.12.0
 - 馬・収納: Better Horses、DualHorse、FEATO Horsemanship 0.2.0、Backpack Plus
 - 醸造・料理: BreweryX 3.7.1（標準レシピ・日本語表示）
 - 死亡時保護: DeadChest 4.31.0
@@ -293,6 +293,19 @@ BetterHorsesの馬上ダメージ加算だけを起動前patchで無効化し、
 
 公開アセットのハッシュ・同梱Skill・効果設定と既存GUIの一致を確認しました。v0.3.0の隔離起動確認と実機未確認事項は[馬術の導入手順](java/plugins/ValhallaMMO/HORSEMANSHIP_SETUP.md)を参照してください。本番適用とJava/Bedrockのプレイヤー操作は未確認です。
 
+## 大規模編集基盤（FAWE）
+
+WorldEdit 7.4.5をFastAsyncWorldEdit **2.16.0 Paper版**へ置換します。公式stable Releaseの
+固定URLを`java/plugins.txt`で管理し、CraftBook 3.10.13と有効mechanics・権限設定を維持します。
+BUILDING高レベル能力で、Survival inventory消費を伴う制限付き大規模施工を安全に
+実装できる編集基盤を用意するための変更です。BUILDING / Architect自体は今回実装しません。
+
+旧WorldEdit JARは既存の`REMOVE_OLD_MODS_INCLUDE`と起動前cleanupで除去します。
+`/data/plugins/update/`とPaperのremap cacheも対象にし、設定・schematicは削除しません。
+一般プレイヤーへのWorldEdit権限追加、WorldGuard追加、CraftBook forkは行いません。
+配布hash、隔離起動結果、Inventory PoC、移行・ロールバックと実機確認は
+[FAWE移行手順](java/FAWE_MIGRATION.md)を参照してください。
+
 ## CraftBook Chairs（休憩）
 
 CraftBook 3.10.13のChairsを有効化します。階段に看板を付け、ブロックを持たずに
@@ -491,7 +504,7 @@ FEATO Coin Exchange
 ./script/setup_minecraft_permissions.sh <player-group> <admin-group>
 ```
 
-スクリプトは一般グループへ残高確認、送金、EIアイテム使用、FEATO商店だけを許可し、一般`/spawn`、`essentials.kits.return_ticket`、EconomyShopGUIの一括売却コマンドを拒否します。`featocoinexchange.execute`などFEATO Coin Exchangeの実行権限は一般・管理のいずれにも付与しません。管理グループへ経済、spawn、kit、商店編集、NPC作成と`console_command`を含む必要なaction種別だけを個別付与します。ワイルドカード権限、prefix、suffix、継承は変更しません。
+スクリプトは一般グループへ残高確認、送金、EIアイテム使用、FEATO商店だけを許可し、一般`/spawn`、`essentials.kits.return_ticket`、EconomyShopGUIの一括売却コマンドを拒否します。`featocoinexchange.execute`などFEATO Coin Exchangeの実行権限は一般・管理のいずれにも付与しません。管理グループへ経済、spawn、kit、商店編集、NPC作成と`console_command`を含む必要なaction種別だけを個別付与します。村長グループ`mayor`のprefixは優先度100で`&9[村長] `に設定します。LuckTagsでのprefix表示は実機確認済みです（運用者確認）。その他のprefix、suffix、継承は変更せず、ワイルドカード権限も付与しません。
 
 FancyHolograms 2.12.0の管理操作は、指定した管理グループ・村長 (`mayor`)・役場職員 (`town_clerk`) に同じ34個の権限を個別付与します。コマンド入口に必要な `fancyholograms.admin` も含みます。一般プレイヤーと警備隊長 (`guard_captain`) には管理権限を付与しません。ワイルドカードは使用せず、村長・役場職員へOPや管理者グループの継承を追加しないため、サーバー管理者になるわけではありません。`PERMISSION_NEEDED` の閲覧権限はホログラムごとに必要時だけ付与します。
 
