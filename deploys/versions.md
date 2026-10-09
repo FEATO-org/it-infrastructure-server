@@ -99,12 +99,6 @@ JavaバージョンとJVMフラグの動作をデプロイ前に確認してく�
 https://docker-minecraft-server.readthedocs.io/en/latest/versions/java/
 https://raw.githubusercontent.com/itzg/docker-minecraft-server/master/images.json
 
-自前で更新版GraalVMを導入する必要がある場合だけ、`.env`に
-`MINECRAFT_SERVER_IMAGE=it-infrastructure/minecraft-server:java25-graalvm`を指定し、
-`./script/build_minecraft_graalvm.sh`を実行します。
-複数ノードでは各ノードからpullできるレジストリのイメージ名を指定してビルドし、
-本体のイメージをpushしてください。ビルドスクリプトは自動push・デプロイしません。
-
 本体はAikarを無効にし、`USE_MEOWICE_FLAGS`と`USE_MEOWICE_GRAALVM_FLAGS`を有効化。
 プロキシはこれらの変数をサポートしないため、`JVM_XX_OPTS`でG1GC、並列参照処理、
 ヒープの事前確保、明示的GCの抑制、GC停止時間の目標200msを指定します。
