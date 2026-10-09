@@ -1,5 +1,28 @@
 # バージョン確認（2026-09-22）
 
+## WorldEdit → FAWE置換（2026-10-09）
+
+[公式Modrinth metadata](https://api.modrinth.com/v2/project/fastasyncworldedit/version)と
+[GitHub stable Release 2.16.0](https://github.com/IntellectualSites/FastAsyncWorldEdit/releases/tag/2.16.0)を再確認。
+第一候補2.15.4より新しい2.16.0は2026-10-04公開、`version_type: release` /
+`prerelease: false`で、Paper用metadataに26.2を含みます。26.3対応に加え、clipboard保存時の
+entity座標修正とblock/item ID定数の明示化を含むため2.16.0を採用します。snapshot/devではありません。
+固定版IDは`U2dcKa9T`、GETしたPaper JARのSHA-512は下表の公式hashと一致しました。
+`plugin.yml`は`version: 2.16.0+bd5705d`、`main: com.sk89q.worldedit.bukkit.WorldEditPlugin`、
+`provides: [WorldEdit]`。CraftBook配布版3.10.13（JAR内表記`3.10.13-SNAPSHOT;no_git_id`）は維持します。
+WorldEdit本体はmanifestから除去し、永続Volumeの旧JARを通常取得前と起動前に除去します。
+
+変更理由はBUILDING高レベル能力でSurvival inventory消費を伴う制限付き大規模施工を
+安全に実装できる編集基盤を用意するためです。設定・schematicは保持し、権限は変更しません。
+隔離Paper 26.2 build 126 / Java 25.0.4で全現行manifest Pluginのenableと正常停止を確認。
+CraftBookにClassNotFoundException / NoSuchMethodError / WorldEdit依存欠落なし。
+Player inventoryのtest doubleと実FAWE / Paper Worldを使うPoCで、64→54、96→16、
+資材不足時の無料設置なし、History / undo、有限MAX_CHANGESを確認しました。
+Modern Gunsのpredicate ERRORや既存Plugin警告は旧WorldEdit対照でも再現します。
+CraftBook mechanicsの実操作、本番、実Playerのinventoryは未確認です。
+起動試験・Inventory PoCと未確認の実機項目は[FAWE移行記録](../minecraft/java/FAWE_MIGRATION.md)を参照。
+以下のWorldEdit 7.4.5に関する過去の節は、その変更時点の検証記録です。
+
 ## DeadChest・Magic起動警告修正（2026-10-09）
 
 版・取得URLは変更せず、[DeadChest公式4.31.0](https://modrinth.com/plugin/dead-chest/version/ej8X4AM4)の
@@ -173,7 +196,7 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | Magic | 11.2.4 | [固定URL](https://mediafilez.forgecdn.net/files/8375/702/Magic-11.2.4.jar) | Paper | 26.2（公式配布対象） | stable | 公式ValhallaMMO integrationを使用; Requires runtime verification |
 | SCore | 5.26.9.17 | [固定URL](https://cdn.modrinth.com/data/ZfcV7L06/versions/EHLoQYh8/SCore-5.26.9.17.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 8以上; Requires runtime verification |
 | ExecutableItems | 7.26.9.17 | [固定URL](https://cdn.modrinth.com/data/g8Zwnnmn/versions/XrhxAt8x/ExecutableItems-7.26.9.17.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 8以上; Requires runtime verification |
-| WorldEdit | 7.4.5 | [固定URL](https://cdn.modrinth.com/data/1u6JkXh5/versions/F5ea2ov3/worldedit-bukkit-7.4.5.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 25以上; Requires runtime verification |
+| FastAsyncWorldEdit | 2.16.0 | [固定Paper JAR](https://cdn.modrinth.com/data/z4HZZnLr/versions/U2dcKa9T/FastAsyncWorldEdit-Paper-2.16.0.jar) | Paper | 26.2（公式metadata） | stable Release | Java 25 / Paper 26.2 build 126で隔離検証。詳細はFAWE移行記録; 本番・実操作は未確認 |
 | CraftBook | 3.10.13 | [固定URL](https://cdn.modrinth.com/data/jrO7z7l7/versions/6kl3GQSJ/craftbook-3.10.13.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | ImageFrame | 2026.1.4 | [固定URL](https://cdn.modrinth.com/data/lJFOpcEj/versions/nt0GWT1y/ImageFrame-2026.1.4.0.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | Backpack Plus | 3.2.0 | [固定URL](https://cdn.modrinth.com/data/lDAFcnRN/versions/vsRfbexG/BackpackPlus-3.2.0-all.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
@@ -286,7 +309,7 @@ Paper 26.2 build 126 / Oracle GraalVM 25.0.4、ValhallaMMO 1.10.3、BetterHorses
 | Magic-11.2.4.jar | `4eb13cba74a534f6f58ef4dd4a301cac20f58299b4606ff2488c7fa7c4fc6dac69781449669acbef12a30b378771d474fdd58b9e4fa33defa59e9061aeed9e32` |
 | SCore-5.26.9.17.jar | `7d023fa5973ca88acce406581eeb8378b2c14de9a77545d04f87ff79b3049de296f1d67eb0b442977b2e6b4fb5665ec344b8c274b7ccbda942fcc87fa72f57ee` |
 | ExecutableItems-7.26.9.17.jar | `4d96fe9d62f8936fa9a471d118eaf4d18cee491da8f4a42bc438be8b2a85bd85a3d3508350dea48e92f2f99aae4f4602522117fea8329c802ebaef3b7e8be04d` |
-| worldedit-bukkit-7.4.5.jar | `a383492fac6bfb4d43a257dfa7b5fc076aae503a71151b463de4fe80e6f3d5fc11209eaf4097baa115f3febf0adc40ca0a1ecda227b8439b429d0a4ba3a63a4f` |
+| FastAsyncWorldEdit-Paper-2.16.0.jar | `add46c57209e95c700cbda1c4b25d58d4e39826cd5cbc23bfbc678e145d3424283020317544ec05587972d2a133e43715dc24dd26d51593bb3b0c4e28b7c9c4b` |
 | craftbook-3.10.13.jar | `04ff7ae4ddaf732951a882096e9d0744626e0449b6d6c24c2fa4f5af02ac5241b45c8992dcf4814153c5d1a3d01051a7bb6a42bd8102fea192ca93c8513addb3` |
 | ImageFrame-2026.1.4.0.jar | `2a510fa5906e26331351fb69da6b19ca08d82ffb3ea34781cde8de44eed25a18e43862e6144a3bcbc8bf2184ee3a975fe65ee10689ff07039d23076fda35f58a` |
 | BackpackPlus-3.2.0-all.jar | `e2385aab904864957ec1063f4faa9c553ad8e68604cb719a74b8a3a03c7459b628f82b10e7f4a56768ee77511129a0884bda7d4168074d26cec10448ce80ff5f` |
