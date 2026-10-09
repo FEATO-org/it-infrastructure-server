@@ -23,6 +23,28 @@ CraftBook mechanicsの実操作、本番、実Playerのinventoryは未確認で�
 起動試験・Inventory PoCと未確認の実機項目は[FAWE移行記録](../minecraft/java/FAWE_MIGRATION.md)を参照。
 以下のWorldEdit 7.4.5に関する過去の節は、その変更時点の検証記録です。
 
+## DeadChest・Magic起動警告修正（2026-10-09）
+
+版・取得URLは変更せず、[DeadChest公式4.31.0](https://modrinth.com/plugin/dead-chest/version/ej8X4AM4)の
+metadata SHA-512とJARの一致、Magic 11.2.4の固定ForgeCDN JARと検証用JARのバイト一致を確認しました。
+対象JARの逆コンパイルでDeadChestの`ConfigKey`・`DeadChestConfig`、Magicの`BaseSpell`・
+`SpellParameters`・`ModifyVariableAction`・`ParameterizedConfiguration`を確認しています。
+
+DeadChestは旧キーの存在だけでも移行します。旧patchが毎回追加する`auto-update: false`が
+再移行の原因でした。今後は`updates.auto-check: false`と`auto-update: null`（Bukkitで未設定）を
+適用し、`chest.duration-seconds: 0`を維持します。既存の他設定・updatesの追加キーは保持します。
+新規設定だけ公式JAR同梱の完全configをseedとしてコピーします。既存の不足・旧設定は本体が
+初回移行するのでその警告は残り、以後は解消します。`config-version: 2`だけでは移行を抑制できません。
+
+[上流修正](https://github.com/elBukkit/MagicPlugin/commit/10d3665616efe71f3431a2434ff8124d0aeeebc7)の
+文字列宣言は対象11.2.4では登録されません。`vengeance.variables`を`bubble: 0`のマップにし、
+既定CASTスコープを維持します。spellスコープへ変更せず、Rank II・IIIの継承と0.4/0.6/0.8の式も維持します。
+
+隔離Paper 26.2 build 126 / Java 25.0.4で3 Pluginのenableと正常停止を確認しました。
+新規・現行・移行後再起動で対象警告はありません。旧/最小設定の初回移行警告は意図どおり残ります。
+設定保持・冪等性、Magicの模擬変数更新/倍率/次回context初期化も確認しました。
+実戦闘・死亡・回収・Valhallaの実プレイヤーXP・全Plugin同時起動・本番は未確認です。
+手順と制約は[Minecraft運用](../minecraft/README.md#deadchestmagic起動警告の検証2026-10-09)を参照してください。
 
 ## CraftBook Chairs有効化（2026-10-04）
 
@@ -42,7 +64,7 @@ ProtocolLibは追加済みの公式5.5.0-SNAPSHOT / asset ID `608298575`を維�
 
 ## Plugin運用整理（2026-10-04）
 
-- DeadChest 4.31.0: [作者公式配布](https://modrinth.com/plugin/dead-chest/version/ej8X4AM4)はPaper / 26.2を列挙。GETしたJARのSHA-512は公式metadataと一致しました。旧`dead-chest-*.jar`は既存の起動前除去対象に追加し、`plugins/update/`の同名パターンも除去します。DeadChest 4.31.0を継続使用し、`prepare-paper-plugins.sh`で運用設定の`updates.auto-check`と旧形式`auto-update`をfalseへpatchします。同じ起動時patchで`/data/plugins/DeadChest/config.yml`の`chest.duration-seconds`を全ロス防止のため`0`（無期限）に固定し、死亡チェストは時間経過では期限切れにしません。その他の死亡保護設定（`chest.max-per-player`を含む）は既存値を保持します。無期限化の本番動作・プレイヤー操作は未確認です。
+- DeadChest 4.31.0: [作者公式配布](https://modrinth.com/plugin/dead-chest/version/ej8X4AM4)はPaper / 26.2を列挙。GETしたJARのSHA-512は公式metadataと一致しました。旧`dead-chest-*.jar`は既存の起動前除去対象に追加し、`plugins/update/`の同名パターンも除去します。DeadChest 4.31.0を継続使用し、`prepare-paper-plugins.sh`で運用設定の`updates.auto-check`をfalse、旧形式`auto-update`をnull（Bukkit上で未設定）へpatchします。同じ起動時patchで`/data/plugins/DeadChest/config.yml`の`chest.duration-seconds`を全ロス防止のため`0`（無期限）に固定し、死亡チェストは時間経過では期限切れにしません。その他の死亡保護設定（`chest.max-per-player`を含む）は既存値を保持します。無期限化の本番動作・プレイヤー操作は未確認です。
 - ProtocolLib: [公式dev changelog](https://github.com/dmulloy2/ProtocolLib/releases/tag/dev-build)は26.2対応（#3642）とJava 25修正（#3566）を含みます。stable 5.4.0の対応は1.21.8までなのでdevelopment版を採用。2026-10-03T18:20:42Z作成の`ProtocolLib-Spigot.jar`（JAR表記5.5.0-SNAPSHOT、asset ID `608298575`）を固定し、可変`dev-build`ダウンロードURLは使いません。`plugins.txt`には管理対象と固定取得元をコメントで記録し、Acceptヘッダーが必要なため起動前スクリプトで`mc-image-helper get --accept application/octet-stream`を実行します。SHA-256 `a4ef57c36e27adec56b3a7935b7930fd1e366b310b9b698949e7f3320c84a8f9`で検証してから配置します。公式asset削除・ハッシュ不一致時は起動を中止します。既存JARがハッシュ一致なら再取得しません。
 - PlaceholderAPI: [公式2.12.3 Release](https://github.com/PlaceholderAPI/PlaceholderAPI/releases/tag/2.12.3)は26.2対応を明記していますが、Paper版はexperimentalとされています。ここではReleaseのBukkit/Spigot JARを固定し、Java 25でenableを確認。SHA-256 `fde03259f5af6938f3c33eeb4d814000a1adabf1d2304ce14970be81f609a437`は公式asset digestと一致しました。eCloud・外部Expansionは導入していません（既存Plugin自身の内部placeholder登録は発生します）。
 - Magic 11.2.4: [upstream修正](https://github.com/elBukkit/MagicPlugin/commit/10d3665616efe71f3431a2434ff8124d0aeeebc7)に沿って`vengeance.variables: bubble`を追跡設定へ追加。本体版と0.4/0.6/0.8の式は維持。ただし、この版でのローカル起動では3段階の式評価警告が残りました。

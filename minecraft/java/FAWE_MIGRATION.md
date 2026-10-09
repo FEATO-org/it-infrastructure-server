@@ -76,6 +76,10 @@ Gun Core 1.0.15 / Modern Guns 1.9.3 / Bridge 0.3.0を含む現行`datapacks.txt`
 CraftBookを含め、ClassNotFoundException / NoSuchMethodError / WorldEdit dependency missingは検出しなかった。
 ただしenableだけでmechanicsの実操作互換性は確定しない。以下の手動項目は未確認。
 
+この隔離起動記録はPR #51のDeadChest・Magic起動警告修正を取り込む前の設定による。
+2026-10-10の競合解消では同修正を保持して統合し、cleanup・起動設定の検証を再実施した。
+修正後の全Plugin同時起動と実プレイヤー操作は未再検証。
+
 検証環境の初回不備として、Data PackなしのBridge起動失敗、未ロードの仮想Playerに対する
 LuckPerms/Vault lookup例外が出た。Data Pack配置とテストUUIDの事前loadで解消した。
 最終試験ではPoC例外やBridge停止は解消し、以下の残存ログを調査した。
