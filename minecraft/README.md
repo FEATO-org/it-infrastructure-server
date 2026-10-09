@@ -72,10 +72,13 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 DeadChest 4.31.0は公式metadataでPaper 26.2に対応し、Java 25で起動を確認しています。
 死亡・回収のプレイヤー操作と本番は未確認です。旧JARは既存の`REMOVE_OLD_MODS_INCLUDE`で
 `/data/plugins/dead-chest-*.jar`だけを除去し、4.31.0を再取得します。
-起動前にDeadChestの自動更新を無効化し、`/data/plugins/update/dead-chest-*.jar`も除去します。
+起動前にDeadChestの`updates.auto-check`をfalseへ固定し、旧`auto-update`はnull（Bukkit上で未設定）にし、`/data/plugins/update/dead-chest-*.jar`も除去します。
 起動時patchで`/data/plugins/DeadChest/config.yml`の`chest.duration-seconds`を`0`（無期限）へ固定し、
 死亡チェストは時間経過では期限切れにしません。他の死亡保護設定（`chest.max-per-player`を含む）は
-既存値を保持し、JARの版は4.31.0のままインフラ側で管理します。本変更の本番動作は未確認です。
+既存値を保持し、JARの版は4.31.0のままインフラ側で管理します。
+新規環境だけ`java/config-seeds/deadchest-config.yml`（4.31.0公式JAR同梱configそのまま）を
+`/extras/deadchest-config.yml`からコピーします。既存設定にseedを上書き・マージしません。
+本変更の本番動作は未確認です。
 
 ProtocolLibは公式Development Buildのasset IDとSHA-256を固定して起動前に取得します。
 一覧と固定取得元は`plugins.txt`、詳細は[versions.md](../deploys/versions.md)を参照してください。
@@ -84,9 +87,63 @@ GhastMasterは運用版を特定できないため、今回の本体管理化は
 既存の手動JARの正式版・公式配布元を確認するまで、そのJARを維持してください。
 `setup_minecraft_permissions.sh`には一般グループの`ghastmaster.share`だけを追加しています。
 
-Magicの`vengeance.variables: bubble`追加とMineGamesの外部YAMLの重複削除を反映しました。
-ただしMagic 11.2.4の式評価警告とMineGames 1.0.5のJAR内既定YAMLの重複警告は
-ローカル起動で残っています。本体版、式、メッセージ文言は変更していません。
+Magic 11.2.4の`vengeance.variables`は`bubble: 0`のマップ形式を使用します。
+この版では文字列`bubble`や文字列リストでは変数が登録されません。マップ形式は
+`BaseSpell.initializeVariables`でCASTスコープを使い、公式`ModifyVariableAction`の既定スコープと
+初期値0を維持します。Rank II・IIIにも継承され、0.4/0.6/0.8の式、反撃処理、Valhalla連携は変更しません。
+MineGames 1.0.5のJAR内既定YAMLの重複警告は別件として残っています。
+
+### DeadChest・Magic起動警告の検証（2026-10-09）
+
+DeadChest 4.31.0の`DeadChestConfig.detectMissingConfigs`は、登録した正規キーの不足、または
+`ConfigKey.aliases()`に含まれる旧キーの存在で移行を実行します。`config-version`の比較ではありません。
+従来の最小YAMLは不足キーを生み、毎回`auto-update: false`を追加するpatchは移行を再発させていました。
+`auto-update: null`はBukkitが旧キーとして検出しないため、繰り返し移行を止めます。
+他の旧キー・不足がある既存設定は、本体が初回だけ移行し、`config.legacy.yml`を作ります。
+この初回の3件の警告は残します。運用設定を独自変換して隠すことはしません。
+本体の移行は既存`config.legacy.yml`を置換するため、適用前に停止・DeadChestディレクトリ全体を
+別の場所へバックアップしてください。設定・死亡チェスト情報をGitへ取り込まないでください。
+
+隔離Paper **26.2 build 126** / Oracle GraalVM **Java 25.0.4** / DeadChest **4.31.0** /
+Magic **11.2.4** / ValhallaMMO **1.10.3**で、以下を確認しています。
+
+- 新規・現行形式: 3 Pluginのenable、正常停止、対象の起動警告なし。
+- 旧形式・最小設定: 初回移行の警告あり。移行後の再起動では警告なし。
+- 起動前スクリプト2回: 設定のバイト一致、既存の上限・所有者限定・破壊保護・XP・除外設定の保持。
+  本体の旧形式移行でもこれらと回収方法・ブロック種別の保持を確認。
+- Magic: 3ランクのテンプレート読み込み、初期式評価0、CAST変数登録、実`ModifyVariableAction`で
+  模擬damage=4を3回与えたbubble=4/8/12と各倍率、次回contextで0、旧contextの値の独立、
+  `valhalla_xp_magic`設定の保持。起動とこの模擬処理でbubble式警告なし。
+
+起動前処理の回帰テストはPyYAML・Dockerを用意して、リポジトリルートから
+`TEST_MINECRAFT_IMAGE=<使用するイメージ> python3 script/test_deadchest_startup_config.py`で実行します。
+ネットワークを無効にした一時データだけを使い、実スクリプトのDeadChestブロックと実ヘルパーを実行します。
+Floodgate鍵とProtocolLib取得はテスト範囲外です。
+Magicの模擬テストは`script/fixtures/MagicVengeanceProbe.java`をテスト専用Pluginとして使います。
+Paperを一度起動した**隔離サーバー**のディレクトリで、以下のようにビルドして完全再起動します。
+本番へこのテストPluginを配布しないでください。
+
+```sh
+probe_classpath=$(rg --files libraries plugins | rg '\.jar$' | paste -sd: -)
+javac -cp "$probe_classpath" -d probe-build /path/to/repository/script/fixtures/MagicVengeanceProbe.java
+cat > probe-build/plugin.yml <<'YAML'
+name: MagicVengeanceProbe
+version: '1.0'
+main: MagicVengeanceProbe
+api-version: '26.2'
+depend: [Magic, ValhallaMMO, DeadChest]
+YAML
+jar --create --file plugins/MagicVengeanceProbe.jar -C probe-build .
+```
+
+起動後`PROBE PASS`と各ランクの結果を確認します。模擬contextはプレイヤー戦闘ではありません。
+被ダメージイベント・閾値到達時の実反撃・効果終了、実プレイヤーの魔術経験値/習得、
+死亡チェスト生成・再ログイン回収・再起動後のアイテム保持、Java/Bedrock、本番は未確認です。
+適用後は既存設定とログ、これらの実操作を確認してください。ロールバック時は正常停止し、
+変更前の設定とスクリプトを復元します。旧スクリプトへ戻すと移行警告も再発します。
+
+今回の変更はゲーム内仕様を維持した起動初期化・内部ログの修正なので、`changes/README.md`の
+内部変更の基準に従い`changes/pending/`は追加しません。
 
 旧Vault、XConomy、XConomy_Reload、SetSpawn、Genius Shop、Dynmapは採用しません。既存VolumeからJARが自動削除されるとは限らないため、停止中に退避してください。Dynmapのタイルはバックアップ後に残して構いませんが、squaremapは別形式で再描画します。
 
