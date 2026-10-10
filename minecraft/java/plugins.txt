@@ -1,12 +1,12 @@
 https://cdn.modrinth.com/data/Vebnzrzj/versions/b0mk8uS6/LuckPerms-Bukkit-5.5.71.jar
 https://cdn.modrinth.com/data/riEl5GDK/versions/mMmIwg51/lucktags-1.4.jar
 https://cdn.modrinth.com/data/rxrgsoud/versions/GkeSDJSq/ValhallaMMO_1.10.3.jar
-https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.3.0/feato-gun-valhalla-bridge-plugin-0.3.0.jar
+https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.3.0-poc.2/feato-gun-valhalla-bridge-plugin-0.3.0-poc.2.jar
 https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.3.0/feato-horsemanship-0.3.0.jar
 https://mediafilez.forgecdn.net/files/8375/702/Magic-11.2.4.jar
 https://cdn.modrinth.com/data/ZfcV7L06/versions/EHLoQYh8/SCore-5.26.9.17.jar
 https://cdn.modrinth.com/data/g8Zwnnmn/versions/XrhxAt8x/ExecutableItems-7.26.9.17.jar
-https://cdn.modrinth.com/data/1u6JkXh5/versions/F5ea2ov3/worldedit-bukkit-7.4.5.jar
+https://cdn.modrinth.com/data/z4HZZnLr/versions/U2dcKa9T/FastAsyncWorldEdit-Paper-2.16.0.jar
 https://cdn.modrinth.com/data/jrO7z7l7/versions/6kl3GQSJ/craftbook-3.10.13.jar
 https://cdn.modrinth.com/data/lJFOpcEj/versions/nt0GWT1y/ImageFrame-2026.1.4.0.jar
 https://cdn.modrinth.com/data/lDAFcnRN/versions/vsRfbexG/BackpackPlus-3.2.0-all.jar

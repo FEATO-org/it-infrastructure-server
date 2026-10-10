@@ -1,0 +1,5 @@
+name: FAWEInventoryProbe
+version: 1.0.0
+main: FaweInventoryProbe
+api-version: '26.2'
+depend: [WorldEdit, LuckPerms]

@@ -1,5 +1,51 @@
 # バージョン確認（2026-09-22）
 
+## WorldEdit → FAWE置換（2026-10-09）
+
+[公式Modrinth metadata](https://api.modrinth.com/v2/project/fastasyncworldedit/version)と
+[GitHub stable Release 2.16.0](https://github.com/IntellectualSites/FastAsyncWorldEdit/releases/tag/2.16.0)を再確認。
+第一候補2.15.4より新しい2.16.0は2026-10-04公開、`version_type: release` /
+`prerelease: false`で、Paper用metadataに26.2を含みます。26.3対応に加え、clipboard保存時の
+entity座標修正とblock/item ID定数の明示化を含むため2.16.0を採用します。snapshot/devではありません。
+固定版IDは`U2dcKa9T`、GETしたPaper JARのSHA-512は下表の公式hashと一致しました。
+`plugin.yml`は`version: 2.16.0+bd5705d`、`main: com.sk89q.worldedit.bukkit.WorldEditPlugin`、
+`provides: [WorldEdit]`。CraftBook配布版3.10.13（JAR内表記`3.10.13-SNAPSHOT;no_git_id`）は維持します。
+WorldEdit本体はmanifestから除去し、永続Volumeの旧JARを通常取得前と起動前に除去します。
+
+変更理由はBUILDING高レベル能力でSurvival inventory消費を伴う制限付き大規模施工を
+安全に実装できる編集基盤を用意するためです。設定・schematicは保持し、権限は変更しません。
+隔離Paper 26.2 build 126 / Java 25.0.4で全現行manifest Pluginのenableと正常停止を確認。
+CraftBookにClassNotFoundException / NoSuchMethodError / WorldEdit依存欠落なし。
+Player inventoryのtest doubleと実FAWE / Paper Worldを使うPoCで、64→54、96→16、
+資材不足時の無料設置なし、History / undo、有限MAX_CHANGESを確認しました。
+Modern Gunsのpredicate ERRORや既存Plugin警告は旧WorldEdit対照でも再現します。
+CraftBook mechanicsの実操作、本番、実Playerのinventoryは未確認です。
+起動試験・Inventory PoCと未確認の実機項目は[FAWE移行記録](../minecraft/java/FAWE_MIGRATION.md)を参照。
+以下のWorldEdit 7.4.5に関する過去の節は、その変更時点の検証記録です。
+
+## DeadChest・Magic起動警告修正（2026-10-09）
+
+版・取得URLは変更せず、[DeadChest公式4.31.0](https://modrinth.com/plugin/dead-chest/version/ej8X4AM4)の
+metadata SHA-512とJARの一致、Magic 11.2.4の固定ForgeCDN JARと検証用JARのバイト一致を確認しました。
+対象JARの逆コンパイルでDeadChestの`ConfigKey`・`DeadChestConfig`、Magicの`BaseSpell`・
+`SpellParameters`・`ModifyVariableAction`・`ParameterizedConfiguration`を確認しています。
+
+DeadChestは旧キーの存在だけでも移行します。旧patchが毎回追加する`auto-update: false`が
+再移行の原因でした。今後は`updates.auto-check: false`と`auto-update: null`（Bukkitで未設定）を
+適用し、`chest.duration-seconds: 0`を維持します。既存の他設定・updatesの追加キーは保持します。
+新規設定だけ公式JAR同梱の完全configをseedとしてコピーします。既存の不足・旧設定は本体が
+初回移行するのでその警告は残り、以後は解消します。`config-version: 2`だけでは移行を抑制できません。
+
+[上流修正](https://github.com/elBukkit/MagicPlugin/commit/10d3665616efe71f3431a2434ff8124d0aeeebc7)の
+文字列宣言は対象11.2.4では登録されません。`vengeance.variables`を`bubble: 0`のマップにし、
+既定CASTスコープを維持します。spellスコープへ変更せず、Rank II・IIIの継承と0.4/0.6/0.8の式も維持します。
+
+隔離Paper 26.2 build 126 / Java 25.0.4で3 Pluginのenableと正常停止を確認しました。
+新規・現行・移行後再起動で対象警告はありません。旧/最小設定の初回移行警告は意図どおり残ります。
+設定保持・冪等性、Magicの模擬変数更新/倍率/次回context初期化も確認しました。
+実戦闘・死亡・回収・Valhallaの実プレイヤーXP・全Plugin同時起動・本番は未確認です。
+手順と制約は[Minecraft運用](../minecraft/README.md#deadchestmagic起動警告の検証2026-10-09)を参照してください。
+
 ## CraftBook Chairs有効化（2026-10-04）
 
 CraftBook 3.10.13 / WorldEdit 7.4.5は変更せず、Chairsを有効化します。
@@ -18,7 +64,7 @@ ProtocolLibは追加済みの公式5.5.0-SNAPSHOT / asset ID `608298575`を維�
 
 ## Plugin運用整理（2026-10-04）
 
-- DeadChest 4.31.0: [作者公式配布](https://modrinth.com/plugin/dead-chest/version/ej8X4AM4)はPaper / 26.2を列挙。GETしたJARのSHA-512は公式metadataと一致しました。旧`dead-chest-*.jar`は既存の起動前除去対象に追加し、`plugins/update/`の同名パターンも除去します。DeadChest 4.31.0を継続使用し、`prepare-paper-plugins.sh`で運用設定の`updates.auto-check`と旧形式`auto-update`をfalseへpatchします。同じ起動時patchで`/data/plugins/DeadChest/config.yml`の`chest.duration-seconds`を全ロス防止のため`0`（無期限）に固定し、死亡チェストは時間経過では期限切れにしません。その他の死亡保護設定（`chest.max-per-player`を含む）は既存値を保持します。無期限化の本番動作・プレイヤー操作は未確認です。
+- DeadChest 4.31.0: [作者公式配布](https://modrinth.com/plugin/dead-chest/version/ej8X4AM4)はPaper / 26.2を列挙。GETしたJARのSHA-512は公式metadataと一致しました。旧`dead-chest-*.jar`は既存の起動前除去対象に追加し、`plugins/update/`の同名パターンも除去します。DeadChest 4.31.0を継続使用し、`prepare-paper-plugins.sh`で運用設定の`updates.auto-check`をfalse、旧形式`auto-update`をnull（Bukkit上で未設定）へpatchします。同じ起動時patchで`/data/plugins/DeadChest/config.yml`の`chest.duration-seconds`を全ロス防止のため`0`（無期限）に固定し、死亡チェストは時間経過では期限切れにしません。その他の死亡保護設定（`chest.max-per-player`を含む）は既存値を保持します。無期限化の本番動作・プレイヤー操作は未確認です。
 - ProtocolLib: [公式dev changelog](https://github.com/dmulloy2/ProtocolLib/releases/tag/dev-build)は26.2対応（#3642）とJava 25修正（#3566）を含みます。stable 5.4.0の対応は1.21.8までなのでdevelopment版を採用。2026-10-03T18:20:42Z作成の`ProtocolLib-Spigot.jar`（JAR表記5.5.0-SNAPSHOT、asset ID `608298575`）を固定し、可変`dev-build`ダウンロードURLは使いません。`plugins.txt`には管理対象と固定取得元をコメントで記録し、Acceptヘッダーが必要なため起動前スクリプトで`mc-image-helper get --accept application/octet-stream`を実行します。SHA-256 `a4ef57c36e27adec56b3a7935b7930fd1e366b310b9b698949e7f3320c84a8f9`で検証してから配置します。公式asset削除・ハッシュ不一致時は起動を中止します。既存JARがハッシュ一致なら再取得しません。
 - PlaceholderAPI: [公式2.12.3 Release](https://github.com/PlaceholderAPI/PlaceholderAPI/releases/tag/2.12.3)は26.2対応を明記していますが、Paper版はexperimentalとされています。ここではReleaseのBukkit/Spigot JARを固定し、Java 25でenableを確認。SHA-256 `fde03259f5af6938f3c33eeb4d814000a1adabf1d2304ce14970be81f609a437`は公式asset digestと一致しました。eCloud・外部Expansionは導入していません（既存Plugin自身の内部placeholder登録は発生します）。
 - Magic 11.2.4: [upstream修正](https://github.com/elBukkit/MagicPlugin/commit/10d3665616efe71f3431a2434ff8124d0aeeebc7)に沿って`vengeance.variables: bubble`を追跡設定へ追加。本体版と0.4/0.6/0.8の式は維持。ただし、この版でのローカル起動では3段階の式評価警告が残りました。
@@ -99,12 +145,6 @@ JavaバージョンとJVMフラグの動作をデプロイ前に確認してく�
 https://docker-minecraft-server.readthedocs.io/en/latest/versions/java/
 https://raw.githubusercontent.com/itzg/docker-minecraft-server/master/images.json
 
-自前で更新版GraalVMを導入する必要がある場合だけ、`.env`に
-`MINECRAFT_SERVER_IMAGE=it-infrastructure/minecraft-server:java25-graalvm`を指定し、
-`./script/build_minecraft_graalvm.sh`を実行します。
-複数ノードでは各ノードからpullできるレジストリのイメージ名を指定してビルドし、
-本体のイメージをpushしてください。ビルドスクリプトは自動push・デプロイしません。
-
 本体はAikarを無効にし、`USE_MEOWICE_FLAGS`と`USE_MEOWICE_GRAALVM_FLAGS`を有効化。
 プロキシはこれらの変数をサポートしないため、`JVM_XX_OPTS`でG1GC、並列参照処理、
 ヒープの事前確保、明示的GCの抑制、GC停止時間の目標200msを指定します。
@@ -150,13 +190,13 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | LuckPerms | v5.5.71-velocity | [固定URL](https://cdn.modrinth.com/data/Vebnzrzj/versions/tamnmXad/LuckPerms-Velocity-5.5.71.jar) | Velocity | 26.2（配布metadata） | stable | 同梱Java 11以上; Requires runtime verification |
 | LuckTags | 1.4 | [固定URL](https://cdn.modrinth.com/data/riEl5GDK/versions/mMmIwg51/lucktags-1.4.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | ValhallaMMO | 1.10.3 | [固定URL](https://cdn.modrinth.com/data/rxrgsoud/versions/GkeSDJSq/ValhallaMMO_1.10.3.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
-| FEATO Gun-Valhalla Bridge Plugin | 0.3.0 | [固定JAR](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.3.0/feato-gun-valhalla-bridge-plugin-0.3.0.jar) | Paper | 26.2 build 126（Bridge固定対象） | 公開Release（Phase 1 PoC） | Java 25、ValhallaMMO 1.10.3必須。release ID 4 / protocol 1。config reload対応。0.3.0の実機起動・reloadは未確認 |
-| FEATO Gun-Valhalla Bridge Datapack | 0.3.0 | [固定ZIP](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.3.0/feato-gun-valhalla-bridge-datapack-0.3.0.zip) | Data Pack | 26.2（pack format 107.1） | 公開Release（Phase 1 PoC） | 同版Pluginと対で配置。Gun Core 1.0.15 / Modern Guns 1.9.3。release ID 4 / protocol 1。0.3.0は実機未確認 |
+| FEATO Gun-Valhalla Bridge Plugin | 0.3.0-poc.2 | [固定JAR](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.3.0-poc.2/feato-gun-valhalla-bridge-plugin-0.3.0-poc.2.jar) | Paper | 26.2 build 126（Bridge固定対象） | 公開Release（Phase 2 raycast PoC） | Java 25、ValhallaMMO 1.10.3必須。release ID 6 / protocol 2。config reload対応。0.3.0-poc.2の実機起動・reloadは未確認 |
+| FEATO Gun-Valhalla Bridge Datapack | 0.3.0-poc.2 | [固定ZIP](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.3.0-poc.2/feato-gun-valhalla-bridge-datapack-0.3.0-poc.2.zip) | Data Pack | 26.2（pack format 107.1） | 公開Release（Phase 2 raycast PoC） | 同版Pluginと対で配置。Gun Core 1.0.15 / Modern Guns 1.9.3。release ID 6 / protocol 2。0.3.0-poc.2は実機未確認 |
 | FEATO Horsemanship | 0.3.0 | [固定JAR](https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.3.0/feato-horsemanship-0.3.0.jar) / [Skill設定](https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.3.0/horsemanship.yml) | Paper | 26.2 build 126（配布元対象、api-version 26.2） | stable release（draft=false、prerelease=false） | Java 25、ValhallaMMO 1.10.3必須。専用Java Skill/Profile登録。旧Custom Skill退避と完全再起動が必要。公開アセット・設定の一致を確認、v0.3.0実機確認は下記参照。本番・プレイヤー操作は未確認 |
 | Magic | 11.2.4 | [固定URL](https://mediafilez.forgecdn.net/files/8375/702/Magic-11.2.4.jar) | Paper | 26.2（公式配布対象） | stable | 公式ValhallaMMO integrationを使用; Requires runtime verification |
 | SCore | 5.26.9.17 | [固定URL](https://cdn.modrinth.com/data/ZfcV7L06/versions/EHLoQYh8/SCore-5.26.9.17.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 8以上; Requires runtime verification |
 | ExecutableItems | 7.26.9.17 | [固定URL](https://cdn.modrinth.com/data/g8Zwnnmn/versions/XrhxAt8x/ExecutableItems-7.26.9.17.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 8以上; Requires runtime verification |
-| WorldEdit | 7.4.5 | [固定URL](https://cdn.modrinth.com/data/1u6JkXh5/versions/F5ea2ov3/worldedit-bukkit-7.4.5.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 25以上; Requires runtime verification |
+| FastAsyncWorldEdit | 2.16.0 | [固定Paper JAR](https://cdn.modrinth.com/data/z4HZZnLr/versions/U2dcKa9T/FastAsyncWorldEdit-Paper-2.16.0.jar) | Paper | 26.2（公式metadata） | stable Release | Java 25 / Paper 26.2 build 126で隔離検証。詳細はFAWE移行記録; 本番・実操作は未確認 |
 | CraftBook | 3.10.13 | [固定URL](https://cdn.modrinth.com/data/jrO7z7l7/versions/6kl3GQSJ/craftbook-3.10.13.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | ImageFrame | 2026.1.4 | [固定URL](https://cdn.modrinth.com/data/lJFOpcEj/versions/nt0GWT1y/ImageFrame-2026.1.4.0.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | Backpack Plus | 3.2.0 | [固定URL](https://cdn.modrinth.com/data/lDAFcnRN/versions/vsRfbexG/BackpackPlus-3.2.0-all.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
@@ -200,6 +240,19 @@ Paper 26.2 build 126 / Java 25での起動、操作・保存、任意連携とJa
 
 JARの標準`config.yml`は`config-version: 2.0.1.9`で、`LanguageFiles/lang-ja.yml`を同梱しています。既存設定とのキー比較では削除キーはなく、新規キーは`bedrock-forms`、`per-player-languages: false`、`enchanted-variants: false`でした。今回追加するForms設定は上流既定を使い、商品を1回の選択で操作するため`use-double-click-for-touch-devices`だけ既定の`true`から`false`へ変更します。目的外の新規optional featureは追加せず、既定の無効状態を維持します。経済Provider・価格・sections/shops・既存のクリックとnavigation設定は維持し、7.3.2の起動・取引・画面遷移は未検証です。
 
+### FIREARMS Bridge 0.3.0-poc.2確認（2026-10-10）
+
+[公開Release v0.3.0-poc.2](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/tag/v0.3.0-poc.2)のJAR/ZIPを取得し、公開`SHA256SUMS`およびGitHub asset digestとの一致、ZIP整合性、JARの`plugin.yml`を確認しました。JARの`bridge.properties`とDatapack markerはrelease ID **6** / protocol **2**で一致し、pack formatはmin/maxとも`[107, 1]`です。
+
+| Distribution | SHA-256 |
+| --- | --- |
+| feato-gun-valhalla-bridge-plugin-0.3.0-poc.2.jar | `4a7da9245aba37bde503ad0ecc22c2cc3b26413e0e924a6ea8bca68c90871d26` |
+| feato-gun-valhalla-bridge-datapack-0.3.0-poc.2.zip | `0915522104930a42ce0ce040a6f75117572c9b036a91636b6863ac21b7fe248d` |
+
+両manifestを同時更新します。追跡configは公開JAR同梱版とbyte単位で一致し、debugの各フラグはfalseです。Paper 26.2 build 126 / Java 25 / ValhallaMMO 1.10.3 / Gun Core 1.0.15 / Modern Guns 1.9.3、旧版削除glob、管理者権限は維持します。
+
+今回の公開成果物はprotocol 2のPhase 2 raycast・burst・shotgun Adapterを含みます。Phase 1はユーザー検証によりComplete、respecは後回しです。Phase 2全体は未完了で、slowcast/explosionの対応付けは観測のみです。Phase 3と銃撃EXP・Damage連携・Ability効果は未実装です。protocol 1の旧配布物と混在させず、適応した銃は削除・切り戻し前に復元します。本番適用とこの版の実機起動・reloadは未確認です。適用・完全再起動・バックアップ・復旧は[導入手順](../minecraft/README.md#銃器スキルfirearms-bridge-030-poc2--phase-2-raycast-poc)を参照してください。
+
 ### FIREARMS Bridge 0.3.0確認（2026-10-07）
 
 [公開Release v0.3.0](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/tag/v0.3.0)はdraft=false、prerelease=falseです。JAR/ZIPを取得し、公開`SHA256SUMS`とGitHub asset digestのSHA-256一致、ZIP整合性、JARの`plugin.yml`（version 0.3.0 / ValhallaMMO依存）を確認しました。JARの`bridge.properties`とZIPのmarkerはrelease ID **4** / protocol **1**で一致し、pack formatはmin/maxとも`[107, 1]`です。
@@ -211,7 +264,7 @@ JARの標準`config.yml`は`config-version: 2.0.1.9`で、`LanguageFiles/lang-ja
 
 両manifestのURLを同時更新します。Paper 26.2 build 126 / Java 25 / ValhallaMMO 1.10.3 / Gun Core 1.0.15 / Modern Guns 1.9.3は同じ固定対象です。追跡configは0.3.0 JAR同梱版とbyte単位で一致し、debug.enabled / shot-context / damage-integrationはfalseのままです。既存の旧版JAR/ZIP削除globと管理者reload権限を維持します。
 
-公開版はPhase 1 PoCで、Shot Context Adapter、銃撃EXP、Damage連携、Ability効果は未実装です。今回の取得・静的確認は実サーバー起動や保存・再接続・reloadの実機成功を証明しません。0.3.0の本番適用・実機確認は未実施です。適用・バックアップ・復旧手順は[minecraft/README.md](../minecraft/README.md#銃器スキルfirearms-bridge-030--phase-1-poc)を参照してください。
+公開版はPhase 1 PoCで、Shot Context Adapter、銃撃EXP、Damage連携、Ability効果は未実装です。今回の取得・静的確認は実サーバー起動や保存・再接続・reloadの実機成功を証明しません。0.3.0の本番適用・実機確認は未実施です。適用・バックアップ・復旧手順は[minecraft/README.md](../minecraft/README.md#銃器スキルfirearms-bridge-030-poc2--phase-2-raycast-poc)を参照してください。
 
 ### FIREARMS Bridge 0.2.0確認（2026-10-04）
 
@@ -226,7 +279,7 @@ Paper build 126 / Minecraft 26.2 / Java 25 / ValhallaMMO 1.10.3 / Gun Core 1.0.1
 
 0.2.0は`/firearms reload`を追加したPhase 1 PoCで、銃撃EXP・Damage連携・Ability効果は未実装です。`plugin.yml`のreload専用権限`feato.gunvalhalla.reload`は既定OP、既存debug権限とは独立し、debug無効時もconsoleから実行できます。管理者グループ向け権限スクリプトへreloadだけを追加し、debugの付与設定は変更しません。
 
-0.1.0ではユーザー実機報告でhandshake・FIREARMS登録・銃器表示・Lv0 Profileの再ログイン維持を確認しました。0.2.0の実機起動と新reload経路、特定XP値・Level Up・完全再起動後の保存・DB値・Perk三択は未確認です。respec/recalculationは未確認のまま後回しとし、後続開発を止める理由にはしません。更新・config反映・実機確認・復旧手順は[minecraft/README.md](../minecraft/README.md#銃器スキルfirearms-bridge-030--phase-1-poc)を参照してください。
+0.1.0ではユーザー実機報告でhandshake・FIREARMS登録・銃器表示・Lv0 Profileの再ログイン維持を確認しました。0.2.0の実機起動と新reload経路、特定XP値・Level Up・完全再起動後の保存・DB値・Perk三択は未確認です。respec/recalculationは未確認のまま後回しとし、後続開発を止める理由にはしません。更新・config反映・実機確認・復旧手順は[minecraft/README.md](../minecraft/README.md#銃器スキルfirearms-bridge-030-poc2--phase-2-raycast-poc)を参照してください。
 
 ### FEATO Horsemanship 0.3.0（2026-10-05）
 
@@ -263,13 +316,13 @@ Paper 26.2 build 126 / Oracle GraalVM 25.0.4、ValhallaMMO 1.10.3、BetterHorses
 | LuckPerms-Bukkit-5.5.71.jar | `188a91f0a543d23bfda32385fca6db63d61e49c8a422bd452a260bd9cbc6a7d7fe45071199e9fca8f3ce43c2b41ee84fd315bd15464577028ff3951a7d4fab27` |
 | LuckPerms-Velocity-5.5.71.jar | `a619da8804727bed7b2b2ee5383974329a3c09181a67745484fdffd0f4b6c5b13c44aa88e0d2b30d13f3068d9b0f3e26863abba9855f80a7eb5f9455ca6c40d4` |
 | lucktags-1.4.jar | `1052d2ea814da732d5e39447384df0427fd14c2e1f206441b3d71a5a65b10733bf30db983cc92e21079503687c9097310d43b237e388db7d8d1129fc56989855` |
-| feato-gun-valhalla-bridge-plugin-0.3.0.jar | `168aabb27d747299233da1ebfc9637c677f30c3c39184403e185ad858a0964b006146d43a4eaaabb0843a745452547b7e01bb2d0bac7ece67e83383f9cdc92d3` |
-| feato-gun-valhalla-bridge-datapack-0.3.0.zip | `be83d4edc94e914bfd8a73ffbf7aaf83fdf941e3ae511858f7e5ed42e86f70f62d58a4f0f6e1d631d249d140ea3753a9f4aeefe25ba2af93707def36424daea7` |
+| feato-gun-valhalla-bridge-plugin-0.3.0-poc.2.jar | `8bf5c26e52931983aaa9639aa8fa96e6477e816724c2814e4ed5a97960ceaf92e86058387f708cfc5c23ab4553fdbfd107899b618e3489657bac34bfbfa35892` |
+| feato-gun-valhalla-bridge-datapack-0.3.0-poc.2.zip | `0445ab19bb378aa0b8d3fdac299f209b3e63c4f55b1995e755cb0bac6a198e0dea8d7b04524e9544875a3717368bf5c84a31afcf14ba40b32c2911c11fc864f2` |
 | ValhallaMMO_1.10.3.jar | `e04a1e8f39e009e141fe8f07dd1eea85ad06c5850e63e5518618c316e3b4822179ab5bab571f1a5fc6ccf35c17de4baaae07c86e7fd9b374b6eb1f6cedd528a6` |
 | Magic-11.2.4.jar | `4eb13cba74a534f6f58ef4dd4a301cac20f58299b4606ff2488c7fa7c4fc6dac69781449669acbef12a30b378771d474fdd58b9e4fa33defa59e9061aeed9e32` |
 | SCore-5.26.9.17.jar | `7d023fa5973ca88acce406581eeb8378b2c14de9a77545d04f87ff79b3049de296f1d67eb0b442977b2e6b4fb5665ec344b8c274b7ccbda942fcc87fa72f57ee` |
 | ExecutableItems-7.26.9.17.jar | `4d96fe9d62f8936fa9a471d118eaf4d18cee491da8f4a42bc438be8b2a85bd85a3d3508350dea48e92f2f99aae4f4602522117fea8329c802ebaef3b7e8be04d` |
-| worldedit-bukkit-7.4.5.jar | `a383492fac6bfb4d43a257dfa7b5fc076aae503a71151b463de4fe80e6f3d5fc11209eaf4097baa115f3febf0adc40ca0a1ecda227b8439b429d0a4ba3a63a4f` |
+| FastAsyncWorldEdit-Paper-2.16.0.jar | `add46c57209e95c700cbda1c4b25d58d4e39826cd5cbc23bfbc678e145d3424283020317544ec05587972d2a133e43715dc24dd26d51593bb3b0c4e28b7c9c4b` |
 | craftbook-3.10.13.jar | `04ff7ae4ddaf732951a882096e9d0744626e0449b6d6c24c2fa4f5af02ac5241b45c8992dcf4814153c5d1a3d01051a7bb6a42bd8102fea192ca93c8513addb3` |
 | ImageFrame-2026.1.4.0.jar | `2a510fa5906e26331351fb69da6b19ca08d82ffb3ea34781cde8de44eed25a18e43862e6144a3bcbc8bf2184ee3a975fe65ee10689ff07039d23076fda35f58a` |
 | BackpackPlus-3.2.0-all.jar | `e2385aab904864957ec1063f4faa9c553ad8e68604cb719a74b8a3a03c7459b628f82b10e7f4a56768ee77511129a0884bda7d4168074d26cec10448ce80ff5f` |
