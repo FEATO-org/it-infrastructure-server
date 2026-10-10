@@ -190,8 +190,8 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | LuckPerms | v5.5.71-velocity | [固定URL](https://cdn.modrinth.com/data/Vebnzrzj/versions/tamnmXad/LuckPerms-Velocity-5.5.71.jar) | Velocity | 26.2（配布metadata） | stable | 同梱Java 11以上; Requires runtime verification |
 | LuckTags | 1.4 | [固定URL](https://cdn.modrinth.com/data/riEl5GDK/versions/mMmIwg51/lucktags-1.4.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | ValhallaMMO | 1.10.3 | [固定URL](https://cdn.modrinth.com/data/rxrgsoud/versions/GkeSDJSq/ValhallaMMO_1.10.3.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
-| FEATO Gun-Valhalla Bridge Plugin | 0.3.0-poc.1 | [固定JAR](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.3.0-poc.1/feato-gun-valhalla-bridge-plugin-0.3.0-poc.1.jar) | Paper | 26.2 build 126（Bridge固定対象） | 公開Release（Phase 1 PoC） | Java 25、ValhallaMMO 1.10.3必須。release ID 5 / protocol 1。config reload対応。0.3.0-poc.1の実機起動・reloadは未確認 |
-| FEATO Gun-Valhalla Bridge Datapack | 0.3.0-poc.1 | [固定ZIP](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.3.0-poc.1/feato-gun-valhalla-bridge-datapack-0.3.0-poc.1.zip) | Data Pack | 26.2（pack format 107.1） | 公開Release（Phase 1 PoC） | 同版Pluginと対で配置。Gun Core 1.0.15 / Modern Guns 1.9.3。release ID 5 / protocol 1。0.3.0-poc.1は実機未確認 |
+| FEATO Gun-Valhalla Bridge Plugin | 0.3.0-poc.2 | [固定JAR](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.3.0-poc.2/feato-gun-valhalla-bridge-plugin-0.3.0-poc.2.jar) | Paper | 26.2 build 126（Bridge固定対象） | 公開Release（Phase 2 raycast PoC） | Java 25、ValhallaMMO 1.10.3必須。release ID 6 / protocol 2。config reload対応。0.3.0-poc.2の実機起動・reloadは未確認 |
+| FEATO Gun-Valhalla Bridge Datapack | 0.3.0-poc.2 | [固定ZIP](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.3.0-poc.2/feato-gun-valhalla-bridge-datapack-0.3.0-poc.2.zip) | Data Pack | 26.2（pack format 107.1） | 公開Release（Phase 2 raycast PoC） | 同版Pluginと対で配置。Gun Core 1.0.15 / Modern Guns 1.9.3。release ID 6 / protocol 2。0.3.0-poc.2は実機未確認 |
 | FEATO Horsemanship | 0.3.0 | [固定JAR](https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.3.0/feato-horsemanship-0.3.0.jar) / [Skill設定](https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.3.0/horsemanship.yml) | Paper | 26.2 build 126（配布元対象、api-version 26.2） | stable release（draft=false、prerelease=false） | Java 25、ValhallaMMO 1.10.3必須。専用Java Skill/Profile登録。旧Custom Skill退避と完全再起動が必要。公開アセット・設定の一致を確認、v0.3.0実機確認は下記参照。本番・プレイヤー操作は未確認 |
 | Magic | 11.2.4 | [固定URL](https://mediafilez.forgecdn.net/files/8375/702/Magic-11.2.4.jar) | Paper | 26.2（公式配布対象） | stable | 公式ValhallaMMO integrationを使用; Requires runtime verification |
 | SCore | 5.26.9.17 | [固定URL](https://cdn.modrinth.com/data/ZfcV7L06/versions/EHLoQYh8/SCore-5.26.9.17.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 8以上; Requires runtime verification |
@@ -240,18 +240,18 @@ Paper 26.2 build 126 / Java 25での起動、操作・保存、任意連携とJa
 
 JARの標準`config.yml`は`config-version: 2.0.1.9`で、`LanguageFiles/lang-ja.yml`を同梱しています。既存設定とのキー比較では削除キーはなく、新規キーは`bedrock-forms`、`per-player-languages: false`、`enchanted-variants: false`でした。今回追加するForms設定は上流既定を使い、商品を1回の選択で操作するため`use-double-click-for-touch-devices`だけ既定の`true`から`false`へ変更します。目的外の新規optional featureは追加せず、既定の無効状態を維持します。経済Provider・価格・sections/shops・既存のクリックとnavigation設定は維持し、7.3.2の起動・取引・画面遷移は未検証です。
 
-### FIREARMS Bridge 0.3.0-poc.1確認（2026-10-10）
+### FIREARMS Bridge 0.3.0-poc.2確認（2026-10-10）
 
-[公開Release v0.3.0-poc.1](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/tag/v0.3.0-poc.1)のJAR/ZIPを取得し、公開`SHA256SUMS`およびGitHub asset digestとの一致、ZIP整合性、JARの`plugin.yml`を確認しました。JARの`bridge.properties`とDatapack markerはrelease ID **5** / protocol **1**で一致し、pack formatはmin/maxとも`[107, 1]`です。
+[公開Release v0.3.0-poc.2](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/tag/v0.3.0-poc.2)のJAR/ZIPを取得し、公開`SHA256SUMS`およびGitHub asset digestとの一致、ZIP整合性、JARの`plugin.yml`を確認しました。JARの`bridge.properties`とDatapack markerはrelease ID **6** / protocol **2**で一致し、pack formatはmin/maxとも`[107, 1]`です。
 
 | Distribution | SHA-256 |
 | --- | --- |
-| feato-gun-valhalla-bridge-plugin-0.3.0-poc.1.jar | `13dc1edaca28ea9cfe17b3b82769283414090a9d1fc6bd26dfad85e65ea46ac3` |
-| feato-gun-valhalla-bridge-datapack-0.3.0-poc.1.zip | `b286be75324988775c1dca550ffd11c5c51d9d23d2ee9689c1a0b7164ca4141d` |
+| feato-gun-valhalla-bridge-plugin-0.3.0-poc.2.jar | `4a7da9245aba37bde503ad0ecc22c2cc3b26413e0e924a6ea8bca68c90871d26` |
+| feato-gun-valhalla-bridge-datapack-0.3.0-poc.2.zip | `0915522104930a42ce0ce040a6f75117572c9b036a91636b6863ac21b7fe248d` |
 
 両manifestを同時更新します。追跡configは公開JAR同梱版とbyte単位で一致し、debugの各フラグはfalseです。Paper 26.2 build 126 / Java 25 / ValhallaMMO 1.10.3 / Gun Core 1.0.15 / Modern Guns 1.9.3、旧版削除glob、管理者権限は維持します。
 
-今回の公開成果物はPhase 1 PoCです。開発中のprotocol 2 Shot Context Adapterは含まれず、Phase 2/3と銃撃EXP・Damage連携・Ability効果は未実装です。本番適用とこの版の実機起動・reloadは未確認です。適用・完全再起動・バックアップ・復旧は[導入手順](../minecraft/README.md#銃器スキルfirearms-bridge-030-poc1--phase-1-poc)を参照してください。
+今回の公開成果物はprotocol 2のPhase 2 raycast・burst・shotgun Adapterを含みます。Phase 1はユーザー検証によりComplete、respecは後回しです。Phase 2全体は未完了で、slowcast/explosionの対応付けは観測のみです。Phase 3と銃撃EXP・Damage連携・Ability効果は未実装です。protocol 1の旧配布物と混在させず、適応した銃は削除・切り戻し前に復元します。本番適用とこの版の実機起動・reloadは未確認です。適用・完全再起動・バックアップ・復旧は[導入手順](../minecraft/README.md#銃器スキルfirearms-bridge-030-poc2--phase-2-raycast-poc)を参照してください。
 
 ### FIREARMS Bridge 0.3.0確認（2026-10-07）
 
@@ -264,7 +264,7 @@ JARの標準`config.yml`は`config-version: 2.0.1.9`で、`LanguageFiles/lang-ja
 
 両manifestのURLを同時更新します。Paper 26.2 build 126 / Java 25 / ValhallaMMO 1.10.3 / Gun Core 1.0.15 / Modern Guns 1.9.3は同じ固定対象です。追跡configは0.3.0 JAR同梱版とbyte単位で一致し、debug.enabled / shot-context / damage-integrationはfalseのままです。既存の旧版JAR/ZIP削除globと管理者reload権限を維持します。
 
-公開版はPhase 1 PoCで、Shot Context Adapter、銃撃EXP、Damage連携、Ability効果は未実装です。今回の取得・静的確認は実サーバー起動や保存・再接続・reloadの実機成功を証明しません。0.3.0の本番適用・実機確認は未実施です。適用・バックアップ・復旧手順は[minecraft/README.md](../minecraft/README.md#銃器スキルfirearms-bridge-030-poc1--phase-1-poc)を参照してください。
+公開版はPhase 1 PoCで、Shot Context Adapter、銃撃EXP、Damage連携、Ability効果は未実装です。今回の取得・静的確認は実サーバー起動や保存・再接続・reloadの実機成功を証明しません。0.3.0の本番適用・実機確認は未実施です。適用・バックアップ・復旧手順は[minecraft/README.md](../minecraft/README.md#銃器スキルfirearms-bridge-030-poc2--phase-2-raycast-poc)を参照してください。
 
 ### FIREARMS Bridge 0.2.0確認（2026-10-04）
 
@@ -279,7 +279,7 @@ Paper build 126 / Minecraft 26.2 / Java 25 / ValhallaMMO 1.10.3 / Gun Core 1.0.1
 
 0.2.0は`/firearms reload`を追加したPhase 1 PoCで、銃撃EXP・Damage連携・Ability効果は未実装です。`plugin.yml`のreload専用権限`feato.gunvalhalla.reload`は既定OP、既存debug権限とは独立し、debug無効時もconsoleから実行できます。管理者グループ向け権限スクリプトへreloadだけを追加し、debugの付与設定は変更しません。
 
-0.1.0ではユーザー実機報告でhandshake・FIREARMS登録・銃器表示・Lv0 Profileの再ログイン維持を確認しました。0.2.0の実機起動と新reload経路、特定XP値・Level Up・完全再起動後の保存・DB値・Perk三択は未確認です。respec/recalculationは未確認のまま後回しとし、後続開発を止める理由にはしません。更新・config反映・実機確認・復旧手順は[minecraft/README.md](../minecraft/README.md#銃器スキルfirearms-bridge-030-poc1--phase-1-poc)を参照してください。
+0.1.0ではユーザー実機報告でhandshake・FIREARMS登録・銃器表示・Lv0 Profileの再ログイン維持を確認しました。0.2.0の実機起動と新reload経路、特定XP値・Level Up・完全再起動後の保存・DB値・Perk三択は未確認です。respec/recalculationは未確認のまま後回しとし、後続開発を止める理由にはしません。更新・config反映・実機確認・復旧手順は[minecraft/README.md](../minecraft/README.md#銃器スキルfirearms-bridge-030-poc2--phase-2-raycast-poc)を参照してください。
 
 ### FEATO Horsemanship 0.3.0（2026-10-05）
 
@@ -316,8 +316,8 @@ Paper 26.2 build 126 / Oracle GraalVM 25.0.4、ValhallaMMO 1.10.3、BetterHorses
 | LuckPerms-Bukkit-5.5.71.jar | `188a91f0a543d23bfda32385fca6db63d61e49c8a422bd452a260bd9cbc6a7d7fe45071199e9fca8f3ce43c2b41ee84fd315bd15464577028ff3951a7d4fab27` |
 | LuckPerms-Velocity-5.5.71.jar | `a619da8804727bed7b2b2ee5383974329a3c09181a67745484fdffd0f4b6c5b13c44aa88e0d2b30d13f3068d9b0f3e26863abba9855f80a7eb5f9455ca6c40d4` |
 | lucktags-1.4.jar | `1052d2ea814da732d5e39447384df0427fd14c2e1f206441b3d71a5a65b10733bf30db983cc92e21079503687c9097310d43b237e388db7d8d1129fc56989855` |
-| feato-gun-valhalla-bridge-plugin-0.3.0-poc.1.jar | `0b5d378eec4240059d79db751f534f4caea25721c9df7023c294a2f199a354fbc1e634e34d89ae12d7177a67dcd3207dbbfccb4648666fb8d73cdf0f2b2c0748` |
-| feato-gun-valhalla-bridge-datapack-0.3.0-poc.1.zip | `7a38e22a9ce43d715f9d897ccc7c45a3fd8afa136518beba88c8dafd6c690ae724f4124e93b3d228cb768742a826afa437572f618e9cc66d223418a22a6c052c` |
+| feato-gun-valhalla-bridge-plugin-0.3.0-poc.2.jar | `8bf5c26e52931983aaa9639aa8fa96e6477e816724c2814e4ed5a97960ceaf92e86058387f708cfc5c23ab4553fdbfd107899b618e3489657bac34bfbfa35892` |
+| feato-gun-valhalla-bridge-datapack-0.3.0-poc.2.zip | `0445ab19bb378aa0b8d3fdac299f209b3e63c4f55b1995e755cb0bac6a198e0dea8d7b04524e9544875a3717368bf5c84a31afcf14ba40b32c2911c11fc864f2` |
 | ValhallaMMO_1.10.3.jar | `e04a1e8f39e009e141fe8f07dd1eea85ad06c5850e63e5518618c316e3b4822179ab5bab571f1a5fc6ccf35c17de4baaae07c86e7fd9b374b6eb1f6cedd528a6` |
 | Magic-11.2.4.jar | `4eb13cba74a534f6f58ef4dd4a301cac20f58299b4606ff2488c7fa7c4fc6dac69781449669acbef12a30b378771d474fdd58b9e4fa33defa59e9061aeed9e32` |
 | SCore-5.26.9.17.jar | `7d023fa5973ca88acce406581eeb8378b2c14de9a77545d04f87ff79b3049de296f1d67eb0b442977b2e6b4fb5665ec344b8c274b7ccbda942fcc87fa72f57ee` |
