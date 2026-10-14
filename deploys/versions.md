@@ -1,5 +1,36 @@
 # バージョン確認（2026-09-22）
 
+## 生活・建築改善（2026-10-14）
+
+Paper **26.2 build 126 / Java 25**、CraftBook **3.10.13** を維持します。
+指定されたModrinth **version ID** でAPIを取得し、primary JARのSHA-512をダウンロード実体と照合しました。
+3版とも配布metadataはPaper / 26.2を列挙し、必須dependencyはありません。
+GSitの保護Plugin類とEasyArmorStandsの連携Plugin類は任意依存です。
+CraftBookは既存FAWE 2.16.0のWorldEdit提供を利用します。
+
+| Plugin | 固定版 / version ID | ファイル・配布URL | SHA-512 |
+| --- | --- | --- | --- |
+| GSit | 3.7.0 / `gnY5Flgo` | [GSit-3.7.0.jar](https://cdn.modrinth.com/data/GOHbQGyX/versions/gnY5Flgo/GSit-3.7.0.jar) | `7813fe99d2fde47e3a40538c09b87b88b6101c27fb4f3305e0fd9bf806809c37e4e67c726f96596caca79785cdd7aa8d8ae724b211535775db21e602f57993d5` |
+| Craftable Invisible Frames | 2.4.1 / `snCgr9QJ` | [craftableinvframes-2.4.1.jar](https://cdn.modrinth.com/data/wtE6hwEA/versions/snCgr9QJ/craftableinvframes-2.4.1.jar) | `312bd726c72b3dc7e8464f221e4a1c4e28490d37248e8daffac43e77561a6d6c2d6c3eafc94c92766162b4c74e415a4f79eb7896fb1e3a78a6200ad6d2fb5dba` |
+| EasyArmorStands | 3.3.0 / `CdGnJlay` | [EasyArmorStands-3.3.0.jar](https://cdn.modrinth.com/data/8DDI76SG/versions/CdGnJlay/EasyArmorStands-3.3.0.jar) | `e07e42a8247e639920f7f98bd6589c39c7da347328093fb3aab1569abed3580993897e9d4218693a13d5174dab2934552ad8808733f91d508aa5055c4f1ebc81` |
+
+API: [GSit](https://api.modrinth.com/v2/version/gnY5Flgo)、[Craftable Invisible Frames](https://api.modrinth.com/v2/version/snCgr9QJ)、[EasyArmorStands](https://api.modrinth.com/v2/version/CdGnJlay)。
+新規設定seedは取得・照合した各JAR同梱の公式configです。GSit / EasyArmorStandsは
+`/extras` のseedを未存在時だけ `/data/plugins/<Plugin>/config.yml` に配置し、指定キーだけをpatchします。
+Craftable Invisible Framesは設定・レシピ・アイテム識別を変更せず、Plugin自身に初期生成させます。
+CraftBookのChairsと他Mechanicsの既存設定を保持し、追加4機能だけを差分適用します。
+`books.txt` は未存在時だけUTF-8の操作ヒントを配置します。
+
+2026-10-14の隔離Paper 26.2 build 126 / Java 25.0.4で、新規3Plugin・CraftBook・FAWEのenableと正常停止を確認しました。
+ただし既存ProtocolLib固定asset `608298575` がHTTP 404で取得できず、Chairsは `PacketListener` 不足でロード失敗です。
+ProtocolLibの版・URL・SHA-256は維持し、既存Volumeに正しいハッシュのJARがない場合の起動阻害要因として記録します。
+Chairsの依存解決・実操作、全既存Plugin同時起動、本番・Java / Bedrockのプレイヤー操作は未確認です。
+
+検証結果と実機未確認事項は [Minecraft運用](../minecraft/README.md#生活建築改善craftbook--gsit--透明額縁--easyarmorstands) を参照。
+固定URLによる導入は既存 `PLUGINS_FILE` 方式です。起動時の新規3 JARハッシュ強制検証は追加せず、
+ここに記録した公式ハッシュとの取得時照合を行っています。
+Double Doors Server / ViewDistanceTweaksは導入せず、描画距離16・シミュレーション距離10を維持します。
+
 ## WorldEdit → FAWE置換（2026-10-09）
 
 [公式Modrinth metadata](https://api.modrinth.com/v2/project/fastasyncworldedit/version)と
@@ -149,7 +180,8 @@ https://raw.githubusercontent.com/itzg/docker-minecraft-server/master/images.jso
 プロキシはこれらの変数をサポートしないため、`JVM_XX_OPTS`でG1GC、並列参照処理、
 ヒープの事前確保、明示的GCの抑制、GC停止時間の目標200msを指定します。
 小さい1Gヒープには本体用の16Mリージョン設定を流用せず、JVMの自動調整を使います。
-両方ともメモリ上限とヒープの上限は従来値を維持します。
+本体は最大ヒープ8G・コンテナ上限9G、プロキシはヒープ1G・コンテナ上限1536Mです。
+本体の初期ヒープは1Gに抑え、更新時はstop-firstで旧タスク停止後に起動します。
 https://docker-minecraft-server.readthedocs.io/en/latest/configuration/jvm-options/#enable-meowices-flags
 https://github.com/itzg/docker-mc-proxy/blob/main/README.md
 
@@ -192,7 +224,7 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | ValhallaMMO | 1.10.3 | [固定URL](https://cdn.modrinth.com/data/rxrgsoud/versions/GkeSDJSq/ValhallaMMO_1.10.3.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 21以上; Requires runtime verification |
 | FEATO Gun-Valhalla Bridge Plugin | 0.3.0-poc.2 | [固定JAR](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.3.0-poc.2/feato-gun-valhalla-bridge-plugin-0.3.0-poc.2.jar) | Paper | 26.2 build 126（Bridge固定対象） | 公開Release（Phase 2 raycast PoC） | Java 25、ValhallaMMO 1.10.3必須。release ID 6 / protocol 2。config reload対応。0.3.0-poc.2の実機起動・reloadは未確認 |
 | FEATO Gun-Valhalla Bridge Datapack | 0.3.0-poc.2 | [固定ZIP](https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.3.0-poc.2/feato-gun-valhalla-bridge-datapack-0.3.0-poc.2.zip) | Data Pack | 26.2（pack format 107.1） | 公開Release（Phase 2 raycast PoC） | 同版Pluginと対で配置。Gun Core 1.0.15 / Modern Guns 1.9.3。release ID 6 / protocol 2。0.3.0-poc.2は実機未確認 |
-| FEATO Horsemanship | 0.3.0 | [固定JAR](https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.3.0/feato-horsemanship-0.3.0.jar) / [Skill設定](https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.3.0/horsemanship.yml) | Paper | 26.2 build 126（配布元対象、api-version 26.2） | stable release（draft=false、prerelease=false） | Java 25、ValhallaMMO 1.10.3必須。専用Java Skill/Profile登録。旧Custom Skill退避と完全再起動が必要。公開アセット・設定の一致を確認、v0.3.0実機確認は下記参照。本番・プレイヤー操作は未確認 |
+| FEATO Horsemanship | 0.4.0 | [固定JAR](https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.4.0/feato-horsemanship-0.4.0.jar) / [Skill設定](https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.4.0/horsemanship.yml) | Paper | 26.2 build 126（配布元対象、api-version 26.2） | stable release（draft=false、prerelease=false） | Java 25、ValhallaMMO 1.10.3必須。BetterHorses / DualHorseはsoftdepend。専用Java Skill/Profile登録。EXP曲線緩和・50 blocks / 5 EXP・標準EXP feedback有効。旧Custom Skill退避と完全再起動が必要。公開アセット・設定の一致を確認、v0.4.0隔離起動は下記参照。本番・プレイヤー操作は未確認 |
 | Magic | 11.2.4 | [固定URL](https://mediafilez.forgecdn.net/files/8375/702/Magic-11.2.4.jar) | Paper | 26.2（公式配布対象） | stable | 公式ValhallaMMO integrationを使用; Requires runtime verification |
 | SCore | 5.26.9.17 | [固定URL](https://cdn.modrinth.com/data/ZfcV7L06/versions/EHLoQYh8/SCore-5.26.9.17.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 8以上; Requires runtime verification |
 | ExecutableItems | 7.26.9.17 | [固定URL](https://cdn.modrinth.com/data/g8Zwnnmn/versions/XrhxAt8x/ExecutableItems-7.26.9.17.jar) | Paper | 26.2（配布metadata） | stable | 同梱Java 8以上; Requires runtime verification |
@@ -281,6 +313,19 @@ Paper build 126 / Minecraft 26.2 / Java 25 / ValhallaMMO 1.10.3 / Gun Core 1.0.1
 
 0.1.0ではユーザー実機報告でhandshake・FIREARMS登録・銃器表示・Lv0 Profileの再ログイン維持を確認しました。0.2.0の実機起動と新reload経路、特定XP値・Level Up・完全再起動後の保存・DB値・Perk三択は未確認です。respec/recalculationは未確認のまま後回しとし、後続開発を止める理由にはしません。更新・config反映・実機確認・復旧手順は[minecraft/README.md](../minecraft/README.md#銃器スキルfirearms-bridge-030-poc2--phase-2-raycast-poc)を参照してください。
 
+### FEATO Horsemanship 0.4.0（2026-10-14）
+
+[公開Release](https://github.com/FEATO-org/feato_horsemanship/releases/tag/v0.4.0)はdraft=false、prerelease=false。JAR・Skill YAML・SHA256SUMSを認証なしでHTTP GETし、全assetのSHA-256とRelease digest、SHA256SUMSの両掲載値が一致しました。
+
+| Asset | 検証済みSHA-256 |
+| --- | --- |
+| feato-horsemanship-0.4.0.jar | `c043876b46ebbb74576f2ce9e710c9e6c683c2dfce46e870eb38d902df166b94` |
+| horsemanship.yml | `8db5172d445d2f3433f742c9b788fca6382bcf4522a9e703f338ec920659ddbc` |
+
+JAR内plugin.ymlはversion 0.4.0、api-version 26.2、depend=[ValhallaMMO]、softdepend=[BetterHorses, DualHorse]。全class majorは69（Java 25）。専用HorsemanshipSkill/HorsemanshipProfile方式とPlugin data folderの外部Skill配置を維持します。同梱config・Skillと追跡設定、同梱SkillとRelease YAMLはバイト一致です。Skill差分はEXP曲線の/7.6→/17.0のみ、config差分は50 blocks / 5 EXPとshow-gain-feedback=trueのみです。
+
+Sprint・世話EXP・騎乗ブロック破壊補正・BetterHorses必須化・FARMING前提削除はこのReleaseに含まれません。BetterHorsesの動的Spiget取得と馬上ダメージpatchを維持します。2026-10-14、localhost限定の新規World / Paper 26.2 build 126 / Oracle GraalVM Java 25.0.4 / ValhallaMMO 1.10.3 / BetterHorses 6.4で、3 Pluginのenable、専用Skill/Profile登録を確認しました。ProtocolLibなしのためBetterHorsesの一部機能無効通知があります。DualHorse・Magic・本番全Pluginとの併用、実際にSpigetから取得されるBetterHorses版、EXP付与・ActionBar・既存Profile保持・Java/Bedrock操作・本番は未確認です。適用・受入試験・rollbackは[導入手順](../minecraft/java/plugins/ValhallaMMO/HORSEMANSHIP_SETUP.md)を参照してください。
+
 ### FEATO Horsemanship 0.3.0（2026-10-05）
 
 [公開Release](https://github.com/FEATO-org/feato_horsemanship/releases/tag/v0.3.0)のJAR・Skill YAML・SHA256SUMSを認証なしでGETし、公開asset digestとSHA-256を照合しました。JAR内のplugin.ymlは0.3.0 / api-version 26.2 / ValhallaMMO必須、最大class majorは69（Java 25）です。同梱SkillとRelease YAMLは一致し、効果設定は追跡configと一致します。最新GUI、43 PerkのID・条件・報酬・座標・EXP曲線を維持し、未使用statsだけを除去しています。
@@ -307,7 +352,7 @@ Release asset名と取得URLは小文字のままですが、旧0.2.0ではGit�
 
 Paper 26.2 build 126 / Oracle GraalVM 25.0.4、ValhallaMMO 1.10.3、BetterHorses 6.4、DualHorse 1.5.4、Magic 11.2.4で、Custom Skill登録、5 Pluginの有効化、Magicから馬術Lv・EXPの認識、馬術設定reload、正常停止を隔離したローカル環境で確認しました。43 Perkの報酬・前提・排他条件・座標も静的検証しています。v0.1.0で再現した`horsemanship_first_saddle_set`未登録エラーは解消しました。一般プレイヤーのPerk取得・NG+・騎乗・育成連携、Java/Bedrock操作、本番動作は未確認です。
 
-既存BetterHorsesのSpiget URLは動的で、2026-10-03のGET結果を使用したローカル起動版は6.4でした。配布元の馬術対象表記は6.3です。取得方式は維持し、実際の本番起動版はログで確認してください。起動前patchは`settings.mounted-damage-boost.enabled`だけを無効化します。配置・停止バックアップ・実機確認・戻し方は[馬術の導入手順](../minecraft/java/plugins/ValhallaMMO/HORSEMANSHIP_SETUP.md)を参照してください。
+既存BetterHorsesのSpiget URLは動的で、2026-10-03のGET結果を使用したローカル起動版は6.4でした。配布元の馬術対象表記は6.3です。取得方式は維持し、実際の本番起動版はログで確認してください。起動前patchは`horse-growth-settings.time-until-adult=60`（分）、`settings.breeding-cooldown=21600`（秒）、`settings.male-ignore-cooldown=true`を適用し、`settings.mounted-damage-boost.enabled=false`を維持します。成長・繁殖調整の本番動作は未確認です。配置・停止バックアップ・実機確認・戻し方は[馬術の導入手順](../minecraft/java/plugins/ValhallaMMO/HORSEMANSHIP_SETUP.md)を参照してください。
 
 ### GET検証済みSHA-512
 

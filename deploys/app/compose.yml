@@ -113,7 +113,7 @@ services:
       EULA: "TRUE"
       ONLINE_MODE: "FALSE"
       NETWORK_COMPRESSION_THRESHOLD: "-1"
-      MEMORY: 6G
+      MEMORY: 8G
       VERSION: ${MINECRAFT_VERSION:-26.2}
       TYPE: PAPER
       # Bridge requires this exact Paper build.
@@ -163,7 +163,7 @@ services:
       # VPS may not expose invariant TSC or a NUMA topology.
       JVM_OPTS: -XX:-UseFastUnorderedTimeStamps -XX:-UseNUMA
       INIT_MEMORY: 1G
-      MAX_MEMORY: 6G
+      MAX_MEMORY: 8G
       MAX_TICK_TIME: "60000"
     secrets:
       - source: forwarding_secret
@@ -179,11 +179,18 @@ services:
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/plugins.txt:/extras/plugins.txt:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/copy-floodgate-key.sh:/extras/copy-floodgate-key.sh:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/prepare-paper-plugins.sh:/extras/prepare-paper-plugins.sh:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/startup:/extras/startup:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/patches/betterhorses-horsemanship.json:/extras/betterhorses-horsemanship.json:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config-seeds/deadchest-config.yml:/extras/deadchest-config.yml:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/patches/deadchest-updates.json:/extras/deadchest-updates.json:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/patches/craftbook-chairs.json:/extras/craftbook-chairs.json:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config-seeds/craftbook-mechanisms.yml:/extras/craftbook-mechanisms.yml:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/patches/craftbook-life.json:/extras/craftbook-life.json:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/patches/gsit-life.json:/extras/gsit-life.json:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/patches/easyarmorstands-life.json:/extras/easyarmorstands-life.json:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config-seeds/gsit-config.yml:/extras/gsit-config.yml:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config-seeds/easyarmorstands-config.yml:/extras/easyarmorstands-config.yml:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config-seeds/craftbook-books.txt:/extras/craftbook-books.txt:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/plugins:/plugins:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/bukkit.yml:/config/bukkit.yml:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/java/config/spigot.yml:/config/spigot.yml:ro
@@ -216,7 +223,7 @@ services:
         reservations:
           memory: 2G
         limits:
-          memory: 7G
+          memory: 9G
     logging: *default-logging
 
 networks:

@@ -2,12 +2,12 @@
 
 ## 採用版と配布先
 
-[FEATO Horsemanship v0.3.0](https://github.com/FEATO-org/feato_horsemanship/releases/tag/v0.3.0)を使用します。配布元の対象はPaper 26.2 build 126 / Java 25、ValhallaMMO 1.10.3、任意連携はBetterHorses 6.3とDualHorse 1.5.4です。既存Spiget URLは動的で、ローカル検証で実際に使用したBetterHorsesは6.4でした。本番でも起動ログで版を確認してください。
+[FEATO Horsemanship v0.4.0](https://github.com/FEATO-org/feato_horsemanship/releases/tag/v0.4.0)を使用します。配布元の対象はPaper 26.2 build 126 / Java 25、ValhallaMMO 1.10.3、BetterHorsesとDualHorseは任意連携です。DualHorseの採用版は1.5.4です。既存Spiget URLは動的で、ローカル検証で実際に使用したBetterHorsesは6.4でした。本番でも起動ログで版を確認してください。
 
 | 配布元 | コンテナ内の読み込み先 |
 | --- | --- |
-| `minecraft/java/plugins.txt`の固定Release JAR URL | `/data/plugins/feato-horsemanship-0.3.0.jar` |
-| `minecraft/java/plugins/FEATOHorsemanship/horsemanship.yml`（v0.3.0 Release添付・最新GUIと一致） | `/data/plugins/FEATOHorsemanship/horsemanship.yml` |
+| `minecraft/java/plugins.txt`の固定Release JAR URL | `/data/plugins/feato-horsemanship-0.4.0.jar` |
+| `minecraft/java/plugins/FEATOHorsemanship/horsemanship.yml`（v0.4.0 Release添付・JAR同梱と一致） | `/data/plugins/FEATOHorsemanship/horsemanship.yml` |
 | `minecraft/java/plugins/FEATOHorsemanship/config.yml`（JAR同梱初期設定） | `/data/plugins/FEATOHorsemanship/config.yml` |
 | `minecraft/java/prepare-paper-plugins.sh`と`patches/betterhorses-horsemanship.json` | `/extras/prepare-paper-plugins.sh`と`/extras/betterhorses-horsemanship.json` |
 
@@ -15,7 +15,33 @@
 
 `REMOVE_OLD_MODS_INCLUDE`には`feato-horsemanship-*.jar`を追加して、起動前に旧版JARを除去します。更新時は実在するRelease tagとasset名へURLを更新し、Skillと効果設定も同じ版の差分を確認してください。`/horsemanship reload`は効果設定の再読込だけで、Skill定義の変更にはPaper再起動が必要です。本番でGit管理設定を調整した場合は、次のデプロイ前に取り込みます。
 
-## v0.2.0からの専用 Skill/Profile 移行
+## v0.3.0からv0.4.0への更新
+
+公開JARのSHA-256は`c043876b46ebbb74576f2ce9e710c9e6c683c2dfce46e870eb38d902df166b94`、Skill YAMLは`8db5172d445d2f3433f742c9b788fca6382bcf4522a9e703f338ec920659ddbc`です。Release digestとSHA256SUMSに一致し、追跡config・SkillはJAR resourceとバイト一致です。version 0.4.0、api-version 26.2、class major 69（Java 25）、ValhallaMMO必須、BetterHorses / DualHorseはsoftdependです。
+
+最大Lv100を維持し、要求EXP曲線は`(%level% + 75 * 2^(%level%/17.0)) + 300`へ緩和します。50 blocks / 5 EXPで効率0.1 EXP/blockは同じです。`experience.show-gain-feedback: true`でValhallaMMO標準の獲得ActionBarを有効にし、独自の二重表示は追加しません。累積EXPはLv10約4,000、Lv50約28,815、Lv80約74,354、Lv100約143,905。平均8 blocks/sec・bonusなしの純騎乗は計算上約50時間で、保証時間ではありません。
+
+このReleaseはリード右クリック方式の「追う」を維持しています。Sprint入力、Brushing / FeedingのEXP、騎乗ブロック破壊補正、BetterHorses必須化は未実装です。`breeders_insight`のFARMING:50、`bloodline_study`のFARMING:60も残っており、インフラだけで削除しません。BetterHorsesの動的Spiget取得・馬上ダメージpatch・Training等の設定を維持します。
+
+適用前にminecraft-dataノードのPaperを正常停止し、Paper Volume全体とv0.3.0の追跡設定を必ずバックアップします。level・current EXP・total EXP・PowerProfile・通常/永続取得Perk・NG+・skill pointsは削除やresetせず、曲線変更を理由に独自再計算しません。旧Custom Skillの管理元・Volume両方からの退避を維持します。
+
+geometryと正本一致の検証は`python script/validate_horsemanship_tree.py --release-skill <検証済みv0.4.0 JARから抽出したhorsemanship.yml>`を使用します。旧版の`--baseline`は表示だけの変更用で、版更新には使用しません。
+
+### v0.4.0受入試験（未実施）
+
+1. 完全再起動し、専用Skill/Profile登録とenable成功ログ、実際のBetterHorses版を確認します。ConfigurableProfile例外、二重登録、連携初期化失敗、EntityDamageByEntityEvent例外がないことを確認します。
+2. Survivalプレイヤーで`/val profile HORSEMANSHIP`、`/val exp HORSEMANSHIP 10`、profile再表示の順に実行し、EXP +10と例外なしを確認します。失敗時は移動試験へ進みません。管理コマンドの一般権限は追加しません。
+3. First Saddle未取得で50～60 blocks騎乗し+5 EXP、合計100～110 blocksで約+10 EXPを確認します。49+3 blocksで5 EXPと2 blocksの端数が残り、DualHorse後席には付与されないことを確認します。
+4. 一般Survivalユーザーの標準EXP ActionBarと二重表示なしを確認します。feedback=falseではEXPだけ増えることを確認し、試験後trueへ戻します。CreativeのSKILL_ACTION制限は標準仕様です。
+5. 馬上戦闘EXPとイベント例外なし、既存プレイヤーのLv・EXP・累積EXP・通常/永続Perk・NG+・skill points・PowerProfileが再ログインと完全再起動後も保持されることを確認します。Java/Bedrock・Geyser操作とGUI表示も実機確認対象です。
+
+2026-10-14、localhost限定の新規World / Paper 26.2 build 126 / Oracle GraalVM Java 25.0.4 / ValhallaMMO 1.10.3 / BetterHorses 6.4で、3 Pluginのenableと専用Skill/Profile登録を確認しました。対象の登録・連携・イベント例外はありません。ProtocolLibなしのBetterHorses機能制限と未設定resource packの警告があります。DualHorse・Magic・本番全Pluginとの併用、上記プレイヤー操作・既存Profile保持・本番は未確認です。以下のv0.3.0以前の確認履歴を今回の成功として扱いません。
+
+### v0.4.0からのrollback
+
+Paper停止中にJAR、config.yml、horsemanship.yml、plugins.txtと関連文書・配布設定を同じv0.3.0時点へまとめて戻し、Volume側にも同期して完全再起動します。JARだけ戻してv0.4.0設定を残しません。ValhallaMMO Profile DBは原則継続し、破損が疑われる場合は適用前の整合したPaper Volumeバックアップから復旧します。BetterHorses patchと専用Skill配置は維持します。
+
+## 過去のv0.2.0からの専用 Skill/Profile 移行
 
 v0.2.0には、YAML Custom Skillの共通Profile型が標準EXP経路で解決されず、馬術EXP付与時に例外が発生する問題があります。v0.3.0は専用Java Skill/Profileで登録します。SkillはPlugin自身の `FEATOHorsemanship/horsemanship.yml` から読み込み、ValhallaMMOの `skills/custom/` へ置きません。
 
@@ -27,10 +53,10 @@ MinecraftやValhallaMMOの `/reload`、Pluginのdisable/enableは更新に使用
 
 ## スキルと権限
 
-馬術はLv 0-100、移動・持久・操作・戦闘・育成の5系統です。初期設定とPerkのLv・コスト・他スキルLv・排他条件は配布元の値を維持します。v0.3.0は通常PerkをValhallaMMOの永続profile内の取得リストで判定し、NG+効果は永続取得したMaster / Legendから判定します。共通スキルポイントは他スキルと共有します。
+馬術はLv 0-100、移動・持久・操作・戦闘・育成の5系統です。初期設定とPerkのLv・コスト・他スキルLv・排他条件は配布元の値を維持します。v0.4.0も通常PerkをValhallaMMOの永続profile内の取得リストで判定し、NG+効果は永続取得したMaster / Legendから判定します。共通スキルポイントは他スキルと共有します。
 
 - 対象mountは馬、スケルトンホース、ゾンビホース、ロバ、ラバ。ラクダとラマは初期設定で対象外です。
-- 移動EXPは操縦者に100ブロックごと10、後席には付与しません。馬上戦闘EXPは攻撃者本人に2秒間隔で0.5を付与します。
+- 移動EXPは操縦者に50ブロックごと5 EXP、後席には付与しません。馬上戦闘EXPは攻撃者本人に2秒間隔で0.5を付与します。
 - Perk取得前の操縦速度は-5%、鞍上の第一歩の取得後は-2%、手綱の心得の取得後はペナルティなしです。
 - Lv20の「追う」は操縦中にメインハンドのリードを右クリックして使用します。初期値は応答1秒、速度+6%、5秒、再使用35秒、終了後の疲労率15%です。
 - BetterHorsesの遺伝・Trait・base attributeは馬術で直接書き換えません。`馬を見る目`取得者は`/horsemanship inspect`、`生産者の眼`取得者は`/horsemanship parent`と`/horsemanship predict`を使えます。
@@ -40,7 +66,7 @@ MinecraftやValhallaMMOの `/reload`、Pluginのdisable/enableは更新に使用
 
 ## スキルツリーGUIの配置
 
-Git管理のSkillは既存GUI調整を維持したv0.3.0の同梱・Release添付設定と一致します。Perk ID・Lv・cost・報酬・前提・排他・NG+と効果設定を維持しています。今後の版更新では既存GUIとの差分を照合し、表示調整を保持してください。
+Git管理のSkillは既存GUI調整を維持したv0.4.0の同梱・Release添付設定と一致します。Perk ID・Lv・cost・報酬・前提・排他・NG+を維持し、EXP曲線と移動付与間隔・標準feedbackだけを更新しています。今後の版更新では既存GUIとの差分を照合し、表示調整を保持してください。
 
 ValhallaMMO 1.10.3 JAR内のArchery / Mining / Heavy Armor / Farmingを参考に、Lv10ごとにxを2進め、左から右へ進行します。主幹はy=6、機動0、持久3、技術9、馬上戦闘14、馬管理18です。線用の空間を確保し、馬上戦闘のLv70・90は上段13／下段15へ配置します。馬管理のLv40・60・80にノードは追加しません。
 
@@ -65,17 +91,32 @@ Lv30の5入口はx=6に揃え、「追う」からの分岐を説明と標準の
 
 `starting_coordinates: "0,3"`はメニュー内部の中心値ではなく、初期表示の左上に対応します（内部でx+4、y+2）。初期9×5枠のx=0..8、y=3..7に基礎Lv0・10・20と持久Lv30が入り、上下スクロールで残る専門入口、右スクロールで後半へ進みます。6レーン全部を5行に詰めません。ナビゲーションボタンが基礎序盤のノードを隠さない座標です。
 
-説明は現在の`FEATOHorsemanship/config.yml`とv0.3.0実装に基づき、`/n`区切りで最大4行に整理しています。必要Lv・cost・他スキルLv・取得前提はValhalla標準loreへ任せます。設定の数値を変更した場合は説明も同期してください。失速の補助回復には既存の最低水平速度・移動ごとの上限が適用されます。
+説明は現在の`FEATOHorsemanship/config.yml`とv0.4.0実装に基づき、`/n`区切りで最大4行に整理しています。必要Lv・cost・他スキルLv・取得前提はValhalla標準loreへ任せます。設定の数値を変更した場合は説明も同期してください。失速の補助回復には既存の最低水平速度・移動ごとの上限が適用されます。
 
 GUI用の8件の検証テスト（重複・誤った角の向き・効果変更の拒否を含む）と変更前YAML比較が成功しました。Pluginソースの一時コピーへ追跡Skill・効果設定を組み込み、既存14テストと`test`、続けて`clean build`を実行して成功しています。このGUI調整はv0.3.0の公開JARにも同梱されています。
 
-ローカル静的検証はPyYAMLのあるPythonで`python script/validate_horsemanship_tree.py --baseline <変更前のhorsemanship.yml>`を実行します。検証テストは`python -m unittest discover -s script -p test_horsemanship_tree.py`です。GUI配置の実クライアント表示は未確認です。適用は既存の起動前同期とPaper再起動を使い、Java/Bedrockで初期表示・スクロール・各lock状態・loreを確認してください。GUIだけ戻す場合は停止中に変更前SkillをGit配布元とVolume側へ戻して再起動し、JAR・効果設定・profileは維持します。
+表示だけの変更に対する静的検証はPyYAMLのあるPythonで`python script/validate_horsemanship_tree.py --baseline <変更前のhorsemanship.yml>`を実行します。版更新では上記の`--release-skill`を使用します。検証テストは`python -m unittest discover -s script -p test_horsemanship_tree.py`です。GUI配置の実クライアント表示は未確認です。適用は既存の起動前同期とPaper再起動を使い、Java/Bedrockで初期表示・スクロール・各lock状態・loreを確認してください。GUIだけ戻す場合は停止中に変更前SkillをGit配布元とVolume側へ戻して再起動し、JAR・効果設定・profileは維持します。
 
-## BetterHorsesの馬上ダメージ補正
+## BetterHorsesの成長・繁殖と馬上ダメージ補正
 
-馬術側の攻撃補正と重複しないよう、`prepare-paper-plugins.sh`は既存のFloodgate鍵コピーを実行した後、`mc-image-helper patch`で永続Volumeの`/data/plugins/BetterHorses/config.yml`にある`settings.mounted-damage-boost.enabled`だけを`false`にします。ほかの繁殖・育成・Trait設定は保持します。
+`prepare-paper-plugins.sh`は既存のFloodgate鍵コピー後、`mc-image-helper patch`で永続Volumeの`/data/plugins/BetterHorses/config.yml`へ次の4項目だけを適用します。設定全体をGit管理・置換せず、遺伝・Traits・Training・所有権・収納、馬術・DualHorseの設定と馬データは維持します。
 
-初回で設定ファイルがない場合は、このキーを含む最小設定を作成します。BetterHorses 6.4が不足している既定値を起動時に補完することをローカル確認しています。空ファイルなど不正な状態では準備処理が失敗してPaper起動を止めます。このキーは毎起動時に無効化します。
+| キー | 適用値 | BetterHorses 6.4同梱既定値 |
+| --- | --- | --- |
+| `horse-growth-settings.time-until-adult` | `60`（分） | `3`（分） |
+| `settings.breeding-cooldown` | `21600`（秒、6時間） | `300`（秒） |
+| `settings.male-ignore-cooldown` | `true` | `true` |
+| `settings.mounted-damage-boost.enabled` | `false`（従来patchを維持） | `false` |
+
+設定キーと単位は[公式配布6.4](https://hangar.papermc.io/LuisTTV/BetterHorses/versions/6.4)に対応する既存Spiget配布JAR（`plugin.yml`のversionは6.4）の同梱`config.yml`と実装を確認しました。`HorseGrowthManager`は成長時間を分からtickへ変換（×60×20）し、`HorseBreedListener`は繁殖クールダウンを秒からミリ秒へ変換（×1000）、雄馬免除設定も参照します。検証したJARのSHA-256は`a7062f46d37579406d4e2cfcdacf2ff16ed49b9fac56018d89b029ab87e4f71f`です。成長の階層は`settings`内ではなくルートの`horse-growth-settings`です。動的配布URLのため、本番で使用する版は起動ログで別途確認してください。
+
+初回で設定ファイルがない場合は従来の最小設定を作成します。欠落した`horse-growth-settings`だけを空のセクションとして補い、3項目を`$put`、既存の馬上補正を`$set`で適用します。既存セクションは置換しません。BetterHorses 6.4が不足する既定値を起動時に補完することは過去のローカル確認に基づきます。空ファイルなど不正な状態では準備処理が失敗してPaper起動を止めます。4項目は毎起動時に再適用します。
+
+隔離した設定テストは`TEST_MINECRAFT_IMAGE=feato-validation:minecraft-server python -m unittest discover -s script -p test_betterhorses_startup_config.py`で実行できます（PyYAML、Docker、mc-image-helper入りのローカルイメージが必要）。Paperや実プレイヤー操作は起動しません。2026-10-14、mc-image-helper 1.70.2で初回・最小・既存・成長セクション欠落・6.4同梱設定の5ケースを各3回適用し、4値・指定外設定・データ確認ファイルの保持、冪等性、空設定の拒否を確認しました。
+
+今回のバランス調整だけを適用する際は、停止中の設定・馬データをバックアップし、既存のpatchと準備スクリプトを配布して通常の完全再起動を行います。起動後に上記4値、不足既定値の補完、設定エラーがないことを確認し、一般プレイヤーで新しい仔馬の60分成長、雌馬の6時間再繁殖制限、雄馬の免除、馬上ダメージ補正の重複がないことを確認してください。成長設定の有効状態や給餌・育成機能、管理者のbypass権限も試験条件として確認します。既存の育成途中・繁殖済みの馬に対する時間の扱い、収納・再接続・再起動後のデータ保持は実機未確認です。
+
+この調整だけを戻す場合は、停止中に以前のpatch・準備スクリプトへ戻し、Volumeの変更した3キーもバックアップ値へ戻します。以前のpatchへ戻すだけでは新しい設定値は消えません。馬術JARや馬データの削除・resetは不要です。
 
 ## 適用順
 
@@ -106,12 +147,12 @@ GUI用の8件の検証テスト（重複・誤った角の向き・効果変更�
 本番とJava/Bedrockの実プレイヤー操作は未確認です。以下を実機で確認してください。
 
 - `/skills` と標準 `/valhalla profile HORSEMANSHIP` の表示、`/valhalla exp HORSEMANSHIP 10` 前後のEXP増分10、共通スキルポイント、通常Perk取得・返却・reset、NG+、排他Perk、他スキルLv条件。
-- First Saddle未取得で100ブロック約10 EXP、取得後約10.5 EXP、DualHorse後席への移動EXP抑止、攻撃者本人への戦闘EXP（2秒間隔0.5）、logout/login・完全再起動後の保存。
+- First Saddle未取得で50ブロック約5 EXP（100ブロック約10 EXP）、取得後50ブロック約5.25 EXP、DualHorse後席への移動EXP抑止、攻撃者本人への戦闘EXP（2秒間隔0.5）、logout/login・完全再起動後の保存。
 - Perk取得前後の速度、「追う」、疲労・クールダウン、降車・再接続時の一時効果解除、馬上攻撃補正の重複がないこと。
 - 育成コマンドの取得条件、BetterHorses Training・回復補助、一般プレイヤーのreload拒否。
 - 既存のMagic、BetterHorses、DualHorseと本番の全Pluginを含めた併用。
 
-## 戻し方
+## 過去の新規導入時の戻し方
 
 Paperを停止し、導入前の配布設定・旧JAR除去対象・管理権限設定へ戻します。`PRE_START_SCRIPT`を`/extras/copy-floodgate-key.sh`へ戻し、馬術用の準備スクリプトとpatchのmountを外します。Volume内の`feato-horsemanship-*.jar`と`FEATOHorsemanship/horsemanship.yml`をVolume外へ退避し、BetterHorses設定をバックアップから戻してから再起動します。Gitからの削除だけではVolume内のファイルは消えません。付与済みの`feato.horsemanship.admin`も必要に応じて管理グループから外します。
 

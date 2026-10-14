@@ -2,7 +2,7 @@ https://cdn.modrinth.com/data/Vebnzrzj/versions/b0mk8uS6/LuckPerms-Bukkit-5.5.71
 https://cdn.modrinth.com/data/riEl5GDK/versions/mMmIwg51/lucktags-1.4.jar
 https://cdn.modrinth.com/data/rxrgsoud/versions/GkeSDJSq/ValhallaMMO_1.10.3.jar
 https://github.com/FEATO-org/feato-gun-valhalla-bridge/releases/download/v0.3.0-poc.2/feato-gun-valhalla-bridge-plugin-0.3.0-poc.2.jar
-https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.3.0/feato-horsemanship-0.3.0.jar
+https://github.com/FEATO-org/feato_horsemanship/releases/download/v0.4.0/feato-horsemanship-0.4.0.jar
 https://mediafilez.forgecdn.net/files/8375/702/Magic-11.2.4.jar
 https://cdn.modrinth.com/data/ZfcV7L06/versions/EHLoQYh8/SCore-5.26.9.17.jar
 https://cdn.modrinth.com/data/g8Zwnnmn/versions/XrhxAt8x/ExecutableItems-7.26.9.17.jar
@@ -31,3 +31,6 @@ https://cdn.modrinth.com/data/gvXaGv1n/versions/XmLbPZhp/BreweryX-3.7.1.jar
 https://github.com/PlaceholderAPI/PlaceholderAPI/releases/download/2.12.3/PlaceholderAPI-2.12.3.jar
 # ProtocolLib 5.5.0-SNAPSHOT: fixed official asset, fetched with Accept + SHA-256 by prepare-paper-plugins.sh.
 # https://api.github.com/repos/dmulloy2/ProtocolLib/releases/assets/608298575
+https://cdn.modrinth.com/data/GOHbQGyX/versions/gnY5Flgo/GSit-3.7.0.jar
+https://cdn.modrinth.com/data/wtE6hwEA/versions/snCgr9QJ/craftableinvframes-2.4.1.jar
+https://cdn.modrinth.com/data/8DDI76SG/versions/CdGnJlay/EasyArmorStands-3.3.0.jar
