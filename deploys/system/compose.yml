@@ -76,6 +76,7 @@ services:
       METRICS_SCRAPE_INTERVAL: ${METRICS_SCRAPE_INTERVAL:-2m}
       GRAFANA_API_KEY: ${GRAFANA_API_KEY}
       APP_MODE: ${APP_MODE}
+      HOST_NODE_NAME: "{{.Node.Hostname}}"
     volumes:
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /proc:/host/proc:ro
