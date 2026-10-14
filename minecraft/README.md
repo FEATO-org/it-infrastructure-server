@@ -310,7 +310,7 @@ Phase 1はユーザー検証によりComplete、respec/recalculationは後回し
 
 JARは`java/plugins.txt`の固定URLから取得し、最新GUIを維持したSkillを`java/plugins/FEATOHorsemanship/horsemanship.yml`、効果設定を`java/plugins/FEATOHorsemanship/config.yml`として追跡します。起動前に`/plugins`から`/data/plugins`へ同期します。旧 `ValhallaMMO/skills/custom/horsemanship.yml`・`HORSEMANSHIP.yml` は停止中に管理元とVolumeから退避してください。Gitの削除だけではVolumeから消えず、残存すると二重登録で馬術Pluginが停止します。JARと新Skill配置を同時に適用し、完全再起動してください。
 
-BetterHorsesの馬上ダメージ加算だけを起動前patchで無効化し、ほかの既存設定は保持します。一般プレイヤーの育成コマンドは取得Perkで制限し、reload権限は管理グループだけへ付与します。
+BetterHorsesは起動前patchで仔馬の成長時間を60分、繁殖クールダウンを6時間、雄馬のクールダウン免除を有効にし、馬上ダメージ加算を引き続き無効化します。ほかの既存設定は保持します。一般プレイヤーの育成コマンドは取得Perkで制限し、reload権限は管理グループだけへ付与します。
 
 公開アセットのハッシュ・同梱Skill・効果設定と既存GUIの一致を確認しました。v0.3.0の隔離起動確認と実機未確認事項は[馬術の導入手順](java/plugins/ValhallaMMO/HORSEMANSHIP_SETUP.md)を参照してください。本番適用とJava/Bedrockのプレイヤー操作は未確認です。
 

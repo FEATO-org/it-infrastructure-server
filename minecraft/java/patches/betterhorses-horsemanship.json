@@ -2,6 +2,27 @@
   "file": "/data/plugins/BetterHorses/config.yml",
   "ops": [
     {
+      "$put": {
+        "path": "$['horse-growth-settings']",
+        "key": "time-until-adult",
+        "value": 60
+      }
+    },
+    {
+      "$put": {
+        "path": "$.settings",
+        "key": "breeding-cooldown",
+        "value": 21600
+      }
+    },
+    {
+      "$put": {
+        "path": "$.settings",
+        "key": "male-ignore-cooldown",
+        "value": true
+      }
+    },
+    {
       "$set": {
         "path": "$.settings['mounted-damage-boost'].enabled",
         "value": false
