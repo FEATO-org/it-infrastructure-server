@@ -129,7 +129,6 @@ sh -n minecraft/java/startup/valhalla-salvage.sh
 sh -n minecraft/java/prepare-paper-plugins.sh
 ```
 
-PRの `Validate Valhalla salvage` Workflowも同じ固定JARで実行します。
 静的検証・一時ファイルの補正テストは、Paperの起動・プレイヤー操作の実機確認ではありません。
 
 ## 適用・受入確認（運用者が実行）
