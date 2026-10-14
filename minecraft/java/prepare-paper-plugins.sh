@@ -101,3 +101,6 @@ for obsolete_jar in /data/plugins/worldedit-bukkit-*.jar \
     /data/plugins/update/dead-chest-*.jar; do
   [ ! -f "$obsolete_jar" ] || rm -f -- "$obsolete_jar"
 done
+
+# Correct only reviewed ValhallaMMO salvage recipes after /plugins synchronization.
+sh /extras/startup/valhalla-salvage.sh
