@@ -97,11 +97,26 @@ GUI用の8件の検証テスト（重複・誤った角の向き・効果変更�
 
 表示だけの変更に対する静的検証はPyYAMLのあるPythonで`python script/validate_horsemanship_tree.py --baseline <変更前のhorsemanship.yml>`を実行します。版更新では上記の`--release-skill`を使用します。検証テストは`python -m unittest discover -s script -p test_horsemanship_tree.py`です。GUI配置の実クライアント表示は未確認です。適用は既存の起動前同期とPaper再起動を使い、Java/Bedrockで初期表示・スクロール・各lock状態・loreを確認してください。GUIだけ戻す場合は停止中に変更前SkillをGit配布元とVolume側へ戻して再起動し、JAR・効果設定・profileは維持します。
 
-## BetterHorsesの馬上ダメージ補正
+## BetterHorsesの成長・繁殖と馬上ダメージ補正
 
-馬術側の攻撃補正と重複しないよう、`prepare-paper-plugins.sh`は既存のFloodgate鍵コピーを実行した後、`mc-image-helper patch`で永続Volumeの`/data/plugins/BetterHorses/config.yml`にある`settings.mounted-damage-boost.enabled`だけを`false`にします。ほかの繁殖・育成・Trait設定は保持します。
+`prepare-paper-plugins.sh`は既存のFloodgate鍵コピー後、`mc-image-helper patch`で永続Volumeの`/data/plugins/BetterHorses/config.yml`へ次の4項目だけを適用します。設定全体をGit管理・置換せず、遺伝・Traits・Training・所有権・収納、馬術・DualHorseの設定と馬データは維持します。
 
-初回で設定ファイルがない場合は、このキーを含む最小設定を作成します。BetterHorses 6.4が不足している既定値を起動時に補完することをローカル確認しています。空ファイルなど不正な状態では準備処理が失敗してPaper起動を止めます。このキーは毎起動時に無効化します。
+| キー | 適用値 | BetterHorses 6.4同梱既定値 |
+| --- | --- | --- |
+| `horse-growth-settings.time-until-adult` | `60`（分） | `3`（分） |
+| `settings.breeding-cooldown` | `21600`（秒、6時間） | `300`（秒） |
+| `settings.male-ignore-cooldown` | `true` | `true` |
+| `settings.mounted-damage-boost.enabled` | `false`（従来patchを維持） | `false` |
+
+設定キーと単位は[公式配布6.4](https://hangar.papermc.io/LuisTTV/BetterHorses/versions/6.4)に対応する既存Spiget配布JAR（`plugin.yml`のversionは6.4）の同梱`config.yml`と実装を確認しました。`HorseGrowthManager`は成長時間を分からtickへ変換（×60×20）し、`HorseBreedListener`は繁殖クールダウンを秒からミリ秒へ変換（×1000）、雄馬免除設定も参照します。検証したJARのSHA-256は`a7062f46d37579406d4e2cfcdacf2ff16ed49b9fac56018d89b029ab87e4f71f`です。成長の階層は`settings`内ではなくルートの`horse-growth-settings`です。動的配布URLのため、本番で使用する版は起動ログで別途確認してください。
+
+初回で設定ファイルがない場合は従来の最小設定を作成します。欠落した`horse-growth-settings`だけを空のセクションとして補い、3項目を`$put`、既存の馬上補正を`$set`で適用します。既存セクションは置換しません。BetterHorses 6.4が不足する既定値を起動時に補完することは過去のローカル確認に基づきます。空ファイルなど不正な状態では準備処理が失敗してPaper起動を止めます。4項目は毎起動時に再適用します。
+
+隔離した設定テストは`TEST_MINECRAFT_IMAGE=feato-validation:minecraft-server python -m unittest discover -s script -p test_betterhorses_startup_config.py`で実行できます（PyYAML、Docker、mc-image-helper入りのローカルイメージが必要）。Paperや実プレイヤー操作は起動しません。2026-10-14、mc-image-helper 1.70.2で初回・最小・既存・成長セクション欠落・6.4同梱設定の5ケースを各3回適用し、4値・指定外設定・データ確認ファイルの保持、冪等性、空設定の拒否を確認しました。
+
+今回のバランス調整だけを適用する際は、停止中の設定・馬データをバックアップし、既存のpatchと準備スクリプトを配布して通常の完全再起動を行います。起動後に上記4値、不足既定値の補完、設定エラーがないことを確認し、一般プレイヤーで新しい仔馬の60分成長、雌馬の6時間再繁殖制限、雄馬の免除、馬上ダメージ補正の重複がないことを確認してください。成長設定の有効状態や給餌・育成機能、管理者のbypass権限も試験条件として確認します。既存の育成途中・繁殖済みの馬に対する時間の扱い、収納・再接続・再起動後のデータ保持は実機未確認です。
+
+この調整だけを戻す場合は、停止中に以前のpatch・準備スクリプトへ戻し、Volumeの変更した3キーもバックアップ値へ戻します。以前のpatchへ戻すだけでは新しい設定値は消えません。馬術JARや馬データの削除・resetは不要です。
 
 ## 適用順
 
