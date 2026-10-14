@@ -158,6 +158,43 @@ Grafana Exploreでは次のInstant queryで系列数の多いメトリクスを�
 topk(20, count by (__name__) ({__name__=~".+"}))
 ```
 
+ホストメトリクスは独立したnode_exporterサービスではなく、各ノードのFluent Bitの
+`node_exporter_metrics`入力からGrafana Cloudへremote writeします。
+`monitor="node"`、`job="node-exporter"`、`instance="<Swarmノード名>"`を付けます。
+ノード名はComposeの`HOST_NODE_NAME: "{{.Node.Hostname}}"`をSwarmが展開し、
+Fluent Bitの出力で付与します。コンテナ再作成でも同じノードの系列を維持します。
+
+デプロイ後は2分の収集間隔を数回待ち、Exploreで次を確認してください。
+
+```promql
+count by (job, instance) (node_memory_MemTotal_bytes{monitor="node"})
+node_memory_MemAvailable_bytes{monitor="node"}
+rate(node_cpu_seconds_total{monitor="node",mode="idle"}[10m])
+node_filesystem_avail_bytes{monitor="node",mountpoint="/"}
+```
+
+系列があってパネルだけ空の場合は、ダッシュボードのjob選択を`node-exporter`、
+instance選択を対象ノード名へ合わせます。既存のコンテナ名の系列は過去データとして残ります。
+系列自体がなければ`docker service logs --since 10m system_fluent-bit`で
+node入力の初期化・収集エラーとremote writeの接続エラー・HTTP応答を確認します。
+ログを共有する前に秘密値を除いてください。ローカル検証だけではCloud側の
+認証・受信や既存ダッシュボードの全パネルの動作を確認したことにはなりません。
+
+### Minecraftのメモリ予算
+
+Paperの最大ヒープを6Gから8Gへ、コンテナ上限を7Gから9Gへ増やしています。
+初期ヒープは1G、Velocityはヒープ1G・コンテナ上限1536Mを維持します。
+最大ヒープは常時使用量ではなく上限です。Paperのヒープ外領域用に1Gを残し、
+両サービスの更新は`stop-first`で旧・新タスクの同時実行を避けます。
+
+ホスト11.7GB・実測最大5.58GBに2GBを足す単純計算では約4.1GBの余裕がありますが、
+今後の負荷やヒープ外使用量を保証する値ではありません。全サービスのコンテナ上限を
+同時に使えばホスト容量を超え得るため、デプロイ前・起動中・起動後にホストの
+利用可能メモリ、コンテナ使用量、OOMの有無を確認してください。
+PaperのJVM引数が`-Xms1G`・`-Xmx8G`、コンテナ上限が9GiBになったことも確認します。
+余裕が不足する場合はPaperの`MEMORY`と`MAX_MEMORY`を6G、コンテナ上限を7Gへ戻して
+再デプロイします。Volumeのデータはこの設定変更の対象ではありません。
+
 ## 5. DNSとファイアウォール
 
 - `api.feato.jp`と`dynmap.feato.jp`（squaremap。互換性のため既存ホスト名を維持）はCloudflare Proxyを有効化

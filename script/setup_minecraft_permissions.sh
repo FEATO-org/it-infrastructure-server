@@ -8,6 +8,10 @@ fi
 
 player_group=$1
 admin_group=$2
+if [ "$player_group" = "$admin_group" ]; then
+  echo "Player and admin groups must be different." >&2
+  exit 2
+fi
 mapfile -t containers < <(docker ps -q --filter label=com.docker.swarm.service.name=app_minecraft-server)
 if [ "${#containers[@]}" -ne 1 ]; then
   echo "Run on the minecraft-data node; expected exactly one app_minecraft-server task, found ${#containers[@]}." >&2
@@ -30,10 +34,25 @@ player_allow=(
   deadchest.generate
   deadchest.get
 
+  # GSit commands only; CraftBook owns right-click chairs.
+  GSit.Sit
+  GSit.Lay
+  GSit.LegsUp
+  GSit.BellyFlop
+  GSit.Spin
+  GSit.Crawl
+  craftableinvframes.craft
+  craftableinvframes.place
+
   # GhastMaster
   ghastmaster.share
 
   # CraftBook: enabled user-facing mechanics.
+  craftbook.mech.leads
+  craftbook.mech.signcopy.use
+  craftbook.mech.bookshelf.use
+  craftbook.mech.headdrops.kill
+  craftbook.mech.headdrops.break
   craftbook.mech.chair.use
   craftbook.mech.elevator
   craftbook.mech.elevator.use
@@ -50,6 +69,14 @@ player_allow=(
   craftbook.vehicles.station
 )
 player_deny=(
+  GSit.SitClick
+  GSit.PlayerSit
+  GSit.Kick.*
+  GSit.ByPass.*
+  GSit.Reload
+  craftbook.mech.signcopy.edit
+  easyarmorstands.survival
+  easyarmorstands.creative
   essentials.spawn
   essentials.kits.return_ticket
   EconomyShopGUI.shop.all
@@ -63,6 +90,15 @@ player_deny=(
   EconomyShopGUI.sellgui.all
 )
 admin_allow=(
+  # Exact overrides keep new player denies from restricting an inheriting admin group.
+  GSit.SitClick
+  GSit.PlayerSit
+  GSit.Kick.*
+  GSit.ByPass.*
+  GSit.Reload
+  craftbook.mech.signcopy.edit
+  easyarmorstands.survival
+  easyarmorstands.creative
   feato.gunvalhalla.reload
   feato.horsemanship.admin
   essentials.balance.others

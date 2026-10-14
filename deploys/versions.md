@@ -1,5 +1,36 @@
 # バージョン確認（2026-09-22）
 
+## 生活・建築改善（2026-10-14）
+
+Paper **26.2 build 126 / Java 25**、CraftBook **3.10.13** を維持します。
+指定されたModrinth **version ID** でAPIを取得し、primary JARのSHA-512をダウンロード実体と照合しました。
+3版とも配布metadataはPaper / 26.2を列挙し、必須dependencyはありません。
+GSitの保護Plugin類とEasyArmorStandsの連携Plugin類は任意依存です。
+CraftBookは既存FAWE 2.16.0のWorldEdit提供を利用します。
+
+| Plugin | 固定版 / version ID | ファイル・配布URL | SHA-512 |
+| --- | --- | --- | --- |
+| GSit | 3.7.0 / `gnY5Flgo` | [GSit-3.7.0.jar](https://cdn.modrinth.com/data/GOHbQGyX/versions/gnY5Flgo/GSit-3.7.0.jar) | `7813fe99d2fde47e3a40538c09b87b88b6101c27fb4f3305e0fd9bf806809c37e4e67c726f96596caca79785cdd7aa8d8ae724b211535775db21e602f57993d5` |
+| Craftable Invisible Frames | 2.4.1 / `snCgr9QJ` | [craftableinvframes-2.4.1.jar](https://cdn.modrinth.com/data/wtE6hwEA/versions/snCgr9QJ/craftableinvframes-2.4.1.jar) | `312bd726c72b3dc7e8464f221e4a1c4e28490d37248e8daffac43e77561a6d6c2d6c3eafc94c92766162b4c74e415a4f79eb7896fb1e3a78a6200ad6d2fb5dba` |
+| EasyArmorStands | 3.3.0 / `CdGnJlay` | [EasyArmorStands-3.3.0.jar](https://cdn.modrinth.com/data/8DDI76SG/versions/CdGnJlay/EasyArmorStands-3.3.0.jar) | `e07e42a8247e639920f7f98bd6589c39c7da347328093fb3aab1569abed3580993897e9d4218693a13d5174dab2934552ad8808733f91d508aa5055c4f1ebc81` |
+
+API: [GSit](https://api.modrinth.com/v2/version/gnY5Flgo)、[Craftable Invisible Frames](https://api.modrinth.com/v2/version/snCgr9QJ)、[EasyArmorStands](https://api.modrinth.com/v2/version/CdGnJlay)。
+新規設定seedは取得・照合した各JAR同梱の公式configです。GSit / EasyArmorStandsは
+`/extras` のseedを未存在時だけ `/data/plugins/<Plugin>/config.yml` に配置し、指定キーだけをpatchします。
+Craftable Invisible Framesは設定・レシピ・アイテム識別を変更せず、Plugin自身に初期生成させます。
+CraftBookのChairsと他Mechanicsの既存設定を保持し、追加4機能だけを差分適用します。
+`books.txt` は未存在時だけUTF-8の操作ヒントを配置します。
+
+2026-10-14の隔離Paper 26.2 build 126 / Java 25.0.4で、新規3Plugin・CraftBook・FAWEのenableと正常停止を確認しました。
+ただし既存ProtocolLib固定asset `608298575` がHTTP 404で取得できず、Chairsは `PacketListener` 不足でロード失敗です。
+ProtocolLibの版・URL・SHA-256は維持し、既存Volumeに正しいハッシュのJARがない場合の起動阻害要因として記録します。
+Chairsの依存解決・実操作、全既存Plugin同時起動、本番・Java / Bedrockのプレイヤー操作は未確認です。
+
+検証結果と実機未確認事項は [Minecraft運用](../minecraft/README.md#生活建築改善craftbook--gsit--透明額縁--easyarmorstands) を参照。
+固定URLによる導入は既存 `PLUGINS_FILE` 方式です。起動時の新規3 JARハッシュ強制検証は追加せず、
+ここに記録した公式ハッシュとの取得時照合を行っています。
+Double Doors Server / ViewDistanceTweaksは導入せず、描画距離16・シミュレーション距離10を維持します。
+
 ## WorldEdit → FAWE置換（2026-10-09）
 
 [公式Modrinth metadata](https://api.modrinth.com/v2/project/fastasyncworldedit/version)と
@@ -149,7 +180,8 @@ https://raw.githubusercontent.com/itzg/docker-minecraft-server/master/images.jso
 プロキシはこれらの変数をサポートしないため、`JVM_XX_OPTS`でG1GC、並列参照処理、
 ヒープの事前確保、明示的GCの抑制、GC停止時間の目標200msを指定します。
 小さい1Gヒープには本体用の16Mリージョン設定を流用せず、JVMの自動調整を使います。
-両方ともメモリ上限とヒープの上限は従来値を維持します。
+本体は最大ヒープ8G・コンテナ上限9G、プロキシはヒープ1G・コンテナ上限1536Mです。
+本体の初期ヒープは1Gに抑え、更新時はstop-firstで旧タスク停止後に起動します。
 https://docker-minecraft-server.readthedocs.io/en/latest/configuration/jvm-options/#enable-meowices-flags
 https://github.com/itzg/docker-mc-proxy/blob/main/README.md
 
