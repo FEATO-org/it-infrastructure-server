@@ -19,7 +19,7 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ EconomyShopGUI Free
                      ├ FancyNpcs / FancyHolograms 2.12.0
                      ├ squaremap :8123
-                     ├ ValhallaMMO / Magic 11.2.4 / FEATO Horsemanship 0.2.0
+                     ├ ValhallaMMO / Magic 11.2.4 / FEATO Horsemanship 0.4.0
                      ├ FEATO Gun-Valhalla Bridge 0.3.0-poc.2 (Phase 2 raycast PoC)
                      ├ SCore / ExecutableItems
                      ├ FastAsyncWorldEdit (WorldEdit互換) / CraftBook
@@ -64,7 +64,7 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 - RPG・アイテム: ValhallaMMO、Magic 11.2.4、SCore、ExecutableItems
 - 銃器スキル検証: FEATO Gun-Valhalla Bridge 0.3.0-poc.2（Phase 2 raycast PoC）
 - 建築・表示: FastAsyncWorldEdit 2.16.0（WorldEdit互換）、CraftBook、ImageFrame、FancyHolograms 2.12.0
-- 馬・収納: Better Horses、DualHorse、FEATO Horsemanship 0.2.0、Backpack Plus
+- 馬・収納: Better Horses、DualHorse、FEATO Horsemanship 0.4.0、Backpack Plus
 - 醸造・料理: BreweryX 3.7.1（標準レシピ・日本語表示）
 - 死亡時保護: DeadChest 4.31.0
 - 独自機能: FEATO Ancient Coin 1.0.0、FEATO Coin Exchange 1.1.0
@@ -299,13 +299,15 @@ Phase 1はユーザー検証によりComplete、respec/recalculationは後回し
 
 ## 馬術（ValhallaMMO + FEATO Horsemanship）
 
-[FEATO Horsemanship v0.3.0](https://github.com/FEATO-org/feato_horsemanship/releases/tag/v0.3.0)で、ValhallaMMOに「馬術」（Lv 0-100）と移動・持久・操作・戦闘・育成のスキルツリーを追加します。専用Java Skill/ProfileをDB初期化後に登録し、v0.2.0のEXP付与時のProfile解決エラーに対応します。対象は馬、スケルトンホース、ゾンビホース、ロバ、ラバです。移動EXPは操縦者だけに100ブロックごと10、鞍上の第一歩取得後は+5%、馬上戦闘EXPは攻撃者本人に2秒間隔で0.5を付与する初期設定です。Lv20の「追う」は操縦中にメインハンドへリードを持って右クリックすると発動し、速度+6%、5秒、再使用35秒です。Perk取得前の操縦速度は-5%、鞍上の第一歩の取得後は-2%、手綱の心得の取得後はペナルティなしです。
+[FEATO Horsemanship v0.4.0](https://github.com/FEATO-org/feato_horsemanship/releases/tag/v0.4.0)で、ValhallaMMOに「馬術」（Lv 0-100）と移動・持久・操作・戦闘・育成のスキルツリーを追加します。専用Java Skill/ProfileをDB初期化後に登録し、v0.2.0のEXP付与時のProfile解決エラーに対応します。対象は馬、スケルトンホース、ゾンビホース、ロバ、ラバです。移動EXPは操縦者だけに50ブロックごと5 EXP、鞍上の第一歩取得後は+5%、馬上戦闘EXPは攻撃者本人に2秒間隔で0.5を付与する初期設定です。Lv20の「追う」は操縦中にメインハンドへリードを持って右クリックすると発動し、速度+6%、5秒、再使用35秒です。Perk取得前の操縦速度は-5%、鞍上の第一歩の取得後は-2%、手綱の心得の取得後はペナルティなしです。
+
+高レベル帯の要求EXP曲線を`(%level% + 75 * 2^(%level%/17.0)) + 300`へ緩和し、一般プレイヤーの標準EXP獲得ActionBarを`experience.show-gain-feedback: true`で有効にします。移動効率は0.1 EXP/blockを維持します。平均8 blocks/sec・bonusなしのLv100純騎乗は計算上約50時間で、保証プレイ時間ではありません。公開v0.4.0にはSprintによる「追う」、世話EXP、騎乗ブロック破壊補正、BetterHorses必須化、FARMING前提削除は含まれないため、現行仕様を維持します。
 
 JARは`java/plugins.txt`の固定URLから取得し、最新GUIを維持したSkillを`java/plugins/FEATOHorsemanship/horsemanship.yml`、効果設定を`java/plugins/FEATOHorsemanship/config.yml`として追跡します。起動前に`/plugins`から`/data/plugins`へ同期します。旧 `ValhallaMMO/skills/custom/horsemanship.yml`・`HORSEMANSHIP.yml` は停止中に管理元とVolumeから退避してください。Gitの削除だけではVolumeから消えず、残存すると二重登録で馬術Pluginが停止します。JARと新Skill配置を同時に適用し、完全再起動してください。
 
 BetterHorsesの馬上ダメージ加算だけを起動前patchで無効化し、ほかの既存設定は保持します。一般プレイヤーの育成コマンドは取得Perkで制限し、reload権限は管理グループだけへ付与します。
 
-公開アセットのハッシュ・同梱Skill・効果設定と既存GUIの一致を確認しました。v0.3.0の隔離起動確認と実機未確認事項は[馬術の導入手順](java/plugins/ValhallaMMO/HORSEMANSHIP_SETUP.md)を参照してください。本番適用とJava/Bedrockのプレイヤー操作は未確認です。
+公開アセットのハッシュ・同梱Skill・効果設定と既存GUIの一致を確認しました。v0.4.0の検証結果と実機未確認事項は[馬術の導入手順](java/plugins/ValhallaMMO/HORSEMANSHIP_SETUP.md)を参照してください。本番適用とJava/Bedrockのプレイヤー操作は未確認です。
 
 ## 大規模編集基盤（FAWE）
 
