@@ -1,0 +1,117 @@
+{
+  "file": "/data/plugins/CraftBook/mechanisms.yml",
+  "ops": [
+    {
+      "$put": {
+        "path": "$.mechanics.BetterLeads",
+        "key": "stop-mob-target",
+        "value": false
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.BetterLeads",
+        "key": "owner-unleash-only",
+        "value": true
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.BetterLeads",
+        "key": "hitch-persists",
+        "value": true
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.BetterLeads",
+        "key": "mob-repel",
+        "value": false
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.BetterLeads",
+        "key": "allowed-mobs",
+        "value": []
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.SignCopier",
+        "key": "item",
+        "value": "minecraft:ink_sac"
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.Bookcase",
+        "key": "read-when-sneaking",
+        "value": "no"
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.Bookcase",
+        "key": "read-when-holding-block",
+        "value": false
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.HeadDrops",
+        "key": "drop-mob-heads",
+        "value": true
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.HeadDrops",
+        "key": "drop-player-heads",
+        "value": false
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.HeadDrops",
+        "key": "require-player-killed",
+        "value": true
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.HeadDrops",
+        "key": "drop-head-when-mined",
+        "value": true
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.HeadDrops",
+        "key": "override-natural-head-drops",
+        "value": false
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.HeadDrops",
+        "key": "drop-rate",
+        "value": 0.02
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.HeadDrops",
+        "key": "looting-rate-modifier",
+        "value": 0.005
+      }
+    },
+    {
+      "$put": {
+        "path": "$.mechanics.HeadDrops",
+        "key": "show-name-right-click",
+        "value": true
+      }
+    }
+  ]
+}
