@@ -20,6 +20,17 @@ if [ ! -f "$config" ] || [ ! -s "$config" ]; then
   exit 1
 fi
 
+# The growth section may be absent from the first-start seed or older configs.
+if ! mc-image-helper yaml-path --file "$config" '$.horse-growth-settings' >/dev/null 2>&1; then
+  growth_init=$(mktemp /tmp/betterhorses-growth.XXXXXX.json)
+  trap 'rm -f -- "$growth_init"' EXIT
+  cat > "$growth_init" <<'JSON'
+{"file":"/data/plugins/BetterHorses/config.yml","ops":[{"$put":{"path":"$","key":"horse-growth-settings","value":{}}}]}
+JSON
+  mc-image-helper patch "$growth_init"
+  rm -f -- "$growth_init"
+  trap - EXIT
+fi
 mc-image-helper patch /extras/betterhorses-horsemanship.json
 
 # Keep mechanic settings outside the automatic /plugins sync.
