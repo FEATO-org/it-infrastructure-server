@@ -166,6 +166,13 @@ ValhallaMMOの訳は、JAR内英語原本とキー・配列・名前付きプレ
 
 この処理は[日本語Gist](https://gist.github.com/LenTakayama/e8f65dbce8e58baec96c8554a4eba4e5)を一時領域へ取得し、[検証スクリプト](../script/validate_valhallammo_translation.py)を通過してから置換します。
 
+## 装備分解の品質制限
+
+ValhallaMMO 1.10.3の釣りLv50パークで、鍛冶品質情報のない通常装備も分解できるようにします。
+起動前補正、対象86種類、初回seed、特殊装備のリスク、受入試験、停止バックアップと
+ロールバックは[装備分解の運用](java/startup/SALVAGE.md)を参照してください。
+解放条件・素材還元式・耐久補正・Profileは変更しません。本番の実機確認は未実施です。
+
 ## 醸造・料理（BreweryX）
 
 BreweryX 3.7.1を公式固定URLから取得します。標準SQLite保存とゲーム挙動を維持し、
