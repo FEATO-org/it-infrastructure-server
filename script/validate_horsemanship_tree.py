@@ -2,7 +2,9 @@
 """Review Horsemanship GUI geometry and optionally compare gameplay with a baseline.
 
 Requires PyYAML. Pass the pre-change YAML using --baseline to check that only
-presentation fields changed. This does not validate the live client rendering.
+presentation fields changed. For version updates, use --release-skill to require
+byte equality with the verified Release resource instead.
+This does not validate the live client rendering.
 """
 import argparse
 from pathlib import Path
@@ -142,16 +144,21 @@ def validate(skill, baseline=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--skill', type=Path, default=SKILL)
-    parser.add_argument('--baseline', type=Path)
+    comparison = parser.add_mutually_exclusive_group()
+    comparison.add_argument('--baseline', type=Path)
+    comparison.add_argument('--release-skill', type=Path)
     args = parser.parse_args()
     skill = yaml.safe_load(args.skill.read_text())
     baseline = yaml.safe_load(args.baseline.read_text()) if args.baseline else None
     errors = validate(skill, baseline)
+    if args.release_skill and args.skill.read_bytes() != args.release_skill.read_bytes():
+        errors.append('skill differs from verified Release resource')
     if errors:
         print('\n'.join(errors), file=sys.stderr)
         return 1
     print(f"PASS: {len(skill['perks'])} perks, lanes, coordinates, connection slots and models"
-          + (', gameplay unchanged' if baseline else ''))
+          + (', gameplay unchanged' if baseline else '')
+          + (', Release resource identical' if args.release_skill else ''))
     return 0
 
 
