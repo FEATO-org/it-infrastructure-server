@@ -149,7 +149,8 @@ https://raw.githubusercontent.com/itzg/docker-minecraft-server/master/images.jso
 プロキシはこれらの変数をサポートしないため、`JVM_XX_OPTS`でG1GC、並列参照処理、
 ヒープの事前確保、明示的GCの抑制、GC停止時間の目標200msを指定します。
 小さい1Gヒープには本体用の16Mリージョン設定を流用せず、JVMの自動調整を使います。
-両方ともメモリ上限とヒープの上限は従来値を維持します。
+本体は最大ヒープ9G・コンテナ上限10G、プロキシはヒープ1G・コンテナ上限1536Mです。
+本体の初期ヒープは1Gに抑え、更新時はstop-firstで旧タスク停止後に起動します。
 https://docker-minecraft-server.readthedocs.io/en/latest/configuration/jvm-options/#enable-meowices-flags
 https://github.com/itzg/docker-mc-proxy/blob/main/README.md
 

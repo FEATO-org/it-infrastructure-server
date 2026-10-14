@@ -113,7 +113,7 @@ services:
       EULA: "TRUE"
       ONLINE_MODE: "FALSE"
       NETWORK_COMPRESSION_THRESHOLD: "-1"
-      MEMORY: 6G
+      MEMORY: 9G
       VERSION: ${MINECRAFT_VERSION:-26.2}
       TYPE: PAPER
       # Bridge requires this exact Paper build.
@@ -163,7 +163,7 @@ services:
       # VPS may not expose invariant TSC or a NUMA topology.
       JVM_OPTS: -XX:-UseFastUnorderedTimeStamps -XX:-UseNUMA
       INIT_MEMORY: 1G
-      MAX_MEMORY: 6G
+      MAX_MEMORY: 9G
       MAX_TICK_TIME: "60000"
     secrets:
       - source: forwarding_secret
@@ -216,7 +216,7 @@ services:
         reservations:
           memory: 2G
         limits:
-          memory: 7G
+          memory: 10G
     logging: *default-logging
 
 networks:
