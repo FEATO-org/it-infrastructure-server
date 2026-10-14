@@ -1,0 +1,19 @@
+{
+  "file": "/data/plugins/EasyArmorStands/config.yml",
+  "ops": [
+    {
+      "$put": {
+        "path": "$.editor",
+        "key": "allow-non-persistent",
+        "value": false
+      }
+    },
+    {
+      "$put": {
+        "path": "$.integration.FancyHolograms",
+        "key": "enabled",
+        "value": false
+      }
+    }
+  ]
+}

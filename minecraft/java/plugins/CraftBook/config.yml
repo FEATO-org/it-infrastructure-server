@@ -20,13 +20,17 @@ enabled-mechanics:
   - MinecartSpeedModifiers
   - MinecartStation
   - Pipes
+  - BetterLeads
+  - SignCopier
+  - Bookcase
+  - HeadDrops
 
 # A list of CraftBook mechanics that are disabled, for easy copy/pastability to the enabled list.
 disabled-mechanics:
   - Variables
   - AI
   - Ammeter
-  - BetterLeads
+  # - BetterLeads
   - BetterPhysics
   - BetterPistons
   # - BetterPlants
@@ -37,7 +41,7 @@ disabled-mechanics:
   - BoatSpeedModifiers
   - BoatUncrashable
   - BoatWaterPlaceOnly
-  - Bookcase
+  # - Bookcase
   - BounceBlocks
   # - Bridge
   - Cauldron
@@ -53,7 +57,7 @@ disabled-mechanics:
   # - Elevator
   # - Gate
   - Glowstone
-  - HeadDrops
+  # - HeadDrops
   - HiddenSwitch
   - ICs
   - JackOLantern
@@ -96,7 +100,7 @@ disabled-mechanics:
   - PaintingSwitcher
   - Pay
   # - Pipes
-  - SignCopier
+  # - SignCopier
   - Snow
   - Sponge
   - Teleporter

@@ -32,18 +32,68 @@ if [ ! -f "$craftbook_config" ] || [ ! -s "$craftbook_config" ]; then
   echo "ERROR: CraftBook mechanisms.yml is empty or not a regular file." >&2
   exit 1
 fi
-# Add only a missing Chairs section; retain blocks and all other mechanics.
-if ! mc-image-helper yaml-path --file "$craftbook_config" '$.mechanics.Chairs' >/dev/null 2>&1; then
-  chair_init=$(mktemp /tmp/craftbook-chairs.XXXXXX.json)
-  trap 'rm -f -- "$chair_init"' EXIT
-  cat > "$chair_init" <<'JSON'
-{"file":"/data/plugins/CraftBook/mechanisms.yml","ops":[{"$put":{"path":"$.mechanics","key":"Chairs","value":{}}}]}
+# Add only missing sections before patching selected keys; never sync whole runtime configs.
+ensure_section() {
+  section_file=$1
+  parent_path=$2
+  section_key=$3
+  if ! mc-image-helper yaml-path --file "$section_file" "$parent_path.$section_key" >/dev/null 2>&1; then
+    section_init=$(mktemp /tmp/paper-section.XXXXXX.json)
+    trap 'rm -f -- "$section_init"' EXIT
+    cat > "$section_init" <<JSON
+{"file":"$section_file","ops":[{"\$put":{"path":"$parent_path","key":"$section_key","value":{}}}]}
 JSON
-  mc-image-helper patch "$chair_init"
-  rm -f -- "$chair_init"
-  trap - EXIT
-fi
+    mc-image-helper patch "$section_init"
+    rm -f -- "$section_init"
+    trap - EXIT
+  fi
+}
+
+ensure_section "$craftbook_config" '$' mechanics
+ensure_section "$craftbook_config" '$.mechanics' Chairs
 mc-image-helper patch /extras/craftbook-chairs.json
+
+# BEGIN living/building configuration (also exercised by the isolated startup test).
+for mechanic in BetterLeads SignCopier Bookcase HeadDrops; do
+  ensure_section "$craftbook_config" '$.mechanics' "$mechanic"
+done
+mc-image-helper patch /extras/craftbook-life.json
+
+# Bookcase reads one shared UTF-8 file; preserve operator-authored text on every restart.
+if [ ! -e /data/plugins/CraftBook/books.txt ]; then
+  cp /extras/craftbook-books.txt /data/plugins/CraftBook/books.txt
+fi
+
+for plugin in GSit EasyArmorStands; do
+  case "$plugin" in
+    GSit) seed=gsit-config.yml ;;
+    EasyArmorStands) seed=easyarmorstands-config.yml ;;
+  esac
+  plugin_config="/data/plugins/$plugin/config.yml"
+  mkdir -p "/data/plugins/$plugin"
+  if [ ! -e "$plugin_config" ]; then
+    cp "/extras/$seed" "$plugin_config"
+  fi
+  if [ ! -f "$plugin_config" ] || [ ! -s "$plugin_config" ]; then
+    echo "ERROR: $plugin config.yml is empty or not a regular file." >&2
+    exit 1
+  fi
+done
+
+gsit_config=/data/plugins/GSit/config.yml
+ensure_section "$gsit_config" '$' Lang
+ensure_section "$gsit_config" '$' Options
+for section in PlayerSit Pose Crawl; do
+  ensure_section "$gsit_config" '$.Options' "$section"
+done
+mc-image-helper patch /extras/gsit-life.json
+
+armorstands_config=/data/plugins/EasyArmorStands/config.yml
+ensure_section "$armorstands_config" '$' editor
+ensure_section "$armorstands_config" '$' integration
+ensure_section "$armorstands_config" '$.integration' FancyHolograms
+mc-image-helper patch /extras/easyarmorstands-life.json
+# END living/building configuration.
 
 # Pin the official Spigot dev asset; the dev-build release URL is mutable.
 protocol_jar=/data/plugins/ProtocolLib-Spigot.jar
