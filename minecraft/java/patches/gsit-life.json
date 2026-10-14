@@ -1,0 +1,75 @@
+{
+  "file": "/data/plugins/GSit/config.yml",
+  "ops": [
+    {
+      "$put": {
+        "path": "$.Lang",
+        "key": "client-lang",
+        "value": true
+      }
+    },
+    {
+      "$put": {
+        "path": "$.Options",
+        "key": "get-up-damage",
+        "value": true
+      }
+    },
+    {
+      "$put": {
+        "path": "$.Options",
+        "key": "get-up-sneak",
+        "value": true
+      }
+    },
+    {
+      "$put": {
+        "path": "$.Options",
+        "key": "allow-unsafe",
+        "value": false
+      }
+    },
+    {
+      "$put": {
+        "path": "$.Options.PlayerSit",
+        "key": "allow-sit",
+        "value": false
+      }
+    },
+    {
+      "$put": {
+        "path": "$.Options.PlayerSit",
+        "key": "allow-sit-npc",
+        "value": false
+      }
+    },
+    {
+      "$put": {
+        "path": "$.Options.Pose",
+        "key": "lay-rest",
+        "value": false
+      }
+    },
+    {
+      "$put": {
+        "path": "$.Options.Pose",
+        "key": "lay-night-skip",
+        "value": false
+      }
+    },
+    {
+      "$put": {
+        "path": "$.Options.Crawl",
+        "key": "corridor-crawl",
+        "value": false
+      }
+    },
+    {
+      "$put": {
+        "path": "$.Options.Crawl",
+        "key": "double-sneak",
+        "value": false
+      }
+    }
+  ]
+}

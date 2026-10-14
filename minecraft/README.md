@@ -351,6 +351,104 @@ Requires runtime verification:
 - Java版とGeyser経由のBedrock版での着席・離席。
 - 既存全Pluginとの併用時にProtocolLibによる回帰がないこと。
 
+## 生活・建築改善（CraftBook / GSit / 透明額縁 / EasyArmorStands）
+
+Paper 26.2 build 126 / Java 25、CraftBook 3.10.13を維持し、既存12 Mechanicsに
+BetterLeads・SignCopier・Bookcase・HeadDropsを加えます。追加JARはGSit 3.7.0、
+Craftable Invisible Frames 2.4.1、EasyArmorStands 3.3.0です。
+固定URLとSHA-512は [配布版記録](../deploys/versions.md#生活建築改善2026-10-14) を参照してください。
+
+| 機能 | 利用方法・運用設定 |
+| --- | --- |
+| BetterLeads | リードの持ち主だけが係留を解除でき、係留を保持します。`allowed-mobs: []` で敵対モブへの追加係留を許可せず、ターゲット停止・モブ反発も無効です。 |
+| SignCopier | イカスミで看板の文字をコピー・貼り付けできます。`craftbook.mech.signcopy.use` を一般グループへ許可し、文章編集の `.edit` は管理者限定です。貼り付け時の建築保護・SignChangeEvent連携を実機確認してください。 |
+| Bookcase | しゃがまず、ブロックを持たずに本棚を操作すると、共通の `books.txt` からランダムに1行を表示します。本棚ごとの文章設定ではありません。初期文章は操作ヒントだけです。 |
+| HeadDrops | プレイヤーによるモブ討伐の頭ドロップを基本2%、Lootingレベルごとに0.5ポイント追加にします。プレイヤー頭は落とさず、バニラの頭ドロップを上書きしません。頭を採掘して回収でき、右クリックで名前を表示します。 |
+| GSit | 一般プレイヤーは `/sit` `/lay` `/legsup` `/bellyflop` `/spin` `/crawl` を使用できます。被ダメージ・スニークで起き上がり、危険な場所での利用を許可しません。プレイヤー・NPC上への着席、伏せによる休息判定・夜スキップ、自動crawlを無効化します。メッセージは対応するクライアント言語を使用します。 |
+| 透明額縁 | 標準レシピ・識別方式でクラフト・設置できます。一般グループには `craftableinvframes.craft` と `.place` のみ追加し、`/iframe` と管理系権限は追加しません。既存ImageFrameの設定は維持します。 |
+| EasyArmorStands | 初期状態では管理者だけが防具立てなどの展示物を編集します。`easyarmorstands.survival` と `.creative` を一般グループでは拒否し、管理者グループだけに許可します。非永続Entityの編集とFancyHolograms連携は無効です。一般プレイヤーによる他人の展示編集は許可しません。 |
+
+CraftBook Chairsは引き続き看板付き階段への右クリック着席と体力回復を担当し、GSitはコマンドで
+姿勢を変更します。一般グループの `GSit.SitClick` / `GSit.PlayerSit` / `GSit.Kick.*` /
+`GSit.ByPass.*` / `GSit.Reload` を明示的にfalseにし、デフォルトtrueやOP既定だけに依存しません。
+追加CraftBook権限は `craftbook.mech.leads` / `.signcopy.use` / `.bookshelf.use` /
+`.headdrops.kill` / `.headdrops.break` です。
+管理者が一般グループを継承しても今回のdenyを引き継いで制限されないよう、管理者には同じ8ノードを
+明示的にtrueにします（既存の管理者・役職権限と継承関係は変更しません）。
+プレイヤー・管理者には異なる既存グループ名を指定します。既存のユーザー直接許可・context付き許可・
+他グループのより具体的な許可は、適用前後にLuckPermsの実効権限を確認してください。
+役職グループへの今回の編集権限追加はありません。
+
+設定の配布元・保存先:
+
+- `java/plugins.txt` → `PLUGINS_FILE` による `/data/plugins` への固定JAR導入。
+- `java/plugins/CraftBook/config.yml` → `/plugins` 経由で `/data/plugins/CraftBook/config.yml` へ同期。
+- `java/patches/craftbook-life.json` / `gsit-life.json` / `easyarmorstands-life.json` → `/extras` へread-only mountし、起動前に各Pluginの永続設定の指定キーだけをpatch。
+- `java/config-seeds/gsit-config.yml` / `easyarmorstands-config.yml` は新規ファイル用の公式seed。`mechanisms.yml` と同様、通常の `/plugins` 同期へ置きません。不足する親sectionだけを追加してからpatchし、独自キー・既存データは保持します。
+- `java/config-seeds/craftbook-books.txt` → 未存在時だけ `/data/plugins/CraftBook/books.txt` へ配置。既存文章（空ファイルを含む）は上書きしません。文章を運用で変更する場合はUTF-8で永続側を編集します。
+
+### 適用手順
+
+本変更では本番デプロイ・本番LuckPerms操作を行いません。リリース後の適用担当者は次を行います。
+
+1. 下記のProtocolLib取得問題を解決し、既存VolumeのJARハッシュを確認します。本番の実グループ名と継承・実効権限を確認し、LuckPermsをexportして保管します。Paperを正常停止し、永続VolumeのCraftBook（`config.yml` / `mechanisms.yml` / `books.txt` を含む）、GSit、EasyArmorStands、craftableinvframesの既存ディレクトリ・JARをバックアップします。バックアップはGitへ入れません。
+2. 通常の [Swarm配布手順](../deploys/README.md) で、リリースの追跡ファイル、追加seed・patch・Compose mountをMinecraftノードへ配布します。旧版への差し替えではなく指定固定版だけを導入します。コピーだけで有効化されたと判断せず、管理者がappを更新してPaperを起動します。
+3. 起動ログでCraftBook・FAWE・新規3Pluginのenableと依存解決を確認し、永続側の指定キー・既存独自キー・`books.txt` を確認します。
+4. Minecraftデータノードで `./script/setup_minecraft_permissions.sh <player-group> <admin-group>` を実行します。この既存スクリプトは既存権限と役職設定も再適用するため内容を確認してください。一般・管理者・各役職の実効権限を `lp user <player> permission check <node>` で確認し、一般でGSitの6コマンドと看板コピー・本棚・頭回収・額縁が許可、管理操作・展示編集・GSit右クリック着席が拒否されることを確認します。OPだけで権限試験を済ませず、非OPの一般アカウントを使用します。
+5. 次の実機確認を行い、Paper再起動後も設定・展示物・文章が保持されることを確認します。
+
+### 検証状態と本番実機チェック
+
+静的検証・隔離試験の結果はこの節末尾に記録します。以下のプレイヤー操作は未確認です。
+
+- Java / BedrockでGSitの全姿勢、スニーク・被ダメージ解除、GSit右クリック着席の拒否。
+- CraftBook Chairsの看板付き階段・体力回復とGSitの共存。
+- Gun CoreのADS・リロード・Ability操作、EasyArmorStands編集メニューのFキー競合。
+- BetterHorses / DualHorse / FEATO HorsemanshipとBetterLeads、所有者以外の解除拒否・再起動後の係留保持・敵対モブの追加係留拒否。
+- SignCopierのコピー・貼り付け、建築保護・他人の看板保護・文章編集の管理者限定。
+- Bookcaseの日本語・ランダム1行表示、しゃがみ中・ブロック保持中の拒否。
+- HeadDropsの近接・銃撃・爆発とLooting・頭回収・名前表示・プレイヤー頭非ドロップ。Gun Coreの通常弾・爆発は `EntityDeathEvent#getKiller()` の帰属が成立しない場合があり、銃撃・爆発での頭ドロップは未確認です。Gun Core / FIREARMS Bridgeは改変していません。
+- 透明額縁の標準レシピ・設置・回収・Java / Bedrock描画、ImageFrameと既存展示物の保持。
+- EasyArmorStandsの一般拒否・管理者許可、非永続Entity拒否・FancyHolograms編集除外、他人の展示物保護。
+- 実際のLuckPermsの継承・既定権限・個人許可・context、再起動後の各設定・データ保持。
+
+静的検証はYAML / JSON、`sh -n` / `bash -n`、検証用環境変数を使ったCompose / Swarm config、
+7件の変更記録validator、配布3 JARの公式SHA-512照合、`git diff --check` を通過しました。
+`TEST_MINECRAFT_IMAGE=feato-validation:minecraft-server python3 script/test_living_building_startup_config.py`
+（PyYAMLが必要）の2テストも通過しました。実際のmc-image-helper 1.70.2を使い、
+新規・独自設定あり・親section不足の3ケースで2回適用後のファイル一致、指定キー以外の設定・文章・
+ユーザーデータの保持を確認しました。権限試験はDocker呼び出しをstub化して、一般allow / deny・
+管理者override・同一グループ指定拒否のコマンドを確認したもので、実サーバーの実効権限試験ではありません。
+ローカルimageがない場合は `TEST_MINECRAFT_IMAGE=itzg/minecraft-server:java25-graalvm` を指定し、
+事前にそのimageを取得してください。
+Composeの既存 `version` 属性の非推奨警告は残ります。
+隔離試験はローカルJava 25.0.4 / Paper 26.2 build 126 / FAWE 2.16.0で実施し、
+CraftBookと新規3Pluginのenable、追加4 Mechanicsの設定補完、`Done` と `stop` による正常停止（exit 0）を確認しました。
+本番のDB・秘密鍵・World・プレイヤーデータは使用せず、127.0.0.1だけで待ち受けました。
+全既存Plugin・Gun Core / Bridge / Geyser / Floodgateとの同時起動は今回未試験です。
+
+**適用前に解決すべき既存依存の問題:** 既存起動前処理が指定するProtocolLib asset
+`608298575` の取得は2026-10-14にHTTP 404でした。指定ハッシュ
+`a4ef57c36e27adec56b3a7935b7930fd1e366b310b9b698949e7f3320c84a8f9`（SHA-256）と
+一致する `/data/plugins/ProtocolLib-Spigot.jar` が既存Volumeにあれば取得をスキップします。
+一致しない・存在しない場合は通常起動前処理が失敗するため、同一配布物の復旧を確認するまで適用を進めません。
+今回ProtocolLibの版・URL・ハッシュは変更していません。
+隔離環境には同一JARを用意できず、Chairsだけ `PacketListener` 不足による読み込み失敗を確認しました。
+Chairsの継続動作・依存解決を成功扱いにはしません。
+その他のログは隔離offline-mode、FAWE / EasyArmorStands / Paperの更新通知、JVMのUnsafe非推奨警告、
+初回flat Worldのレイヤー未指定ERRORです。新規3Pluginのenable失敗はありませんでした。
+
+### ロールバック
+
+Paperを正常停止し、追跡ファイル・Compose・起動前処理を適用前リリースへ戻します。
+永続Volumeから今回追加した3 JAR（同Pluginの `update/` / `.paper-remapped/` のコピーがあればそれも）を
+個別に退避し、CraftBookの設定をバックアップから復元します。CraftBook全体や他Pluginデータを削除しません。
+新規3Pluginの設定・ユーザーデータも保管します。透明額縁・頭・展示物はWorldに保存されるためWorldを巻き戻さず、
+Pluginを外した後の表示・回収を確認します。
+LuckPermsは適用前exportとの比較で今回追加・変更したノードだけを元の値または未設定へ戻します。
+既存権限を一括unsetしたり、他変更を含むDB全体を無条件に復元しません。
+旧版のmountと起動前処理へ戻してから起動し、Chairs・既存展示物・既存12 Mechanics・権限を確認します。
+
 ## CraftBook Cauldronの無効化
 
 BreweryXとの大釜利用の競合が疑われ、経験抽出が実運用で正常に利用できなかったため、CraftBookのCauldronを無効化し、経験抽出レシピと専用設定を撤去しました。経験値の瓶はFEATO商店で購入できます。
