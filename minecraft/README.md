@@ -625,7 +625,11 @@ FEATO Coin Exchange
 ./script/setup_minecraft_permissions.sh <player-group> <admin-group>
 ```
 
-スクリプトは一般グループへ残高確認、送金、EIアイテム使用、FEATO商店だけを許可し、一般`/spawn`、`essentials.kits.return_ticket`、EconomyShopGUIの一括売却コマンドを拒否します。`featocoinexchange.execute`などFEATO Coin Exchangeの実行権限は一般・管理のいずれにも付与しません。管理グループへ経済、spawn、kit、商店編集、NPC作成と`console_command`を含む必要なaction種別だけを個別付与します。村長グループ`mayor`のprefixは優先度100で`&9[村長] `に設定します。LuckTagsでのprefix表示は実機確認済みです（運用者確認）。その他のprefix、suffix、継承は変更せず、ワイルドカード権限も付与しません。
+スクリプトは一般グループへ残高確認、送金、EIアイテム使用、FEATO商店などを許可し、一般`/spawn`、`essentials.kits.return_ticket`、EconomyShopGUIの一括売却コマンドを拒否します。`featocoinexchange.execute`などFEATO Coin Exchangeの実行権限は一般・管理のいずれにも付与しません。管理グループへ経済、spawn、kit、商店編集、NPC作成と`console_command`を含む必要なaction種別だけを個別付与します。村長グループ`mayor`のprefixは優先度100で`&9[村長] `に設定します。LuckTagsでのprefix表示は実機確認済みです（運用者確認）。その他のprefix、suffix、継承は変更せず、ワイルドカード権限も付与しません。
+
+一般グループにはsparkの読み取り用診断権限 `spark.tps` と `spark.ping` だけを追加します。`/spark ping --player <player>` による対象指定も既存仕様の範囲で利用できます。sparkの包括権限・管理系権限や明示的denyは追加しません。
+
+適用前にLuckPermsをexportして保管し、`<player-group>`には実際に一般プレイヤーへ適用しているグループを指定してください。上記スクリプトは既存の管理者・役職設定も再適用します。適用後は非OPの一般プレイヤーで `/spark tps`、`/spark ping`、`/spark ping --player <player>` が利用でき、`/spark profiler` などの管理・詳細診断コマンドへアクセスできないことを確認します。`lp user <player> permission check <node>` でも `spark.tps`、`spark.ping`、`spark`、`spark.*`、`spark.profiler`、`spark.health`、`spark.tickmonitor` の実効権限を確認してください。スクリプトによる2権限の設定と実効権限は別であり、既存の継承・OP・個人権限・contextによる許可は取り消しません。想定外の許可があれば付与元を調べ、管理者に影響する一律denyで対処しないでください。このsparkの実機確認は未実施です。
 
 FancyHolograms 2.12.0の管理操作は、指定した管理グループ・村長 (`mayor`)・役場職員 (`town_clerk`) に同じ34個の権限を個別付与します。コマンド入口に必要な `fancyholograms.admin` も含みます。一般プレイヤーと警備隊長 (`guard_captain`) には管理権限を付与しません。ワイルドカードは使用せず、村長・役場職員へOPや管理者グループの継承を追加しないため、サーバー管理者になるわけではありません。`PERMISSION_NEEDED` の閲覧権限はホログラムごとに必要時だけ付与します。
 
