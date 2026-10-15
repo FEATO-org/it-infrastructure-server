@@ -24,6 +24,10 @@ set_permission() {
 }
 
 player_allow=(
+  # spark: read-only performance diagnostics for regular players.
+  spark.tps
+  spark.ping
+
   essentials.balance
   essentials.pay
   essentials.kit
