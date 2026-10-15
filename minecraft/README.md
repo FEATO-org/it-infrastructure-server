@@ -625,7 +625,11 @@ FEATO Coin Exchange
 ./script/setup_minecraft_permissions.sh <player-group> <admin-group>
 ```
 
-スクリプトは一般グループへ残高確認、送金、EIアイテム使用、FEATO商店だけを許可し、一般`/spawn`、`essentials.kits.return_ticket`、EconomyShopGUIの一括売却コマンドを拒否します。`featocoinexchange.execute`などFEATO Coin Exchangeの実行権限は一般・管理のいずれにも付与しません。管理グループへ経済、spawn、kit、商店編集、NPC作成と`console_command`を含む必要なaction種別だけを個別付与します。村長グループ`mayor`のprefixは優先度100で`&9[村長] `に設定します。LuckTagsでのprefix表示は実機確認済みです（運用者確認）。その他のprefix、suffix、継承は変更せず、ワイルドカード権限も付与しません。
+スクリプトは一般グループへ残高確認、送金、EIアイテム使用、FEATO商店などを許可し、一般`/spawn`、`essentials.kits.return_ticket`、EconomyShopGUIの一括売却コマンドを拒否します。`featocoinexchange.execute`などFEATO Coin Exchangeの実行権限は一般・管理のいずれにも付与しません。管理グループへ経済、spawn、kit、商店編集、NPC作成と`console_command`を含む必要なaction種別だけを個別付与します。村長グループ`mayor`のprefixは優先度100で`&9[村長] `に設定します。LuckTagsでのprefix表示は実機確認済みです（運用者確認）。その他のprefix、suffix、継承は変更せず、ワイルドカード権限も付与しません。
+
+一般グループにはsparkの読み取り用診断権限 `spark.tps` と `spark.ping` だけを追加します。`/spark ping --player <player>` による対象指定も既存仕様の範囲で利用できます。sparkの包括権限・管理系権限や明示的denyは追加しません。
+
+適用前にLuckPermsをexportして保管し、`<player-group>`には実際に一般プレイヤーへ適用しているグループを指定してください。上記スクリプトは既存の管理者・役職設定も再適用します。適用後は非OPの一般プレイヤーで `/spark tps`、`/spark ping`、`/spark ping --player <player>` が利用でき、`/spark profiler` などの管理・詳細診断コマンドへアクセスできないことを確認します。`lp user <player> permission check <node>` でも `spark.tps`、`spark.ping`、`spark`、`spark.*`、`spark.profiler`、`spark.health`、`spark.tickmonitor` の実効権限を確認してください。スクリプトによる2権限の設定と実効権限は別であり、既存の継承・OP・個人権限・contextによる許可は取り消しません。想定外の許可があれば付与元を調べ、管理者に影響する一律denyで対処しないでください。このsparkの実機確認は未実施です。
 
 FancyHolograms 2.12.0の管理操作は、指定した管理グループ・村長 (`mayor`)・役場職員 (`town_clerk`) に同じ34個の権限を個別付与します。コマンド入口に必要な `fancyholograms.admin` も含みます。一般プレイヤーと警備隊長 (`guard_captain`) には管理権限を付与しません。ワイルドカードは使用せず、村長・役場職員へOPや管理者グループの継承を追加しないため、サーバー管理者になるわけではありません。`PERMISSION_NEEDED` の閲覧権限はホログラムごとに必要時だけ付与します。
 
@@ -653,7 +657,7 @@ PaperはMinecraft起動前にSecretを`/data/plugins/floodgate/key.pem`へ毎回
 
 ## 描画距離・シミュレーション距離
 
-初期目標は描画16チャンク・シミュレーション10チャンクです。実測前のため、最適値や動作確認済みの値ではありません。
+設定目標は描画18チャンク・シミュレーション12チャンクです。実測前のため、最適値や動作確認済みの値ではありません。
 `deploys/app/compose.yml`の`VIEW_DISTANCE`と`SIMULATION_DISTANCE`は、
 [itzgの起動処理](https://docker-minecraft-server.readthedocs.io/en/latest/configuration/server-properties/)で
 永続Volume内の`/data/server.properties`の`view-distance`と`simulation-distance`へ反映されます。
@@ -663,14 +667,14 @@ PaperはMinecraft起動前にSecretを`/data/plugins/floodgate/key.pem`へ毎回
 
 1. 変更前のTPS、MSPT、メモリ使用量と人数・活動内容を記録します。
 2. [通常のデプロイ手順](../deploys/README.md#4-環境変数とデプロイ)で変更を適用し、Paperを再起動します。
-3. 起動後、Paperタスクが動く`minecraft-data`ノードで次を実行し、`view-distance=16`と`simulation-distance=10`を確認します。秘密値を含むファイル全体は表示しません。
+3. 起動後、Paperタスクが動く`minecraft-data`ノードで次を実行し、`view-distance=18`と`simulation-distance=12`を確認します。秘密値を含むファイル全体は表示しません。
 
    ```bash
    docker exec <minecraft-server-container> sh -c 'grep -E "^(view-distance|simulation-distance)=" /data/server.properties'
    ```
 
 4. Java／Bedrockの両方で地形の見通しと移動時のチャンク読み込みを確認します。クライアント側の描画距離も確認してください。Paperの[`auto-config-send-distance: true`](https://docs.papermc.io/paper/reference/global-configuration/#chunk-loading-advanced_auto-config-send-distance)は維持しているため、クライアントの指定距離が小さいと送信範囲も小さくなります。
-5. 変更前後で同程度の人数・活動に揃え、TPS、MSPT、メモリ使用量を比較します。TPSが継続して20を下回る、またはMSPTが継続して50msを超える場合は原因を確認し、必要ならComposeの両環境変数を`14`／`8`へ戻して再デプロイします。再起動後、同じ2項目と負荷を再確認します。
+5. 変更前後で同程度の人数・活動に揃え、TPS、MSPT、メモリ使用量を比較します。TPSが継続して20を下回る、またはMSPTが継続して50msを超える場合は原因を確認し、必要ならComposeの両環境変数を`16`／`10`へ戻して再デプロイします。再起動後、同じ2項目と負荷を再確認します。
 
 本番Volume内のワールド別設定や追加Pluginによる上書き、Java／Bedrockの実機動作、負荷の比較は適用時の確認事項です。
 

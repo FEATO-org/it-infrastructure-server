@@ -109,7 +109,13 @@ class LivingBuildingStartupTest(unittest.TestCase):
             ]
             subprocess.run(run + ['players', 'admins'], check=True, capture_output=True)
             commands = log.read_text().splitlines()
-            allows = ['GSit.Sit', 'GSit.Lay', 'GSit.LegsUp', 'GSit.BellyFlop', 'GSit.Spin',
+            spark_commands = [c for c in commands if ' permission set spark' in c]
+            self.assertCountEqual(spark_commands, [
+                'exec fixture rcon-cli lp group players permission set spark.tps true',
+                'exec fixture rcon-cli lp group players permission set spark.ping true',
+            ])
+            allows = ['essentials.balance', 'essentials.pay', 'EconomyShopGUI.shop.feato_shop',
+                      'GSit.Sit', 'GSit.Lay', 'GSit.LegsUp', 'GSit.BellyFlop', 'GSit.Spin',
                       'GSit.Crawl', 'craftableinvframes.craft', 'craftableinvframes.place',
                       'craftbook.mech.leads', 'craftbook.mech.signcopy.use',
                       'craftbook.mech.bookshelf.use', 'craftbook.mech.headdrops.kill',
@@ -124,10 +130,32 @@ class LivingBuildingStartupTest(unittest.TestCase):
                 self.assertIn(f'exec fixture rcon-cli lp group admins permission set {node} true', commands)
             self.assertFalse(any('lp group players permission set craftableinvframes.' in c
                                  and not any(n in c for n in ['.craft ', '.place ']) for c in commands))
+            for group, node in [
+                ('admins', 'essentials.eco'),
+                ('mayor', 'feato.mayor'), ('mayor', 'ei.item.mayor_flag'),
+                ('mayor', 'slots.admin'),
+                ('guard_captain', 'feato.guard_captain'),
+                ('guard_captain', 'ei.item.guard_captain_flag'),
+                ('town_clerk', 'feato.town_clerk'),
+                ('town_clerk', 'essentials.kits.administrative_enforcement_order'),
+            ]:
+                self.assertIn(f'exec fixture rcon-cli lp group {group} permission set {node} true', commands)
+            for group in ['mayor', 'guard_captain', 'town_clerk']:
+                self.assertIn(f'exec fixture rcon-cli lp creategroup {group}', commands)
+            for group in ['admins', 'mayor', 'town_clerk']:
+                self.assertIn(f'exec fixture rcon-cli lp group {group} permission set fancyholograms.admin true', commands)
+            self.assertIn('exec fixture rcon-cli lp group mayor meta setprefix 100 &9[村長] ', commands)
+            self.assertFalse(any(' parent ' in c for c in commands))
+            self.assertEqual(len(commands), len(set(commands)))
             log.unlink()
-            result = subprocess.run(run + ['same', 'same'], capture_output=True)
-            self.assertNotEqual(0, result.returncode)
-            self.assertFalse(log.exists())
+            subprocess.run(run + ['players', 'admins'], check=True, capture_output=True)
+            self.assertEqual(commands, log.read_text().splitlines())
+            log.unlink()
+            for args in [[], ['players'], ['players', 'admins', 'extra'], ['same', 'same']]:
+                with self.subTest(args=args):
+                    result = subprocess.run(run + args, capture_output=True)
+                    self.assertEqual(2, result.returncode)
+                    self.assertFalse(log.exists())
 
 
 if __name__ == '__main__':
