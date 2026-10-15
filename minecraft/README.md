@@ -653,7 +653,7 @@ PaperはMinecraft起動前にSecretを`/data/plugins/floodgate/key.pem`へ毎回
 
 ## 描画距離・シミュレーション距離
 
-初期目標は描画16チャンク・シミュレーション10チャンクです。実測前のため、最適値や動作確認済みの値ではありません。
+設定目標は描画18チャンク・シミュレーション12チャンクです。実測前のため、最適値や動作確認済みの値ではありません。
 `deploys/app/compose.yml`の`VIEW_DISTANCE`と`SIMULATION_DISTANCE`は、
 [itzgの起動処理](https://docker-minecraft-server.readthedocs.io/en/latest/configuration/server-properties/)で
 永続Volume内の`/data/server.properties`の`view-distance`と`simulation-distance`へ反映されます。
@@ -663,14 +663,14 @@ PaperはMinecraft起動前にSecretを`/data/plugins/floodgate/key.pem`へ毎回
 
 1. 変更前のTPS、MSPT、メモリ使用量と人数・活動内容を記録します。
 2. [通常のデプロイ手順](../deploys/README.md#4-環境変数とデプロイ)で変更を適用し、Paperを再起動します。
-3. 起動後、Paperタスクが動く`minecraft-data`ノードで次を実行し、`view-distance=16`と`simulation-distance=10`を確認します。秘密値を含むファイル全体は表示しません。
+3. 起動後、Paperタスクが動く`minecraft-data`ノードで次を実行し、`view-distance=18`と`simulation-distance=12`を確認します。秘密値を含むファイル全体は表示しません。
 
    ```bash
    docker exec <minecraft-server-container> sh -c 'grep -E "^(view-distance|simulation-distance)=" /data/server.properties'
    ```
 
 4. Java／Bedrockの両方で地形の見通しと移動時のチャンク読み込みを確認します。クライアント側の描画距離も確認してください。Paperの[`auto-config-send-distance: true`](https://docs.papermc.io/paper/reference/global-configuration/#chunk-loading-advanced_auto-config-send-distance)は維持しているため、クライアントの指定距離が小さいと送信範囲も小さくなります。
-5. 変更前後で同程度の人数・活動に揃え、TPS、MSPT、メモリ使用量を比較します。TPSが継続して20を下回る、またはMSPTが継続して50msを超える場合は原因を確認し、必要ならComposeの両環境変数を`14`／`8`へ戻して再デプロイします。再起動後、同じ2項目と負荷を再確認します。
+5. 変更前後で同程度の人数・活動に揃え、TPS、MSPT、メモリ使用量を比較します。TPSが継続して20を下回る、またはMSPTが継続して50msを超える場合は原因を確認し、必要ならComposeの両環境変数を`16`／`10`へ戻して再デプロイします。再起動後、同じ2項目と負荷を再確認します。
 
 本番Volume内のワールド別設定や追加Pluginによる上書き、Java／Bedrockの実機動作、負荷の比較は適用時の確認事項です。
 
