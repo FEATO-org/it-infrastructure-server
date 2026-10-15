@@ -116,6 +116,7 @@ services:
       MEMORY: 8G
       VERSION: ${MINECRAFT_VERSION:-26.2}
       TYPE: PAPER
+      ALLOW_FLIGHT: "TRUE"
       # Bridge requires this exact Paper build.
       PAPER_BUILD: "126"
       GAMEMODE: survival
