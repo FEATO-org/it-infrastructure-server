@@ -98,7 +98,7 @@ login-ratelimit = 3000
 connection-timeout = 10000
 
 # Specify a read timeout for connections here. The default is 30 seconds.
-read-timeout = 30000
+read-timeout = 60000
 
 # Enables compatibility with HAProxy's PROXY protocol. If you don't know what this is for, then
 # don't enable it.
