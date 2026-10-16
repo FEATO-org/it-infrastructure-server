@@ -29,6 +29,7 @@ https://cdn.spiget.org/file/spiget-resources/40996.jar
 https://download.geysermc.org/v2/projects/hurricane/versions/latest/builds/latest/downloads/spigot
 https://cdn.modrinth.com/data/gvXaGv1n/versions/XmLbPZhp/BreweryX-3.7.1.jar
 https://github.com/PlaceholderAPI/PlaceholderAPI/releases/download/2.12.3/PlaceholderAPI-2.12.3.jar
+https://github.com/ViaVersion/ViaVersion/releases/download/5.12.1/ViaVersion-5.12.1.jar
 # ProtocolLib 5.5.0-SNAPSHOT: fixed official asset, fetched with Accept + SHA-256 by prepare-paper-plugins.sh.
 # https://api.github.com/repos/dmulloy2/ProtocolLib/releases/assets/608298575
 https://cdn.modrinth.com/data/GOHbQGyX/versions/gnY5Flgo/GSit-3.7.0.jar
