@@ -1,5 +1,22 @@
 # バージョン確認（2026-09-22）
 
+## ViaVersion 5.12.1追加（2026-10-16）
+
+### 変更理由
+
+統合版の接続で `lobby に接続できません: Outdated server! I'm still on 26.2` が発生しています。Geyserが中継する26.3 Java protocolとPaper 26.2間の変換をPaper側で行うため、ViaVersionを導入します。
+
+### 変更内容
+
+- ViaVersion 5.12.1 stable releaseをPaper側だけに追加しました。固定URL: https://github.com/ViaVersion/ViaVersion/releases/download/5.12.1/ViaVersion-5.12.1.jar
+- SHA-256: `b8033807e7182c35003a45962352dd642c1e91880ca281da3a43cb6f481a95a2`（[GitHub公式Release asset metadata](https://github.com/ViaVersion/ViaVersion/releases/expanded_assets/5.12.1)）。実行環境のネットワーク制限によりこの作業ではJARを取得できず、ローカル実体との照合は未実施。
+- 公式Hangar metadataはPaper 1.8–26.3、Velocity 3.4–4.2.1を対応platformとして示し、必須依存なしとしています。今回Velocity側には配置しません。Paper 26.2は対応範囲内です。ViaVersion公式Java要件はJava 17以上なのでJava 25は要件を満たします。
+- 公式5.12.0 Release notesは26.3クライアント対応を示し、5.12.1 Release notesは26.2→26.3のentity movement interpolation、brewing stand slot、custom registry等の変換修正を記載しています。
+- Paper build 126 / Java 25での起動試験、Geyser/Floodgateを含む接続試験、既存全Pluginとの組み合わせは未実施です。Java 26.2 / 26.3、統合版、Lobby・server移動・Floodgate・インベントリと基本操作をデプロイ後に確認してください。カスタムアイテム、Gun Core / Modern Guns、リソースパックの変換品質も接続成功とは分けて未確認です。
+- 永続Plugin Volumeの既存`ViaVersion-*.jar`による重複を避けるため、既存の`REMOVE_OLD_MODS_INCLUDE`で現行PLUGINS_FILE取得前に削除する対象へ追加しました。起動時の別取得機構やVelocity版は追加しません。
+
+公式資料: [5.12.1 Release](https://github.com/ViaVersion/ViaVersion/releases/tag/5.12.1)、[Hangar 5.12.1 metadata](https://hangar.papermc.io/ViaVersion/ViaVersion/versions/5.12.1)、[5.12.0の26.3対応Release notes](https://github.com/ViaVersion/ViaVersion/releases/tag/5.12.0)、[Java要件](https://github.com/ViaVersion/ViaVersion/wiki/Java-Requirements)、[GeyserのVelocity向け設定](https://geysermc.org/wiki/geyser/setup/)。Geyserの公式手順は、Velocity上のGeyserを使う場合、backendが26.3でなければbackendへViaVersionを入れるよう案内しています。
+
 ## 生活・建築改善（2026-10-14）
 
 Paper **26.2 build 126 / Java 25**、CraftBook **3.10.13** を維持します。
@@ -236,6 +253,7 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | DeadChest | 4.31.0 | [固定URL](https://cdn.modrinth.com/data/pKqnV03Y/versions/ej8X4AM4/dead-chest-4.31.0.jar) | Paper | 26.2（公式metadata） | stable | Java 25 / Paper 26.2 build 126でenable・正常停止確認。死亡・回収操作と本番は未確認 |
 | ProtocolLib | 5.5.0-SNAPSHOT（asset 608298575） | [固定公式asset](https://api.github.com/repos/dmulloy2/ProtocolLib/releases/assets/608298575) | Paper（Spigot artifact） | 26.2（公式dev changelog #3642） | development | Java 25対応修正 #3566を含む。Java 25 / Paper 26.2 build 126でenableとBetterHorses接続確認 |
 | PlaceholderAPI | 2.12.3 | [固定公式Release](https://github.com/PlaceholderAPI/PlaceholderAPI/releases/download/2.12.3/PlaceholderAPI-2.12.3.jar) | Paper | 26.2（公式Release） | release（Paper版はexperimental表記） | Java 25 / Paper 26.2 build 126でenable確認。追加Expansionなし |
+| ViaVersion | 5.12.1 | [固定公式Release](https://github.com/ViaVersion/ViaVersion/releases/download/5.12.1/ViaVersion-5.12.1.jar) | Paperのみ | 26.2（Hangarは1.8–26.3を列挙） | stable release | SHA-256 `b8033807e7182c35003a45962352dd642c1e91880ca281da3a43cb6f481a95a2`（作業時の実JAR照合・起動・接続は未実施）。Java 17+要件のためJava 25は要件内。26.3 clientを含むprotocol変換。詳細と未確認事項は上記導入記録 |
 | Better Horses | 6.4（検証時、動的取得） | [作者配布](https://www.spigotmc.org/resources/better-horses.124223/) | Paper | 26.2（6.4でローカル起動確認） | dynamic author release | Spiget resource 124223の取得方式を維持。2026-10-04に馬術との同時起動確認、プレイヤー操作は未確認。ProtocolLibなしでは一部機能無効 |
 | EssentialsX Core / Spawn | 2.22.1-dev+24-49a2f10（公式CI build 1829） | [Core](https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsX-2.22.1-dev+24-49a2f10.jar) / [Spawn](https://ci.ender.zone/job/EssentialsX/1829/artifact/jars/EssentialsXSpawn-2.22.1-dev+24-49a2f10.jar) | Paper | 26.2（現行公式support一覧） | development | 2.22.0 stableは26.1.2まで。Paper 26.2で起動確認 |
 | VaultUnlocked | 2.20.3 | [固定URL](https://cdn.modrinth.com/data/ayRaM8J7/versions/qZgRzoYs/VaultUnlocked-2.20.3.jar) | Paper | 26.2（配布metadata） | stable | plugin名は`Vault`。Paper 26.2で起動確認 |

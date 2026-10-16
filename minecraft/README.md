@@ -26,6 +26,7 @@ Java TCP 25565 / Bedrock UDP 19132
                      ├ ImageFrame
                      ├ BreweryX 3.7.1
                      ├ ProtocolLib 5.5.0-SNAPSHOT / PlaceholderAPI 2.12.3
+                     ├ ViaVersion 5.12.1（Java 26.3 → Paper 26.2 protocol translation）
                      ├ Better Horses / DualHorse
                      ├ Backpack Plus
                      ├ DeadChest 4.31.0
@@ -38,7 +39,7 @@ Web: nginx dynmap.feato.jp -> squaremap :8123
 
 対象バージョンは26.2です。`.env`の`MINECRAFT_VERSION`が既定値を上書きするため、デプロイ前に26.2であることを確認してください。
 
-GeyserとFloodgateはVelocityへ配置し、Bedrock判定をPaper側Pluginでも利用できるようFloodgate-SpigotもPaperへ配置します。Velocity側は`send-floodgate-data: true`で暗号化したBedrock player dataを転送します。両Floodgateは同一のDocker Swarm secret `floodgate_key`を使用します。Paperコンテナは起動時に`/run/secrets/floodgate_key`を`/data/plugins/floodgate/key.pem`へコピーし、Floodgateは`key-file-name: key.pem`で参照します。Velocityのmodern forwarding、共有forwarding secret、Paperのoffline modeは維持します。Paper、MariaDB、squaremapはホストへ直接公開しません。
+GeyserとFloodgateはVelocityへ配置し、Bedrock判定をPaper側Pluginでも利用できるようFloodgate-SpigotもPaperへ配置します。ViaVersion 5.12.1はPaperバックエンドだけに配置してJavaプロトコルを変換します。Paperを26.2に固定したまま、対応する新しいJavaプロトコルを受け付けられます。Velocity側にViaVersionは重複導入しません。新しいMinecraft版への対応時は、GeyserとViaVersion双方の対応版・相互運用性を確認してください。Velocity側は`send-floodgate-data: true`で暗号化したBedrock player dataを転送します。両Floodgateは同一のDocker Swarm secret `floodgate_key`を使用します。Paperコンテナは起動時に`/run/secrets/floodgate_key`を`/data/plugins/floodgate/key.pem`へコピーし、Floodgateは`key-file-name: key.pem`で参照します。Velocityのmodern forwarding、共有forwarding secret、Paperのoffline modeは維持します。Paper、MariaDB、squaremapはホストへ直接公開しません。
 
 EmoteOffhandはPaper/Velocity PluginではなくGeyser Extensionです。管理側の
 `resources/minecraft/geyser/extensions/EmoteOffhand.jar`を更新時のみ
@@ -83,6 +84,10 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 - 醸造・料理: BreweryX 3.7.1（標準レシピ・日本語表示）
 - 死亡時保護: DeadChest 4.31.0
 - 独自機能: FEATO Ancient Coin 1.0.0、FEATO Coin Exchange 1.1.0
+
+ViaVersion 5.12.1はGeyserが中継する新しいJavaプロトコルをPaper 26.2へ変換するためにPaperだけへ導入します。統合版接続で`Outdated server! I'm still on 26.2`が出る場合は、Paperの起動ログでViaVersionが有効化されたこと、永続Plugin Volumeに同梱版以外のViaVersion JARが残っていないことを確認してください。起動後も解消しない場合はGeyserとViaVersionの対応プロトコルを確認し、Bedrock接続からLobby参加までを手動試験します。
+
+接続受け入れ試験ではJava 26.2 / 26.3とGeyser経由の統合版それぞれでLobby参加・サーバー間移動・Floodgate認証・インベントリ表示・基本操作を確認します。Gun Core / Modern Guns、カスタムアイテム、リソースパック表示と操作は別項目で確認してください。プロトコル変換によるこれらの挙動は、接続成功だけでは確認できません。
 
 DeadChest 4.31.0は公式metadataでPaper 26.2に対応し、Java 25で起動を確認しています。
 死亡・回収のプレイヤー操作と本番は未確認です。旧JARは既存の`REMOVE_OLD_MODS_INCLUDE`で
