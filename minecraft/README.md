@@ -53,6 +53,21 @@ HurricaneはPaper Pluginとして`plugins.txt`から公式APIで取得します�
 pointed dripstoneだけを有効にしています。両回避策は対象ブロックのサーバー側衝突を
 なくすため、改造クライアントによる通過リスクと設置時の不安定さを理解したうえで運用してください。
 
+## 接続タイムアウトの暫定緩和
+
+一部のJava版プレイヤーが通信停滞時に `was kicked due to keepalive timeout!` で
+切断されるため、原因調査中の暫定策として待機時間を30秒から60秒へ延長します。
+`deploys/app/compose.yml` のPaper環境変数 `JVM_DD_OPTS: "paper.playerconnection.keepalive=60"` は、
+[itzgの起動処理](https://docker-minecraft-server.readthedocs.io/en/latest/configuration/jvm-options/#extra-jvm-options)で
+Java引数 `-Dpaper.playerconnection.keepalive=60` として渡されます。既存の `JVM_OPTS` は維持します。
+Velocityは `minecraft-proxy/config/velocity.toml` の `advanced.read-timeout` を
+`60000`（ミリ秒）にし、`connection-timeout = 10000` は変更しません。
+同ファイルは `/config/velocity.toml` にmountされ、起動時に `/server/velocity.toml` へ同期されます。
+
+適用にはPaperとVelocityの再起動が必要です。適用時はPaperの実際のJava引数と
+Velocityの `/server/velocity.toml` の対象2項目を確認し、切断ログと接続状況を比較してください。
+根本原因の解消を示す変更ではありません。本変更の本番デプロイ・実機確認は未実施です。
+
 ## 採用Plugin
 
 Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布元・ハッシュは[versions.md](../deploys/versions.md)で管理します。

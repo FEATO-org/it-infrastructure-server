@@ -163,6 +163,7 @@ services:
       USE_MEOWICE_GRAALVM_FLAGS: "true"
       # VPS may not expose invariant TSC or a NUMA topology.
       JVM_OPTS: -XX:-UseFastUnorderedTimeStamps -XX:-UseNUMA
+      JVM_DD_OPTS: "paper.playerconnection.keepalive=60"
       INIT_MEMORY: 1G
       MAX_MEMORY: 8G
       MAX_TICK_TIME: "60000"
