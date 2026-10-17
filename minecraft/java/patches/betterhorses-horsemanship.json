@@ -3,6 +3,27 @@
   "ops": [
     {
       "$put": {
+        "path": "$.max-stats",
+        "key": "health",
+        "value": 100.0
+      }
+    },
+    {
+      "$put": {
+        "path": "$.max-stats",
+        "key": "speed",
+        "value": 0.79064
+      }
+    },
+    {
+      "$put": {
+        "path": "$.max-stats",
+        "key": "jump",
+        "value": 1.3
+      }
+    },
+    {
+      "$put": {
         "path": "$['horse-growth-settings']",
         "key": "time-until-adult",
         "value": 60
