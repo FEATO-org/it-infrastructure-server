@@ -31,6 +31,16 @@ JSON
   rm -f -- "$growth_init"
   trap - EXIT
 fi
+if ! mc-image-helper yaml-path --file "$config" '$.max-stats' >/dev/null 2>&1; then
+  max_stats_init=$(mktemp /tmp/betterhorses-max-stats.XXXXXX.json)
+  trap 'rm -f -- "$max_stats_init"' EXIT
+  cat > "$max_stats_init" <<'JSON'
+{"file":"/data/plugins/BetterHorses/config.yml","ops":[{"$put":{"path":"$","key":"max-stats","value":{}}}]}
+JSON
+  mc-image-helper patch "$max_stats_init"
+  rm -f -- "$max_stats_init"
+  trap - EXIT
+fi
 mc-image-helper patch /extras/betterhorses-horsemanship.json
 
 # Keep mechanic settings outside the automatic /plugins sync.

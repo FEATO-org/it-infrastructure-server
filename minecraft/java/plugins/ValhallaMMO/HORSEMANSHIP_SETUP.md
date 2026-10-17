@@ -99,7 +99,7 @@ GUI用の8件の検証テスト（重複・誤った角の向き・効果変更�
 
 ## BetterHorsesの成長・繁殖と馬上ダメージ補正
 
-`prepare-paper-plugins.sh`は既存のFloodgate鍵コピー後、`mc-image-helper patch`で永続Volumeの`/data/plugins/BetterHorses/config.yml`へ次の4項目だけを適用します。設定全体をGit管理・置換せず、遺伝・Traits・Training・所有権・収納、馬術・DualHorseの設定と馬データは維持します。
+`prepare-paper-plugins.sh`は既存のFloodgate鍵コピー後、`mc-image-helper patch`で永続Volumeの`/data/plugins/BetterHorses/config.yml`へ次の7項目だけを適用します。設定全体をGit管理・置換せず、遺伝・Traits・Training・所有権・収納、馬術・DualHorseの設定と馬データは維持します。
 
 | キー | 適用値 | BetterHorses 6.4同梱既定値 |
 | --- | --- | --- |
@@ -107,10 +107,13 @@ GUI用の8件の検証テスト（重複・誤った角の向き・効果変更�
 | `settings.breeding-cooldown` | `21600`（秒、6時間） | `300`（秒） |
 | `settings.male-ignore-cooldown` | `true` | `true` |
 | `settings.mounted-damage-boost.enabled` | `false`（従来patchを維持） | `false` |
+| `max-stats.health` | `100.0` | `300.0` |
+| `max-stats.speed` | `0.79064` | `0.4` |
+| `max-stats.jump` | `1.3` | `1.2` |
 
-設定キーと単位は[公式配布6.4](https://hangar.papermc.io/LuisTTV/BetterHorses/versions/6.4)に対応する既存Spiget配布JAR（`plugin.yml`のversionは6.4）の同梱`config.yml`と実装を確認しました。`HorseGrowthManager`は成長時間を分からtickへ変換（×60×20）し、`HorseBreedListener`は繁殖クールダウンを秒からミリ秒へ変換（×1000）、雄馬免除設定も参照します。検証したJARのSHA-256は`a7062f46d37579406d4e2cfcdacf2ff16ed49b9fac56018d89b029ab87e4f71f`です。成長の階層は`settings`内ではなくルートの`horse-growth-settings`です。動的配布URLのため、本番で使用する版は起動ログで別途確認してください。
+設定キーと単位は[公式配布6.4](https://hangar.papermc.io/LuisTTV/BetterHorses/versions/6.4)に対応する既存Spiget配布JAR（`plugin.yml`のversionは6.4）の同梱`config.yml`と実装を確認しました。`max-stats`はルート直下にあり、標準馬の`health`、`speed`、`jump`と、各マウント種別の個別上限を持ちます。今回変更するのは標準馬の3値です。`HorseGrowthManager`は成長時間を分からtickへ変換（×60×20）し、`HorseBreedListener`は繁殖クールダウンを秒からミリ秒へ変換（×1000）、雄馬免除設定も参照します。検証したJARのSHA-256は`a7062f46d37579406d4e2cfcdacf2ff16ed49b9fac56018d89b029ab87e4f71f`です。成長の階層は`settings`内ではなくルートの`horse-growth-settings`です。動的配布URLのため、本番で使用する版は起動ログで別途確認してください。
 
-初回で設定ファイルがない場合は従来の最小設定を作成します。欠落した`horse-growth-settings`だけを空のセクションとして補い、3項目を`$put`、既存の馬上補正を`$set`で適用します。既存セクションは置換しません。BetterHorses 6.4が不足する既定値を起動時に補完することは過去のローカル確認に基づきます。空ファイルなど不正な状態では準備処理が失敗してPaper起動を止めます。4項目は毎起動時に再適用します。
+初回で設定ファイルがない場合は従来の最小設定を作成します。欠落した`horse-growth-settings`と`max-stats`だけを空のセクションとして補い、上記の6項目を`$put`、既存の馬上補正を`$set`で適用します。既存セクションは置換しません。BetterHorses 6.4が不足する既定値を起動時に補完することは過去のローカル確認に基づきます。空ファイルなど不正な状態では準備処理が失敗してPaper起動を止めます。7項目は毎起動時に再適用します。
 
 隔離した設定テストは`TEST_MINECRAFT_IMAGE=feato-validation:minecraft-server python -m unittest discover -s script -p test_betterhorses_startup_config.py`で実行できます（PyYAML、Docker、mc-image-helper入りのローカルイメージが必要）。Paperや実プレイヤー操作は起動しません。2026-10-14、mc-image-helper 1.70.2で初回・最小・既存・成長セクション欠落・6.4同梱設定の5ケースを各3回適用し、4値・指定外設定・データ確認ファイルの保持、冪等性、空設定の拒否を確認しました。
 
