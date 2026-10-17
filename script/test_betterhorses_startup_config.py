@@ -5,6 +5,7 @@ points to config.yml extracted from the verified 6.4 JAR for a full-default test
 Does not start Paper or simulate horse growth and breeding.
 """
 import copy
+import math
 import os
 from pathlib import Path
 import shutil
@@ -27,6 +28,8 @@ class BetterHorsesStartupTest(unittest.TestCase):
             'settings': {'breeding-cooldown': 300, 'male-ignore-cooldown': False,
                          'mounted-damage-boost': {'enabled': True, 'percentage': 42},
                          'custom': ['retain']},
+            'max-stats': {'health': 300.0, 'speed': 0.4, 'jump': 1.2,
+                          'custom': 'retain', 'skeleton-horses': {'health': 250.0}},
             'traits': {'custom': 17}, 'training': {'enabled': True},
             'ownership': {'custom': 'retain'}, 'storage': {'custom': 'retain'},
         }
@@ -75,11 +78,28 @@ class BetterHorsesStartupTest(unittest.TestCase):
                     expected['settings']['breeding-cooldown'] = 21600
                     expected['settings']['male-ignore-cooldown'] = True
                     expected['settings']['mounted-damage-boost']['enabled'] = False
+                    expected.setdefault('max-stats', {}).update(
+                        {'health': 100.0, 'speed': 0.79064, 'jump': 1.3})
                     folder = base / name / 'plugins/BetterHorses'
                     actual = yaml.safe_load((folder / 'config.yml').read_text())
                     self.assertEqual(expected, actual)
                     self.assertIs(actual['settings']['male-ignore-cooldown'], True)
                     self.assertIs(actual['settings']['mounted-damage-boost']['enabled'], False)
+                    self.assertEqual({key: actual['max-stats'][key]
+                                      for key in ('health', 'speed', 'jump')},
+                                     {'health': 100.0, 'speed': 0.79064, 'jump': 1.3})
+                    if name in ('existing', 'missing-growth'):
+                        self.assertEqual(actual['max-stats']['custom'], 'retain')
+                        self.assertEqual(actual['max-stats']['skeleton-horses'],
+                                         {'health': 250.0})
+                    self.assertTrue(math.isclose(actual['max-stats']['speed'] * 1.2 * 42.16,
+                                                 40.00005888, rel_tol=0, abs_tol=0.001))
+                    self.assertTrue(math.isclose(actual['max-stats']['speed'] * 42.16,
+                                                 33.3333824, rel_tol=0, abs_tol=0.001))
+                    self.assertTrue(math.isclose(100.0 * 1.2, 120.0,
+                                                 rel_tol=0, abs_tol=0.001))
+                    self.assertTrue(math.isclose(1.3 * 1.2, 1.56,
+                                                 rel_tol=0, abs_tol=0.001))
                     self.assertEqual(b'keep horse data\n', (folder / 'data-sentinel').read_bytes())
 
 
