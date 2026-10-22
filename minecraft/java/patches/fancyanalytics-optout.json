@@ -1,0 +1,19 @@
+{
+  "file": "/data/plugins/FancyAnalytics/config.json",
+  "ops": [
+    {
+      "$put": {
+        "path": "$",
+        "key": "send_metrics",
+        "value": false
+      }
+    },
+    {
+      "$put": {
+        "path": "$",
+        "key": "send_errors",
+        "value": false
+      }
+    }
+  ]
+}
