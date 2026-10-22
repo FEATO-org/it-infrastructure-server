@@ -116,6 +116,19 @@ ensure_section "$armorstands_config" '$.integration' FancyHolograms
 mc-image-helper patch /extras/easyarmorstands-life.json
 # END living/building configuration.
 
+# FancyNpcs and FancyHolograms embed FancyAnalytics. Disable its optional
+# telemetry without replacing unrelated settings in the persistent JSON file.
+fancyanalytics_config=/data/plugins/FancyAnalytics/config.json
+mkdir -p /data/plugins/FancyAnalytics
+if [ ! -e "$fancyanalytics_config" ]; then
+  printf '{}\n' > "$fancyanalytics_config"
+fi
+if [ ! -f "$fancyanalytics_config" ] || [ ! -s "$fancyanalytics_config" ]; then
+  echo "ERROR: FancyAnalytics config.json is missing, empty, or not a regular file." >&2
+  exit 1
+fi
+mc-image-helper patch /extras/fancyanalytics-optout.json
+
 # Pin the official Spigot dev asset; the dev-build release URL is mutable.
 protocol_jar=/data/plugins/ProtocolLib-Spigot.jar
 protocol_sha256=a4ef57c36e27adec56b3a7935b7930fd1e366b310b9b698949e7f3320c84a8f9
