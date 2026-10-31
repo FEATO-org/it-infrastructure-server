@@ -53,6 +53,12 @@ HurricaneはPaper Pluginとして`plugins.txt`から公式APIで取得します�
 pointed dripstoneだけを有効にしています。両回避策は対象ブロックのサーバー側衝突を
 なくすため、改造クライアントによる通過リスクと設置時の不安定さを理解したうえで運用してください。
 
+## 睡眠
+
+Ultimate Sleep 1.3.1の設定・適用前の割合実測、ワールド制約、受入試験と復旧は
+[睡眠の運用手順](java/plugins/UltimateSleep/README.md)を参照してください。
+追跡設定の20%は本番の実測値ではありません。本番適用・実機確認は未実施です。
+
 ## 接続タイムアウトの暫定緩和
 
 一部のJava版プレイヤーが通信停滞時に `was kicked due to keepalive timeout!` で
@@ -84,6 +90,26 @@ Paper側の取得URLは[plugins.txt](java/plugins.txt)、詳細な版・配布�
 - 醸造・料理: BreweryX 3.7.1（標準レシピ・日本語表示）
 - 死亡時保護: DeadChest 4.31.0
 - 独自機能: FEATO Ancient Coin 1.0.0、FEATO Coin Exchange 1.1.0
+
+### FancyAnalyticsの外部送信抑止
+
+FancyNpcs / FancyHologramsに組み込まれるFancyAnalyticsの外部データ送信で
+HTTP 500が約30秒ごとに発生する場合に備え、分析データとエラー情報の送信を無効化します。
+NPC・ホログラム自体は無効化しません。
+
+Paperの起動前に`java/prepare-paper-plugins.sh`が永続Volume上の
+`/data/plugins/FancyAnalytics/config.json`を確認し、ファイルが未作成の場合だけ`{}`で初期化します。
+`java/patches/fancyanalytics-optout.json`（Composeで`/extras/fancyanalytics-optout.json`へmount）を
+`mc-image-helper patch`で適用して、`send_metrics: false`と`send_errors: false`の
+2項目だけを固定します。既存のそのほかの設定は変更しません。
+ファイルが空または通常ファイルでない場合、起動前処理を失敗させます。
+
+変更反映にはPaperサービスの正常な再起動が必要です。
+再起動後、上記JSONの両キーが`false`であること、FancyNpcs / FancyHologramsが有効であること、
+`FancyAnalytics-JavaSDK`の定期送信エラーが止まることを確認してください。
+エラーが残る場合は、使用中のSDKが設定を読み込むパスとバージョンを調べてください。
+これらの実機確認と本番適用は未実施です。送信を復旧する場合はpatchの適用を解除し、
+必要に応じてバックアップ済み設定に戻して正常再起動してください。
 
 ViaVersion 5.12.1はGeyserが中継する新しいJavaプロトコルをPaper 26.2へ変換するためにPaperだけへ導入します。統合版接続で`Outdated server! I'm still on 26.2`が出る場合は、Paperの起動ログでViaVersionが有効化されたこと、永続Plugin Volumeに同梱版以外のViaVersion JARが残っていないことを確認してください。起動後も解消しない場合はGeyserとViaVersionの対応プロトコルを確認し、Bedrock接続からLobby参加までを手動試験します。
 

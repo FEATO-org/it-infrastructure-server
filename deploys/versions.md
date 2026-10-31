@@ -1,5 +1,11 @@
 # バージョン確認（2026-09-22）
 
+## Ultimate Sleep 1.3.1（26.x Plugin）
+
+[公式Modrinth metadata](https://api.modrinth.com/v2/version/nfpVqUns)はstable release、Paper / Bukkit / Spigot / FoliaとMinecraft 26.2を列挙する。固定取得先は[ultimate-sleep-1.3.1+26.x-plugin.jar](https://cdn.modrinth.com/data/M1lrtuN1/versions/nfpVqUns/ultimate-sleep-1.3.1%2B26.x-plugin.jar)、version IDは `nfpVqUns`。取得JARのSHA-512はmetadataと一致: `41b463eff7ad1dc290404b91203f8bc726942c2ed17aac5a21cdb755c8f870b0f1077c23981f2d4364438f15aedfb93f58562ed65c13f99658dad31cd58622d1`。
+
+同梱configを基準に設定し、`plugins.txt` と既存同期を使用する。JAR整理対象は `ultimate-sleep-*.jar`。公式ソースとJARの処理を静的確認し、隔離Paper 26.2 build 126 / Java 25でenable、設定読込、20→101→正常停止後20を確認した。実プレイヤー・既存Plugin併用・本番の確認状況と、暫定20%の実測、101復元の必須手順は[運用手順](../minecraft/java/plugins/UltimateSleep/README.md)を参照。
+
 ## ViaVersion 5.12.1追加（2026-10-16）
 
 ### 変更理由
