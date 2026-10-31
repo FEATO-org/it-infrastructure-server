@@ -53,6 +53,12 @@ HurricaneはPaper Pluginとして`plugins.txt`から公式APIで取得します�
 pointed dripstoneだけを有効にしています。両回避策は対象ブロックのサーバー側衝突を
 なくすため、改造クライアントによる通過リスクと設置時の不安定さを理解したうえで運用してください。
 
+## 睡眠
+
+Ultimate Sleep 1.3.1の設定・適用前の割合実測、ワールド制約、受入試験と復旧は
+[睡眠の運用手順](java/plugins/UltimateSleep/README.md)を参照してください。
+追跡設定の20%は本番の実測値ではありません。本番適用・実機確認は未実施です。
+
 ## 接続タイムアウトの暫定緩和
 
 一部のJava版プレイヤーが通信停滞時に `was kicked due to keepalive timeout!` で
