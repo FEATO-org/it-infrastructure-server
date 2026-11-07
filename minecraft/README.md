@@ -1,4 +1,23 @@
-# Minecraft運用（Paper 26.2）
+# Minecraft運用
+
+## Forge 1.20.1 切替
+
+現在の構成は Java 1.20.1 Forge 専用です。`minecraft.feato.jp:25565` → nginx → Velocity 4.2.0 → `minecraft-forge:25565`。クライアントには提供 Modpack が必要です。Bedrock は利用できません。Geyser JAR は起動時に Proxy Volume の `disabled-plugins` に退避し、nginx の Bedrock TCP/UDP 公開ポートを閉じます。Floodgate・設定・鍵と Paper の Volume は保持します。Forge と Paper のワールド・プレイヤーデータは独立しています。
+
+[Modpack の内容と更新](forge/modpack/README.md)。Forge は `minecraft_forge_data`、Paper は既存 `minecraft_server_data` を使用し、直接ポートを公開しません。`forwarding_secret` は既存の Swarm Secret を再利用します。Forge の固定イメージは Java 17、ヒープ 1G〜8G、メモリ上限 9G です。データノードの空きメモリを確認してください。
+
+### 適用前・検証
+
+1. 停止前に Paper と Proxy の Volume を整合した状態でバックアップし、復元先と `minecraft-data` ノードを確認します。Forge Volume も同様に、停止してからワールドと設定をバックアップします。Volume 名は `docker volume ls` で実物を確認し、削除しないでください。
+2. 最新リポジトリを全対象ノードの `DEPLOY_ROOT` に配置し、既存 Secret とディスク容量、対応したクライアント Modpack を確認します。環境構築と stack の起動・停止は [Swarm運用](../deploys/README.md) に従います。サービスの一時停止は manager から `docker service scale app_minecraft-forge=0`、再開は `=1` です。Compose の次回デプロイで指定 replica に戻ります。
+3. 専用の隔離環境で Forge と Velocity を先に試します。固定ファイルの取得、Mod 読込、Java 版ログイン、UUID とプレイヤー情報、再起動後のワールド維持を確認します。Forge 停止時に接続が失敗し Paper に移動しないこと、Bedrock の各経路が使えないことも確認します。起動中の `Photon` / `LowDragLib` の client class 読込、`creatingspace` の欠落タグ、Curios slot、recipe 等のエラーは隔離起動ログで観測済みです。影響が判明するまで本番適用の判断に含めてください。
+4. Modpack と Forge の更新は manifest の Minecraft / Forge / file ID を一緒に更新し、クライアントを揃えて隔離環境で起動・接続を検証します。設定は初回のみコピーされ、Volume を自動上書きしません。
+
+### Paper へ戻す
+
+メンテナンス中に Forge を停止し、`deploys/app/compose.yml` で Forge の replica を 0、Paper を 1 に戻します。`minecraft-proxy/config/velocity.toml` の `[servers]` を `lobby = "minecraft-server:25565"`、`try = ["lobby"]` に戻し、必要な forced host と failover を復元します。Proxy の `DISABLE_GEYSER` を外し、Geyser の取得 URL を復元します。Proxy Volume の `disabled-plugins` に退避した JAR は重複しないよう確認してから復元し、既存 Geyser/Floodgate 設定と同じ鍵を使用します。system Compose の 19132 TCP/UDP・19133 UDP と監視先も戻します。保存済みの旧リビジョンの差分を使い、Volume を削除せず stack を更新して Java と Bedrock の接続を確認します。データ移行は行いません。
+
+## 以下は停止中の Paper 26.2 の運用記録
 
 ## 構成
 

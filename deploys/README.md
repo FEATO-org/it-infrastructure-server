@@ -1,3 +1,5 @@
+> Forge 切替時の接続、Bedrock 停止、バックアップと Paper 復旧は [Forge 運用](../minecraft/README.md#forge-1201-切替) を参照してください。以下の Paper / Bedrock の説明は復旧時の旧構成を含みます。
+
 # Docker Swarm production deployment
 
 この構成は次の3スタックをデプロイします。
