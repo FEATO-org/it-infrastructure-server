@@ -1,0 +1,14 @@
+
+[debug]
+	#Whether to render hitboxes in the client
+	hitbox = false
+
+[worldgen]
+	#Density of Originium Feature in the world
+	#Range: 0.0 ~ 1.0
+	ognm_density = 1.0
+
+[sync]
+	#Interval (in ticks) for server-client synchronization heartbeat
+	#Range: > 20
+	heartbeat_interval = 100

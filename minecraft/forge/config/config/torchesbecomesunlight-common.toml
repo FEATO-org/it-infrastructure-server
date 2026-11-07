@@ -1,0 +1,479 @@
+
+[server]
+	spawnDemon = false
+
+	[server.mobs]
+
+		[server.mobs.gun_knight]
+			#If 'true' disable frontal attack
+			"nullify a frontal attack" = true
+			#Set damage limit percentage (based on max health)
+			#Range: 0.01 ~ 1.0
+			"damage limit percentage" = 0.1
+
+			[server.mobs.gun_knight.attribute_config]
+				#Regulate mob health by this value
+				#Range: 0.0 ~ 1.7976931348623157E308
+				"Health multiplier" = 1.0
+				#Regulate mob attack damage by this value
+				#Range: 0.0 ~ 1.7976931348623157E308
+				"Attack multiplier" = 1.0
+
+			[server.mobs.gun_knight.neutral_protection_config]
+				#Can take unsourced damage without an attack target
+				"can damage" = false
+				#How far of sourced damage can be ignored when there is no target to attack
+				#Range: 0.0 ~ 1.7976931348623157E308
+				"can damage distance" = 16.0
+
+			[server.mobs.gun_knight.bossbar]
+				#Enable custom bossbar
+				"Enable or not" = true
+
+			#Regulate spawning structure
+			[server.mobs.gun_knight.structure_generation_config]
+				#Maximum height for generation placement. -65 to ignore
+				#Range: -65.0 ~ 256.0
+				height_max = 100.0
+				#Minimum height for generation placement. -65 to ignore
+				#Range: -65.0 ~ 256.0
+				height_min = 50.0
+
+			#Regulate mob spawning
+			[server.mobs.gun_knight.spawn_config]
+				#Regulate spawn rate, 0 to disable spawning
+				#Range: > 0
+				spawn_rate = 1
+
+		[server.mobs.red]
+			#Set damage limit percentage (based on max health)
+			#Range: 0.01 ~ 1.0
+			"damage limit percentage" = 0.1
+
+			[server.mobs.red.attribute_config]
+				#Regulate mob health by this value
+				#Range: 0.0 ~ 1.7976931348623157E308
+				"Health multiplier" = 1.0
+				#Regulate mob attack damage by this value
+				#Range: 0.0 ~ 1.7976931348623157E308
+				"Attack multiplier" = 1.0
+
+			[server.mobs.red.bossbar]
+				#Enable custom bossbar
+				"Enable or not" = true
+
+			#Regulate mob spawning
+			[server.mobs.red.spawn_config]
+				#Regulate spawn rate, 0 to disable spawning
+				#Range: > 0
+				spawn_rate = 1
+
+		[server.mobs.patrol_captain]
+
+			#Regulate mob spawning
+			[server.mobs.patrol_captain.spawn_config]
+				#Regulate spawn rate, 0 to disable spawning
+				#Range: > 0
+				spawn_rate = 1
+
+		[server.mobs.mangler]
+
+			#Regulate mob spawning
+			[server.mobs.mangler.spawn_config]
+				#Regulate spawn rate, 0 to disable spawning
+				#Range: > 0
+				spawn_rate = 1
+
+		[server.mobs.burdenbeast]
+
+			#Regulate mob spawning
+			[server.mobs.burdenbeast.spawn_config]
+				#Regulate spawn rate, 0 to disable spawning
+				#Range: > 0
+				spawn_rate = 1
+
+		[server.mobs.snow_guerrilla_camp]
+
+			[server.mobs.snow_guerrilla_camp.frost_nova]
+				#Whether the entity should actively attack players
+				aggressiveToPlayer = false
+				#Set damage limit percentage (based on max health)
+				#Range: 0.01 ~ 1.0
+				"damage limit percentage" = 0.1
+
+				[server.mobs.snow_guerrilla_camp.frost_nova.attribute_config]
+					#Regulate mob health by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Health multiplier" = 1.0
+					#Regulate mob attack damage by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Attack multiplier" = 1.0
+
+				[server.mobs.snow_guerrilla_camp.frost_nova.partner_attribute_config]
+					#Regulate partner mob health by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Health multiplier" = 1.0
+					#Regulate partner mob attack damage by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Attack multiplier" = 1.0
+
+				[server.mobs.snow_guerrilla_camp.frost_nova.neutral_protection_config]
+					#Can take unsourced damage without an attack target
+					"can damage" = false
+					#How far of sourced damage can be ignored when there is no target to attack
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"can damage distance" = 16.0
+
+				[server.mobs.snow_guerrilla_camp.frost_nova.bossbar]
+					#Enable custom bossbar
+					"Enable or not" = true
+
+				#Regulate mob spawning
+				[server.mobs.snow_guerrilla_camp.frost_nova.spawn_config]
+					#Regulate spawn rate, 0 to disable spawning
+					#Range: > 0
+					spawn_rate = 1
+
+			[server.mobs.snow_guerrilla_camp.patriot]
+				#Whether the entity should actively attack players
+				aggressiveToPlayer = false
+				#If 'true' disable frontal attack
+				"nullify a frontal attack" = true
+				#Set damage limit percentage (based on max health)
+				#Range: 0.01 ~ 1.0
+				"damage limit percentage" = 0.1
+
+				[server.mobs.snow_guerrilla_camp.patriot.attribute_config]
+					#Regulate mob health by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Health multiplier" = 1.0
+					#Regulate mob attack damage by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Attack multiplier" = 1.0
+
+				[server.mobs.snow_guerrilla_camp.patriot.partner_attribute_config]
+					#Regulate partner mob health by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Health multiplier" = 1.0
+					#Regulate partner mob attack damage by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Attack multiplier" = 1.0
+
+				[server.mobs.snow_guerrilla_camp.patriot.bossbar]
+					#Enable custom bossbar
+					"Enable or not" = true
+
+				[server.mobs.snow_guerrilla_camp.patriot.neutral_protection_config]
+					#Can take unsourced damage without an attack target
+					"can damage" = false
+					#How far of sourced damage can be ignored when there is no target to attack
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"can damage distance" = 16.0
+
+				#Regulate mob spawning
+				[server.mobs.snow_guerrilla_camp.patriot.spawn_config]
+					#Regulate spawn rate, 0 to disable spawning
+					#Range: > 0
+					spawn_rate = 1
+
+			[server.mobs.snow_guerrilla_camp.yeti_ice_leaver]
+				#Whether the entity should actively attack players
+				aggressiveToPlayer = false
+
+				[server.mobs.snow_guerrilla_camp.yeti_ice_leaver.attribute_config]
+					#Regulate mob health by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Health multiplier" = 1.0
+					#Regulate mob attack damage by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Attack multiplier" = 1.0
+
+			[server.mobs.snow_guerrilla_camp.shield_guard]
+				#Whether the entity should actively attack players
+				aggressiveToPlayer = false
+
+				[server.mobs.snow_guerrilla_camp.shield_guard.attribute_config]
+					#Regulate mob health by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Health multiplier" = 1.0
+					#Regulate mob attack damage by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Attack multiplier" = 1.0
+
+		[server.mobs.rhodes_island_office]
+
+			[server.mobs.rhodes_island_office.rosmontis]
+				#Whether the entity should actively attack players
+				aggressiveToPlayer = false
+				#Set damage limit percentage (based on max health)
+				#Range: 0.01 ~ 1.0
+				"damage limit percentage" = 0.1
+
+				[server.mobs.rhodes_island_office.rosmontis.attribute_config]
+					#Regulate mob health by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Health multiplier" = 1.0
+					#Regulate mob attack damage by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Attack multiplier" = 1.0
+
+				[server.mobs.rhodes_island_office.rosmontis.partner_attribute_config]
+					#Regulate partner mob health by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Health multiplier" = 1.0
+					#Regulate partner mob attack damage by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Attack multiplier" = 1.0
+
+				[server.mobs.rhodes_island_office.rosmontis.neutral_protection_config]
+					#Can take unsourced damage without an attack target
+					"can damage" = false
+					#How far of sourced damage can be ignored when there is no target to attack
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"can damage distance" = 16.0
+
+				[server.mobs.rhodes_island_office.rosmontis.bossbar]
+					#Enable custom bossbar
+					"Enable or not" = true
+
+				#Regulate mob spawning
+				[server.mobs.rhodes_island_office.rosmontis.spawn_config]
+					#Regulate spawn rate, 0 to disable spawning
+					#Range: > 0
+					spawn_rate = 1
+
+			[server.mobs.rhodes_island_office.preparation_op]
+				#Whether the entity should actively attack players
+				aggressiveToPlayer = false
+
+				[server.mobs.rhodes_island_office.preparation_op.attribute_config]
+					#Regulate mob health by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Health multiplier" = 1.0
+					#Regulate mob attack damage by this value
+					#Range: 0.0 ~ 1.7976931348623157E308
+					"Attack multiplier" = 1.0
+
+		[server.mobs.pursuer]
+			#Set damage limit percentage (based on max health)
+			#Range: 0.01 ~ 1.0
+			"damage limit percentage" = 0.1
+
+			[server.mobs.pursuer.attribute_config]
+				#Regulate mob health by this value
+				#Range: 0.0 ~ 1.7976931348623157E308
+				"Health multiplier" = 1.0
+				#Regulate mob attack damage by this value
+				#Range: 0.0 ~ 1.7976931348623157E308
+				"Attack multiplier" = 1.0
+
+			[server.mobs.pursuer.bossbar]
+				#Enable custom bossbar
+				"Enable or not" = true
+
+			#Regulate mob spawning
+			[server.mobs.pursuer.spawn_config]
+				#Regulate spawn rate, 0 to disable spawning
+				#Range: > 0
+				spawn_rate = 1
+
+		[server.mobs.gravestone]
+			#Set damage limit (Maximum damage taken within 3s)
+			#Range: 0.0 ~ 1.7976931348623157E308
+			"damage limit" = 40.0
+			#Set setHealth limit (Maximum damage taken within 3s)
+			#Range: 0.0 ~ 1.7976931348623157E308
+			"setHealth limit" = 60.0
+			#Whether to halve max health, armor, and attack limit when gravestone entering phase 2
+			"true halve max health, armor, and attack limit" = true
+			#Set suck blood multiplier
+			#Range: 0.0 ~ 3.4028234663852886E38
+			"suck blood multiplier" = 1.0
+			#Whether the gravestone can be re-summoned only when the entity is dead or not loaded
+			"true enable gravestone respawn only dead" = true
+
+			[server.mobs.gravestone.attribute_config]
+				#Regulate mob health by this value
+				#Range: 0.0 ~ 1.7976931348623157E308
+				"Health multiplier" = 1.0
+				#Regulate mob attack damage by this value
+				#Range: 0.0 ~ 1.7976931348623157E308
+				"Attack multiplier" = 1.0
+
+			[server.mobs.gravestone.neutral_protection_config]
+				#Can take unsourced damage without an attack target
+				"can damage" = false
+				#How far of sourced damage can be ignored when there is no target to attack
+				#Range: 0.0 ~ 1.7976931348623157E308
+				"can damage distance" = 20.0
+
+			[server.mobs.gravestone.bossbar]
+				#Enable custom bossbar
+				"Enable or not" = true
+
+	[server.tools]
+
+		[server.tools.halberd]
+			#tool attack damage
+			#Range: 0.0 ~ 1.7976931348623157E308
+			attack_damage = 20.0
+			#skill 1 numerical requirements
+			#Range: 0 ~ 100
+			requirements_1 = 10
+			#skill 2 numerical requirements
+			#Range: 0 ~ 100
+			requirements_2 = 50
+
+		[server.tools.shield]
+			#skill 1 numerical requirements
+			#Range: 0 ~ 100
+			requirements_1 = 10
+
+		[server.tools.scratch]
+			#skill 1 numerical requirements
+			#Range: 0 ~ 100
+			requirements_1 = 60
+
+		[server.tools.winter_pass]
+			#tool attack damage
+			#Range: 0.0 ~ 1.7976931348623157E308
+			attack_damage = 6.0
+			#skill1 numerical requirements
+			#Range: 0 ~ 100
+			requirements1 = 50
+
+		[server.tools.ice_broadsword]
+			#tool attack damage
+			#Range: 0.0 ~ 1.7976931348623157E308
+			attack_damage = 10.0
+			#skill 1 numerical requirements
+			#Range: 0 ~ 100
+			requirements_1 = 35
+
+		[server.tools.fire_steel]
+			#tool attack damage
+			#Range: 0.0 ~ 1.7976931348623157E308
+			attack_damage = 8.0
+
+		[server.tools.sankta_ring]
+			#skill 1 numerical requirements
+			#Range: 0 ~ 100
+			requirements_1 = 5
+			#When enabled, most hostile mobs will no longer actively attack the player.
+			"mobs will no longer attack the player" = true
+
+		[server.tools.phantom_grasp]
+			#tool attack damage
+			#Range: 0.0 ~ 1.7976931348623157E308
+			attack_damage = 4.0
+			#skill1 numerical requirements
+			#Range: 0 ~ 100
+			requirements1 = 20
+
+		[server.tools.sacred_halberd]
+			#tool attack damage
+			#Range: 0.0 ~ 1.7976931348623157E308
+			attack_damage = 24.0
+			#skill light numerical requirements
+			#Range: 0 ~ 100
+			light_requirements = 10
+			#skill wind numerical requirements
+			#Range: 0 ~ 100
+			wind_requirements = 70
+
+		[server.tools.sacred_gun]
+			#tool attack damage
+			#Range: 0.0 ~ 1.7976931348623157E308
+			attack_damage = 10.0
+			#skill numerical requirements
+			#Range: 0 ~ 100
+			requirements = 60
+
+		[server.tools.machete]
+			#tool attack damage
+			#Range: 0.0 ~ 1.7976931348623157E308
+			attack_damage = 14.0
+			#skill numerical requirements
+			#Range: 0 ~ 100
+			requirements = 45
+
+	[server.global_setting]
+		#Whether living can talk
+		"Enable living can talk" = true
+		#Whether attack living when dialogue
+		"Enable attack living when dialogue" = false
+		#The number of times a player can summon a boss each day
+		#Range: > 0
+		"Can summon number" = 1
+		#Whether boss show healthBar
+		"Enable bossBar can show" = false
+
+		#Regulate spawning structure
+		[server.global_setting.structure_generation_config]
+			#Maximum height for generation placement. -65 to ignore
+			#Range: -65.0 ~ 256.0
+			height_max = 150.0
+			#Minimum height for generation placement. -65 to ignore
+			#Range: -65.0 ~ 256.0
+			height_min = 20.0
+
+	[server.story_setting]
+		#Do you need to have seen rosmontis before you can summon she by the Preparation Op
+		"false represents being able to summon without seeing" = false
+
+	[server.mega_structure]
+		#Whether to generate custom biomes near mega structures
+		generate_custom_biome = true
+		#Whether to generate flattened terrain near mega structures
+		generate_flat_terrain = true
+		#Radius multiplier for flattened terrain near mega structures
+		#Range: 0 ~ 10
+		flat_terrain_radius_multiplier = 1
+		#Whether to restrict mob spawning near mega structures (by default only vanilla non-creeper mobs are allowed)
+		restrict_mob_spawning = true
+		#If true, blocks other structures and placed features from generating inside MegaStructure coreRadius.
+		preventOtherWorldgenInMegaCore = true
+		#Default mega-structure generation speed applied during manager initialization. Allowed values: normal, fast.
+		megaStructureGenerationSpeed = "normal"
+		#If true, natural MegaStructures can also be planned for worlds that already existed before this mod was added.
+		isgenerateStructureinexistworld = false
+
+		[server.mega_structure.structure_sankta_holy_city]
+			#If true, this mega structure will be generated.
+			generate = true
+
+		[server.mega_structure.structure_plain_rodes_office]
+			#If true, this mega structure will be generated.
+			generate = true
+			#If true, rosmontis will spawn in a place suitable for fighting locations and manual spawning is enabled(Only effective when dialogue is closed)
+			rosmontis_useArenaSpawnAndManualSpawn = false
+			#Cooldown in ticks for Rosmontis respawn. Default 600 (30 seconds).
+			#Range: > 1
+			rosmontisSpawnTimeCooldown = 600
+			#Cooldown in ticks for PreparationOp respawn. Default 12000 (600 seconds).
+			#Range: > 1
+			preparationOpSpawnTimeCooldown = 12000
+
+		[server.mega_structure.structure_snow_guerrilla_camp]
+			#If true, this mega structure will be generated.
+			generate = true
+			#If true, patriot will spawn in a place suitable for fighting locations and manual spawning is enabled(Only effective when dialogue is closed)
+			patriot_useArenaSpawnAndManualSpawn = false
+			#Cooldown in ticks for Patriot respawn. Default 600 (30 seconds).
+			#Range: > 1
+			PatriotSpawnTimeCooldown = 600
+			#If true, frost_nova will spawn in a place suitable for fighting locations and manual spawning is enabled(Only effective when dialogue is closed)
+			frost_nova_useArenaSpawnAndManualSpawn = false
+			#Cooldown in ticks for FrostNova respawn. Default 600 (30 seconds).
+			#Range: > 1
+			FrostNovaSpawnTimeCooldown = 600
+			#Cooldown in ticks for ShieldGuard respawn. Default 12000 (600 seconds).
+			#Range: > 1
+			ShieldGuardOpSpawnTimeCooldown = 12000
+			#Cooldown in ticks for YetiIceLeaver respawn. Default 12000 (600 seconds).
+			#Range: > 1
+			YetiIceLeaverSpawnTimeCooldown = 12000
+
+		[server.mega_structure.structure_snow_rodes_office]
+			#If true, this mega structure will be generated.
+			generate = true

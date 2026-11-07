@@ -1,0 +1,48 @@
+#Turn off all structures?
+DisableStructures = false
+#Whether the structure will appear.
+AbandonedBankSpawning = true
+#Disables the spawn of the named custom zombie for this structure.
+BankSpawnZombieWithCustomName = false
+#Average distance between two neighboring generation attempts.
+#Range: 0 ~ 4096
+AbandonedBankSpacing = 100
+#Minimum distance between two neighboring attempts.
+#Range: 0 ~ 4096
+AbandonedBankSeparation = 60
+#Defines the list of biomes where this structure can spawn.
+AbandonedBankBiomes = ["plains", "sunflower_plains", "savanna", "windswept_savanna", "savanna_plateau"]
+#Whether the structure will appear.
+AbandonedHotelSpawning = true
+#Disables the spawn of the named custom zombie for this structure.
+HotelSpawnZombieWithCustomName = false
+#Average distance between two neighboring generation attempts.
+#Range: 0 ~ 4096
+AbandonedHotelSpacing = 95
+#Minimum distance between two neighboring attempts.
+#Range: 0 ~ 4096
+AbandonedHotelSeparation = 55
+#Defines the list of biomes where this structure can spawn.
+AbandonedHotelBiomes = ["savanna", "savanna_plateau", "windswept_savanna"]
+#Whether the structure will appear.
+OvergrownSuburbanSpawning = true
+#Disables the spawn of the named custom zombie for this structure.
+SuburbanSpawnZombieWithCustomName = false
+#Average distance between two neighboring generation attempts.
+#Range: 0 ~ 4096
+OvergrownSuburbanSpacing = 80
+#Minimum distance between two neighboring attempts.
+#Range: 0 ~ 4096
+OvergrownSuburbanSeparation = 60
+#Defines the list of biomes where this structure can spawn.
+OvergrownSuburbanBiomes = ["desert", "plains", "sunflower_plains", "savanna_plateau", "windswept_savanna", "savanna"]
+#Whether the structure will appear.
+AbandonedSuburbanSpawning = true
+#Average distance between two neighboring generation attempts.
+#Range: 0 ~ 4096
+AbandonedSuburbanSpacing = 85
+#Minimum distance between two neighboring attempts.
+#Range: 0 ~ 4096
+AbandonedSuburbanSeparation = 65
+#Defines the list of biomes where this structure can spawn.
+AbandonedSuburbanBiomes = ["plains", "savanna", "savanna_plateau", "windswept_savanna"]
