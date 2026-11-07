@@ -72,14 +72,14 @@ enable-player-address-logging = true
 [servers]
 # Configure your servers here. Each key represents the server's name, and the value
 # represents the IP address of the server to connect to.
-lobby = "minecraft-server:25565"
+forge = "minecraft-forge:25565"
 
 # In what order we should try servers when a player logs in or is kicked from a server.
-try = ["lobby"]
+try = ["forge"]
 
 [forced-hosts]
 # Configure your forced hosts here.
-"lobby.example.com" = ["lobby"]
+# No forced hosts while Forge is the only backend.
 
 [advanced]
 # How large a Minecraft packet has to be before we compress it. Setting this to zero will
@@ -117,7 +117,7 @@ show-ping-requests = false
 # loses connection to the server without an explicit disconnect message by attempting to fall the
 # user back, except in the case of read timeouts. BungeeCord will disconnect the user instead. You
 # can disable this setting to use the BungeeCord behavior.
-failover-on-unexpected-server-disconnect = true
+failover-on-unexpected-server-disconnect = false
 
 # Declares the proxy commands to 1.13+ clients.
 announce-proxy-commands = true

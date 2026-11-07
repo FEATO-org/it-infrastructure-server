@@ -42,6 +42,7 @@ services:
     command: [ "/usr/bin/run-bungeecord.sh" ]
     environment:
       TYPE: VELOCITY
+      DISABLE_GEYSER: "true"
       VELOCITY_VERSION: "4.2.0"
       VELOCITY_BUILD_ID: "30"
       MINECRAFT_VERSION: ${MINECRAFT_VERSION:-26.2}
@@ -59,7 +60,7 @@ services:
       JVM_OPTS: >-
         --enable-native-access=ALL-UNNAMED -DgeyserAdvertiseAddresses=162.43.23.222
       PLUGINS: |-
-        https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/velocity
+        https://cdn.modrinth.com/data/cOj6YqJM/versions/YeQbhgna/Ambassador-Velocity-1.4.5-all.jar
         https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/velocity
         https://cdn.modrinth.com/data/Vebnzrzj/versions/tamnmXad/LuckPerms-Velocity-5.5.71.jar
     secrets:
@@ -207,6 +208,56 @@ services:
       - web-ingress-network
     stop_grace_period: 2m
     deploy:
+      replicas: 0
+      placement:
+        constraints:
+          - node.labels.minecraft-data == true
+      update_config:
+        parallelism: 1
+        order: stop-first
+        failure_action: rollback
+      rollback_config:
+        parallelism: 1
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        window: 180s
+      resources:
+        reservations:
+          memory: 2G
+        limits:
+          memory: 9G
+    logging: *default-logging
+
+  minecraft-forge:
+    image: itzg/minecraft-server:java17@sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287
+    environment:
+      EULA: "TRUE"
+      TYPE: AUTO_CURSEFORGE
+      CF_SLUG: custom
+      CF_MODPACK_MANIFEST: /forge-pack/manifest.json
+      CF_EXCLUDE_MODS: "495267,679177,908741,240630,535489"
+      CF_FORCE_INCLUDE_MODS: "248787"
+      MODS: https://cdn.modrinth.com/data/vDyrHl8l/versions/qiZ49HIW/proxy-compatible-forge-1.3.1.jar
+      PRE_START_SCRIPT: /forge-pack/prepare-forge.sh
+      ONLINE_MODE: "FALSE"
+      INIT_MEMORY: 1G
+      MAX_MEMORY: 8G
+      TZ: Asia/Tokyo
+      UID: "1000"
+      GID: "1000"
+    secrets:
+      - forwarding_secret
+    volumes:
+      - minecraft_forge_data:/data
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/modpack/manifest.json:/forge-pack/manifest.json:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/prepare-forge.sh:/forge-pack/prepare-forge.sh:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/config:/forge-config:ro
+    networks:
+      - minecraft-backend-network
+    stop_grace_period: 2m
+    deploy:
       replicas: 1
       placement:
         constraints:
@@ -246,6 +297,7 @@ networks:
 volumes:
   minecraft_proxy_data:
   minecraft_server_data:
+  minecraft_forge_data:
 
 secrets:
   forwarding_secret:

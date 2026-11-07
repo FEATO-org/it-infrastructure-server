@@ -41,4 +41,13 @@ printf "host: localhost\nport: %s\npassword: '%s'\n" "${RCON_PORT:-25575}" "${rc
 mv -f -- "${rcon_cli_config_tmp}" "${rcon_cli_config}"
 trap - EXIT
 
+if [[ "${DISABLE_GEYSER:-false}" == "true" ]]; then
+  mkdir -p /server/disabled-plugins
+  shopt -s nullglob nocaseglob
+  for jar in /server/plugins/*geyser*.jar; do
+    mv --backup=numbered -- "$jar" /server/disabled-plugins/
+  done
+  shopt -u nullglob nocaseglob
+fi
+
 exec "$@"

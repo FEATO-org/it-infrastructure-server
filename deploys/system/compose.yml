@@ -142,7 +142,7 @@ services:
     command:
       - export-for-prometheus
     environment:
-      EXPORT_SERVERS: app_minecraft-server
+      EXPORT_SERVERS: app_minecraft-forge
       DEBUG: "false"
     networks:
       - monitoring-network
@@ -181,18 +181,6 @@ services:
       - target: 25565
         published: 25565
         protocol: tcp
-        mode: host
-      - target: 19132
-        published: 19132
-        protocol: tcp
-        mode: host
-      - target: 19132
-        published: 19132
-        protocol: udp
-        mode: host
-      - target: 19133
-        published: 19133
-        protocol: udp
         mode: host
     configs:
       - source: nginx_main_config

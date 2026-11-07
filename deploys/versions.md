@@ -1,3 +1,14 @@
+# Forge 1.20.1 切替の取得元
+
+| 対象 | 固定版 / 取得元 | 検証状況 |
+| --- | --- | --- |
+| itzg/minecraft-server | `java17` / digest `sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287` / [公式](https://docker-minecraft-server.readthedocs.io/) | 隔離起動試験に使用 |
+| Minecraft / Forge | 1.20.1 / 47.4.28、提供 manifest と [Auto CurseForge](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) | 隔離 Forge で起動、Mod エラーあり |
+| Ambassador | 1.4.5 / [固定ファイル](https://cdn.modrinth.com/data/cOj6YqJM/versions/YeQbhgna/Ambassador-Velocity-1.4.5-all.jar) | Velocity 4.2.0 と接続未検証 |
+| Proxy Compatible Forge | 1.3.1 / [固定ファイル](https://cdn.modrinth.com/data/vDyrHl8l/versions/qiZ49HIW/proxy-compatible-forge-1.3.1.jar) | Forge 初期化確認、Forwarding 接続未検証 |
+
+Mod の固定 ID と配布元一覧、除外と更新は [Modpack](../minecraft/forge/modpack/README.md) を参照。本番での起動・接続は未確認。
+
 # バージョン確認（2026-09-22）
 
 ## Ultimate Sleep 1.3.1（26.x Plugin）
