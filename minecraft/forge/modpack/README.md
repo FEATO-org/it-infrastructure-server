@@ -1,10 +1,10 @@
 # イワシコ寄生虫 Modpack
 
-提供された58件版から Superb Warfare と TaCZ 関連6件を除いた `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と 51 組の CurseForge project ID / file ID を固定する。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
+提供された58件版から Superb Warfare を除いた `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と 57 組の CurseForge project ID / file ID を固定する。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
 
 [Auto CurseForge](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) で manifest を使う。Java 17 イメージの組み込み API key を使用し、配布制限されたファイルがあれば起動ログに示される手順に従い同じ ID のファイルを手動取得する。キーを変更する必要があるときは Swarm secret と `CF_API_KEY_FILE` を使用し、Git に記載しない。
 
-以下はサーバーから除外する: Inventory Profiles Next (495267)、libIPN (679177)、Embeddium (908741)、Just Enough Resources (240630)、Sound Physics Remastered (535489)、[More Overlays Updated](https://www.curseforge.com/minecraft/mc-mods/more-overlays-updated) (391382)、[Entity Culling](https://www.curseforge.com/minecraft/mc-mods/entityculling) (448233)、[Oculus](https://www.curseforge.com/minecraft/mc-mods/oculus) (581495)。More Overlays、Entity Culling、Oculus は配布元がクライアント用と記載している。[Inventory Profiles Next](https://www.curseforge.com/minecraft/mc-mods/inventory-profiles-next) と [libIPN](https://www.curseforge.com/minecraft/mc-mods/libipn) はクライアント用、[Embeddium](https://www.curseforge.com/minecraft/mc-mods/embeddium) はクライアント描画用、[JER](https://www.curseforge.com/minecraft/mc-mods/just-enough-resources-jer) はクライアント向け JEI 拡張、[Sound Physics](https://github.com/henkelmax/sound-physics-remastered/issues/172) の音響処理はクライアント向け。イメージ同梱の除外規則も適用されるため、[AppleSkin](https://github.com/squeek502/AppleSkin) は空腹・隠し満腹度の同期を使えるよう明示的に含める。JourneyMap はサーバー機能があるため残す。JEI なども提供 pack と依存関係を維持する。
+以下はサーバーから除外する: Inventory Profiles Next (495267)、libIPN (679177)、Embeddium (908741)、Just Enough Resources (240630)、Sound Physics Remastered (535489)、[Tactical HUD](https://www.curseforge.com/minecraft/mc-mods/tacz-tactical-hud) (1768274)、[More Overlays Updated](https://www.curseforge.com/minecraft/mc-mods/more-overlays-updated) (391382)、[Entity Culling](https://www.curseforge.com/minecraft/mc-mods/entityculling) (448233)、[Oculus](https://www.curseforge.com/minecraft/mc-mods/oculus) (581495)。後者4件は配布元がクライアント用と記載している。[Inventory Profiles Next](https://www.curseforge.com/minecraft/mc-mods/inventory-profiles-next) と [libIPN](https://www.curseforge.com/minecraft/mc-mods/libipn) はクライアント用、[Embeddium](https://www.curseforge.com/minecraft/mc-mods/embeddium) はクライアント描画用、[JER](https://www.curseforge.com/minecraft/mc-mods/just-enough-resources-jer) はクライアント向け JEI 拡張、[Sound Physics](https://github.com/henkelmax/sound-physics-remastered/issues/172) の音響処理はクライアント向け。イメージ同梱の除外規則も適用されるため、[AppleSkin](https://github.com/squeek502/AppleSkin) は空腹・隠し満腹度の同期を使えるよう明示的に含める。JourneyMap はサーバー機能があるため残す。JEI なども提供 pack と依存関係を維持する。
 
 ZIP の overrides は古い別 Mod の設定、クライアント設定、個人の画面・履歴情報、外部サービス設定を含む。現在の pack に関係する共通設定だけを `../config/config/` に選別した。`prepare-forge.sh` が存在しない設定だけを `/data/config` にコピーするため、Volume の設定は再起動や更新で自動上書きされない。更新時は新しい ZIP の manifest と設定の差分・Mod 依存関係を確認し、Volume をバックアップしてから必要な変更を明示的に反映する。ワールド単位の `serverconfig` は `/data/world/serverconfig` の実物を優先し、ZIP の古い Ars Nouveau 設定を現在の pack に適用しない。
 
@@ -64,42 +64,39 @@ ZIP の overrides は古い別 Mod の設定、クライアント設定、個人
 
 Create Crafts & Additions 1.3.3 は既存のため変更しない。Steam 'n' Rails と Diesel Generators の配布 JAR の Forge メタデータでは Create 6.0.8 が依存範囲に含まれる。Big Cannons 5.10.2 の配布ページは Create 6.0.8 を明記している。4 件の組み合わせの専用サーバー起動、ゲーム内動作とクライアント接続は未確認。Big Cannons の CurseForge 配布 JAR は固定 URL から取得でき、Forge メタデータの Create 6.0.8 と Ritchie’s Projectile Library 2.1.1 の依存範囲を確認した。Auto CurseForge での取得・起動は未確認。
 
-以下の更新・復旧手順を参照する。
+以下の58件版への更新・復旧手順を優先する。
 
-## TaCZ全削除の適用と復旧
+## TaCZディレクトリの退避
 
-TaCZ本体、Weapons and Tactics、Tactical HUD、Gucci & Vuitton Attachments、Create: TaCZ、LesRaisins Tactical Equipements を Manifest と一覧から除外した。Arcana と全Gunpackも `content.lock` から外し、TaCZ・LesRaisinsのGit管理の初回設定を除いた。実Volumeの設定は保持する。Minecraft 1.20.1 / Forge 47.4.28、他のMod、ワールドは維持する。
+TaCZ本体、Weapons and Tacticsなどの関連Modと Arcana は維持する。`content.lock` から Charge into Battle、EOS Lab、Alex Kim の Gunpack ZIP を外したため、再起動時に自動再取得しない。Classics Reborn は以前に同期対象から外している。
 
-本番を停止しForge Volume全体をバックアップする。TaCZ関連の銃器・アイテムなどを持つプレイヤーや保存データへの影響を確認する。関連データは削除後のワールド保存時に失われるおそれがあり、復旧には削除前のワールド・プレイヤーデータと旧構成の整合したバックアップが必要。クライアントも同じ6 ModとArcanaおよびGunpackを外す。ZIPやフォルダの別名コピーも調べる。
+本番のForgeを停止してVolume全体をバックアップする。`/data/tacz/` には Gunpack のほか利用者が置いたZIP・展開済みフォルダ・設定・その他のファイルが含まれる可能性がある。対象全体を確認し、以下のコマンドでディレクトリを `/data/.feato-content/retired/tacz-directory/tacz/` へまとめて移動する。既知のGunpackの管理記録も同じ退避先の `records/` へ移す。ModのJARと `/data/config/`、ワールドは操作しない。
 
-`content.lock` を更新しただけでは既存Volumeのファイルは消えない。新しいリポジトリをデータノードへ配置後、サービスを停止しバックアップを取得してから、以下で確認済みの対象だけを `/data/.feato-content/retired/tacz-removal/` に退避する。管理対象Gunpack・Arcanaはファイルと管理記録の両方、他のJARは固定配布物のSHA-256を照合する。不一致、シンボリックリンク、退避先の競合があれば移動前に停止する。存在しない対象は飛ばす。追加・別名のJARやZIPは自動で対象にならないため、別途内容を確認する。
+新しいリポジトリと `content.lock` をデータノードへ配置し、停止・バックアップ後に実行する。Volumeとパスは実物を確認する。ディレクトリ自体が存在しなければ何もしない。シンボリックリンク、管理記録の不一致、退避先の競合は移動前に拒否する。
 
 ```bash
-# データノード上。指定したリポジトリのファイルとVolumeを事前に確認する。
 FORGE_VOLUME='実際のForge Volume名'
-REPO_DIR='配布したリポジトリの絶対パス'
+REPO_DIR='更新済みリポジトリの絶対パス'
 FORGE_IMAGE='itzg/minecraft-server:java17@sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287'
 docker run --rm --user 0:0 --entrypoint bash \
   -v "$FORGE_VOLUME:/data" \
-  -v "$REPO_DIR/minecraft/forge/retire-tacz.sh:/retire-tacz.sh:ro" \
-  "$FORGE_IMAGE" /retire-tacz.sh /data
+  -v "$REPO_DIR/minecraft/forge/retire-tacz-directory.sh:/retire-tacz-directory.sh:ro" \
+  "$FORGE_IMAGE" /retire-tacz-directory.sh /data
 ```
 
-操作が途中で失敗した場合は出力と退避先を確認し、手動で整合を取る。再起動前に `/data/mods/` と `/data/tacz/` を一覧確認し、対象が残っていないこと、旧lockが使われていないことを確認する。更新版の構成を適用しForgeとクライアントの接続、残るModを確認する。ロールバックは停止して旧設定と更新前Volumeの整合したバックアップを復元する。
-
-隔離された新規ワールドでは、対象6件とArcana/Gunpackを除いたForge 47.4.28が起動し `Done` を確認した。Photonのクライアントクラス読込、Creating Spaceのタグ、レシピ、Curiosスロット等のエラーは残った。Proxy Compatible Forge・MobBottle・実ワールド・実クライアントを含む試験は未実施。
+適用後、TaCZは起動時に新しい `/data/tacz/` や既定コンテンツを生成する可能性がある。ディレクトリを永続的に存在させない設定ではない。追加Gunpackが再取得されないことを確認する。プレイヤーのクライアントに追加Gunpackがある場合は同様に退避し、接続・ゲーム内動作を検証する。削除したGunpack由来の銃器・アイテムは利用できなくなる可能性があり、削除後にワールドを保存すると復元できない場合がある。戻す際は停止して整合した更新前Volumeのバックアップと旧lockを復元する。
 
 ## 58件版への更新と復旧
 
-当時の58件版の旧44件との差分は Weapons and Tactics (Mod)、Superb Warfare、Storage Drawers、FerriteCore、Tactical HUD、More Overlays Updated、ModernFix、Gucci & Vuitton Attachments、Delightful、Torchmaster、Entity Culling、LesRaisins Tactical Equipements、Oculus、spark、Create: Copper & Zinc の15件追加、GraveStone の削除、Create Big Cannons の file 7478036 から [8169547](https://www.curseforge.com/minecraft/mc-mods/create-big-cannons/files/8169547) への更新。当時 Weapons and Tactics は [JAR版 1411291 / 9473803](https://www.curseforge.com/minecraft/mc-mods/tacz-weapons-and-tactics-mod) を採用し、旧 ZIP 版は使わない。当時はクライアント専用9件を manifest に残した。
+旧44件との差分は Weapons and Tactics (Mod)、Superb Warfare、Storage Drawers、FerriteCore、Tactical HUD、More Overlays Updated、ModernFix、Gucci & Vuitton Attachments、Delightful、Torchmaster、Entity Culling、LesRaisins Tactical Equipements、Oculus、spark、Create: Copper & Zinc の15件追加、GraveStone の削除、Create Big Cannons の file 7478036 から [8169547](https://www.curseforge.com/minecraft/mc-mods/create-big-cannons/files/8169547) への更新。Weapons and Tactics は [JAR版 1411291 / 9473803](https://www.curseforge.com/minecraft/mc-mods/tacz-weapons-and-tactics-mod) を採用し、旧 ZIP 版は使わない。クライアント専用9件は manifest に残す。
 
 適用前にサーバーを停止し Forge Volume 全体（world、playerdata、config、mods、tacz、管理状態）を整合した状態でバックアップし、復元を試す。GraveStone の削除により残存する墓やその所持品などが読み込めなくなる・失われるおそれがある。事前に墓とアイテムを回収し、旧Mod・旧設定を含む停止時バックアップを保存する。欠落データを保存したワールドに後からModを戻しても復元できる保証はない。
 
-公式の [Auto CurseForge 再同期](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) は `CF_FORCE_SYNCHRONIZE=true` で除外条件を再評価する。停止・バックアップ後、隔離コピーでまず一時設定して試す。再同期が旧 JAR の削除を保証するとは確認できていないため、旧 GraveStone、旧 Create Big Cannons、除外9件を `/data/mods/` で project/file ID・実体から特定し、残存していれば対象だけを `/data/mods/` の外へ退避する。識別不能なら停止して調査し、ディレクトリ全体を削除しない。不要なJARは対象を特定して退避する。検証後は一時設定を外す。
+公式の [Auto CurseForge 再同期](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) は `CF_FORCE_SYNCHRONIZE=true` で除外条件を再評価する。停止・バックアップ後、隔離コピーでまず一時設定して試す。再同期が旧 JAR の削除を保証するとは確認できていないため、旧 GraveStone、旧 Create Big Cannons、除外9件を `/data/mods/` で project/file ID・実体から特定し、残存していれば対象だけを `/data/mods/` の外へ退避する。識別不能なら停止して調査し、ディレクトリ全体を削除しない。Arcana と他の手動管理 JAR を維持する。検証後は一時設定を外す。
 
-起動前の同期は `/data/tacz/feato-weapons-and-tactics.zip` と管理記録の双方が旧 SHA-256 `e9983776641a5ffa95fef55198d91ff595faff1630934cb4bfa7d6a8c4666c10` に一致する場合のみ `/data/.feato-content/retired/` に退避し、管理記録を除く。未管理、改変、退避先の競合は起動を拒否し、手動調査する。対象がなければ続行する。TaCZ全削除時は上記の退避手順を参照する。
+起動前の同期は `/data/tacz/feato-weapons-and-tactics.zip` と管理記録の双方が旧 SHA-256 `e9983776641a5ffa95fef55198d91ff595faff1630934cb4bfa7d6a8c4666c10` に一致する場合のみ `/data/.feato-content/retired/` に退避し、管理記録を除く。未管理、改変、退避先の競合は起動を拒否し、手動調査する。対象がなければ続行する。TaCZディレクトリの退避については上記の手順を参照する。
 
-プレイヤーはTaCZ関連のModとGunpackをクライアントからも除く。設定とセーブは別途保全する。
+プレイヤーは新しい提供 Modpack を適用し、旧 Weapons and Tactics ZIP を `tacz/` から手動で退避して JAR版だけにする。追加Gunpackは退避し、Arcanaは `mods/` に維持する。設定とセーブは別途保全する。
 
 [Weapons and Tactics 配布元](https://www.curseforge.com/minecraft/mc-mods/tacz-weapons-and-tactics-mod/files/all) は 0.4.1 を Forge 1.20.1 / TaCZ 1.2.0 向けとし、Big Cannons 5.11.4 は Create 6.0.7 以降を指定する。Create 6.0.8・TaCZ 1.2.0 はその表記範囲内だが、全Modの依存・レシピ・銃器ID・ネットワーク、Arcana と他Gunpackの競合、および実接続は未検証。隔離コピーで Forge とクライアントの起動・接続、レシピ・銃器・墓を確認する。旧版の隔離起動結果は新版の確認ではない。
 
@@ -113,7 +110,7 @@ docker run --rm --user 0:0 --entrypoint bash \
 
 ## Superb Warfare の削除
 
-提供された58件版から [Superb Warfare 0.8.9.2](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/9019882)（project 1218165 / file 9019882）を外した。TaCZ関連の削除前は manifest と modlist は57件だった。クライアントでも対象JARをインスタンスの `mods/` の外へ退避し、サーバーと同じ構成にする。TaCZ関連の削除は上記の手順を参照する。
+提供された58件版から [Superb Warfare 0.8.9.2](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/9019882)（project 1218165 / file 9019882）を外した。現在の manifest と modlist は57件。クライアントでも対象JARをインスタンスの `mods/` の外へ退避し、サーバーと同じ構成にする。TaCZ、Arcana とその Gunpack は維持する。
 
 適用前に Forge を停止し、Volume全体（world、playerdata、mods、configを含む）をバックアップする。Superb Warfare の銃・乗り物・ブロック・インベントリなど、このModに由来する保存済みデータが失われる可能性がある。対象の回収・保存の要否を確認し、隔離コピーで Mod を除いた起動とワールドを検証する。除外後のワールドを保存してからJARを戻しても、消えたデータの復元は保証されない。復旧が必要なら停止して更新前の Volume バックアップと旧 manifest・JAR・設定を揃えて復元する。
 
@@ -163,4 +160,4 @@ docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IM
 '
 ```
 
-クライアント側でも同じ Gunpack の ZIP や展開版を `tacz/` から退避する。現在は TaCZ 全削除の手順を優先し、クライアント接続と残りのModを確認する。
+クライアント側でも同じ Gunpack の ZIP や展開版を `tacz/` から退避する。現在は追加Gunpackをすべて退避し、Arcana、TaCZ本体、ほかの設定は維持する。適用後に対象が再取得されず、クライアント接続を確認する。
