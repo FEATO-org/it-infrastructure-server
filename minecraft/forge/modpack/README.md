@@ -1,6 +1,6 @@
 # イワシコ寄生虫 Modpack
 
-提供された58件版から Superb Warfare と Gucci & Vuitton Attachments を除いた `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と 56 組の CurseForge project ID / file ID を固定する。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
+提供された58件版から Superb Warfare、Gucci & Vuitton Attachments、LesRaisins Tactical Equipements を除いた `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と 55 組の CurseForge project ID / file ID を固定する。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
 
 [Auto CurseForge](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) で manifest を使う。Java 17 イメージの組み込み API key を使用し、配布制限されたファイルがあれば起動ログに示される手順に従い同じ ID のファイルを手動取得する。キーを変更する必要があるときは Swarm secret と `CF_API_KEY_FILE` を使用し、Git に記載しない。
 
@@ -104,7 +104,7 @@ docker run --rm --user 0:0 --entrypoint bash \
 
 ## 提供 overrides のサーバー設定
 
-提供 overrides から Diesel Generators、Delightful、Farmer’s Delight、FerriteCore、LesRaisins Tactical Equipements、ModernFix、Steam ’n’ Rails、ShinColle-kai（採掘テーブルを含む）、Storage Drawers、Torchmaster の共通設定を `../config/config/` に初回用として取り込んだ。これらの値は新規 Volume または対応ファイルが存在しない場合にのみ `prepare-forge.sh` により `/data/config/` にコピーされ、既存 Volume 上の同名設定は上書きされない。適用する必要がある場合は停止・バックアップ後、実際の設定と提供値を比較し、運用者が対象設定を個別に反映する。ゲーム内の効果は未検証。
+提供 overrides から Diesel Generators、Delightful、Farmer’s Delight、FerriteCore、ModernFix、Steam ’n’ Rails、ShinColle-kai（採掘テーブルを含む）、Storage Drawers、Torchmaster の共通設定を `../config/config/` に初回用として取り込んだ。これらの値は新規 Volume または対応ファイルが存在しない場合にのみ `prepare-forge.sh` により `/data/config/` にコピーされ、既存 Volume 上の同名設定は上書きされない。適用する必要がある場合は停止・バックアップ後、実際の設定と提供値を比較し、運用者が対象設定を個別に反映する。ゲーム内の効果は未検証。
 
 既存の共通設定は保持する。提供版の Touhou Little Maid 設定には妖精関連の値の変更とクライアント固有のマイク設定があるが、既存設定の上書きは行わない。クライアント専用設定、個人情報を含み得るファイル、overrides 内の未管理JAR・Gunpack・モデル・音声・ワールドは一括コピーしない。これらの要否と再配布条件は別途確認する。
 
@@ -162,31 +162,40 @@ docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IM
 
 クライアント側でも同じ Gunpack の ZIP や展開版を `tacz/` から退避する。現在は追加Gunpackをすべて退避し、Arcana、TaCZ本体、ほかの設定は維持する。適用後に対象が再取得されず、クライアント接続を確認する。
 
-## Gucci & Vuitton Attachments の削除
+## Gucci & Vuitton と LesRaisins Tactical の削除
 
-[Gucci & Vuitton Attachments](https://www.curseforge.com/minecraft/mc-mods/tacz-gucci-vuitton-attachments/files/6062098)（project 1103436 / file 6062098）を manifest と一覧から外す。TaCZ本体、Weapons and Tactics、Arcanaと他のModは維持する。クライアントの `mods/` からも同ModのJARを外し、`tacz/` に同GunpackのZIPまたは展開版が残っていないか確認する。
+[Gucci & Vuitton Attachments](https://www.curseforge.com/minecraft/mc-mods/tacz-gucci-vuitton-attachments/files/6062098)（project 1103436 / file 6062098）と [LesRaisins Tactical Equipements](https://www.curseforge.com/minecraft/mc-mods/tacz-lesraisins-tactical-equipements/files/8652673)（project 1273094 / file 8652673）を manifest と一覧から外す。LesRaisins のGit管理の初回設定を外し、既存Volumeの設定は保持する。TaCZ本体、Weapons and Tactics、Arcanaと他のModは維持する。クライアントの `mods/` からも両ModのJARを外し、`tacz/` に両GunpackのZIPまたは展開版が残っていないか確認する。
 
-停止中のForge Volumeをバックアップし、対象Mod由来のアタッチメント・アイテムの回収と復旧要否を確認する。Modを外してワールドを保存すると関連データが失われる可能性がある。復旧時は停止したうえで旧Mod構成と削除前Volumeの整合したバックアップを復元する。
+停止中のForge Volumeをバックアップし、対象Mod由来のアタッチメント・装備・アイテムの回収と復旧要否を確認する。Modを外してワールドを保存すると関連データが失われる可能性がある。復旧時は停止したうえで旧Mod構成と削除前Volumeの整合したバックアップを復元する。
 
-既存VolumeのJARはmanifestから外すだけでは残る可能性がある。データノードで実際のVolume名を確認し、サービス停止・バックアップ後に次を実行する。確認済みの固定版とSHA-256が一致する場合だけ対象JARを読込対象外へ退避する。対象なしは正常終了し、別版・変更・シンボリックリンク・退避先競合時は停止する。
+既存VolumeのJARはmanifestから外すだけでは残る可能性がある。データノードで実際のVolume名を確認し、サービス停止・バックアップ後に次を実行する。確認済みの固定版とSHA-256が一致するJARだけを読込対象外へ退避する。対象をすべて事前確認し、一つでも不一致なら移動を始めない。対象なしは正常終了し、別版・変更・シンボリックリンク・退避先競合時は停止する。
 
 ```bash
 FORGE_VOLUME='実際のForge Volume名'
 FORGE_IMAGE='itzg/minecraft-server:java17@sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287'
 docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IMAGE" -euc '
-  src=/data/mods/guccivuitton-1.20.1-0.2.2.jar
-  dst=/data/.feato-content/retired/guccivuitton-1.20.1-0.2.2.jar
-  expected=9247e55f20acf8ec89af56d4ad45fcc8fe08bee9f7189421ef31835f3516bd57
-  for dir in /data/mods /data/.feato-content /data/.feato-content/retired; do
+  entries=(
+    "guccivuitton-1.20.1-0.2.2.jar|9247e55f20acf8ec89af56d4ad45fcc8fe08bee9f7189421ef31835f3516bd57"
+    "lrtactical-1.20.1-0.4.3.jar|930372cab33e1f563f597c74f9155b5ed25e6f2b0ff7e12dfc86255e1020ef2d"
+  )
+  dest=/data/.feato-content/retired
+  for dir in /data/mods /data/.feato-content "$dest"; do
     [[ ! -L "$dir" && ( ! -e "$dir" || -d "$dir" ) ]] || { echo "安全でないディレクトリ: $dir" >&2; exit 1; }
   done
-  if [[ ! -e "$src" && ! -L "$src" ]]; then echo "対象JARは存在しません"; exit 0; fi
-  [[ ! -L "$src" && -f "$src" ]] || { echo "通常ファイルではありません: $src" >&2; exit 1; }
-  [[ "$(sha256sum "$src" | cut -d " " -f 1)" == "$expected" ]] || { echo "SHA-256不一致: $src" >&2; exit 1; }
-  [[ ! -e "$dst" && ! -L "$dst" ]] || { echo "退避先が存在します: $dst" >&2; exit 1; }
-  mkdir -p "$(dirname "$dst")"
-  mv -- "$src" "$dst"
-  echo "対象JARを退避しました: $dst"
+  for entry in "${entries[@]}"; do
+    IFS="|" read -r name hash <<< "$entry"
+    src="/data/mods/$name"; dst="$dest/$name"
+    if [[ ! -e "$src" && ! -L "$src" ]]; then echo "対象なし: $name"; continue; fi
+    [[ ! -L "$src" && -f "$src" ]] || { echo "通常ファイルではありません: $src" >&2; exit 1; }
+    [[ "$(sha256sum "$src" | cut -d " " -f 1)" == "$hash" ]] || { echo "SHA-256不一致: $src" >&2; exit 1; }
+    [[ ! -e "$dst" && ! -L "$dst" ]] || { echo "退避先が存在します: $dst" >&2; exit 1; }
+  done
+  mkdir -p "$dest"
+  for entry in "${entries[@]}"; do
+    IFS="|" read -r name hash <<< "$entry"
+    src="/data/mods/$name"
+    [[ ! -f "$src" ]] || { mv -- "$src" "$dest/$name"; echo "退避: $name"; }
+  done
 '
 ```
 
