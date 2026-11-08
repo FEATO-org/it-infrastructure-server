@@ -1,6 +1,6 @@
 # Forge 1.20.1 切替の取得元
 
-現行55件版: 提供58件版から Superb Warfare (1218165 / 9019882) Gucci & Vuitton Attachments (1103436 / 6062098)、LesRaisins Tactical Equipements (1273094 / 8652673) を除外。[manifest](../minecraft/forge/modpack/manifest.json) の固定 project/file ID と [Modpack手順](../minecraft/forge/modpack/README.md#58件版への更新と復旧) を参照。Weapons and Tactics Mod 1411291 / 9473803 は CurseForge 経由、Create Big Cannons 646668 / 8169547 は [配布元](https://www.curseforge.com/minecraft/mc-mods/create-big-cannons/files/8169547)。Forge 47.4.28 / Java 17 での58件版の取得・起動・接続は未確認。
+現行57件版: 提供58件版から LesRaisins Tactical Equipements (1273094 / 8652673) を除き、Superb Warfare (1218165 / 9019882) と Gucci & Vuitton Attachments (1103436 / 6062098) を復活。[manifest](../minecraft/forge/modpack/manifest.json) と [復活手順](../minecraft/forge/modpack/README.md#gucci--vuittonとsuperb-warfareの復活) を参照。Forge 47.4.28 / Java 17、x86_64エミュレーションの隔離環境でArcanaを含む起動を確認。実ワールド・クライアント接続は未確認。ARM64ではArcanaネイティブライブラリのGLIBC不足で起動失敗。
 
 | 対象 | 固定版 / 取得元 | 検証状況 |
 | --- | --- | --- |

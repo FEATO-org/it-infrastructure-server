@@ -1,6 +1,6 @@
 # イワシコ寄生虫 Modpack
 
-提供された58件版から Superb Warfare、Gucci & Vuitton Attachments、LesRaisins Tactical Equipements を除いた `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と 55 組の CurseForge project ID / file ID を固定する。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
+提供された58件版から LesRaisins Tactical Equipements を除いた `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と 57 組の CurseForge project ID / file ID を固定する。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
 
 [Auto CurseForge](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) で manifest を使う。Java 17 イメージの組み込み API key を使用し、配布制限されたファイルがあれば起動ログに示される手順に従い同じ ID のファイルを手動取得する。キーを変更する必要があるときは Swarm secret と `CF_API_KEY_FILE` を使用し、Git に記載しない。
 
@@ -72,7 +72,7 @@ TaCZ本体、Weapons and Tacticsなどの関連Modと Arcana は維持する。`
 
 本番のForgeを停止してVolume全体をバックアップする。`/data/tacz/` には Gunpack のほか利用者が置いたZIP・展開済みフォルダ・設定・その他のファイルが含まれる可能性がある。対象全体を確認し、以下のコマンドでディレクトリを `/data/.feato-content/retired/tacz-directory/tacz/` へまとめて移動する。既知のGunpackの管理記録も同じ退避先の `records/` へ移す。ModのJARと `/data/config/`、ワールドは操作しない。
 
-Gucci & Vuitton と LesRaisins Tactical も削除する場合は、下記「Gucci & Vuitton と LesRaisins Tactical の削除」の一括退避手順を優先する。TaCZディレクトリだけを退避する場合は、新しいリポジトリと `content.lock` をデータノードへ配置し、停止・バックアップ後に実行する。Volumeとパスは実物を確認する。ディレクトリ自体が存在しなければ何もしない。シンボリックリンク、管理記録の不一致、退避先の競合は移動前に拒否する。
+TaCZディレクトリを退避する場合は、新しいリポジトリと `content.lock` をデータノードへ配置し、停止・バックアップ後に実行する。Volumeとパスは実物を確認する。ディレクトリ自体が存在しなければ何もしない。シンボリックリンク、管理記録の不一致、退避先の競合は移動前に拒否する。
 
 ```bash
 FORGE_VOLUME='実際のForge Volume名'
@@ -104,36 +104,9 @@ docker run --rm --user 0:0 --entrypoint bash \
 
 ## 提供 overrides のサーバー設定
 
-提供 overrides から Diesel Generators、Delightful、Farmer’s Delight、FerriteCore、ModernFix、Steam ’n’ Rails、ShinColle-kai（採掘テーブルを含む）、Storage Drawers、Torchmaster の共通設定を `../config/config/` に初回用として取り込んだ。これらの値は新規 Volume または対応ファイルが存在しない場合にのみ `prepare-forge.sh` により `/data/config/` にコピーされ、既存 Volume 上の同名設定は上書きされない。適用する必要がある場合は停止・バックアップ後、実際の設定と提供値を比較し、運用者が対象設定を個別に反映する。ゲーム内の効果は未検証。
+提供 overrides から Diesel Generators、Delightful、Farmer’s Delight、FerriteCore、ModernFix、Superb Warfare、Steam ’n’ Rails、ShinColle-kai（採掘テーブルを含む）、Storage Drawers、Torchmaster の共通設定を `../config/config/` に初回用として取り込んだ。これらの値は新規 Volume または対応ファイルが存在しない場合にのみ `prepare-forge.sh` により `/data/config/` にコピーされ、既存 Volume 上の同名設定は上書きされない。適用する必要がある場合は停止・バックアップ後、実際の設定と提供値を比較し、運用者が対象設定を個別に反映する。ゲーム内の効果は未検証。
 
 既存の共通設定は保持する。提供版の Touhou Little Maid 設定には妖精関連の値の変更とクライアント固有のマイク設定があるが、既存設定の上書きは行わない。クライアント専用設定、個人情報を含み得るファイル、overrides 内の未管理JAR・Gunpack・モデル・音声・ワールドは一括コピーしない。これらの要否と再配布条件は別途確認する。
-
-## Superb Warfare の削除
-
-提供された58件版から [Superb Warfare 0.8.9.2](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/9019882)（project 1218165 / file 9019882）を外した。Superb Warfare 削除直後は manifest と modlist は57件だった。クライアントでも対象JARをインスタンスの `mods/` の外へ退避し、サーバーと同じ構成にする。TaCZとArcanaは維持する。Gunpackは上記の退避方針に従う。
-
-適用前に Forge を停止し、Volume全体（world、playerdata、mods、configを含む）をバックアップする。Superb Warfare の銃・乗り物・ブロック・インベントリなど、このModに由来する保存済みデータが失われる可能性がある。対象の回収・保存の要否を確認し、隔離コピーで Mod を除いた起動とワールドを検証する。除外後のワールドを保存してからJARを戻しても、消えたデータの復元は保証されない。復旧が必要なら停止して更新前の Volume バックアップと旧 manifest・JAR・設定を揃えて復元する。
-
-本番Volumeには `superbwarfare-0.8.9.2-mc1.20.1-65d985a64-all.jar` が存在した。manifestから外すだけで既存JARが消える保証はない。データノードで対象Volumeを確認し、停止・バックアップ後に次のコマンドで対象だけを `/data/mods/` の外に退避する。旧JARと異なる内容、シンボリックリンク、退避先競合の場合は停止して調査する。`FORGE_VOLUME` は実際のVolume名に置き換える。
-
-```bash
-FORGE_VOLUME='実際のForge Volume名'
-FORGE_IMAGE='itzg/minecraft-server:java17@sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287'
-docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IMAGE" -euc '
-  src=/data/mods/superbwarfare-0.8.9.2-mc1.20.1-65d985a64-all.jar
-  dst=/data/.feato-content/retired/superbwarfare-0.8.9.2-mc1.20.1-65d985a64-all.jar
-  hash=559930003f638080de648a8621821d785158768c3f69a762094ef4c8d3c4cc12
-  if [[ ! -e "$src" && ! -L "$src" ]]; then echo "対象JARは存在しません"; exit 0; fi
-  [[ ! -L "$src" && -f "$src" ]] || { echo "通常ファイルではありません" >&2; exit 1; }
-  [[ "$(sha256sum "$src" | cut -d " " -f 1)" == "$hash" ]] || { echo "SHA-256不一致" >&2; exit 1; }
-  mkdir -p "$(dirname "$dst")"
-  [[ ! -e "$dst" && ! -L "$dst" ]] || { echo "退避先が存在します" >&2; exit 1; }
-  mv -- "$src" "$dst"
-  echo "対象JARを退避しました: $dst"
-'
-```
-
-運用者が更新済み構成を適用し起動後、`/data/mods/` に対象が再生成されていないことと、クライアント接続を確認する。旧 config や `world/serverconfig` は自動削除せず保持する。未使用設定の整理はバックアップのうえ別途判断する。
 
 ## Classics Reborn の退避
 
@@ -162,24 +135,19 @@ docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IM
 
 クライアント側でも同じ Gunpack の ZIP や展開版を `tacz/` から退避する。現在は追加Gunpackをすべて退避し、Arcana、TaCZ本体、ほかの設定は維持する。適用後に対象が再取得されず、クライアント接続を確認する。
 
-## Gucci & Vuitton と LesRaisins Tactical の削除
+## Gucci & VuittonとSuperb Warfareの復活
 
-[Gucci & Vuitton Attachments](https://www.curseforge.com/minecraft/mc-mods/tacz-gucci-vuitton-attachments/files/6062098)（project 1103436 / file 6062098）と [LesRaisins Tactical Equipements](https://www.curseforge.com/minecraft/mc-mods/tacz-lesraisins-tactical-equipements/files/8652673)（project 1273094 / file 8652673）を manifest と一覧から外す。LesRaisins のGit管理の初回設定を外し、既存Volumeの対象設定は停止後に退避する。TaCZ本体、Weapons and Tactics、Arcanaと他のModは維持する。クライアントの `mods/` からも両ModのJARを外し、`tacz/` に両GunpackのZIPまたは展開版が残っていないか確認する。
+[Gucci & Vuitton Attachments](https://www.curseforge.com/minecraft/mc-mods/tacz-gucci-vuitton-attachments/files/6062098)（project 1103436 / file 6062098）と [Superb Warfare](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/9019882)（project 1218165 / file 9019882）をmanifestへ戻す。TaCZとArcanaは維持し、LesRaisins Tactical Equipementsは削除したまま。Superb Warfareの共通設定seedは新規Volumeや設定未作成時だけコピーする。既存Volumeの設定は上書きしない。
 
-停止中のForge Volumeをバックアップし、対象Mod由来のアタッチメント・装備・アイテムの回収と復旧要否を確認する。Modを外してワールドを保存すると関連データが失われる可能性がある。復旧時は停止したうえで旧Mod構成と削除前Volumeの整合したバックアップを復元する。
+反映前にForgeを停止し、world・playerdata・config・modsを含むVolume全体をバックアップする。削除中にワールドが保存された場合、対象Modのアイテムや設置物はModの復活だけでは復元できない可能性がある。復旧が必要な場合は、復活前に保存したワールドとの関係を確認し、整合した削除前バックアップと旧Mod構成を用いて隔離環境で確認する。
 
-既存VolumeのJARはmanifestから外すだけでは残る可能性がある。サービス停止・バックアップ後、データノードに更新版リポジトリを配置し、実際のVolume名とパスを確認して次を実行する。**既存の `/data/tacz/` を設定や他Gunpackを含めて丸ごと退避**し、固定JAR 2件と `/data/config/lrtactical-common.toml`、`/data/config/lrtactical-client.toml`、`/data/world/serverconfig/lrtactical-server.toml`、および `/data/config/` 直下の `taczexpands` で始まるファイル・ディレクトリを同じ退避先に移す。後者の serverconfig は `world` の実ワールド名に基づく。別ワールドを使用している場合は実際のパスを確認し、個別に退避する。`/data/config/tacz-common.toml` は維持する。`taczexpands` はArcana関連設定で、技能設定等を含む場合があるため中身を退避前に確認する。Arcanaは維持するため起動後に同名設定が再生成される可能性がある。
+更新manifest適用時、[Auto CurseForge](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) が指定IDのJARを同期する。対象ファイルが退避済みの場合も再取得されるか起動ログと `/data/mods/` を確認する。取得に失敗した場合は公式配布元から同一ファイルを取得し、Forge停止後にSHA-256を照合して復元する。旧退避先から戻す場合も同じハッシュを確認し、同じModの別名JARが重複しないようにする。
 
-```bash
-FORGE_VOLUME='実際のForge Volume名'
-REPO_DIR='更新済みリポジトリの絶対パス'
-FORGE_IMAGE='itzg/minecraft-server:java17@sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287'
-docker run --rm --user 0:0 --entrypoint bash \
-  -v "$FORGE_VOLUME:/data" \
-  -v "$REPO_DIR/minecraft/forge/retire-removed-tacz-addons.sh:/retire-addons.sh:ro" \
-  "$FORGE_IMAGE" /retire-addons.sh /data
-```
+- `guccivuitton-1.20.1-0.2.2.jar`: `9247e55f20acf8ec89af56d4ad45fcc8fe08bee9f7189421ef31835f3516bd57`
+- `superbwarfare-0.8.9.2-mc1.20.1-65d985a64-all.jar`: `559930003f638080de648a8621821d785158768c3f69a762094ef4c8d3c4cc12`
 
-実行前に2つのJARのハッシュと既存のGunpack管理記録、ファイル種別を一括確認する。`taczexpands*` は `config` 直下だけが対象で、シンボリックリンクは拒否する。異なる版・変更済みJAR、シンボリックリンク、退避先の競合、管理記録の不一致があれば移動せず停止する。退避先 `/data/.feato-content/retired/removed-tacz-addons/` が既にあれば再実行を拒否するため、部分的に失敗した場合は内容と出力を確認して手動で整合する。別名・別バージョンのJARや別ワールドの設定は対象外。既に先の手順で退避されたファイルも変更しない。
+クライアントも同じ2版とArcanaを導入し、同じModを重複させない。起動と接続、両Modのアイテム・銃・アタッチメント、既存ワールドを確認する。復活版の実サーバー起動・接続、ゲーム内の互換性は未検証。
 
-更新したmanifestを配布し起動後、対象JARが再取得されないこととクライアント接続を確認する。TaCZ本体は `/data/tacz/` や既定ファイルを再作成する場合がある。
+LesRaisins Tacticalは引き続き同期対象外。過去の `retire-removed-tacz-addons.sh` はGucciとArcanaの設定まで退避してしまうためGitから削除した。データノードに古いコピーが残っていても実行しない。`/data/tacz/` を退避する場合は [TaCZディレクトリの退避](#taczディレクトリの退避) を使う。
+
+隔離した新規ワールドのx86_64環境（エミュレーション、固定Java 17イメージ、Forge 47.4.28）では、`CF_FORCE_SYNCHRONIZE=true` により2 JARの再取得とSHA-256一致を確認し、Arcana・Proxy Compatible Forgeを含むサーバーが `Done` まで起動した。Gucci JARは `/data/tacz/gucci_vuitton_attachment` を自動展開するため、以前 `tacz/` を退避していても再生成される。旧ZIPや同名の別Gunpackは重複させない。Modのゲーム内動作、クライアント接続、Forwarding SecretとVelocity経由の接続、実ワールド、本番の動作は未検証。隔離ARM64環境ではArcanaネイティブライブラリのGLIBC不足により起動しなかった。Photonのクライアントクラス読込等の既存エラーも別途残る。
