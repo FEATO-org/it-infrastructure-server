@@ -75,15 +75,14 @@ TaCZ 1.2.0 の GunPackLoader はゲームディレクトリの `tacz/` 内の ZI
 | [Charge into Battle: Reboot](https://www.curseforge.com/minecraft/customization/tacz-charge-into-battle-reboot-pack/files/7280896) | 0.3 | 1075478 / 7280896 | 1.1.7+ 表記、1.2.0 での動作は未確認 |
 | [EOS Lab](https://www.curseforge.com/minecraft/customization/tacz-eoslab-gunpack/files/7182834) | 1.1.1 hotfix1 | 1201057 / 7182834 | 1.1.5+ 表記、1.2.0 での動作は未確認 |
 | [Alex Kim’s Gunpack](https://www.curseforge.com/minecraft/customization/alex-kims-gunpack-tacz-gun-pack/files/9494048) | V14.12.25 | 1220585 / 9494048 | 配布ファイル名に TaCZ 1.2.0 の記載 |
-| [Classics Reborn](https://www.curseforge.com/minecraft/customization/tacz-classics-reborn/files/9474740) | 1.1.7 hotfix3 | 1079169 / 9474740 | TaCZ 1.2.0 と Arcana 1.4.2 向け表記 |
 
-Classics 用の [Arcana 1.4.2 hotfix 作者公式 Release](https://github.com/Hamster-Baron/TACZ-Arcana/releases/tag/1.4.2-loader-hybrid-hotfix) は CurseForge 審査待ちのため固定 GitHub Release を使用する。作者によれば本 JAR は保護 Gunpack の読み込み機能を含み、公開ソースからのビルドとは異なる。JAR の内部メタデータでは TaCZ 1.2.0 以上、Forge 47 以上、Kotlin for Forge 4.12 以上を要求し、既存構成には Kotlin for Forge 4.12.0 が含まれる。Arcana は TaCZ 内部を変更するため、既存アドオンとの競合も含め隔離試験する。
+[Arcana 1.4.2 hotfix 作者公式 Release](https://github.com/Hamster-Baron/TACZ-Arcana/releases/tag/1.4.2-loader-hybrid-hotfix) は CurseForge 審査待ちのため固定 GitHub Release を使用する。作者によれば本 JAR は保護 Gunpack の読み込み機能を含み、公開ソースからのビルドとは異なる。JAR の内部メタデータでは TaCZ 1.2.0 以上、Forge 47 以上、Kotlin for Forge 4.12 以上を要求し、既存構成には Kotlin for Forge 4.12.0 が含まれる。Arcana は TaCZ 内部を変更するため、既存アドオンとの競合も含め隔離試験する。
 
 `../content.lock` に各固定 URL と SHA-256、`../sync-content.sh` に同期処理を置く。Forge 起動前に `/data/tacz/feato-*.zip` と `/data/mods/feato-arcana.jar` を検証し、欠けたファイル・管理済みで更新が必要なファイルだけ取得する。未管理ファイルや管理後に変更されたファイルの上書きを拒否し、その他のファイルは削除しない。ZIP のダウンロードと配置は実施するが、作者が再配布を制限しているものもあるため、ZIP を再配布用 Modpack に同梱せず利用者が各配布元から取得する。配布条件を各作者の配布ページでも確認する。
 
-導入前に停止中の Forge Volume をバックアップし、既存 `/data/tacz/` に同じ Gunpack の ZIP または展開版がないか、`/data/mods/` に Arcana の別 JAR がないか確認して重複を避ける。対象 ZIP 間には `data/tacz/recipe_filters/default.json` やアタッチメントタグなど共通パスが26件あり、レシピ・タグの合成結果および衝突の有無は未確認。ゲーム内で検証する。GitHub Release の直接 URL が失敗した場合は同じ公式 asset の GitHub API URL にフォールバックする。両方にアクセスできない場合は同じ公式 Release の JAR を別途取得し、SHA-256 が `content.lock` と一致することを確認して停止中の `/data/mods/feato-arcana.jar` に手動配置する。ファイル未取得、ハッシュ不一致、所有権不明の競合時は起動前処理が失敗する。
+導入前に停止中の Forge Volume をバックアップし、既存 `/data/tacz/` に同じ Gunpack の ZIP または展開版がないか、`/data/mods/` に Arcana の別 JAR がないか確認して重複を避ける。対象 ZIP 間のレシピ・タグの合成結果および衝突の有無は未確認。ゲーム内で検証する。GitHub Release の直接 URL が失敗した場合は同じ公式 asset の GitHub API URL にフォールバックする。両方にアクセスできない場合は同じ公式 Release の JAR を別途取得し、SHA-256 が `content.lock` と一致することを確認して停止中の `/data/mods/feato-arcana.jar` に手動配置する。ファイル未取得、ハッシュ不一致、所有権不明の競合時は起動前処理が失敗する。
 
-クライアントの CurseForge Modpack は現在の57件の manifest に更新し、各配布ページから上記 4 ZIP と Arcana を取得する。`content.lock` の SHA-256 を確認後、ZIP はインスタンスの `tacz/`、Arcana は `mods/` に配置する。Bash と curl が利用可能な場合は `bash minecraft/forge/sync-content.sh <インスタンスのゲームディレクトリ> minecraft/forge/content.lock` でも同じ固定ファイルを用意できる。Windows 等では各配布元から手動取得し、既存の同名 Gunpack を重複させない。TaCZ の `ClientGunPackDownloadUrls` はソース上非推奨であり、完全な Gunpack 自動配布として使用しない。クライアント固有設定やセーブデータをサーバーへコピーしない。
+クライアントの CurseForge Modpack は現在の57件の manifest に更新し、各配布ページから上記 3 ZIP と Arcana を取得する。`content.lock` の SHA-256 を確認後、ZIP はインスタンスの `tacz/`、Arcana は `mods/` に配置する。Bash と curl が利用可能な場合は `bash minecraft/forge/sync-content.sh <インスタンスのゲームディレクトリ> minecraft/forge/content.lock` でも同じ固定ファイルを用意できる。Windows 等では各配布元から手動取得し、既存の同名 Gunpack を重複させない。TaCZ の `ClientGunPackDownloadUrls` はソース上非推奨であり、完全な Gunpack 自動配布として使用しない。クライアント固有設定やセーブデータをサーバーへコピーしない。
 
 更新時は対象の配布元・ID・実ファイル・ライセンス・SHA-256 を照合し `content.lock` と本表を更新する。管理対象だけを外す場合、停止後に `content.lock` で対象を特定し `/data/tacz/feato-*.zip` または `/data/mods/feato-arcana.jar` と対応する `/data/.feato-content/` の記録を手動退避する。現在の lock を維持したまま起動すると再取得するため、併せて対象を lock から除くか旧リビジョンへ戻す。TaCZ 設定や他の Gunpack、Volume は削除しない。新規 Mod 由来のデータを保存後のロールバックには導入前バックアップが必要。
 
@@ -97,7 +96,7 @@ Classics 用の [Arcana 1.4.2 hotfix 作者公式 Release](https://github.com/Ha
 
 起動前の同期は `/data/tacz/feato-weapons-and-tactics.zip` と管理記録の双方が旧 SHA-256 `e9983776641a5ffa95fef55198d91ff595faff1630934cb4bfa7d6a8c4666c10` に一致する場合のみ `/data/.feato-content/retired/` に退避し、管理記録を除く。未管理、改変、退避先の競合は起動を拒否し、手動調査する。対象がなければ続行する。他の Gunpack と Arcana は従来通り。
 
-プレイヤーは新しい提供 Modpack を適用し、旧 Weapons and Tactics ZIP を `tacz/` から手動で退避して JAR版だけにする。残る4 ZIP と Arcana はそれぞれ `tacz/` と `mods/` に維持し、同じ内容の別ファイルが重複しないことを確認する。設定とセーブは別途保全する。
+プレイヤーは新しい提供 Modpack を適用し、旧 Weapons and Tactics ZIP を `tacz/` から手動で退避して JAR版だけにする。残る3 ZIP と Arcana はそれぞれ `tacz/` と `mods/` に維持し、同じ内容の別ファイルが重複しないことを確認する。設定とセーブは別途保全する。
 
 [Weapons and Tactics 配布元](https://www.curseforge.com/minecraft/mc-mods/tacz-weapons-and-tactics-mod/files/all) は 0.4.1 を Forge 1.20.1 / TaCZ 1.2.0 向けとし、Big Cannons 5.11.4 は Create 6.0.7 以降を指定する。Create 6.0.8・TaCZ 1.2.0 はその表記範囲内だが、全Modの依存・レシピ・銃器ID・ネットワーク、Arcana と他Gunpackの競合、および実接続は未検証。隔離コピーで Forge とクライアントの起動・接続、レシピ・銃器・墓を確認する。旧版の隔離起動結果は新版の確認ではない。
 
@@ -135,3 +134,30 @@ docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IM
 ```
 
 運用者が更新済み構成を適用し起動後、`/data/mods/` に対象が再生成されていないことと、クライアント接続を確認する。旧 config や `world/serverconfig` は自動削除せず保持する。未使用設定の整理はバックアップのうえ別途判断する。
+
+## Classics Reborn の退避
+
+Classics Reborn ZIP は同期対象から削除した。既存Volume上の ZIP は自動削除されないため、更新した lock を配布する前に Forge を停止して Volume 全体をバックアップし、対象の `tacz/feato-classics-reborn.zip` と管理記録を確認して `/data/tacz/` の外へ退避する。対象Gunpackの銃器やアイテムの保存データが失われるおそれがあり、削除後にワールドを保存すると戻せない場合がある。必要な場合は停止時の旧Volumeと旧lockを揃えて復元する。
+
+以下はデータノードで実行する例。Volume名を確認して指定する。既知のSHA-256と管理記録が両方一致する通常ファイルだけを退避し、不一致や退避先の競合があれば停止する。ZIPが存在しない場合は何も変更しない。別名ZIPや展開済みGunpackは自動で対象にならないため個別に確認する。
+
+```bash
+FORGE_VOLUME='実際のForge Volume名'
+FORGE_IMAGE='itzg/minecraft-server:java17@sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287'
+docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IMAGE" -euc '
+  src=/data/tacz/feato-classics-reborn.zip
+  state=/data/.feato-content/tacz_feato-classics-reborn.zip.sha256
+  dst=/data/.feato-content/retired/feato-classics-reborn.zip
+  hash=6aa04aa13b87969b4a4f9edceb6ca69dc226f439d9fdbe82ec02b4620d4c1981
+  if [[ ! -e "$src" && ! -L "$src" ]]; then echo "対象ZIPは存在しません。管理記録は変更していません。"; exit 0; fi
+  [[ ! -L "$src" && -f "$src" && ! -L "$state" && -f "$state" ]] || { echo "ZIPまたは管理記録を確認してください" >&2; exit 1; }
+  [[ "$(cat "$state")" == "$hash" && "$(sha256sum "$src" | cut -d " " -f 1)" == "$hash" ]] || { echo "SHA-256または管理記録が不一致です" >&2; exit 1; }
+  mkdir -p "$(dirname "$dst")"
+  [[ ! -e "$dst" && ! -L "$dst" && ! -e "$dst.sha256" && ! -L "$dst.sha256" ]] || { echo "退避先が存在します" >&2; exit 1; }
+  mv -- "$src" "$dst"
+  mv -- "$state" "$dst.sha256"
+  echo "対象ZIPと管理記録を退避しました"
+'
+```
+
+クライアント側でも同じ Gunpack の ZIP や展開版を `tacz/` から退避する。残る3 Gunpack、Arcana、TaCZ本体、ほかの設定は維持する。適用後に対象が再取得されず、クライアント接続と残りの銃器が動作することを確認する。
