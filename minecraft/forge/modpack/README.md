@@ -1,6 +1,6 @@
 # イワシコ寄生虫 Modpack
 
-提供された58件版から Superb Warfare を除いた `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と 57 組の CurseForge project ID / file ID を固定する。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
+提供された58件版から Superb Warfare と Gucci & Vuitton Attachments を除いた `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と 56 組の CurseForge project ID / file ID を固定する。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
 
 [Auto CurseForge](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) で manifest を使う。Java 17 イメージの組み込み API key を使用し、配布制限されたファイルがあれば起動ログに示される手順に従い同じ ID のファイルを手動取得する。キーを変更する必要があるときは Swarm secret と `CF_API_KEY_FILE` を使用し、Git に記載しない。
 
@@ -110,7 +110,7 @@ docker run --rm --user 0:0 --entrypoint bash \
 
 ## Superb Warfare の削除
 
-提供された58件版から [Superb Warfare 0.8.9.2](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/9019882)（project 1218165 / file 9019882）を外した。現在の manifest と modlist は57件。クライアントでも対象JARをインスタンスの `mods/` の外へ退避し、サーバーと同じ構成にする。TaCZ、Arcana とその Gunpack は維持する。
+提供された58件版から [Superb Warfare 0.8.9.2](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/9019882)（project 1218165 / file 9019882）を外した。Superb Warfare 削除直後は manifest と modlist は57件だった。クライアントでも対象JARをインスタンスの `mods/` の外へ退避し、サーバーと同じ構成にする。TaCZとArcanaは維持する。Gunpackは上記の退避方針に従う。
 
 適用前に Forge を停止し、Volume全体（world、playerdata、mods、configを含む）をバックアップする。Superb Warfare の銃・乗り物・ブロック・インベントリなど、このModに由来する保存済みデータが失われる可能性がある。対象の回収・保存の要否を確認し、隔離コピーで Mod を除いた起動とワールドを検証する。除外後のワールドを保存してからJARを戻しても、消えたデータの復元は保証されない。復旧が必要なら停止して更新前の Volume バックアップと旧 manifest・JAR・設定を揃えて復元する。
 
@@ -161,3 +161,33 @@ docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IM
 ```
 
 クライアント側でも同じ Gunpack の ZIP や展開版を `tacz/` から退避する。現在は追加Gunpackをすべて退避し、Arcana、TaCZ本体、ほかの設定は維持する。適用後に対象が再取得されず、クライアント接続を確認する。
+
+## Gucci & Vuitton Attachments の削除
+
+[Gucci & Vuitton Attachments](https://www.curseforge.com/minecraft/mc-mods/tacz-gucci-vuitton-attachments/files/6062098)（project 1103436 / file 6062098）を manifest と一覧から外す。TaCZ本体、Weapons and Tactics、Arcanaと他のModは維持する。クライアントの `mods/` からも同ModのJARを外し、`tacz/` に同GunpackのZIPまたは展開版が残っていないか確認する。
+
+停止中のForge Volumeをバックアップし、対象Mod由来のアタッチメント・アイテムの回収と復旧要否を確認する。Modを外してワールドを保存すると関連データが失われる可能性がある。復旧時は停止したうえで旧Mod構成と削除前Volumeの整合したバックアップを復元する。
+
+既存VolumeのJARはmanifestから外すだけでは残る可能性がある。データノードで実際のVolume名を確認し、サービス停止・バックアップ後に次を実行する。確認済みの固定版とSHA-256が一致する場合だけ対象JARを読込対象外へ退避する。対象なしは正常終了し、別版・変更・シンボリックリンク・退避先競合時は停止する。
+
+```bash
+FORGE_VOLUME='実際のForge Volume名'
+FORGE_IMAGE='itzg/minecraft-server:java17@sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287'
+docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IMAGE" -euc '
+  src=/data/mods/guccivuitton-1.20.1-0.2.2.jar
+  dst=/data/.feato-content/retired/guccivuitton-1.20.1-0.2.2.jar
+  expected=9247e55f20acf8ec89af56d4ad45fcc8fe08bee9f7189421ef31835f3516bd57
+  for dir in /data/mods /data/.feato-content /data/.feato-content/retired; do
+    [[ ! -L "$dir" && ( ! -e "$dir" || -d "$dir" ) ]] || { echo "安全でないディレクトリ: $dir" >&2; exit 1; }
+  done
+  if [[ ! -e "$src" && ! -L "$src" ]]; then echo "対象JARは存在しません"; exit 0; fi
+  [[ ! -L "$src" && -f "$src" ]] || { echo "通常ファイルではありません: $src" >&2; exit 1; }
+  [[ "$(sha256sum "$src" | cut -d " " -f 1)" == "$expected" ]] || { echo "SHA-256不一致: $src" >&2; exit 1; }
+  [[ ! -e "$dst" && ! -L "$dst" ]] || { echo "退避先が存在します: $dst" >&2; exit 1; }
+  mkdir -p "$(dirname "$dst")"
+  mv -- "$src" "$dst"
+  echo "対象JARを退避しました: $dst"
+'
+```
+
+更新したmanifestを配布し起動後、対象JARが再取得されないこととクライアント接続を確認する。別名・別バージョンのJARは自動的に対象にならないため、存在する場合は個別に特定する。
