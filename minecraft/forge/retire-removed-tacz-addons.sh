@@ -10,6 +10,8 @@ mods=(
   'lrtactical-1.20.1-0.4.3.jar|930372cab33e1f563f597c74f9155b5ed25e6f2b0ff7e12dfc86255e1020ef2d'
 )
 configs=('config/lrtactical-common.toml' 'config/lrtactical-client.toml' 'world/serverconfig/lrtactical-server.toml')
+shopt -s nullglob
+expands=("$data_dir"/config/taczexpands*)
 records=(
   'tacz_feato-charge-into-battle.zip.sha256|40797ee6fc734de14e3065e80f85a61efa67207af9914d24084b3b680a8aba60'
   'tacz_feato-eos.zip.sha256|0b490c48b3ce16c2dc15f8822fd488901bd04f46c7d647d91cffca758ec71bb3'
@@ -33,6 +35,9 @@ for relative in "${configs[@]}"; do
   if [[ -e "$src" || -L "$src" ]]; then
     [[ ! -L "$src" && -f "$src" ]] || { echo "Not a regular config file: $src" >&2; exit 1; }
   fi
+done
+for src in "${expands[@]}"; do
+  [[ ! -L "$src" && ( -f "$src" || -d "$src" ) ]] || { echo "Unsafe taczexpands path: $src" >&2; exit 1; }
 done
 for entry in "${records[@]}"; do
   IFS='|' read -r name expected <<< "$entry"
@@ -59,6 +64,10 @@ for relative in "${configs[@]}"; do
     mv -- "$src" "$dest"
     echo "Retired: $relative"
   fi
+done
+for src in "${expands[@]}"; do
+  mv -- "$src" "$archive/config/${src##*/}"
+  echo "Retired: config/${src##*/}"
 done
 for entry in "${records[@]}"; do
   IFS='|' read -r name expected <<< "$entry"

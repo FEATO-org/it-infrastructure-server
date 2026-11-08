@@ -168,7 +168,7 @@ docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IM
 
 停止中のForge Volumeをバックアップし、対象Mod由来のアタッチメント・装備・アイテムの回収と復旧要否を確認する。Modを外してワールドを保存すると関連データが失われる可能性がある。復旧時は停止したうえで旧Mod構成と削除前Volumeの整合したバックアップを復元する。
 
-既存VolumeのJARはmanifestから外すだけでは残る可能性がある。サービス停止・バックアップ後、データノードに更新版リポジトリを配置し、実際のVolume名とパスを確認して次を実行する。**既存の `/data/tacz/` を設定や他Gunpackを含めて丸ごと退避**し、固定JAR 2件と `/data/config/lrtactical-common.toml`、`/data/config/lrtactical-client.toml`、`/data/world/serverconfig/lrtactical-server.toml` の存在するものを同じ退避先に移す。後者の serverconfig は `world` の実ワールド名に基づく。別ワールドを使用している場合は実際のパスを確認し、個別に退避する。`/data/config/tacz-common.toml` は維持する。
+既存VolumeのJARはmanifestから外すだけでは残る可能性がある。サービス停止・バックアップ後、データノードに更新版リポジトリを配置し、実際のVolume名とパスを確認して次を実行する。**既存の `/data/tacz/` を設定や他Gunpackを含めて丸ごと退避**し、固定JAR 2件と `/data/config/lrtactical-common.toml`、`/data/config/lrtactical-client.toml`、`/data/world/serverconfig/lrtactical-server.toml`、および `/data/config/` 直下の `taczexpands` で始まるファイル・ディレクトリを同じ退避先に移す。後者の serverconfig は `world` の実ワールド名に基づく。別ワールドを使用している場合は実際のパスを確認し、個別に退避する。`/data/config/tacz-common.toml` は維持する。`taczexpands` はArcana関連設定で、技能設定等を含む場合があるため中身を退避前に確認する。Arcanaは維持するため起動後に同名設定が再生成される可能性がある。
 
 ```bash
 FORGE_VOLUME='実際のForge Volume名'
@@ -180,6 +180,6 @@ docker run --rm --user 0:0 --entrypoint bash \
   "$FORGE_IMAGE" /retire-addons.sh /data
 ```
 
-実行前に2つのJARのハッシュと既存のGunpack管理記録、ファイル種別を一括確認する。異なる版・変更済みJAR、シンボリックリンク、退避先の競合、管理記録の不一致があれば移動せず停止する。退避先 `/data/.feato-content/retired/removed-tacz-addons/` が既にあれば再実行を拒否するため、部分的に失敗した場合は内容と出力を確認して手動で整合する。別名・別バージョンのJARや別ワールドの設定は対象外。既に先の手順で退避されたファイルも変更しない。
+実行前に2つのJARのハッシュと既存のGunpack管理記録、ファイル種別を一括確認する。`taczexpands*` は `config` 直下だけが対象で、シンボリックリンクは拒否する。異なる版・変更済みJAR、シンボリックリンク、退避先の競合、管理記録の不一致があれば移動せず停止する。退避先 `/data/.feato-content/retired/removed-tacz-addons/` が既にあれば再実行を拒否するため、部分的に失敗した場合は内容と出力を確認して手動で整合する。別名・別バージョンのJARや別ワールドの設定は対象外。既に先の手順で退避されたファイルも変更しない。
 
 更新したmanifestを配布し起動後、対象JARが再取得されないこととクライアント接続を確認する。TaCZ本体は `/data/tacz/` や既定ファイルを再作成する場合がある。
