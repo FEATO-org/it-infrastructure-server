@@ -235,6 +235,7 @@ services:
     environment:
       EULA: "TRUE"
       TYPE: AUTO_CURSEFORGE
+      ALLOW_FLIGHT: "TRUE"
       CF_SLUG: custom
       CF_MODPACK_MANIFEST: /forge-pack/manifest.json
       CF_EXCLUDE_MODS: "495267,679177,908741,240630,535489"
