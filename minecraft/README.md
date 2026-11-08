@@ -767,3 +767,5 @@ EconomyShopGUI 7.3.2の起動と以下の実クライアント操作は未確認
 クライアント操作が必要なJava/Bedrockログイン、NPCクリック、100G徴収、帰還札の消費とteleport、商品売買、馬の二人乗り、各Data Pack、古銭dropは本番公開前の実機確認事項です。Better HorsesはProtocolLibなしでも起動しますが、一部機能が無効になるという通知があります。現在は固定したProtocolLibを導入し、隔離起動でBetterHorsesの接続を確認しています。プレイヤー操作は未確認です。
 
 Forge 58件版の適用前には [更新・バックアップ・旧JARの確認・ロールバック手順](forge/modpack/README.md#58件版への更新と復旧) を実施する。GraveStone の墓や所持品を事前に回収し、更新後のワールドを旧構成で保存しない。
+
+Superb Warfare の削除は [対象JARの退避とワールド保全](forge/modpack/README.md#superb-warfare-の削除) を参照する。
