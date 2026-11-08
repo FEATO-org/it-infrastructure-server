@@ -770,4 +770,4 @@ Forge 58件版の適用前には [更新・バックアップ・旧JARの確認�
 
 Superb Warfare の削除は [対象JARの退避とワールド保全](forge/modpack/README.md#superb-warfare-の削除) を参照する。
 
-TaCZ本体と関連アドオン・Gunpackの削除は [停止・バックアップと対象退避の手順](forge/modpack/README.md#tacz全削除の適用と復旧) に従う。
+TaCZの追加Gunpackは [ディレクトリ退避手順](forge/modpack/README.md#taczディレクトリの退避) に従う。TaCZ本体とArcanaは維持する。
