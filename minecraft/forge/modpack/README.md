@@ -1,6 +1,6 @@
 # イワシコ寄生虫 Modpack
 
-提供 ZIP の SHA-256 は `8358ed7acf2d8385fc8b9209e114d587e2920fd97ba8fa44b6796f3f82b678a6`。`manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と 40 組の CurseForge project ID / file ID を固定する。`modlist.html` は ZIP の一覧を改行正規化したもの。共有 URL は取得元に使わない。
+提供 ZIP の SHA-256 は `8358ed7acf2d8385fc8b9209e114d587e2920fd97ba8fa44b6796f3f82b678a6`。`manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と 44 組の CurseForge project ID / file ID を固定する。`modlist.html` は ZIP の一覧を改行正規化したもの。共有 URL は取得元に使わない。
 
 [Auto CurseForge](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) で manifest を使う。Java 17 イメージの組み込み API key を使用し、配布制限されたファイルがあれば起動ログに示される手順に従い同じ ID のファイルを手動取得する。キーを変更する必要があるときは Swarm secret と `CF_API_KEY_FILE` を使用し、Git に記載しない。
 
@@ -52,3 +52,16 @@ ZIP の overrides は古い別 Mod の設定、クライアント設定、個人
 - `youkaishomecoming-2.7.2.jar`
 
 既存 Volume の除外・包含条件を変更する場合はバックアップ後、一時的に `CF_FORCE_SYNCHRONIZE=true` を設定して再同期し、不要な再適用を避けるため検証後に外す。
+
+## 追加予定の Create アドオン（隔離検証待ち）
+
+| Mod | 固定版 | CurseForge project / file |
+| --- | --- | --- |
+| [Steam 'n' Rails](https://www.curseforge.com/minecraft/mc-mods/create-steam-n-rails/files/8745475) | 1.7.3 Forge 1.20.1 | 688231 / 8745475 |
+| [Diesel Generators](https://www.curseforge.com/minecraft/mc-mods/create-diesel-generators/files/7932785) | 1.3.12 Forge 1.20.1 | 869316 / 7932785 |
+| [Create Big Cannons](https://www.curseforge.com/minecraft/mc-mods/create-big-cannons/files/7478036) | 5.10.2 Forge 1.20.1 | 646668 / 7478036 |
+| [Ritchie's Projectile Library](https://www.curseforge.com/minecraft/mc-mods/ritchies-projectile-library/files/7292523) | 2.1.1 Forge 1.20.1 | 1279407 / 7292523 |
+
+Create Crafts & Additions 1.3.3 は既存のため変更しない。Steam 'n' Rails と Diesel Generators の配布 JAR の Forge メタデータでは Create 6.0.8 が依存範囲に含まれる。Big Cannons 5.10.2 の配布ページは Create 6.0.8 を明記している。4 件の組み合わせの専用サーバー起動、ゲーム内動作とクライアント接続は未確認。Big Cannons の JAR 自動取得は調査環境で HTTP 403 となったため Auto CurseForge での取得も要確認。
+
+クライアントも同じ manifest の追加 4 件を導入する。反映前に Forge Volume を停止してバックアップし、隔離環境で起動と接続を検証する。戻す場合は追加前の manifest を復元し、追加された 4 件の JAR のみを確認して退避する。ワールド Volume は削除しない。新規 Mod のブロック・アイテムを保存後に Mod を外すとデータが欠損し得るため、必要に応じて導入前のバックアップを復元する。
