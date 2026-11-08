@@ -1,5 +1,7 @@
 # Forge 1.20.1 切替の取得元
 
+[MobBottle 1.20.1-0.3](https://github.com/firis-games/MobBottle/releases/tag/ver1.20.1-0.3) は提供版と公式配布JARのSHA-256一致を確認。作者は Forge 47.4.0 対応と明記。47.4.28での起動・接続は未確認。取得先とハッシュは [content.lock](../minecraft/forge/content.lock) を参照。
+
 現行57件版: 提供58件版から Superb Warfare (1218165 / 9019882) を除外。[manifest](../minecraft/forge/modpack/manifest.json) の固定 project/file ID と [Modpack手順](../minecraft/forge/modpack/README.md#58件版への更新と復旧) を参照。Weapons and Tactics Mod 1411291 / 9473803 は CurseForge 経由、Create Big Cannons 646668 / 8169547 は [配布元](https://www.curseforge.com/minecraft/mc-mods/create-big-cannons/files/8169547)。Forge 47.4.28 / Java 17 での58件版の取得・起動・接続は未確認。
 
 | 対象 | 固定版 / 取得元 | 検証状況 |

@@ -83,7 +83,7 @@ Classics 用の [Arcana 1.4.2 hotfix 作者公式 Release](https://github.com/Ha
 
 導入前に停止中の Forge Volume をバックアップし、既存 `/data/tacz/` に同じ Gunpack の ZIP または展開版がないか、`/data/mods/` に Arcana の別 JAR がないか確認して重複を避ける。対象 ZIP 間には `data/tacz/recipe_filters/default.json` やアタッチメントタグなど共通パスが26件あり、レシピ・タグの合成結果および衝突の有無は未確認。ゲーム内で検証する。GitHub Release の直接 URL が失敗した場合は同じ公式 asset の GitHub API URL にフォールバックする。両方にアクセスできない場合は同じ公式 Release の JAR を別途取得し、SHA-256 が `content.lock` と一致することを確認して停止中の `/data/mods/feato-arcana.jar` に手動配置する。ファイル未取得、ハッシュ不一致、所有権不明の競合時は起動前処理が失敗する。
 
-クライアントの CurseForge Modpack は現在の57件の manifest に更新し、各配布ページから上記 4 ZIP と Arcana を取得する。`content.lock` の SHA-256 を確認後、ZIP はインスタンスの `tacz/`、Arcana は `mods/` に配置する。Bash と curl が利用可能な場合は `bash minecraft/forge/sync-content.sh <インスタンスのゲームディレクトリ> minecraft/forge/content.lock` でも同じ固定ファイルを用意できる。Windows 等では各配布元から手動取得し、既存の同名 Gunpack を重複させない。TaCZ の `ClientGunPackDownloadUrls` はソース上非推奨であり、完全な Gunpack 自動配布として使用しない。クライアント固有設定やセーブデータをサーバーへコピーしない。
+クライアントの CurseForge Modpack は現在の57件の manifest に更新し、各配布ページから上記 4 ZIP と Arcana を取得する。`content.lock` の SHA-256 を確認後、ZIP はインスタンスの `tacz/`、Arcana は `mods/` に配置する。提供 pack の `mods/mobbottle-1.20.1-0.3.jar` は維持する。`sync-content.sh` は別名 `mods/feato-mobbottle.jar` でも同じ Mod を取得するため、提供 pack のクライアントにはそのまま実行しない。Arcana と4 ZIP は個別に用意し、同一Modの重複を避ける。Windows 等では各配布元から手動取得し、既存の同名 Gunpack を重複させない。TaCZ の `ClientGunPackDownloadUrls` はソース上非推奨であり、完全な Gunpack 自動配布として使用しない。クライアント固有設定やセーブデータをサーバーへコピーしない。
 
 更新時は対象の配布元・ID・実ファイル・ライセンス・SHA-256 を照合し `content.lock` と本表を更新する。管理対象だけを外す場合、停止後に `content.lock` で対象を特定し `/data/tacz/feato-*.zip` または `/data/mods/feato-arcana.jar` と対応する `/data/.feato-content/` の記録を手動退避する。現在の lock を維持したまま起動すると再取得するため、併せて対象を lock から除くか旧リビジョンへ戻す。TaCZ 設定や他の Gunpack、Volume は削除しない。新規 Mod 由来のデータを保存後のロールバックには導入前バックアップが必要。
 
@@ -135,3 +135,11 @@ docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IM
 ```
 
 運用者が更新済み構成を適用し起動後、`/data/mods/` に対象が再生成されていないことと、クライアント接続を確認する。旧 config や `world/serverconfig` は自動削除せず保持する。未使用設定の整理はバックアップのうえ別途判断する。
+
+## 山南版の提供ファイル
+
+`イワシコ寄生虫_山南` の CurseForge manifest は従来の57 project/file IDと一致する。名称とクライアント向け推奨RAMは提供版に合わせた（サーバーのヒープ設定は変更しない）。提供版は Manifest 外の `overrides/mods/mobbottle-1.20.1-0.3.jar` を含むため、サーバーにも [作者公式の MobBottle 1.20.1-0.3](https://github.com/firis-games/MobBottle/releases/tag/ver1.20.1-0.3) を固定して導入する。提供JARと公式JARの SHA-256 は `ab10d17fe23af1d7b99c79a99d4812205b8f37d3283a5c0253905b9dee846d5f` で一致。作者は Forge 47.4.0 対応の開発版と記載しており、47.4.28での起動・接続・ゲーム内動作は未検証。
+
+起動前に `content.lock` と `sync-content.sh` がサーバーの `/data/mods/feato-mobbottle.jar` を同期する。既存Volumeに MobBottle の別名JARがないことを確認し、ある場合はバックアップ後に重複を避ける。クライアントの提供 pack には同ModのJARが既に含まれ、サーバー側の `feato-mobbottle.jar` と併せて両方をクライアントに置かない。設定は初回のみ投入し既存Volumeを上書きしない。提供版の Touhou Little Maid の妖精設定差分とマイク設定は既存サーバー設定を保持する。提供版の古い Superb Warfare config は採用しない。
+
+適用前に停止中の Forge Volume とクライアントデータをバックアップし、隔離環境で Mod の読込・クライアント接続と保存を確認する。戻す際は停止し、導入前の Volume バックアップと旧リビジョンを復元する。単に lock を戻しても既存VolumeのJARは残るため、対象JARをハッシュ照合のうえ `/data/mods/` 外へ退避し、対応する `.feato-content/mods_feato-mobbottle.jar.sha256` も退避する。MobBottle のアイテムなどを保存後にModを外すとワールドデータが失われる可能性がある。
