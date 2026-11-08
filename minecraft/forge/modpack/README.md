@@ -102,3 +102,9 @@ Classics 用の [Arcana 1.4.2 hotfix 作者公式 Release](https://github.com/Ha
 [Weapons and Tactics 配布元](https://www.curseforge.com/minecraft/mc-mods/tacz-weapons-and-tactics-mod/files/all) は 0.4.1 を Forge 1.20.1 / TaCZ 1.2.0 向けとし、Big Cannons 5.11.4 は Create 6.0.7 以降を指定する。Create 6.0.8・TaCZ 1.2.0 はその表記範囲内だが、全Modの依存・レシピ・銃器ID・ネットワーク、Arcana と他Gunpackの競合、および実接続は未検証。隔離コピーで Forge とクライアントの起動・接続、レシピ・銃器・墓を確認する。旧版の隔離起動結果は新版の確認ではない。
 
 ロールバックは停止後に旧リビジョンの manifest・設定・lock を戻し、更新前の Volume バックアップを復元する。旧ZIPを復元する場合は退避先のハッシュと管理記録を確認して元に戻す。新Modを保存したワールドを旧Mod構成のまま保存しない。
+
+## 提供 overrides のサーバー設定
+
+提供 overrides から Diesel Generators、Delightful、Farmer’s Delight、FerriteCore、LesRaisins Tactical Equipements、ModernFix、Steam ’n’ Rails、ShinColle-kai（採掘テーブルを含む）、Storage Drawers、Superb Warfare、Torchmaster の共通設定を `../config/config/` に初回用として取り込んだ。これらの値は新規 Volume または対応ファイルが存在しない場合にのみ `prepare-forge.sh` により `/data/config/` にコピーされ、既存 Volume 上の同名設定は上書きされない。適用する必要がある場合は停止・バックアップ後、実際の設定と提供値を比較し、運用者が対象設定を個別に反映する。ゲーム内の効果は未検証。
+
+既存の共通設定は保持する。提供版の Touhou Little Maid 設定には妖精関連の値の変更とクライアント固有のマイク設定があるが、既存設定の上書きは行わない。クライアント専用設定、個人情報を含み得るファイル、overrides 内の未管理JAR・Gunpack・モデル・音声・ワールドは一括コピーしない。これらの要否と再配布条件は別途確認する。
