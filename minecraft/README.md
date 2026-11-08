@@ -769,3 +769,5 @@ EconomyShopGUI 7.3.2の起動と以下の実クライアント操作は未確認
 Forge 58件版の適用前には [更新・バックアップ・旧JARの確認・ロールバック手順](forge/modpack/README.md#58件版への更新と復旧) を実施する。GraveStone の墓や所持品を事前に回収し、更新後のワールドを旧構成で保存しない。
 
 Superb Warfare の削除は [対象JARの退避とワールド保全](forge/modpack/README.md#superb-warfare-の削除) を参照する。
+
+TaCZ本体と関連アドオン・Gunpackの削除は [停止・バックアップと対象退避の手順](forge/modpack/README.md#tacz全削除の適用と復旧) に従う。
