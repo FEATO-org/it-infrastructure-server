@@ -68,7 +68,7 @@ Create Crafts & Additions 1.3.3 は既存のため変更しない。Steam 'n' Ra
 
 ## TaCZディレクトリの退避
 
-TaCZ本体、Weapons and Tacticsなどの関連Modと Arcana は維持する。`content.lock` から Charge into Battle、EOS Lab、Alex Kim の Gunpack ZIP を外したため、再起動時に自動再取得しない。Classics Reborn は以前に同期対象から外している。
+TaCZ本体、Weapons and Tacticsなどの関連Modは維持し、Arcanaは削除する。`content.lock` から Charge into Battle、EOS Lab、Alex Kim の Gunpack ZIP を外したため、再起動時に自動再取得しない。Classics Reborn は以前に同期対象から外している。
 
 本番のForgeを停止してVolume全体をバックアップする。`/data/tacz/` には Gunpack のほか利用者が置いたZIP・展開済みフォルダ・設定・その他のファイルが含まれる可能性がある。対象全体を確認し、以下のコマンドでディレクトリを `/data/.feato-content/retired/tacz-directory/tacz/` へまとめて移動する。既知のGunpackの管理記録も同じ退避先の `records/` へ移す。ModのJARと `/data/config/`、ワールドは操作しない。
 
@@ -92,11 +92,11 @@ docker run --rm --user 0:0 --entrypoint bash \
 
 適用前にサーバーを停止し Forge Volume 全体（world、playerdata、config、mods、tacz、管理状態）を整合した状態でバックアップし、復元を試す。GraveStone の削除により残存する墓やその所持品などが読み込めなくなる・失われるおそれがある。事前に墓とアイテムを回収し、旧Mod・旧設定を含む停止時バックアップを保存する。欠落データを保存したワールドに後からModを戻しても復元できる保証はない。
 
-公式の [Auto CurseForge 再同期](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) は `CF_FORCE_SYNCHRONIZE=true` で除外条件を再評価する。停止・バックアップ後、隔離コピーでまず一時設定して試す。再同期が旧 JAR の削除を保証するとは確認できていないため、旧 GraveStone、旧 Create Big Cannons、除外9件を `/data/mods/` で project/file ID・実体から特定し、残存していれば対象だけを `/data/mods/` の外へ退避する。識別不能なら停止して調査し、ディレクトリ全体を削除しない。Arcana と他の手動管理 JAR を維持する。検証後は一時設定を外す。
+公式の [Auto CurseForge 再同期](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) は `CF_FORCE_SYNCHRONIZE=true` で除外条件を再評価する。停止・バックアップ後、隔離コピーでまず一時設定して試す。再同期が旧 JAR の削除を保証するとは確認できていないため、旧 GraveStone、旧 Create Big Cannons、除外9件を `/data/mods/` で project/file ID・実体から特定し、残存していれば対象だけを `/data/mods/` の外へ退避する。識別不能なら停止して調査し、ディレクトリ全体を削除しない。Arcanaは下記の手順で退避し、他の手動管理JARは維持する。検証後は一時設定を外す。
 
 起動前の同期は `/data/tacz/feato-weapons-and-tactics.zip` と管理記録の双方が旧 SHA-256 `e9983776641a5ffa95fef55198d91ff595faff1630934cb4bfa7d6a8c4666c10` に一致する場合のみ `/data/.feato-content/retired/` に退避し、管理記録を除く。未管理、改変、退避先の競合は起動を拒否し、手動調査する。対象がなければ続行する。TaCZディレクトリの退避については上記の手順を参照する。
 
-プレイヤーは新しい提供 Modpack を適用し、旧 Weapons and Tactics ZIP を `tacz/` から手動で退避して JAR版だけにする。追加Gunpackは退避し、Arcanaは `mods/` に維持する。設定とセーブは別途保全する。
+プレイヤーは新しい提供 Modpack を適用し、旧 Weapons and Tactics ZIP を `tacz/` から手動で退避して JAR版だけにする。追加GunpackとArcanaは退避する。設定とセーブは別途保全する。
 
 [Weapons and Tactics 配布元](https://www.curseforge.com/minecraft/mc-mods/tacz-weapons-and-tactics-mod/files/all) は 0.4.1 を Forge 1.20.1 / TaCZ 1.2.0 向けとし、Big Cannons 5.11.4 は Create 6.0.7 以降を指定する。Create 6.0.8・TaCZ 1.2.0 はその表記範囲内だが、全Modの依存・レシピ・銃器ID・ネットワーク、Arcana と他Gunpackの競合、および実接続は未検証。隔離コピーで Forge とクライアントの起動・接続、レシピ・銃器・墓を確認する。旧版の隔離起動結果は新版の確認ではない。
 
@@ -110,7 +110,7 @@ docker run --rm --user 0:0 --entrypoint bash \
 
 ## Superb Warfare の削除
 
-提供された58件版から [Superb Warfare 0.8.9.2](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/9019882)（project 1218165 / file 9019882）を外した。Superb Warfare 削除直後は manifest と modlist は57件だった。クライアントでも対象JARをインスタンスの `mods/` の外へ退避し、サーバーと同じ構成にする。TaCZとArcanaは維持する。Gunpackは上記の退避方針に従う。
+提供された58件版から [Superb Warfare 0.8.9.2](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/9019882)（project 1218165 / file 9019882）を外した。Superb Warfare 削除直後は manifest と modlist は57件だった。クライアントでも対象JARをインスタンスの `mods/` の外へ退避し、サーバーと同じ構成にする。TaCZは維持し、Arcanaは下記の手順で退避する。Gunpackは上記の退避方針に従う。
 
 適用前に Forge を停止し、Volume全体（world、playerdata、mods、configを含む）をバックアップする。Superb Warfare の銃・乗り物・ブロック・インベントリなど、このModに由来する保存済みデータが失われる可能性がある。対象の回収・保存の要否を確認し、隔離コピーで Mod を除いた起動とワールドを検証する。除外後のワールドを保存してからJARを戻しても、消えたデータの復元は保証されない。復旧が必要なら停止して更新前の Volume バックアップと旧 manifest・JAR・設定を揃えて復元する。
 
@@ -160,15 +160,15 @@ docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IM
 '
 ```
 
-クライアント側でも同じ Gunpack の ZIP や展開版を `tacz/` から退避する。現在は追加Gunpackをすべて退避し、Arcana、TaCZ本体、ほかの設定は維持する。適用後に対象が再取得されず、クライアント接続を確認する。
+クライアント側でも同じ Gunpack の ZIP や展開版を `tacz/` から退避する。現在は追加Gunpackをすべて退避し、TaCZ本体とほかの設定は維持し、Arcanaは退避する。適用後に対象が再取得されず、クライアント接続を確認する。
 
 ## Gucci & Vuitton と LesRaisins Tactical の削除
 
-[Gucci & Vuitton Attachments](https://www.curseforge.com/minecraft/mc-mods/tacz-gucci-vuitton-attachments/files/6062098)（project 1103436 / file 6062098）と [LesRaisins Tactical Equipements](https://www.curseforge.com/minecraft/mc-mods/tacz-lesraisins-tactical-equipements/files/8652673)（project 1273094 / file 8652673）を manifest と一覧から外す。LesRaisins のGit管理の初回設定を外し、既存Volumeの対象設定は停止後に退避する。TaCZ本体、Weapons and Tactics、Arcanaと他のModは維持する。クライアントの `mods/` からも両ModのJARを外し、`tacz/` に両GunpackのZIPまたは展開版が残っていないか確認する。
+[Gucci & Vuitton Attachments](https://www.curseforge.com/minecraft/mc-mods/tacz-gucci-vuitton-attachments/files/6062098)（project 1103436 / file 6062098）と [LesRaisins Tactical Equipements](https://www.curseforge.com/minecraft/mc-mods/tacz-lesraisins-tactical-equipements/files/8652673)（project 1273094 / file 8652673）を manifest と一覧から外す。LesRaisins のGit管理の初回設定を外し、既存Volumeの対象設定は停止後に退避する。TaCZ本体、Weapons and Tacticsと他のModは維持し、Arcanaは別途退避する。クライアントの `mods/` からも両ModのJARを外し、`tacz/` に両GunpackのZIPまたは展開版が残っていないか確認する。
 
 停止中のForge Volumeをバックアップし、対象Mod由来のアタッチメント・装備・アイテムの回収と復旧要否を確認する。Modを外してワールドを保存すると関連データが失われる可能性がある。復旧時は停止したうえで旧Mod構成と削除前Volumeの整合したバックアップを復元する。
 
-既存VolumeのJARはmanifestから外すだけでは残る可能性がある。サービス停止・バックアップ後、データノードに更新版リポジトリを配置し、実際のVolume名とパスを確認して次を実行する。**既存の `/data/tacz/` を設定や他Gunpackを含めて丸ごと退避**し、固定JAR 2件と `/data/config/lrtactical-common.toml`、`/data/config/lrtactical-client.toml`、`/data/world/serverconfig/lrtactical-server.toml`、および `/data/config/` 直下の `taczexpands` で始まるファイル・ディレクトリを同じ退避先に移す。後者の serverconfig は `world` の実ワールド名に基づく。別ワールドを使用している場合は実際のパスを確認し、個別に退避する。`/data/config/tacz-common.toml` は維持する。`taczexpands` はArcana関連設定で、技能設定等を含む場合があるため中身を退避前に確認する。Arcanaは維持するため起動後に同名設定が再生成される可能性がある。
+既存VolumeのJARはmanifestから外すだけでは残る可能性がある。サービス停止・バックアップ後、データノードに更新版リポジトリを配置し、実際のVolume名とパスを確認して次を実行する。**既存の `/data/tacz/` を設定や他Gunpackを含めて丸ごと退避**し、固定JAR 2件と `/data/config/lrtactical-common.toml`、`/data/config/lrtactical-client.toml`、`/data/world/serverconfig/lrtactical-server.toml`、および `/data/config/` 直下の `taczexpands` で始まるファイル・ディレクトリを同じ退避先に移す。後者の serverconfig は `world` の実ワールド名に基づく。別ワールドを使用している場合は実際のパスを確認し、個別に退避する。`/data/config/tacz-common.toml` は維持する。`taczexpands` はArcana関連設定で、技能設定等を含む場合があるため中身を退避前に確認する。Arcana自体の削除・退避については下記を参照する。
 
 ```bash
 FORGE_VOLUME='実際のForge Volume名'
@@ -183,3 +183,21 @@ docker run --rm --user 0:0 --entrypoint bash \
 実行前に2つのJARのハッシュと既存のGunpack管理記録、ファイル種別を一括確認する。`taczexpands*` は `config` 直下だけが対象で、シンボリックリンクは拒否する。異なる版・変更済みJAR、シンボリックリンク、退避先の競合、管理記録の不一致があれば移動せず停止する。退避先 `/data/.feato-content/retired/removed-tacz-addons/` が既にあれば再実行を拒否するため、部分的に失敗した場合は内容と出力を確認して手動で整合する。別名・別バージョンのJARや別ワールドの設定は対象外。既に先の手順で退避されたファイルも変更しない。
 
 更新したmanifestを配布し起動後、対象JARが再取得されないこととクライアント接続を確認する。TaCZ本体は `/data/tacz/` や既定ファイルを再作成する場合がある。
+
+## Arcana の削除
+
+TaCZ Arcana 1.4.2 hotfix (`taczexpands`) を `content.lock` の同期対象から除く。TaCZ本体と Weapons and Tactics JARは維持する。クライアントも Arcana JARを `mods/` から外してサーバーと揃える。Arcanaを必要とする他のGunpack・アドオン、Arcana由来のスキルやアイテムの要否は事前に確認する。
+
+Forgeを停止しVolume全体をバックアップする。実Volumeの `mods/feato-arcana.jar` と対応する管理記録は `content.lock` から外すだけでは消えない。以下は両者のSHA-256を確認してから `/data/.feato-content/retired/arcana-removal/` に退避し、`config/` 直下の `taczexpands` で始まるファイル・ディレクトリも同じ退避先へ移す。既に別の手順で退避済みのconfigは変更しない。別名JAR、別ワールドのconfigや、ほかのModが作るファイルは対象外。
+
+```bash
+FORGE_VOLUME='実際のForge Volume名'
+REPO_DIR='更新済みリポジトリの絶対パス'
+FORGE_IMAGE='itzg/minecraft-server:java17@sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287'
+docker run --rm --user 0:0 --entrypoint bash \
+  -v "$FORGE_VOLUME:/data" \
+  -v "$REPO_DIR/minecraft/forge/retire-arcana.sh:/retire-arcana.sh:ro" \
+  "$FORGE_IMAGE" /retire-arcana.sh /data
+```
+
+対象ファイル・管理記録の不一致、シンボリックリンク、退避先の競合は移動前に拒否する。退避先が既にある場合は再実行を拒否するため、中身と出力を確認する。適用後に `mods/` にArcanaの別JARが残らず、設定やJARが再作成されないこと、Forge起動とクライアント接続、残る銃器の動作を確認する。これらの実環境での結果は未確認。失われたデータの復旧には削除前の整合したVolumeバックアップと旧構成を復元する。

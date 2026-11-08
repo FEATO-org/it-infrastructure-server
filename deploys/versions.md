@@ -432,4 +432,4 @@ Better HorsesはProtocolLibなしでも起動しますが一部機能を無効�
 
 Forge Create アドオンの固定版と検証状況は [Modpack](../minecraft/forge/modpack/README.md#追加予定の-create-アドオン隔離検証待ち) を参照。
 
-TaCZの追加Gunpack退避と Arcana 1.4.2 hotfix の取得元・固定ハッシュ・未検証事項は [Modpack](../minecraft/forge/modpack/README.md#taczディレクトリの退避) を参照。
+Arcana 1.4.2 hotfixは同期対象から削除する。固定SHA-256と退避・復旧手順は [Modpack](../minecraft/forge/modpack/README.md#arcana-の削除) を参照。
