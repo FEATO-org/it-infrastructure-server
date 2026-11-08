@@ -1,6 +1,6 @@
 # イワシコ寄生虫 Modpack
 
-新たに提供された `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と 58 組の CurseForge project ID / file ID を固定する。`modlist.html` は ZIP の一覧を改行正規化したもの。共有 URL は取得元に使わない。
+提供された58件版から Superb Warfare を除いた `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と 57 組の CurseForge project ID / file ID を固定する。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
 
 [Auto CurseForge](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) で manifest を使う。Java 17 イメージの組み込み API key を使用し、配布制限されたファイルがあれば起動ログに示される手順に従い同じ ID のファイルを手動取得する。キーを変更する必要があるときは Swarm secret と `CF_API_KEY_FILE` を使用し、Git に記載しない。
 
@@ -83,7 +83,7 @@ Classics 用の [Arcana 1.4.2 hotfix 作者公式 Release](https://github.com/Ha
 
 導入前に停止中の Forge Volume をバックアップし、既存 `/data/tacz/` に同じ Gunpack の ZIP または展開版がないか、`/data/mods/` に Arcana の別 JAR がないか確認して重複を避ける。対象 ZIP 間には `data/tacz/recipe_filters/default.json` やアタッチメントタグなど共通パスが26件あり、レシピ・タグの合成結果および衝突の有無は未確認。ゲーム内で検証する。GitHub Release の直接 URL が失敗した場合は同じ公式 asset の GitHub API URL にフォールバックする。両方にアクセスできない場合は同じ公式 Release の JAR を別途取得し、SHA-256 が `content.lock` と一致することを確認して停止中の `/data/mods/feato-arcana.jar` に手動配置する。ファイル未取得、ハッシュ不一致、所有権不明の競合時は起動前処理が失敗する。
 
-クライアントの CurseForge Modpack は新しい58件の manifest に更新し、各配布ページから上記 4 ZIP と Arcana を取得する。`content.lock` の SHA-256 を確認後、ZIP はインスタンスの `tacz/`、Arcana は `mods/` に配置する。Bash と curl が利用可能な場合は `bash minecraft/forge/sync-content.sh <インスタンスのゲームディレクトリ> minecraft/forge/content.lock` でも同じ固定ファイルを用意できる。Windows 等では各配布元から手動取得し、既存の同名 Gunpack を重複させない。TaCZ の `ClientGunPackDownloadUrls` はソース上非推奨であり、完全な Gunpack 自動配布として使用しない。クライアント固有設定やセーブデータをサーバーへコピーしない。
+クライアントの CurseForge Modpack は現在の57件の manifest に更新し、各配布ページから上記 4 ZIP と Arcana を取得する。`content.lock` の SHA-256 を確認後、ZIP はインスタンスの `tacz/`、Arcana は `mods/` に配置する。Bash と curl が利用可能な場合は `bash minecraft/forge/sync-content.sh <インスタンスのゲームディレクトリ> minecraft/forge/content.lock` でも同じ固定ファイルを用意できる。Windows 等では各配布元から手動取得し、既存の同名 Gunpack を重複させない。TaCZ の `ClientGunPackDownloadUrls` はソース上非推奨であり、完全な Gunpack 自動配布として使用しない。クライアント固有設定やセーブデータをサーバーへコピーしない。
 
 更新時は対象の配布元・ID・実ファイル・ライセンス・SHA-256 を照合し `content.lock` と本表を更新する。管理対象だけを外す場合、停止後に `content.lock` で対象を特定し `/data/tacz/feato-*.zip` または `/data/mods/feato-arcana.jar` と対応する `/data/.feato-content/` の記録を手動退避する。現在の lock を維持したまま起動すると再取得するため、併せて対象を lock から除くか旧リビジョンへ戻す。TaCZ 設定や他の Gunpack、Volume は削除しない。新規 Mod 由来のデータを保存後のロールバックには導入前バックアップが必要。
 
@@ -105,6 +105,33 @@ Classics 用の [Arcana 1.4.2 hotfix 作者公式 Release](https://github.com/Ha
 
 ## 提供 overrides のサーバー設定
 
-提供 overrides から Diesel Generators、Delightful、Farmer’s Delight、FerriteCore、LesRaisins Tactical Equipements、ModernFix、Steam ’n’ Rails、ShinColle-kai（採掘テーブルを含む）、Storage Drawers、Superb Warfare、Torchmaster の共通設定を `../config/config/` に初回用として取り込んだ。これらの値は新規 Volume または対応ファイルが存在しない場合にのみ `prepare-forge.sh` により `/data/config/` にコピーされ、既存 Volume 上の同名設定は上書きされない。適用する必要がある場合は停止・バックアップ後、実際の設定と提供値を比較し、運用者が対象設定を個別に反映する。ゲーム内の効果は未検証。
+提供 overrides から Diesel Generators、Delightful、Farmer’s Delight、FerriteCore、LesRaisins Tactical Equipements、ModernFix、Steam ’n’ Rails、ShinColle-kai（採掘テーブルを含む）、Storage Drawers、Torchmaster の共通設定を `../config/config/` に初回用として取り込んだ。これらの値は新規 Volume または対応ファイルが存在しない場合にのみ `prepare-forge.sh` により `/data/config/` にコピーされ、既存 Volume 上の同名設定は上書きされない。適用する必要がある場合は停止・バックアップ後、実際の設定と提供値を比較し、運用者が対象設定を個別に反映する。ゲーム内の効果は未検証。
 
 既存の共通設定は保持する。提供版の Touhou Little Maid 設定には妖精関連の値の変更とクライアント固有のマイク設定があるが、既存設定の上書きは行わない。クライアント専用設定、個人情報を含み得るファイル、overrides 内の未管理JAR・Gunpack・モデル・音声・ワールドは一括コピーしない。これらの要否と再配布条件は別途確認する。
+
+## Superb Warfare の削除
+
+提供された58件版から [Superb Warfare 0.8.9.2](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/9019882)（project 1218165 / file 9019882）を外した。現在の manifest と modlist は57件。クライアントでも対象JARをインスタンスの `mods/` の外へ退避し、サーバーと同じ構成にする。TaCZ、Arcana とその Gunpack は維持する。
+
+適用前に Forge を停止し、Volume全体（world、playerdata、mods、configを含む）をバックアップする。Superb Warfare の銃・乗り物・ブロック・インベントリなど、このModに由来する保存済みデータが失われる可能性がある。対象の回収・保存の要否を確認し、隔離コピーで Mod を除いた起動とワールドを検証する。除外後のワールドを保存してからJARを戻しても、消えたデータの復元は保証されない。復旧が必要なら停止して更新前の Volume バックアップと旧 manifest・JAR・設定を揃えて復元する。
+
+本番Volumeには `superbwarfare-0.8.9.2-mc1.20.1-65d985a64-all.jar` が存在した。manifestから外すだけで既存JARが消える保証はない。データノードで対象Volumeを確認し、停止・バックアップ後に次のコマンドで対象だけを `/data/mods/` の外に退避する。旧JARと異なる内容、シンボリックリンク、退避先競合の場合は停止して調査する。`FORGE_VOLUME` は実際のVolume名に置き換える。
+
+```bash
+FORGE_VOLUME='実際のForge Volume名'
+FORGE_IMAGE='itzg/minecraft-server:java17@sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287'
+docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IMAGE" -euc '
+  src=/data/mods/superbwarfare-0.8.9.2-mc1.20.1-65d985a64-all.jar
+  dst=/data/.feato-content/retired/superbwarfare-0.8.9.2-mc1.20.1-65d985a64-all.jar
+  hash=559930003f638080de648a8621821d785158768c3f69a762094ef4c8d3c4cc12
+  if [[ ! -e "$src" && ! -L "$src" ]]; then echo "対象JARは存在しません"; exit 0; fi
+  [[ ! -L "$src" && -f "$src" ]] || { echo "通常ファイルではありません" >&2; exit 1; }
+  [[ "$(sha256sum "$src" | cut -d " " -f 1)" == "$hash" ]] || { echo "SHA-256不一致" >&2; exit 1; }
+  mkdir -p "$(dirname "$dst")"
+  [[ ! -e "$dst" && ! -L "$dst" ]] || { echo "退避先が存在します" >&2; exit 1; }
+  mv -- "$src" "$dst"
+  echo "対象JARを退避しました: $dst"
+'
+```
+
+運用者が更新済み構成を適用し起動後、`/data/mods/` に対象が再生成されていないことと、クライアント接続を確認する。旧 config や `world/serverconfig` は自動削除せず保持する。未使用設定の整理はバックアップのうえ別途判断する。
