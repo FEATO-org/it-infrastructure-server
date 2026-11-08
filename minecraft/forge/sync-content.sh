@@ -7,6 +7,29 @@ lock_file=${2:-/forge-pack/content.lock}
 state_dir="$data_dir/.feato-content"
 mkdir -p "$state_dir"
 
+# Retire only the previously pinned and recorded Weapons and Tactics ZIP.
+legacy="$data_dir/tacz/feato-weapons-and-tactics.zip"
+legacy_state="$state_dir/tacz_feato-weapons-and-tactics.zip.sha256"
+legacy_hash=e9983776641a5ffa95fef55198d91ff595faff1630934cb4bfa7d6a8c4666c10
+archive="$state_dir/retired/feato-weapons-and-tactics.zip"
+if [[ -e "$legacy" || -L "$legacy" ]]; then
+  if [[ -L "$legacy" || ! -f "$legacy" || -L "$legacy_state" || ! -f "$legacy_state" ]] || \
+     [[ "$(cat "$legacy_state")" != "$legacy_hash" || "$(sha256sum "$legacy" | cut -d ' ' -f 1)" != "$legacy_hash" ]]; then
+    echo "Refusing to retire unmanaged or modified content: $legacy" >&2
+    exit 1
+  fi
+  mkdir -p "$state_dir/retired"
+  if [[ -e "$archive" || -L "$archive" ]]; then
+    echo "Refusing to overwrite retired content: $archive" >&2
+    exit 1
+  fi
+  mv -- "$legacy" "$archive"
+fi
+if [[ ! -e "$legacy" && ! -L "$legacy" && -f "$legacy_state" && ! -L "$legacy_state" ]] && \
+   [[ "$(cat "$legacy_state")" == "$legacy_hash" ]]; then
+  rm -- "$legacy_state"
+fi
+
 while IFS=$'\t' read -r relative expected url fallback; do
   [[ -z "$relative" || "$relative" == \#* ]] && continue
   if [[ ! "$relative" =~ ^(tacz/feato-[a-z0-9-]+\.zip|mods/feato-[a-z0-9-]+\.jar)$ || ! "$expected" =~ ^[0-9a-f]{64}$ || -z "$url" ]]; then
