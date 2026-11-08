@@ -72,7 +72,7 @@ TaCZ本体、Weapons and Tacticsなどの関連Modと Arcana は維持する。`
 
 本番のForgeを停止してVolume全体をバックアップする。`/data/tacz/` には Gunpack のほか利用者が置いたZIP・展開済みフォルダ・設定・その他のファイルが含まれる可能性がある。対象全体を確認し、以下のコマンドでディレクトリを `/data/.feato-content/retired/tacz-directory/tacz/` へまとめて移動する。既知のGunpackの管理記録も同じ退避先の `records/` へ移す。ModのJARと `/data/config/`、ワールドは操作しない。
 
-新しいリポジトリと `content.lock` をデータノードへ配置し、停止・バックアップ後に実行する。Volumeとパスは実物を確認する。ディレクトリ自体が存在しなければ何もしない。シンボリックリンク、管理記録の不一致、退避先の競合は移動前に拒否する。
+Gucci & Vuitton と LesRaisins Tactical も削除する場合は、下記「Gucci & Vuitton と LesRaisins Tactical の削除」の一括退避手順を優先する。TaCZディレクトリだけを退避する場合は、新しいリポジトリと `content.lock` をデータノードへ配置し、停止・バックアップ後に実行する。Volumeとパスは実物を確認する。ディレクトリ自体が存在しなければ何もしない。シンボリックリンク、管理記録の不一致、退避先の競合は移動前に拒否する。
 
 ```bash
 FORGE_VOLUME='実際のForge Volume名'
@@ -164,39 +164,22 @@ docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IM
 
 ## Gucci & Vuitton と LesRaisins Tactical の削除
 
-[Gucci & Vuitton Attachments](https://www.curseforge.com/minecraft/mc-mods/tacz-gucci-vuitton-attachments/files/6062098)（project 1103436 / file 6062098）と [LesRaisins Tactical Equipements](https://www.curseforge.com/minecraft/mc-mods/tacz-lesraisins-tactical-equipements/files/8652673)（project 1273094 / file 8652673）を manifest と一覧から外す。LesRaisins のGit管理の初回設定を外し、既存Volumeの設定は保持する。TaCZ本体、Weapons and Tactics、Arcanaと他のModは維持する。クライアントの `mods/` からも両ModのJARを外し、`tacz/` に両GunpackのZIPまたは展開版が残っていないか確認する。
+[Gucci & Vuitton Attachments](https://www.curseforge.com/minecraft/mc-mods/tacz-gucci-vuitton-attachments/files/6062098)（project 1103436 / file 6062098）と [LesRaisins Tactical Equipements](https://www.curseforge.com/minecraft/mc-mods/tacz-lesraisins-tactical-equipements/files/8652673)（project 1273094 / file 8652673）を manifest と一覧から外す。LesRaisins のGit管理の初回設定を外し、既存Volumeの対象設定は停止後に退避する。TaCZ本体、Weapons and Tactics、Arcanaと他のModは維持する。クライアントの `mods/` からも両ModのJARを外し、`tacz/` に両GunpackのZIPまたは展開版が残っていないか確認する。
 
 停止中のForge Volumeをバックアップし、対象Mod由来のアタッチメント・装備・アイテムの回収と復旧要否を確認する。Modを外してワールドを保存すると関連データが失われる可能性がある。復旧時は停止したうえで旧Mod構成と削除前Volumeの整合したバックアップを復元する。
 
-既存VolumeのJARはmanifestから外すだけでは残る可能性がある。データノードで実際のVolume名を確認し、サービス停止・バックアップ後に次を実行する。確認済みの固定版とSHA-256が一致するJARだけを読込対象外へ退避する。対象をすべて事前確認し、一つでも不一致なら移動を始めない。対象なしは正常終了し、別版・変更・シンボリックリンク・退避先競合時は停止する。
+既存VolumeのJARはmanifestから外すだけでは残る可能性がある。サービス停止・バックアップ後、データノードに更新版リポジトリを配置し、実際のVolume名とパスを確認して次を実行する。**既存の `/data/tacz/` を設定や他Gunpackを含めて丸ごと退避**し、固定JAR 2件と `/data/config/lrtactical-common.toml`、`/data/config/lrtactical-client.toml`、`/data/world/serverconfig/lrtactical-server.toml` の存在するものを同じ退避先に移す。後者の serverconfig は `world` の実ワールド名に基づく。別ワールドを使用している場合は実際のパスを確認し、個別に退避する。`/data/config/tacz-common.toml` は維持する。
 
 ```bash
 FORGE_VOLUME='実際のForge Volume名'
+REPO_DIR='更新済みリポジトリの絶対パス'
 FORGE_IMAGE='itzg/minecraft-server:java17@sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287'
-docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IMAGE" -euc '
-  entries=(
-    "guccivuitton-1.20.1-0.2.2.jar|9247e55f20acf8ec89af56d4ad45fcc8fe08bee9f7189421ef31835f3516bd57"
-    "lrtactical-1.20.1-0.4.3.jar|930372cab33e1f563f597c74f9155b5ed25e6f2b0ff7e12dfc86255e1020ef2d"
-  )
-  dest=/data/.feato-content/retired
-  for dir in /data/mods /data/.feato-content "$dest"; do
-    [[ ! -L "$dir" && ( ! -e "$dir" || -d "$dir" ) ]] || { echo "安全でないディレクトリ: $dir" >&2; exit 1; }
-  done
-  for entry in "${entries[@]}"; do
-    IFS="|" read -r name hash <<< "$entry"
-    src="/data/mods/$name"; dst="$dest/$name"
-    if [[ ! -e "$src" && ! -L "$src" ]]; then echo "対象なし: $name"; continue; fi
-    [[ ! -L "$src" && -f "$src" ]] || { echo "通常ファイルではありません: $src" >&2; exit 1; }
-    [[ "$(sha256sum "$src" | cut -d " " -f 1)" == "$hash" ]] || { echo "SHA-256不一致: $src" >&2; exit 1; }
-    [[ ! -e "$dst" && ! -L "$dst" ]] || { echo "退避先が存在します: $dst" >&2; exit 1; }
-  done
-  mkdir -p "$dest"
-  for entry in "${entries[@]}"; do
-    IFS="|" read -r name hash <<< "$entry"
-    src="/data/mods/$name"
-    [[ ! -f "$src" ]] || { mv -- "$src" "$dest/$name"; echo "退避: $name"; }
-  done
-'
+docker run --rm --user 0:0 --entrypoint bash \
+  -v "$FORGE_VOLUME:/data" \
+  -v "$REPO_DIR/minecraft/forge/retire-removed-tacz-addons.sh:/retire-addons.sh:ro" \
+  "$FORGE_IMAGE" /retire-addons.sh /data
 ```
 
-更新したmanifestを配布し起動後、対象JARが再取得されないこととクライアント接続を確認する。別名・別バージョンのJARは自動的に対象にならないため、存在する場合は個別に特定する。
+実行前に2つのJARのハッシュと既存のGunpack管理記録、ファイル種別を一括確認する。異なる版・変更済みJAR、シンボリックリンク、退避先の競合、管理記録の不一致があれば移動せず停止する。退避先 `/data/.feato-content/retired/removed-tacz-addons/` が既にあれば再実行を拒否するため、部分的に失敗した場合は内容と出力を確認して手動で整合する。別名・別バージョンのJARや別ワールドの設定は対象外。既に先の手順で退避されたファイルも変更しない。
+
+更新したmanifestを配布し起動後、対象JARが再取得されないこととクライアント接続を確認する。TaCZ本体は `/data/tacz/` や既定ファイルを再作成する場合がある。
