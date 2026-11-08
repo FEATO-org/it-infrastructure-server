@@ -26,3 +26,6 @@ private_dir=$(mktemp -d /tmp/forge-forwarding.XXXXXX)
 printf '[forwarding]\nenabled = true\nmode = "MODERN"\nsecret = "%s"\n' "$secret" > "$private_dir/config.toml"
 ln -sfn "$private_dir/config.toml" "$config_file"
 unset secret
+
+# Synchronize pinned content after preserving the forwarding and configuration setup.
+bash /forge-pack/sync-content.sh /data /forge-pack/content.lock

@@ -429,3 +429,5 @@ Hurricane追加前に、Paper 26.2 build 126 / Java 25で全19 Pluginを同時�
 Better HorsesはProtocolLibなしでも起動しますが一部機能を無効化します。DualHorseの配布metadataは26.1.2までのため、26.2では起動確認に加えて実プレイヤーで二人乗り、再接続、馬データ保存、Better Horsesとの併用を確認してください。NPCクリック、帰還札の100G徴収・1回消費・teleport、Java/Bedrock接続はクライアント試験が必要です。
 
 Forge Create アドオンの固定版と検証状況は [Modpack](../minecraft/forge/modpack/README.md#追加予定の-create-アドオン隔離検証待ち) を参照。
+
+TaCZ Gunpack 5 件と Arcana 1.4.2 hotfix の取得元・固定ハッシュ・導入先・未検証事項は [Modpack](../minecraft/forge/modpack/README.md#tacz-gunpack-と-arcana) を参照。

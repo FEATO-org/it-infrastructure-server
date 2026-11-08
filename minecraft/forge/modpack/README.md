@@ -62,6 +62,28 @@ ZIP の overrides は古い別 Mod の設定、クライアント設定、個人
 | [Create Big Cannons](https://www.curseforge.com/minecraft/mc-mods/create-big-cannons/files/7478036) | 5.10.2 Forge 1.20.1 | 646668 / 7478036 |
 | [Ritchie's Projectile Library](https://www.curseforge.com/minecraft/mc-mods/ritchies-projectile-library/files/7292523) | 2.1.1 Forge 1.20.1 | 1279407 / 7292523 |
 
-Create Crafts & Additions 1.3.3 は既存のため変更しない。Steam 'n' Rails と Diesel Generators の配布 JAR の Forge メタデータでは Create 6.0.8 が依存範囲に含まれる。Big Cannons 5.10.2 の配布ページは Create 6.0.8 を明記している。4 件の組み合わせの専用サーバー起動、ゲーム内動作とクライアント接続は未確認。Big Cannons の JAR 自動取得は調査環境で HTTP 403 となったため Auto CurseForge での取得も要確認。
+Create Crafts & Additions 1.3.3 は既存のため変更しない。Steam 'n' Rails と Diesel Generators の配布 JAR の Forge メタデータでは Create 6.0.8 が依存範囲に含まれる。Big Cannons 5.10.2 の配布ページは Create 6.0.8 を明記している。4 件の組み合わせの専用サーバー起動、ゲーム内動作とクライアント接続は未確認。Big Cannons の CurseForge 配布 JAR は固定 URL から取得でき、Forge メタデータの Create 6.0.8 と Ritchie’s Projectile Library 2.1.1 の依存範囲を確認した。Auto CurseForge での取得・起動は未確認。
 
 クライアントも同じ manifest の追加 4 件を導入する。反映前に Forge Volume を停止してバックアップし、隔離環境で起動と接続を検証する。戻す場合は追加前の manifest を復元し、追加された 4 件の JAR のみを確認して退避する。ワールド Volume は削除しない。新規 Mod のブロック・アイテムを保存後に Mod を外すとデータが欠損し得るため、必要に応じて導入前のバックアップを復元する。
+
+## TaCZ Gunpack と Arcana
+
+TaCZ 1.2.0 の GunPackLoader はゲームディレクトリの `tacz/` 内の ZIP を読み込む。以下は配布 ZIP ルートに `gunpack.meta.json` があり、ZIP の整合性と SHA-256 を確認した。導入後の動作・各 Gunpack 同士の互換性は未検証。
+
+| Gunpack | バージョン | CurseForge project / file | 対応情報 |
+| --- | --- | --- | --- |
+| [Weapons and Tactics](https://www.curseforge.com/minecraft/customization/tacz-weapons-and-tactics/files/9473780) | 0.4.1 | 1312068 / 9473780 | TaCZ 1.2.0 以降と配布元が明記 |
+| [Charge into Battle: Reboot](https://www.curseforge.com/minecraft/customization/tacz-charge-into-battle-reboot-pack/files/7280896) | 0.3 | 1075478 / 7280896 | 1.1.7+ 表記、1.2.0 での動作は未確認 |
+| [EOS Lab](https://www.curseforge.com/minecraft/customization/tacz-eoslab-gunpack/files/7182834) | 1.1.1 hotfix1 | 1201057 / 7182834 | 1.1.5+ 表記、1.2.0 での動作は未確認 |
+| [Alex Kim’s Gunpack](https://www.curseforge.com/minecraft/customization/alex-kims-gunpack-tacz-gun-pack/files/9494048) | V14.12.25 | 1220585 / 9494048 | 配布ファイル名に TaCZ 1.2.0 の記載 |
+| [Classics Reborn](https://www.curseforge.com/minecraft/customization/tacz-classics-reborn/files/9474740) | 1.1.7 hotfix3 | 1079169 / 9474740 | TaCZ 1.2.0 と Arcana 1.4.2 向け表記 |
+
+Classics 用の [Arcana 1.4.2 hotfix 作者公式 Release](https://github.com/Hamster-Baron/TACZ-Arcana/releases/tag/1.4.2-loader-hybrid-hotfix) は CurseForge 審査待ちのため固定 GitHub Release を使用する。作者によれば本 JAR は保護 Gunpack の読み込み機能を含み、公開ソースからのビルドとは異なる。JAR の内部メタデータでは TaCZ 1.2.0 以上、Forge 47 以上、Kotlin for Forge 4.12 以上を要求し、既存構成には Kotlin for Forge 4.12.0 が含まれる。Arcana は TaCZ 内部を変更するため、既存アドオンとの競合も含め隔離試験する。
+
+`../content.lock` に各固定 URL と SHA-256、`../sync-content.sh` に同期処理を置く。Forge 起動前に `/data/tacz/feato-*.zip` と `/data/mods/feato-arcana.jar` を検証し、欠けたファイル・管理済みで更新が必要なファイルだけ取得する。未管理ファイルや管理後に変更されたファイルの上書きを拒否し、その他のファイルは削除しない。ZIP のダウンロードと配置は実施するが、作者が再配布を制限しているものもあるため、ZIP を再配布用 Modpack に同梱せず利用者が各配布元から取得する。配布条件を各作者の配布ページでも確認する。
+
+導入前に停止中の Forge Volume をバックアップし、既存 `/data/tacz/` に同じ Gunpack の ZIP または展開版がないか、`/data/mods/` に Arcana の別 JAR がないか確認して重複を避ける。対象 ZIP 間には `data/tacz/recipe_filters/default.json` やアタッチメントタグなど共通パスが26件あり、レシピ・タグの合成結果および衝突の有無は未確認。ゲーム内で検証する。GitHub Release の直接 URL が失敗した場合は同じ公式 asset の GitHub API URL にフォールバックする。両方にアクセスできない場合は同じ公式 Release の JAR を別途取得し、SHA-256 が `content.lock` と一致することを確認して停止中の `/data/mods/feato-arcana.jar` に手動配置する。ファイル未取得、ハッシュ不一致、所有権不明の競合時は起動前処理が失敗する。
+
+クライアントの CurseForge Modpack は同じ manifest の 4 件を追加し、各配布ページから上記 5 ZIP と Arcana を取得する。`content.lock` の SHA-256 を確認後、ZIP はインスタンスの `tacz/`、Arcana は `mods/` に配置する。Bash と curl が利用可能な場合は `bash minecraft/forge/sync-content.sh <インスタンスのゲームディレクトリ> minecraft/forge/content.lock` でも同じ固定ファイルを用意できる。Windows 等では各配布元から手動取得し、既存の同名 Gunpack を重複させない。TaCZ の `ClientGunPackDownloadUrls` はソース上非推奨であり、完全な Gunpack 自動配布として使用しない。クライアント固有設定やセーブデータをサーバーへコピーしない。
+
+更新時は対象の配布元・ID・実ファイル・ライセンス・SHA-256 を照合し `content.lock` と本表を更新する。管理対象だけを外す場合、停止後に `content.lock` で対象を特定し `/data/tacz/feato-*.zip` または `/data/mods/feato-arcana.jar` と対応する `/data/.feato-content/` の記録を手動退避する。現在の lock を維持したまま起動すると再取得するため、併せて対象を lock から除くか旧リビジョンへ戻す。TaCZ 設定や他の Gunpack、Volume は削除しない。新規 Mod 由来のデータを保存後のロールバックには導入前バックアップが必要。

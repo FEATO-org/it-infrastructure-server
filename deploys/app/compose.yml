@@ -254,6 +254,8 @@ services:
       - minecraft_forge_data:/data
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/modpack/manifest.json:/forge-pack/manifest.json:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/prepare-forge.sh:/forge-pack/prepare-forge.sh:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/sync-content.sh:/forge-pack/sync-content.sh:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/content.lock:/forge-pack/content.lock:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/config:/forge-config:ro
     networks:
       - minecraft-backend-network
