@@ -1,5 +1,7 @@
 # Forge 1.20.1 切替の取得元
 
+58件版: [提供 manifest](../minecraft/forge/modpack/manifest.json) の固定 project/file ID と [Modpack手順](../minecraft/forge/modpack/README.md#58件版への更新と復旧) を参照。Weapons and Tactics Mod 1411291 / 9473803 は CurseForge 経由、Create Big Cannons 646668 / 8169547 は [配布元](https://www.curseforge.com/minecraft/mc-mods/create-big-cannons/files/8169547)。Forge 47.4.28 / Java 17 での58件版の取得・起動・接続は未確認。
+
 | 対象 | 固定版 / 取得元 | 検証状況 |
 | --- | --- | --- |
 | itzg/minecraft-server | `java17` / digest `sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287` / [公式](https://docker-minecraft-server.readthedocs.io/) | 隔離起動試験に使用 |
@@ -430,4 +432,4 @@ Better HorsesはProtocolLibなしでも起動しますが一部機能を無効�
 
 Forge Create アドオンの固定版と検証状況は [Modpack](../minecraft/forge/modpack/README.md#追加予定の-create-アドオン隔離検証待ち) を参照。
 
-TaCZ Gunpack 5 件と Arcana 1.4.2 hotfix の取得元・固定ハッシュ・導入先・未検証事項は [Modpack](../minecraft/forge/modpack/README.md#tacz-gunpack-と-arcana) を参照。
+TaCZ Gunpack 4 件と Arcana 1.4.2 hotfix の取得元・固定ハッシュ・導入先・未検証事項は [Modpack](../minecraft/forge/modpack/README.md#tacz-gunpack-と-arcana) を参照。
