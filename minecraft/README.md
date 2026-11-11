@@ -6,6 +6,16 @@
 
 [Modpack の内容と更新](forge/modpack/README.md)。Forge は `minecraft_forge_data`、Paper は既存 `minecraft_server_data` を使用し、直接ポートを公開しません。`forwarding_secret` は既存の Swarm Secret を再利用します。Forge の固定イメージは Java 17、ヒープ 1G〜8G、メモリ上限 9G です。データノードの空きメモリを確認してください。
 
+### Discord ログ通知
+
+Forge の `/data/logs/latest.log` は `app_minecraft_forge_data` から global の `system_fluent-bit` に読み取り専用で `/minecraft-forge/logs/latest.log` として渡されます。Paper の `app_minecraft_server_data` も従来どおり監視し、それぞれ別の Tail DB で位置を保存します。新規監視時は既存ログ末尾から読み始めます。参加・退出、チャット、既存の判定に一致する死亡、起動開始・完了、停止は `NOTIFY_WEBHOOK_URL`、ERROR は `ERROR_WEBHOOK_URL` へ既存の形式で送ります。WARN やスタックトレースの続き行は送信しません。Mod 独自の死亡メッセージは通知されない場合があります。
+
+両 Minecraft サービスは `minecraft-data` ノードに配置されますが、Fluent Bit は全ノードで動きます。ローカル Volume はノード間で共有されないため、他ノードに同名の空 Volume が作られても Forge のデータではありません。適用前にデータノード上の実際の Volume 名・ログと配置を確認し、同名 Volume を削除しないでください。Paper 復旧時も監視設定と DB は残し、Paper 側のログを確認します。両方を同時に稼働させると両方のイベントが同じ通知先に届きます。
+
+適用後はデータノードの Forge ログと `docker service ps system_fluent-bit`、`docker service logs --since 10m system_fluent-bit` を確認し、管理された試験参加・退出、チャット、起動・停止および安全に発生させられる ERROR で対応する通知先を確認します。通知がない場合は対象タスクの配置、Volume とログの読み取り権限、ログ形式、Tail DB、Fluent Bit のエラー、既存 Webhook 設定と Discord の応答を順に調べます。ログや設定を共有する際は秘密値と個人情報を除いてください。DB を削除すると読み取り位置が失われるため、調査のために安易に削除しないでください。
+
+通知変更のロールバックはこの変更前の system Compose と Fluent Bit 設定へ戻し、通常の stack 更新手順で反映します。Minecraft の Volume と Tail DB は保持します。
+
 ### 適用前・検証
 
 1. 停止前に Paper と Proxy の Volume を整合した状態でバックアップし、復元先と `minecraft-data` ノードを確認します。Forge Volume も同様に、停止してからワールドと設定をバックアップします。Volume 名は `docker volume ls` で実物を確認し、削除しないでください。
