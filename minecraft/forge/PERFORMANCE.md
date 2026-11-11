@@ -4,9 +4,11 @@ Forge の起動・Mod 間互換性・実機操作と性能効果は未確認。�
 
 ## JVM
 
-固定 Java 17 HotSpot イメージで MeowIce の G1 フラグを有効にし、Aikar・GraalVM・ZGC 用は無効にする。Forge の JVM_OPTS / JVM_XX_OPTS は別途指定しない。ヒープは 1G〜8G、Swarm 上限は 9G のまま。固定イメージのスクリプトは G1、AlwaysPreTouch、文字列重複排除、400M コードキャッシュ、Large Pages と Transparent Huge Pages を指定する。SoftMaxHeapSize は ZGC 用の分岐だけで設定される。Large Pages の実際の利用はホスト設定に依存する。ネイティブメモリやコードキャッシュも上限内に必要であり、メモリ削減を保証しない。
+固定 Java 17 HotSpot イメージで MeowIce の G1 フラグを有効にし、Aikar・GraalVM・ZGC 用は無効にする。Forge の JVM_OPTS / JVM_XX_OPTS は別途指定しない。ヒープは 1G〜8G のまま、Swarm 上限は 9G から 10G に変更する。固定イメージのスクリプトは G1、AlwaysPreTouch、文字列重複排除、400M コードキャッシュ、Large Pages と Transparent Huge Pages を指定する。SoftMaxHeapSize は ZGC 用の分岐だけで設定される。Large Pages の実際の利用はホスト設定に依存する。ネイティブメモリやコードキャッシュも上限内に必要であり、メモリ削減を保証しない。
 
 同イメージの Temurin 17.0.15 で生成フラグと 1G〜8G ヒープによる Java 起動を arm64 の隔離コンテナで確認した。対象ノードの CPU と Huge Pages の状態、Forge の実負荷での OOM・GC は別途確認する。戻す場合は Compose の `USE_MEOWICE_FLAGS` を `FALSE` にし、通常のデプロイ手順を使う。
+
+コンテナ上限だけを戻す場合は Forge の `deploy.resources.limits.memory` を `9G` に戻す。いずれの上限でも、データノードに他サービスと OS のための余裕を確保し、実使用量を監視する。
 
 ## FerriteCore の既存 Volume への反映
 
@@ -33,7 +35,7 @@ Manifest には spark 361579 / 4738952 が登録されている。明示除外�
 
 ## 性能比較
 
-最大ヒープ 8G と Forge の Swarm 上限 9G を維持する。MeowIce OFF/ON と compactFastMap false/true の4構成を、同じワールドの隔離コピー、Mod、人数・活動、計測時間で比較する。Chunky による生成は停止し、導入自体の影響は別途測る。採用候補は両方 ON だが、改善は測定前には確定しない。
+最大ヒープ 8G と Forge の Swarm 上限 10G に統一する。旧設定との比較では 9G からの上限変更も記録する。MeowIce OFF/ON と compactFastMap false/true の4構成を、同じワールドの隔離コピー、Mod、人数・活動、計測時間で比較する。Chunky による生成は停止し、導入自体の影響は別途測る。採用候補は両方 ON だが、改善は測定前には確定しない。
 
 ヒープ・GC 後ヒープ、GC 回数と停止時間、コンテナ RSS・Working Set、CPU、TPS、MSPT 平均・P95・P99、起動時間、OOM、Mod エラーを、利用可能な監視と spark で記録する。監視で取得できない項目は未測定とし、数値を推測しない。ホスト全体にも他サービスのための十分なメモリを残す。
 

@@ -285,7 +285,7 @@ services:
         reservations:
           memory: 2G
         limits:
-          memory: 9G
+          memory: 10G
     logging: *default-logging
 
 networks:
