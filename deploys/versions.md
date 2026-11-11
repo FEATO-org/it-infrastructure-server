@@ -8,6 +8,7 @@
 | Minecraft / Forge | 1.20.1 / 47.4.28、提供 manifest と [Auto CurseForge](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) | 隔離 Forge で起動、Mod エラーあり |
 | Ambassador | 1.4.5 / [固定ファイル](https://cdn.modrinth.com/data/cOj6YqJM/versions/YeQbhgna/Ambassador-Velocity-1.4.5-all.jar) | Velocity 4.2.0 と接続未検証 |
 | Proxy Compatible Forge | 1.3.1 / [固定ファイル](https://cdn.modrinth.com/data/vDyrHl8l/versions/qiZ49HIW/proxy-compatible-forge-1.3.1.jar) | Forge 初期化確認、Forwarding 接続未検証 |
+| Chunky | 1.3.146 / [CurseForge 485681:5320028](https://www.curseforge.com/minecraft/mc-mods/chunky-pregenerator-forge/files/5320028) | Forge 1.20.1 対応表記、サーバーへの取得・起動・接続未確認 |
 
 Mod の固定 ID と配布元一覧、除外と更新は [Modpack](../minecraft/forge/modpack/README.md) を参照。本番での起動・接続は未確認。
 
