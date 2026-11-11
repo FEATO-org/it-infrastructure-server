@@ -6,6 +6,8 @@
 
 [Modpack の内容と更新](forge/modpack/README.md)。Forge は `minecraft_forge_data`、Paper は既存 `minecraft_server_data` を使用し、直接ポートを公開しません。`forwarding_secret` は既存の Swarm Secret を再利用します。Forge の固定イメージは Java 17、ヒープ 1G〜8G、メモリ上限 9G です。データノードの空きメモリを確認してください。
 
+Forge の JVM、FerriteCore、spark、サーバー専用 Chunky の設定・測定・バックアップ・復旧は [パフォーマンス管理手順](forge/PERFORMANCE.md) を参照してください。Chunky の事前生成は別途管理者が判断します。
+
 ### 適用前・検証
 
 1. 停止前に Paper と Proxy の Volume を整合した状態でバックアップし、復元先と `minecraft-data` ノードを確認します。Forge Volume も同様に、停止してからワールドと設定をバックアップします。Volume 名は `docker volume ls` で実物を確認し、削除しないでください。
