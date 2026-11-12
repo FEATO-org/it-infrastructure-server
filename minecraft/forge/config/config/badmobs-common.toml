@@ -1,0 +1,5 @@
+[grimoireofgaia.cecaelia]
+allowNormalSpawning = false
+allowSpawners = false
+allowSpawnEggs = false
+allowConversions = false

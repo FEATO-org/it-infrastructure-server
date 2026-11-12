@@ -1,6 +1,14 @@
 # イワシコ寄生虫 Modpack
 
-提供された58件版から LesRaisins Tactical Equipements を除いた `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と 57 組の CurseForge project ID / file ID を固定する。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
+提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と 58 組の CurseForge project ID / file ID を固定する。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
+
+## Bad Mobs と Cecaelia
+
+[Bad Mobs 19.0.4](https://www.curseforge.com/minecraft/mc-mods/bad-mobs/files/5086469)（Project 233258 / File 5086469）を既存の Auto CurseForge manifest に追加し、`grimoireofgaia:cecaelia` の自然・スポナー・スポーンエッグ・変換によるスポーンを禁止する。JAR の Forge メタデータ上の必須依存は Forge 47 以降のみ。作者はクライアントとサーバー両方への導入を要求し、サーバー単独は非サポートとしているため、提供クライアント Modpack にも同じ版を追加する。制御自体はサーバー側の設定で行われる。既存 Mod や Proxy との実接続は未検証。
+
+Git の `../config/config/badmobs-common.toml` は新規 Volume または同名ファイルがない既存 Volume で起動前に `/data/config/badmobs-common.toml` へコピーされる。既存ファイルは上書きしない。既存ファイルがある場合は Forge を停止し Volume 全体をバックアップしたうえで実ファイルを確認し、`[grimoireofgaia.cecaelia]` の `allowNormalSpawning`、`allowSpawners`、`allowSpawnEggs`、`allowConversions` の4項目をすべて `false` に変更する。セクションがなければ Git の該当セクションを追加し、同名セクションやキーを重複させない。他Mobの設定を維持し、起動後の設定ファイルとログを確認する。既存ファイルは自動更新されないため、この手作業が適用条件となる。Forge が不足する設定を補完する際の値の保持、取得、起動、4経路の動作は未検証であり、先に隔離コピーで確認する。
+
+Bad Mobs のエンティティ参加イベントは該当個体を破棄するため、すでにワールド内にいる Cecaelia もチャンク再読込等で削除される可能性がある。コマンド等の他のスポーン理由も通常スポーン設定で拒否され得る。適用前にワールドを含む停止時 Volume のバックアップと復元を確認する。ロールバックは停止後、以前の manifest と設定に戻し、Bad Mobs の JAR が残る場合は対象だけを mods 外へ退避する。失われた個体は Mod の削除だけでは戻らないため、必要に応じ更新前の整合した Volume バックアップを復元する。
 
 [Auto CurseForge](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) で manifest を使う。Java 17 イメージの組み込み API key を使用し、配布制限されたファイルがあれば起動ログに示される手順に従い同じ ID のファイルを手動取得する。キーを変更する必要があるときは Swarm secret と `CF_API_KEY_FILE` を使用し、Git に記載しない。
 
