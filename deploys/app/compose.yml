@@ -235,13 +235,19 @@ services:
     environment:
       EULA: "TRUE"
       TYPE: AUTO_CURSEFORGE
+      ALLOW_FLIGHT: "TRUE"
       CF_SLUG: custom
       CF_MODPACK_MANIFEST: /forge-pack/manifest.json
-      CF_EXCLUDE_MODS: "495267,679177,908741,240630,535489"
+      CF_EXCLUDE_MODS: "495267,679177,908741,240630,535489,1768274,391382,448233,581495"
       CF_FORCE_INCLUDE_MODS: "248787"
+      CURSEFORGE_FILES: "485681:5320028"
       MODS: https://cdn.modrinth.com/data/vDyrHl8l/versions/qiZ49HIW/proxy-compatible-forge-1.3.1.jar
       PRE_START_SCRIPT: /forge-pack/prepare-forge.sh
       ONLINE_MODE: "FALSE"
+      USE_MEOWICE_FLAGS: "TRUE"
+      USE_MEOWICE_GRAALVM_FLAGS: "FALSE"
+      USE_MEOWICE_ZGC_FLAGS: "FALSE"
+      USE_AIKAR_FLAGS: "FALSE"
       INIT_MEMORY: 1G
       MAX_MEMORY: 8G
       TZ: Asia/Tokyo
@@ -253,6 +259,8 @@ services:
       - minecraft_forge_data:/data
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/modpack/manifest.json:/forge-pack/manifest.json:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/prepare-forge.sh:/forge-pack/prepare-forge.sh:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/sync-content.sh:/forge-pack/sync-content.sh:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/content.lock:/forge-pack/content.lock:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/config:/forge-config:ro
     networks:
       - minecraft-backend-network
@@ -277,7 +285,7 @@ services:
         reservations:
           memory: 2G
         limits:
-          memory: 9G
+          memory: 10G
     logging: *default-logging
 
 networks:

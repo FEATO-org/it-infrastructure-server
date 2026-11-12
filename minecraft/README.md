@@ -4,7 +4,19 @@
 
 現在の構成は Java 1.20.1 Forge 専用です。`minecraft.feato.jp:25565` → nginx → Velocity 4.2.0 → `minecraft-forge:25565`。クライアントには提供 Modpack が必要です。Bedrock は利用できません。Geyser JAR は起動時に Proxy Volume の `disabled-plugins` に退避し、nginx の Bedrock TCP/UDP 公開ポートを閉じます。Floodgate・設定・鍵と Paper の Volume は保持します。Forge と Paper のワールド・プレイヤーデータは独立しています。
 
-[Modpack の内容と更新](forge/modpack/README.md)。Forge は `minecraft_forge_data`、Paper は既存 `minecraft_server_data` を使用し、直接ポートを公開しません。`forwarding_secret` は既存の Swarm Secret を再利用します。Forge の固定イメージは Java 17、ヒープ 1G〜8G、メモリ上限 9G です。データノードの空きメモリを確認してください。
+[Modpack の内容と更新](forge/modpack/README.md)。Forge は `minecraft_forge_data`、Paper は既存 `minecraft_server_data` を使用し、直接ポートを公開しません。`forwarding_secret` は既存の Swarm Secret を再利用します。Forge の固定イメージは Java 17、ヒープ 1G〜8G、メモリ上限 10G です。データノードの空きメモリを確認してください。
+
+Forge の JVM、FerriteCore、spark、サーバー専用 Chunky の設定・測定・バックアップ・復旧は [パフォーマンス管理手順](forge/PERFORMANCE.md) を参照してください。Chunky の事前生成は別途管理者が判断します。
+
+### Discord ログ通知
+
+Forge の `/data/logs/latest.log` は `app_minecraft_forge_data` から global の `system_fluent-bit` に読み取り専用で `/minecraft-forge/logs/latest.log` として渡されます。Paper の `app_minecraft_server_data` も従来どおり監視し、それぞれ別の Tail DB で位置を保存します。新規監視時は既存ログ末尾から読み始めます。参加・退出、チャット、既存の判定に一致する死亡、起動開始・完了、停止は `NOTIFY_WEBHOOK_URL`、ERROR は `ERROR_WEBHOOK_URL` へ既存の形式で送ります。WARN やスタックトレースの続き行は送信しません。Mod 独自の死亡メッセージは通知されない場合があります。
+
+両 Minecraft サービスは `minecraft-data` ノードに配置されますが、Fluent Bit は全ノードで動きます。ローカル Volume はノード間で共有されないため、他ノードに同名の空 Volume が作られても Forge のデータではありません。適用前にデータノード上の実際の Volume 名・ログと配置を確認し、同名 Volume を削除しないでください。Paper 復旧時も監視設定と DB は残し、Paper 側のログを確認します。両方を同時に稼働させると両方のイベントが同じ通知先に届きます。
+
+適用後はデータノードの Forge ログと `docker service ps system_fluent-bit`、`docker service logs --since 10m system_fluent-bit` を確認し、管理された試験参加・退出、チャット、起動・停止および安全に発生させられる ERROR で対応する通知先を確認します。通知がない場合は対象タスクの配置、Volume とログの読み取り権限、ログ形式、Tail DB、Fluent Bit のエラー、既存 Webhook 設定と Discord の応答を順に調べます。ログや設定を共有する際は秘密値と個人情報を除いてください。DB を削除すると読み取り位置が失われるため、調査のために安易に削除しないでください。
+
+通知変更のロールバックはこの変更前の system Compose と Fluent Bit 設定へ戻し、通常の stack 更新手順で反映します。Minecraft の Volume と Tail DB は保持します。
 
 ### 適用前・検証
 
@@ -765,3 +777,9 @@ EconomyShopGUI 7.3.2の起動と以下の実クライアント操作は未確認
 - Java: 従来のInventory GUIで商品選択・購入・売却・数量指定・navigationが7.2.1から退行していないことを確認する。
 
 クライアント操作が必要なJava/Bedrockログイン、NPCクリック、100G徴収、帰還札の消費とteleport、商品売買、馬の二人乗り、各Data Pack、古銭dropは本番公開前の実機確認事項です。Better HorsesはProtocolLibなしでも起動しますが、一部機能が無効になるという通知があります。現在は固定したProtocolLibを導入し、隔離起動でBetterHorsesの接続を確認しています。プレイヤー操作は未確認です。
+
+Forge 58件版の適用前には [更新・バックアップ・旧JARの確認・ロールバック手順](forge/modpack/README.md#58件版への更新と復旧) を実施する。GraveStone の墓や所持品を事前に回収し、更新後のワールドを旧構成で保存しない。
+
+Superb Warfare の削除は [対象JARの退避とワールド保全](forge/modpack/README.md#superb-warfare-の削除) を参照する。
+
+TaCZの追加Gunpackは [ディレクトリ退避手順](forge/modpack/README.md#taczディレクトリの退避) に従う。TaCZ本体とArcanaは維持する。

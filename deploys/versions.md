@@ -1,11 +1,14 @@
 # Forge 1.20.1 切替の取得元
 
+現行57件版: 提供58件版から LesRaisins Tactical Equipements (1273094 / 8652673) を除き、Superb Warfare (1218165 / 9019882) と Gucci & Vuitton Attachments (1103436 / 6062098) を復活。[manifest](../minecraft/forge/modpack/manifest.json) と [復活手順](../minecraft/forge/modpack/README.md#gucci--vuittonとsuperb-warfareの復活) を参照。Forge 47.4.28 / Java 17、x86_64エミュレーションの隔離環境でArcanaを含む起動を確認。実ワールド・クライアント接続は未確認。ARM64ではArcanaネイティブライブラリのGLIBC不足で起動失敗。
+
 | 対象 | 固定版 / 取得元 | 検証状況 |
 | --- | --- | --- |
 | itzg/minecraft-server | `java17` / digest `sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287` / [公式](https://docker-minecraft-server.readthedocs.io/) | 隔離起動試験に使用 |
 | Minecraft / Forge | 1.20.1 / 47.4.28、提供 manifest と [Auto CurseForge](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) | 隔離 Forge で起動、Mod エラーあり |
 | Ambassador | 1.4.5 / [固定ファイル](https://cdn.modrinth.com/data/cOj6YqJM/versions/YeQbhgna/Ambassador-Velocity-1.4.5-all.jar) | Velocity 4.2.0 と接続未検証 |
 | Proxy Compatible Forge | 1.3.1 / [固定ファイル](https://cdn.modrinth.com/data/vDyrHl8l/versions/qiZ49HIW/proxy-compatible-forge-1.3.1.jar) | Forge 初期化確認、Forwarding 接続未検証 |
+| Chunky | 1.3.146 / [CurseForge 485681:5320028](https://www.curseforge.com/minecraft/mc-mods/chunky-pregenerator-forge/files/5320028) | Forge 1.20.1 対応表記、サーバーへの取得・起動・接続未確認 |
 
 Mod の固定 ID と配布元一覧、除外と更新は [Modpack](../minecraft/forge/modpack/README.md) を参照。本番での起動・接続は未確認。
 
@@ -427,3 +430,7 @@ Paper 26.2 build 126 / Oracle GraalVM 25.0.4、ValhallaMMO 1.10.3、BetterHorses
 Hurricane追加前に、Paper 26.2 build 126 / Java 25で全19 Pluginを同時に有効化し、正常停止を確認しました。FancyNpcs 2.12.0、squaremap 1.3.15、DualHorse 1.5.4、Better Horses 6.3を含みます。squaremapは8123番で起動し、ValhallaMMOはja-jp、Backpack Plusはjpn、EconomyShopGUIはlang-jp.ymlを読み込みました。ExecutableItemsはemergency_returnを含む追跡アイテム1件を読み込み、EconomyShopGUIはfeato_shop 1セクション/1ショップとEssentialsX Economy接続を確認しました。Hurricaneは公式READMEの対応表記が26.1までのため、Paper 26.2での起動ログと両collision workaroundの実機動作は未検証です。
 
 Better HorsesはProtocolLibなしでも起動しますが一部機能を無効化します。DualHorseの配布metadataは26.1.2までのため、26.2では起動確認に加えて実プレイヤーで二人乗り、再接続、馬データ保存、Better Horsesとの併用を確認してください。NPCクリック、帰還札の100G徴収・1回消費・teleport、Java/Bedrock接続はクライアント試験が必要です。
+
+Forge Create アドオンの固定版と検証状況は [Modpack](../minecraft/forge/modpack/README.md#追加予定の-create-アドオン隔離検証待ち) を参照。
+
+TaCZの追加Gunpack退避と Arcana 1.4.2 hotfix の取得元・固定ハッシュ・未検証事項は [Modpack](../minecraft/forge/modpack/README.md#taczディレクトリの退避) を参照。
