@@ -34,6 +34,9 @@ end
 
 local function parse_log(log)
   local time, thread, level, message = log:match("^%[(%d%d:%d%d:%d%d)%] %[([^/%]]+)/([A-Z]+)%]: (.*)$")
+  if not level then
+    time, thread, level, message = log:match("^%[(%d%d:%d%d:%d%d)%] %[([^/%]]+)/([A-Z]+)%] %[[^%]]+%]: (.*)$")
+  end
   if not level then return nil end
   return { time = time, thread = thread, level = level, message = message }
 end

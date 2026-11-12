@@ -83,6 +83,7 @@ services:
       - /sys:/host/sys:ro
       - /:/host/root:ro
       - minecraft_server_data:/minecraft:ro
+      - minecraft_forge_data:/minecraft-forge:ro
       - fluent_bit_state:/fluent-bit/state
     networks:
       - monitoring-network
@@ -251,6 +252,9 @@ volumes:
   minecraft_server_data:
     external: true
     name: app_minecraft_server_data
+  minecraft_forge_data:
+    external: true
+    name: app_minecraft_forge_data
 
 configs:
   fluent_bit_config:
