@@ -2,6 +2,14 @@
 
 提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 に追加 Mod 9 件を加えた 67 組の CurseForge project ID / file ID を固定する。追加分の依存・保留理由・未検証事項は [調査と受入条件](ADDITIONAL_MODS.md) を参照。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
 
+## Superb Warfare 0.8.9 への変更
+
+[Superb Warfare 0.8.9 final](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/8104849)（1218165 / 8104849）に固定する。取得した JAR は Forge 47 以上、Kotlin for Forge 4.11.0 以上、Curios 5.4.0 以上、GeckoLib 4.4.6 以上を要求し、申告バージョンは `0.8.9`。既存 pack の Kotlin for Forge 4.12.0、Curios 5.14.1、GeckoLib 4.8.4 は宣言範囲内。Frontline 1.2.1 の `[0.8.9]` には合うが、負荷・動作未検証のため Frontline は採用しない。
+
+**ダウングレードのデータ影響は未検証。** 0.8.9.2 JAR には 0.8.9 にないアイテムモデルやレシピがある。0.8.9.2 で作成・配置したアイテム、乗り物、ブロック等が失われたり読み込めなくなる可能性があり、旧版で保存した後に戻しても復元は保証されない。停止時の world・playerdata・mods・config・tacz・管理状態を含む Volume 全体をバックアップし、復元可能性を確認する。新しい版にしかないデータを調査し、損失を許容できない場合は適用を中止する。隔離コピーでダウングレード後のログ、登録、既存データ、保存・再起動、クライアント接続を確認する。実ワールドでの安全性は未確認。
+
+適用時は Forge を停止し、対象 JAR を project/file ID・実体から識別する。Auto CurseForge が旧 0.8.9.2 JAR を除去する保証は未確認のため、残存する場合は対象のみ `/data/mods/` の外へ退避し、0.8.9 と重複させない。新旧の設定を個別に比較し、既存 Volume は seed で上書きされないことに注意する。クライアントも同じ版に揃える。ロールバックは停止後に旧リビジョンと整合した 0.8.9.2 の停止時 Volume バックアップを復元する。`CF_FORCE_SYNCHRONIZE` は常設しない。本番作業は未実施。
+
 ## Bad Mobs と Cecaelia
 
 [Bad Mobs 19.0.4](https://www.curseforge.com/minecraft/mc-mods/bad-mobs/files/5086469)（Project 233258 / File 5086469）を既存の Auto CurseForge manifest に追加し、`grimoireofgaia:cecaelia` の自然・スポナー・スポーンエッグ・変換によるスポーンを禁止する。JAR の Forge メタデータ上の必須依存は Forge 47 以降のみ。作者はクライアントとサーバー両方への導入を要求し、サーバー単独は非サポートとしているため、提供クライアント Modpack にも同じ版を追加する。制御自体はサーバー側の設定で行われる。既存 Mod や Proxy との実接続は未検証。
@@ -146,6 +154,8 @@ docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IM
 クライアント側でも同じ Gunpack の ZIP や展開版を `tacz/` から退避する。現在は追加Gunpackをすべて退避し、Arcana、TaCZ本体、ほかの設定は維持する。適用後に対象が再取得されず、クライアント接続を確認する。
 
 ## Gucci & VuittonとSuperb Warfareの復活
+
+以下は従来の 0.8.9.2 復活時の記録。現行の固定版・適用手順は上記の 0.8.9 への変更を優先する。
 
 [Gucci & Vuitton Attachments](https://www.curseforge.com/minecraft/mc-mods/tacz-gucci-vuitton-attachments/files/6062098)（project 1103436 / file 6062098）と [Superb Warfare](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/9019882)（project 1218165 / file 9019882）をmanifestへ戻す。TaCZとArcanaは維持し、LesRaisins Tactical Equipementsは削除したまま。Superb Warfareの共通設定seedは新規Volumeや設定未作成時だけコピーする。既存Volumeの設定は上書きしない。
 
