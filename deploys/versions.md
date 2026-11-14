@@ -1,6 +1,6 @@
 # Forge 1.20.1 切替の取得元
 
-現行57件版: 提供58件版から LesRaisins Tactical Equipements (1273094 / 8652673) を除き、Superb Warfare (1218165 / 9019882) と Gucci & Vuitton Attachments (1103436 / 6062098) を復活。[manifest](../minecraft/forge/modpack/manifest.json) と [復活手順](../minecraft/forge/modpack/README.md#gucci--vuittonとsuperb-warfareの復活) を参照。Forge 47.4.28 / Java 17、x86_64エミュレーションの隔離環境でArcanaを含む起動を確認。実ワールド・クライアント接続は未確認。ARM64ではArcanaネイティブライブラリのGLIBC不足で起動失敗。
+現行69件版: Bad Mobs を含む58件に追加 Mod 11件を固定し、SBW を [0.8.9 final](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/8104849) に変更し、[Frontline 1.2.1](https://www.curseforge.com/minecraft/mc-mods/frontline-combat-pack/files/8650627) を追加、Invasion を削除する。JAR 依存は照合済み。隔離起動・再起動は完了したが Frontline の Mixin が失敗し、接続・実動作は未確認。[適用・復旧](../minecraft/forge/modpack/README.md#sbw-の版変更と-frontline-の追加invasion-の削除) を参照。[追加 Mod の調査](../minecraft/forge/modpack/ADDITIONAL_MODS.md) を参照。追加構成の起動・既存ワールド互換性は未確認。従来57件版は提供58件版から LesRaisins Tactical Equipements (1273094 / 8652673) を除き、Superb Warfare (1218165 / 9019882) と Gucci & Vuitton Attachments (1103436 / 6062098) を復活。[manifest](../minecraft/forge/modpack/manifest.json) と [復活手順](../minecraft/forge/modpack/README.md#gucci--vuittonとsuperb-warfareの復活) を参照。従来57件版では Forge 47.4.28 / Java 17、x86_64エミュレーションの隔離環境でArcanaを含む起動を確認。実ワールド・クライアント接続は未確認。ARM64ではArcanaネイティブライブラリのGLIBC不足で起動失敗。
 
 | 対象 | 固定版 / 取得元 | 検証状況 |
 | --- | --- | --- |
@@ -8,6 +8,7 @@
 | Minecraft / Forge | 1.20.1 / 47.4.28、提供 manifest と [Auto CurseForge](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) | 隔離 Forge で起動、Mod エラーあり |
 | Ambassador | 1.4.5 / [固定ファイル](https://cdn.modrinth.com/data/cOj6YqJM/versions/YeQbhgna/Ambassador-Velocity-1.4.5-all.jar) | Velocity 4.2.0 と接続未検証 |
 | Proxy Compatible Forge | 1.3.1 / [固定ファイル](https://cdn.modrinth.com/data/vDyrHl8l/versions/qiZ49HIW/proxy-compatible-forge-1.3.1.jar) | Forge 初期化確認、Forwarding 接続未検証 |
+| Bad Mobs | 19.0.4 / [CurseForge 233258:5086469](https://www.curseforge.com/minecraft/mc-mods/bad-mobs/files/5086469) | Forge 1.20.1、JARの必須依存は Forge 47 以降。Cecaeliaのスポーンを制限。JAR取得・メタデータ確認済み、サーバーでの取得・起動・ゲーム内動作未確認 |
 | Chunky | 1.3.146 / [CurseForge 485681:5320028](https://www.curseforge.com/minecraft/mc-mods/chunky-pregenerator-forge/files/5320028) | Forge 1.20.1 対応表記、サーバーへの取得・起動・接続未確認 |
 
 Mod の固定 ID と配布元一覧、除外と更新は [Modpack](../minecraft/forge/modpack/README.md) を参照。本番での起動・接続は未確認。
