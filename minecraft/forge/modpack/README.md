@@ -1,6 +1,6 @@
 # イワシコ寄生虫 Modpack
 
-提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と 58 組の CurseForge project ID / file ID を固定する。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
+提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 に追加 Mod 9 件を加えた 67 組の CurseForge project ID / file ID を固定する。追加分の依存・保留理由・未検証事項は [調査と受入条件](ADDITIONAL_MODS.md) を参照。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
 
 ## Bad Mobs と Cecaelia
 

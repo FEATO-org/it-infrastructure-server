@@ -1,6 +1,6 @@
 # Forge 1.20.1 切替の取得元
 
-現行58件版: Bad Mobs を追加。従来57件版は提供58件版から LesRaisins Tactical Equipements (1273094 / 8652673) を除き、Superb Warfare (1218165 / 9019882) と Gucci & Vuitton Attachments (1103436 / 6062098) を復活。[manifest](../minecraft/forge/modpack/manifest.json) と [復活手順](../minecraft/forge/modpack/README.md#gucci--vuittonとsuperb-warfareの復活) を参照。従来57件版では Forge 47.4.28 / Java 17、x86_64エミュレーションの隔離環境でArcanaを含む起動を確認。実ワールド・クライアント接続は未確認。ARM64ではArcanaネイティブライブラリのGLIBC不足で起動失敗。
+現行67件版: Bad Mobs を含む58件に追加 Mod 9件を固定。各取得元・依存・保留候補と起動未確認の詳細は [調査](../minecraft/forge/modpack/ADDITIONAL_MODS.md) を参照。従来57件版は提供58件版から LesRaisins Tactical Equipements (1273094 / 8652673) を除き、Superb Warfare (1218165 / 9019882) と Gucci & Vuitton Attachments (1103436 / 6062098) を復活。[manifest](../minecraft/forge/modpack/manifest.json) と [復活手順](../minecraft/forge/modpack/README.md#gucci--vuittonとsuperb-warfareの復活) を参照。従来57件版では Forge 47.4.28 / Java 17、x86_64エミュレーションの隔離環境でArcanaを含む起動を確認。実ワールド・クライアント接続は未確認。ARM64ではArcanaネイティブライブラリのGLIBC不足で起動失敗。
 
 | 対象 | 固定版 / 取得元 | 検証状況 |
 | --- | --- | --- |
