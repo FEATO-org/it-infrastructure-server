@@ -1,14 +1,14 @@
 # イワシコ寄生虫 Modpack
 
-提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 に追加 Mod 9 件を加えた 67 組の CurseForge project ID / file ID を固定する。追加分の依存・保留理由・未検証事項は [調査と受入条件](ADDITIONAL_MODS.md) を参照。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
+提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 にSBW を外し追加 Mod 11 件を加えた 68 組の CurseForge project ID / file ID を固定する。追加分の依存・保留理由・未検証事項は [調査と受入条件](ADDITIONAL_MODS.md) を参照。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
 
-## Superb Warfare 0.8.9 への変更
+## Superb Warfare の削除
 
-[Superb Warfare 0.8.9 final](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/8104849)（1218165 / 8104849）に固定する。取得した JAR は Forge 47 以上、Kotlin for Forge 4.11.0 以上、Curios 5.4.0 以上、GeckoLib 4.4.6 以上を要求し、申告バージョンは `0.8.9`。既存 pack の Kotlin for Forge 4.12.0、Curios 5.14.1、GeckoLib 4.8.4 は宣言範囲内。Frontline 1.2.1 の `[0.8.9]` には合うが、負荷・動作未検証のため Frontline は採用しない。
+Superb Warfare（1218165 / 9019882）を manifest とクライアント一覧から外す。依存する Frontline Combat Pack も採用しない。Weapons and Tactics、TaCZ、Arcana は維持する。Git の SBW 設定 seed は削除するが、既存 Volume の設定や JAR は自動削除されない。
 
-**ダウングレードのデータ影響は未検証。** 0.8.9.2 JAR には 0.8.9 にないアイテムモデルやレシピがある。0.8.9.2 で作成・配置したアイテム、乗り物、ブロック等が失われたり読み込めなくなる可能性があり、旧版で保存した後に戻しても復元は保証されない。停止時の world・playerdata・mods・config・tacz・管理状態を含む Volume 全体をバックアップし、復元可能性を確認する。新しい版にしかないデータを調査し、損失を許容できない場合は適用を中止する。隔離コピーでダウングレード後のログ、登録、既存データ、保存・再起動、クライアント接続を確認する。実ワールドでの安全性は未確認。
+**ワールドへの影響:** SBW の銃器、アイテム、乗り物、ブロック等が利用できなくなり、削除後にワールドを保存するとデータが失われる可能性がある。再導入だけでは復元できない場合がある。事前にプレイヤーと設置物を確認し、損失を許容できない場合は適用しない。Forge を停止し world・playerdata・mods・config・tacz・管理状態を含む Volume 全体をバックアップし、復元を試す。隔離コピーで削除後の起動、ログ、既存データ、保存・再起動、クライアント接続を確認する。
 
-適用時は Forge を停止し、対象 JAR を project/file ID・実体から識別する。Auto CurseForge が旧 0.8.9.2 JAR を除去する保証は未確認のため、残存する場合は対象のみ `/data/mods/` の外へ退避し、0.8.9 と重複させない。新旧の設定を個別に比較し、既存 Volume は seed で上書きされないことに注意する。クライアントも同じ版に揃える。ロールバックは停止後に旧リビジョンと整合した 0.8.9.2 の停止時 Volume バックアップを復元する。`CF_FORCE_SYNCHRONIZE` は常設しない。本番作業は未実施。
+更新前に `/data/mods/` の対象 JAR を project/file ID・実体から識別する。Auto CurseForge による旧 JAR の自動削除は未確認のため、残存する場合は対象だけを `/data/mods/` の外へ退避する。識別できなければ停止して調査し、他の Mod や設定を削除しない。クライアントからも SBW を外す。ロールバックは Forge を停止し、旧リビジョンと整合した削除前の Volume バックアップを一緒に復元する。`CF_FORCE_SYNCHRONIZE` は常設しない。本番操作は未実施。
 
 ## Bad Mobs と Cecaelia
 
@@ -122,7 +122,7 @@ docker run --rm --user 0:0 --entrypoint bash \
 
 ## 提供 overrides のサーバー設定
 
-提供 overrides から Diesel Generators、Delightful、Farmer’s Delight、FerriteCore、ModernFix、Superb Warfare、Steam ’n’ Rails、ShinColle-kai（採掘テーブルを含む）、Storage Drawers、Torchmaster の共通設定を `../config/config/` に初回用として取り込んだ。これらの値は新規 Volume または対応ファイルが存在しない場合にのみ `prepare-forge.sh` により `/data/config/` にコピーされ、既存 Volume 上の同名設定は上書きされない。適用する必要がある場合は停止・バックアップ後、実際の設定と提供値を比較し、運用者が対象設定を個別に反映する。ゲーム内の効果は未検証。
+提供 overrides から Diesel Generators、Delightful、Farmer’s Delight、FerriteCore、ModernFix、Steam ’n’ Rails、ShinColle-kai（採掘テーブルを含む）、Storage Drawers、Torchmaster の共通設定を `../config/config/` に初回用として取り込んだ。これらの値は新規 Volume または対応ファイルが存在しない場合にのみ `prepare-forge.sh` により `/data/config/` にコピーされ、既存 Volume 上の同名設定は上書きされない。適用する必要がある場合は停止・バックアップ後、実際の設定と提供値を比較し、運用者が対象設定を個別に反映する。ゲーム内の効果は未検証。
 
 既存の共通設定は保持する。提供版の Touhou Little Maid 設定には妖精関連の値の変更とクライアント固有のマイク設定があるが、既存設定の上書きは行わない。クライアント専用設定、個人情報を含み得るファイル、overrides 内の未管理JAR・Gunpack・モデル・音声・ワールドは一括コピーしない。これらの要否と再配布条件は別途確認する。
 
@@ -155,7 +155,7 @@ docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IM
 
 ## Gucci & VuittonとSuperb Warfareの復活
 
-以下は従来の 0.8.9.2 復活時の記録。現行の固定版・適用手順は上記の 0.8.9 への変更を優先する。
+以下は従来の 0.8.9.2 復活時の記録。現行の構成・適用手順は上記の SBW 削除を優先する。
 
 [Gucci & Vuitton Attachments](https://www.curseforge.com/minecraft/mc-mods/tacz-gucci-vuitton-attachments/files/6062098)（project 1103436 / file 6062098）と [Superb Warfare](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/9019882)（project 1218165 / file 9019882）をmanifestへ戻す。TaCZとArcanaは維持し、LesRaisins Tactical Equipementsは削除したまま。Superb Warfareの共通設定seedは新規Volumeや設定未作成時だけコピーする。既存Volumeの設定は上書きしない。
 
