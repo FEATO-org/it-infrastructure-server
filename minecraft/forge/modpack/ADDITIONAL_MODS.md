@@ -1,6 +1,6 @@
 # Forge 追加 Mod の調査と受入条件
 
-2026-11-14 時点。`develop` の基準は Bad Mobs を含む manifest 58 件（クライアント専用の除外対象を含む）。Forge 47.4.28、Create 6.0.8、AE2 15.4.12、GuideME 20.1.15、TaCZ 1.2.0、SBW は削除する。以下の11件を manifest に追加し、環境と依存関係は隔離試験で受け入れるまで未確定とする。CurseForge の各固定ページと、Curse Maven から取得した同一 project/file ID の JAR の `META-INF/mods.toml` を照合した。JAR の取得成功は Auto CurseForge による取得成功を意味しない。全候補の固定ファイルページは Forge 1.20.1 対応表記。Forge 範囲は JAR の loaderVersion または forge 依存を記す。BOTH は依存の適用側であり、接続要件の実測ではない。
+2026-11-14 時点。`develop` の基準は Bad Mobs を含む manifest 58 件（クライアント専用の除外対象を含む）。Forge 47.4.28、Create 6.0.8、AE2 15.4.12、GuideME 20.1.15、TaCZ 1.2.0、SBW 0.8.9.2 を維持する。以下の11件を manifest に追加し、環境と依存関係は隔離試験で受け入れるまで未確定とする。CurseForge の各固定ページと、Curse Maven から取得した同一 project/file ID の JAR の `META-INF/mods.toml` を照合した。JAR の取得成功は Auto CurseForge による取得成功を意味しない。全候補の固定ファイルページは Forge 1.20.1 対応表記。Forge 範囲は JAR の loaderVersion または forge 依存を記す。BOTH は依存の適用側であり、接続要件の実測ではない。
 
 | 候補（固定配布元） | project / file | JAR メタデータと判断 |
 | --- | --- | --- |
@@ -15,15 +15,15 @@
 | [Glodium 1.5](https://www.curseforge.com/minecraft/mc-mods/glodium/files/5226922) | 957920 / 5226922 | 追加。Forge 47+、Minecraft [1.20.1,1.21) BOTH。ExtendedAE のライブラリ。 |
 | [AEInfinityBooster 1.0.0+51](https://www.curseforge.com/minecraft/mc-mods/aeinfinitybooster/files/6482257) | 559313 / 6482257 | 追加。Forge 47+、AE2 15.0.9-beta+ BOTH。配布元の現行説明には `chunkLoadingEnabled=true` があるが、対象 JAR のクラス・メタデータで設定登録や同キーを確認できず、生成設定も未検証。false の seed は推測して作らない。対象版のチャンク維持の有無と生成設定を実機確認する。 |
 | [Invasion Mod (Fork) 2.0.0](https://www.curseforge.com/minecraft/mc-mods/invasion-mod-unofficial/files/8844167) | 1628663 / 8844167 | 追加。Forge 47.1.106+、Minecraft 1.20.1 BOTH。JEI 等は任意。JAR に地形掘削・ブロック破壊処理があり、建築への範囲や制御、Bad Mobs との相互作用を検証できていない。隔離ワールドで検証し、建築物への影響と制御方法を確認する。 |
-| [Frontline Combat Pack 1.2.1](https://www.curseforge.com/minecraft/mc-mods/frontline-combat-pack/files/8650627) | 1465874 / 8650627 | 見送り。Forge 47+、SBW `[0.8.9]` BOTH を必須とする。SBW 本体を削除するため採用しない。 |
+| [Frontline Combat Pack 1.2.1](https://www.curseforge.com/minecraft/mc-mods/frontline-combat-pack/files/8650627) | 1465874 / 8650627 | 見送り。Forge 47+、SBW `[0.8.9]` BOTH を必須とする。現行 SBW 0.8.9.2 は厳密指定と一致せず、ユーザーの要望により採用しない。 |
 
-既存 Weapons and Tactics 1411291 / 9473803 は維持し、SBW 1218165 / 9019882 は削除する。記載以外の任意依存・競合、生成設定と既定値、クライアント接続、ワールド保存形式は未確認。追加 Mod はブロック・アイテム等を保存し得るため、除去後の保存はデータ喪失につながる。JAR の依存宣言が満たされても実行時互換性の証明にはならない。
+既存 Weapons and Tactics 1411291 / 9473803 と SBW 1218165 / 9019882 を維持し、重複登録しない。記載以外の任意依存・競合、生成設定と既定値、クライアント接続、ワールド保存形式は未確認。追加 Mod はブロック・アイテム等を保存し得るため、除去後の保存はデータ喪失につながる。JAR の依存宣言が満たされても実行時互換性の証明にはならない。
 
 ## 隔離試験と運用
 
 本番 Volume をマウントしない。x86_64 の隔離環境で停止時の整合した Volume コピーまたは新規ワールドを使い、[性能管理](../PERFORMANCE.md) の測定条件を記録する。基準58件、次に Connected・Iron Furnaces・New Age・ExtendedAE・Glodium、次に Easy Stone・Teleporters・Mining Laser・Zoe の順に試す。次に AEInfinityBooster と Invasion を段階的に追加して検証する。Frontline は採用しない。
 
-各段階で起動時間、登録 Mod、依存・Mixin・ClassNotFound エラー、ヒープ・RSS・CPU・GC、spark の TPS・平均と P95 MSPT、チャンク・エンティティ数を同一条件で記録する。Java クライアント接続、レシピ、保存・再起動も確認する。暫定目標は TPS 20、P95 45ms 以下、基準からの悪化15%以内であり負荷条件を併記する。複数 Mining Laser・ExtendedAE の高速バス／パターンプロバイダー／Assembler Matrix、Teleporters の遠距離・別ディメンション・列車、New Age 原子炉の建築破壊、Zoe と既存戦闘 Mod を試す。Invasion は Nexus の起動条件、Mob の大量出現・戦闘後の残存・建築破壊と Bad Mobs の影響を検証する。SBW の削除前後で既存データを確認する。
+各段階で起動時間、登録 Mod、依存・Mixin・ClassNotFound エラー、ヒープ・RSS・CPU・GC、spark の TPS・平均と P95 MSPT、チャンク・エンティティ数を同一条件で記録する。Java クライアント接続、レシピ、保存・再起動も確認する。暫定目標は TPS 20、P95 45ms 以下、基準からの悪化15%以内であり負荷条件を併記する。複数 Mining Laser・ExtendedAE の高速バス／パターンプロバイダー／Assembler Matrix、Teleporters の遠距離・別ディメンション・列車、New Age 原子炉の建築破壊、Zoe と既存戦闘 Mod を試す。Invasion は Nexus の起動条件、Mob の大量出現・戦闘後の残存・建築破壊と Bad Mobs の影響を検証する。SBW と追加 Mod の共存を確認する。
 
 今回、基準および各段階の起動・クライアント接続・ゲーム内動作・性能は未測定。ARM64 上のエミュレーションは本番性能の代用にしない。新設定 seed は追加していない。`prepare-forge.sh` は存在しない `/data/config` のファイルだけを seed するため、将来設定を追加する場合は新規 Volume と既存 Volume を区別し、既存設定を停止・バックアップ後に個別比較して反映する。ワールド単位の serverconfig も実物を確認する。
 
