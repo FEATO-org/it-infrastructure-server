@@ -12,6 +12,12 @@ SBW 0.8.9.2 からのダウングレードや Invasion の削除でアイテム�
 
 `/data/mods/` では旧 SBW 0.8.9.2 と Invasion の JAR を project/file ID・実体から特定する。Auto CurseForge が旧 JAR を削除する保証は未確認のため、残存時は対象だけを mods 外へ退避し、SBW が重複しないことを確認する。識別不能なら中止する。クライアントも同じ構成へ変更する。ロールバックは停止後、旧リビジョンと変更前の整合した Volume バックアップを一緒に復元する。`CF_FORCE_SYNCHRONIZE` は常設しない。本番操作は未実施。
 
+### 2026-11-14 隔離起動結果
+
+空 Volume・テスト用 secret・外部公開ポートなし、固定イメージの amd64 digest を ARM64 ホスト上でエミュレーションし、ヒープ 4G・メモリ上限 6G で試験した。Auto CurseForge は SBW 0.8.9 と Frontline 1.2.1 を取得し、新規ワールドで `Done` に到達、正常停止後の同じワールドでも再起動した。初回は `prepare-forge.sh` の実行権限不足で停止したため、実行可能にしたコピーで再試行し、Git のファイルモードを修正した。
+
+**受入未完了:** 初回と再起動時に Frontline の `AmmoSupplierItemMixin` が SBW の `use` を見つけられず `InvalidInjectionException` を記録した。サーバーは起動したが、弾薬処理への影響は未特定であり、本番適用前に原因と動作を確認する。SBW の client class 読込警告、Photon の client class 読込エラー、Create Connected の任意連携先 class 不在警告、Torches Become Sunlight の構造物生成中の far chunk エラー等も出た。クライアント接続、実ワールドのダウングレード、レシピ・車両・弾薬の操作、負荷比較は未確認。エミュレーションと縮小ヒープでの試験は本番性能を示さない。試験用サーバーは停止した。
+
 ## Bad Mobs と Cecaelia
 
 [Bad Mobs 19.0.4](https://www.curseforge.com/minecraft/mc-mods/bad-mobs/files/5086469)（Project 233258 / File 5086469）を既存の Auto CurseForge manifest に追加し、`grimoireofgaia:cecaelia` の自然・スポナー・スポーンエッグ・変換によるスポーンを禁止する。JAR の Forge メタデータ上の必須依存は Forge 47 以降のみ。作者はクライアントとサーバー両方への導入を要求し、サーバー単独は非サポートとしているため、提供クライアント Modpack にも同じ版を追加する。制御自体はサーバー側の設定で行われる。既存 Mod や Proxy との実接続は未検証。

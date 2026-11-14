@@ -15,7 +15,7 @@
 | [Glodium 1.5](https://www.curseforge.com/minecraft/mc-mods/glodium/files/5226922) | 957920 / 5226922 | 追加。Forge 47+、Minecraft [1.20.1,1.21) BOTH。ExtendedAE のライブラリ。 |
 | [AEInfinityBooster 1.0.0+51](https://www.curseforge.com/minecraft/mc-mods/aeinfinitybooster/files/6482257) | 559313 / 6482257 | 追加。Forge 47+、AE2 15.0.9-beta+ BOTH。配布元の現行説明には `chunkLoadingEnabled=true` があるが、対象 JAR のクラス・メタデータで設定登録や同キーを確認できず、生成設定も未検証。false の seed は推測して作らない。対象版のチャンク維持の有無と生成設定を実機確認する。 |
 | [Invasion Mod (Fork) 2.0.0](https://www.curseforge.com/minecraft/mc-mods/invasion-mod-unofficial/files/8844167) | 1628663 / 8844167 | 削除。Forge 47.1.106+、Minecraft 1.20.1 BOTH。既存ワールドに Nexus や Mob 等がある場合の影響は未検証。 |
-| [Frontline Combat Pack 1.2.1](https://www.curseforge.com/minecraft/mc-mods/frontline-combat-pack/files/8650627) | 1465874 / 8650627 | 追加。Forge 47+、SBW `[0.8.9]` BOTH を必須とし、SBW 0.8.9 JAR の申告版と一致する。起動・接続・ゲーム内動作・SBW 単体との負荷比較は未検証。 |
+| [Frontline Combat Pack 1.2.1](https://www.curseforge.com/minecraft/mc-mods/frontline-combat-pack/files/8650627) | 1465874 / 8650627 | 追加。Forge 47+、SBW `[0.8.9]` BOTH を必須とし、SBW 0.8.9 JAR の申告版と一致する。隔離新規ワールドは起動・再起動したが弾薬処理の Mixin が失敗。接続・ゲーム内動作・SBW 単体との負荷比較は未検証。 |
 
 既存 Weapons and Tactics 1411291 / 9473803 は維持し、SBW は 1218165 / 8104849 に変更する。どちらも重複登録しない。記載以外の任意依存・競合、生成設定と既定値、クライアント接続、ワールド保存形式は未確認。追加 Mod はブロック・アイテム等を保存し得るため、除去後の保存はデータ喪失につながる。JAR の依存宣言が満たされても実行時互換性の証明にはならない。
 
@@ -25,6 +25,6 @@
 
 各段階で起動時間、登録 Mod、依存・Mixin・ClassNotFound エラー、ヒープ・RSS・CPU・GC、spark の TPS・平均と P95 MSPT、チャンク・エンティティ数を同一条件で記録する。Java クライアント接続、レシピ、保存・再起動も確認する。暫定目標は TPS 20、P95 45ms 以下、基準からの悪化15%以内であり負荷条件を併記する。複数 Mining Laser・ExtendedAE の高速バス／パターンプロバイダー／Assembler Matrix、Teleporters の遠距離・別ディメンション・列車、New Age 原子炉の建築破壊、Zoe と既存戦闘 Mod を試す。Invasion の削除後に Nexus・Mob 等の保存データを確認する。SBW と Frontline、追加 Mod の共存を確認する。
 
-今回、基準および各段階の起動・クライアント接続・ゲーム内動作・性能は未測定。ARM64 上のエミュレーションは本番性能の代用にしない。新設定 seed は追加していない。`prepare-forge.sh` は存在しない `/data/config` のファイルだけを seed するため、将来設定を追加する場合は新規 Volume と既存 Volume を区別し、既存設定を停止・バックアップ後に個別比較して反映する。ワールド単位の serverconfig も実物を確認する。
+今回、対象構成の隔離起動・再起動では Frontline の Mixin 失敗を確認した。[試験結果](README.md#2026-11-14-隔離起動結果) を参照。基準および各段階の性能、クライアント接続・ゲーム内動作は未測定。ARM64 上のエミュレーションは本番性能の代用にしない。新設定 seed は追加していない。`prepare-forge.sh` は存在しない `/data/config` のファイルだけを seed するため、将来設定を追加する場合は新規 Volume と既存 Volume を区別し、既存設定を停止・バックアップ後に個別比較して反映する。ワールド単位の serverconfig も実物を確認する。
 
 適用時は [既存の更新・復旧手順](README.md#58件版への更新と復旧) に従い停止し、world、playerdata、mods、tacz、config、管理状態を含む Volume 全体をバックアップして復元可能性を確認する。クライアントにも対応 pack を配布する。`CF_FORCE_SYNCHRONIZE` は常設しない。残存 JAR を除去する必要があれば実体と ID を確認し対象だけを退避する。ロールバックは停止して旧 revision と整合した停止時 Volume バックアップを一緒に復元し、新 Mod のデータを欠いたワールドを保存しない。本番操作は今回実施していない。
