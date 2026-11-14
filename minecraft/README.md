@@ -2,7 +2,7 @@
 
 ## Forge 1.20.1 切替
 
-現在の構成は Java 1.20.1 Forge 専用です。`minecraft.feato.jp:25565` → nginx → Velocity 4.2.0 → `minecraft-forge:25565`。クライアントには提供 Modpack が必要です。Bedrock は利用できません。Geyser JAR は起動時に Proxy Volume の `disabled-plugins` に退避し、nginx の Bedrock TCP/UDP 公開ポートを閉じます。Floodgate・設定・鍵と Paper の Volume は保持します。Forge と Paper のワールド・プレイヤーデータは独立しています。
+現在の構成は Java 1.20.1 Forge 専用です。`minecraft.feato.jp:25565` → nginx → Velocity 4.3.1 build 45 → `minecraft-forge:25565`。クライアントには提供 Modpack が必要です。Bedrock は利用できません。Geyser JAR は起動時に Proxy Volume の `disabled-plugins` に退避し、nginx の Bedrock TCP/UDP 公開ポートを閉じます。Floodgate・設定・鍵と Paper の Volume は保持します。Forge と Paper のワールド・プレイヤーデータは独立しています。
 
 [Modpack の内容と更新](forge/modpack/README.md)。Forge は `minecraft_forge_data`、Paper は既存 `minecraft_server_data` を使用し、直接ポートを公開しません。`forwarding_secret` は既存の Swarm Secret を再利用します。Forge の固定イメージは Java 17、ヒープ 1G〜8G、メモリ上限 10G です。データノードの空きメモリを確認してください。
 
@@ -35,7 +35,7 @@ Forge の `/data/logs/latest.log` は `app_minecraft_forge_data` から global �
 
 ```text
 Java TCP 25565 / Bedrock UDP 19132
-  -> nginx -> Velocity 4.2.0
+  -> nginx -> Velocity 4.3.1 build 45
                 ├ Geyser-Velocity
                 │  └ EmoteOffhand (Geyser Extension)
                 ├ Floodgate

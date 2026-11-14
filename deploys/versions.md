@@ -1,3 +1,18 @@
+# Velocity 4.3.1 build 45 更新（2026-11-14）
+
+Proxyを4.2.0 build 30から、[PaperMC公式配布](https://papermc.io/downloads/velocity)の4.3.1 build 45 stable releaseへ固定更新する。Proxyのバージョン更新が目的。公式FAQでは[4.0以降はJava 25以上](https://docs.papermc.io/velocity/faq/)が必要で、既存のJava 25を維持する。公式配布JARのSHA-256は `0844bcabdcdb4f5b875906fd4c3365bc1bb76918e42bc595ed88ad195258dd75`。config、JVM設定、Plugin指定、Secret、Volumeは変更しない。
+
+- [Velocity公式互換性資料](https://docs.papermc.io/velocity/server-compatibility/)はForge 1.13–1.20.1にAmbassadorを案内し、Modern ForwardingにはProxy Compatible Forge等を要求する。[Ambassador 1.4.5](https://modrinth.com/plugin/ambassador/version/1.4.5)と[Proxy Compatible Forge](https://github.com/adde0109/Proxy-Compatible-Forge)の説明もこの構成を示す。ただしForge 47.4.28、Ambassador 1.4.5、Proxy Compatible Forge 1.3.1とVelocity 4.3.1の組み合わせのハンドシェイクと転送成功は未検証。
+- LuckPerms 5.5.71は[Velocity版](https://modrinth.com/plugin/luckperms/version/tamnmXad)。Floodgateは既存latest取得指定で固定版ではない。[itzgの起動スクリプト](https://github.com/itzg/docker-mc-proxy/blob/main/scripts/run-bungeecord.sh)はVelocityのRCONにVelocirconを取得する。各PluginのVelocity 4.3.1での本番互換性は保証できない。
+- 隔離macOS ARM64、Java 25.0.4で公式JARのSHA-256を照合し、既存JVMフラグと1Gヒープで起動・localhost待受・正常停止を確認。Ambassador 1.4.5、Floodgate 2.2.5-SNAPSHOT build 141をロード、LuckPerms 5.5.71は一時H2設定で有効化した。Ambassadorのchannel initializer置換警告あり。これは本番LinuxイメージやMariaDB接続の確認ではない。Geyser、Velocircon、実際のRCON認証、Forge backend、実クライアント、UUID・player情報転送、Modハンドシェイク、切断・再接続は未確認。
+- 本番適用前に専用Secretと独立Volumeの隔離環境で既存構成・Plugin全体、RCON認証、Forgeクライアントのログイン・UUID・情報転送・Modハンドシェイク・再接続を確認し、エラーがあれば原因を調べる。版変更やJVMフラグ追加は別途判断する。適用時は既存の転送Secret、Floodgate鍵とDBへの接続を確認する。
+
+## ロールバック
+
+適用前にProxyを正常停止できる保守時間を確保し、`minecraft_proxy_data`（`/server` 全体。`velocity.toml`、Plugin JAR・設定・データ、`disabled-plugins`、RCON設定を含む）を一貫した状態で安全な保存先へバックアップする。Git管理の `/config` と `/plugins` の配布元・適用revisionも保存し、forwarding、Floodgate、RCON、LuckPermsの既存Secretと必要なDBバックアップを安全に保全する。秘密値やバックアップはGitへ入れない。新旧版の永続データ形式互換性は未確認。
+
+障害時はProxyを停止し、更新後Volumeを調査用に別途保全する。Composeの `VELOCITY_VERSION` / `VELOCITY_BUILD_ID` を `4.2.0` / `30` に戻し、必要に応じ更新前の `/server` バックアップと配布設定revisionを復元する。既存Secret・鍵は再生成せず同じものを使用し、設定同期で上書きされる配布元も復元対象に含める。旧版JARの取得可能性と設定・Plugin・RCON認証・Forge接続・UUID転送を確認してから復旧完了とする。番号の変更だけではVolume内の変更を戻せない。Paper復帰は別手順を使用する。
+
 # Forge 1.20.1 切替の取得元
 
 現行69件版: Bad Mobs を含む58件に追加 Mod 11件を固定し、SBW を [0.8.9 final](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/8104849) に変更し、[Frontline 1.2.1](https://www.curseforge.com/minecraft/mc-mods/frontline-combat-pack/files/8650627) を追加、Invasion を削除する。JAR 依存は照合済み。隔離起動・再起動は完了したが Frontline の Mixin が失敗し、接続・実動作は未確認。[適用・復旧](../minecraft/forge/modpack/README.md#sbw-の版変更と-frontline-の追加invasion-の削除) を参照。[追加 Mod の調査](../minecraft/forge/modpack/ADDITIONAL_MODS.md) を参照。追加構成の起動・既存ワールド互換性は未確認。従来57件版は提供58件版から LesRaisins Tactical Equipements (1273094 / 8652673) を除き、Superb Warfare (1218165 / 9019882) と Gucci & Vuitton Attachments (1103436 / 6062098) を復活。[manifest](../minecraft/forge/modpack/manifest.json) と [復活手順](../minecraft/forge/modpack/README.md#gucci--vuittonとsuperb-warfareの復活) を参照。従来57件版では Forge 47.4.28 / Java 17、x86_64エミュレーションの隔離環境でArcanaを含む起動を確認。実ワールド・クライアント接続は未確認。ARM64ではArcanaネイティブライブラリのGLIBC不足で起動失敗。
@@ -6,7 +21,7 @@
 | --- | --- | --- |
 | itzg/minecraft-server | `java17` / digest `sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287` / [公式](https://docker-minecraft-server.readthedocs.io/) | 隔離起動試験に使用 |
 | Minecraft / Forge | 1.20.1 / 47.4.28、提供 manifest と [Auto CurseForge](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) | 隔離 Forge で起動、Mod エラーあり |
-| Ambassador | 1.4.5 / [固定ファイル](https://cdn.modrinth.com/data/cOj6YqJM/versions/YeQbhgna/Ambassador-Velocity-1.4.5-all.jar) | Velocity 4.2.0 と接続未検証 |
+| Ambassador | 1.4.5 / [固定ファイル](https://cdn.modrinth.com/data/cOj6YqJM/versions/YeQbhgna/Ambassador-Velocity-1.4.5-all.jar) | Velocity 4.3.1 build 45で隔離ロード確認、Forge接続未検証 |
 | Proxy Compatible Forge | 1.3.1 / [固定ファイル](https://cdn.modrinth.com/data/vDyrHl8l/versions/qiZ49HIW/proxy-compatible-forge-1.3.1.jar) | Forge 初期化確認、Forwarding 接続未検証 |
 | Bad Mobs | 19.0.4 / [CurseForge 233258:5086469](https://www.curseforge.com/minecraft/mc-mods/bad-mobs/files/5086469) | Forge 1.20.1、JARの必須依存は Forge 47 以降。Cecaeliaのスポーンを制限。JAR取得・メタデータ確認済み、サーバーでの取得・起動・ゲーム内動作未確認 |
 | Chunky | 1.3.146 / [CurseForge 485681:5320028](https://www.curseforge.com/minecraft/mc-mods/chunky-pregenerator-forge/files/5320028) | Forge 1.20.1 対応表記、サーバーへの取得・起動・接続未確認 |
@@ -287,7 +302,7 @@ Java列は同梱クラスの最大バージョンに基づきます。Java 25起
 | FancyHolograms | 2.12.0 | [固定URL](https://mediafilez.forgecdn.net/files/8887/168/FancyHolograms-2.12.0.jar) | Paper Plugin | Paper 26.2対象（build 126、実起動未確認） | stable Release | Java 25で運用予定。必須追加dependencyなし。PlaceholderAPI / FancyNpcsはoptional integration。JAR GET・metadata・ZIP整合性のみ確認。本番動作・Java / Bedrock client表示は未確認 |
 | squaremap | 1.3.15 | [固定Release](https://github.com/jpenilla/squaremap/releases/tag/v1.3.15) | Paper | 26.2（api-version、起動確認） | stable | 内部Webサーバー8123、既存dynmap.feato.jp経路を再利用 |
 | DualHorse | 1.5.4 | [固定URL](https://cdn.modrinth.com/data/mgoLZ3st/versions/9jTb2KHl/DualHorse-1.5.4.jar) | Paper | 配布metadataは26.1.2まで、26.2で起動確認 | stable | 26.2の実プレイヤー二人乗りとBetter Horses併用は要確認 |
-| Velocity | 4.2.0 build 30 | [公式配布](https://papermc.io/downloads/velocity) | Velocity | 接続を実機検証 | stable（公式API STABLE） | VELOCITY_VERSIONとBUILD_IDで固定。JAR GETは403、Requires runtime verification |
+| Velocity | 4.3.1 build 45 | [公式配布](https://papermc.io/downloads/velocity) | Velocity | Forge接続を実機検証 | stable release | 固定指定。隔離Java 25起動確認、詳細は先頭の更新記録 |
 | Geyser | 既存latest | [公式配布](https://download.geysermc.org/) | Velocity | 接続を実機検証 | 取得build要確認 | 既存方式維持、Requires runtime verification |
 | Floodgate | 既存latest | [公式配布](https://download.geysermc.org/) | Velocity | 接続を実機検証 | 取得build要確認 | 既存UUID維持、username-prefixは`.`へ変更、Requires runtime verification |
 | EmoteOffhand | Version ID: YiejycoE | [Modrinth](https://modrinth.com/plugin/pVsz9nZm/version/YiejycoE) | Geyser Extension（Velocity上のGeyser） | 1.21.11（配布metadata） | fixed artifact | Source: Modrinth。Project ID: pVsz9nZm。`resources/minecraft/geyser/extensions/EmoteOffhand.jar` を管理側で用意し、更新時のみ `script/copy_plugins_to_remote.sh` で配布。通常deploy時に再取得しない。Velocity Pluginとしては配置しない |
