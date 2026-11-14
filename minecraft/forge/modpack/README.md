@@ -2,6 +2,22 @@
 
 提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と追加 Mod 11 件を含む 69 組の CurseForge project ID / file ID を固定する。追加分の依存・保留理由・未検証事項は [調査と受入条件](ADDITIONAL_MODS.md) を参照。`modlist.html` も同じ除外を反映した一覧。共有 URL は取得元に使わない。
 
+## SBW の版変更と Frontline の追加・Invasion の削除
+
+[SBW 0.8.9 final](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/8104849)（1218165 / 8104849）と [Frontline Combat Pack 1.2.1](https://www.curseforge.com/minecraft/mc-mods/frontline-combat-pack/files/8650627)（1465874 / 8650627）を固定し、Invasion Mod（1628663 / 8844167）を外す。SBW JAR の申告版は `0.8.9` で Frontline の必須範囲 `[0.8.9]` に一致する。SBW は Forge 47+、Kotlin for Forge 4.11.0+、Curios 5.4.0+、GeckoLib 4.4.6+ を要求し、既存版は宣言範囲内。起動・ゲーム内動作・クライアント接続・性能は未検証。[調査と試験](ADDITIONAL_MODS.md) を参照する。
+
+SBW 0.8.9.2 からのダウングレードや Invasion の削除でアイテム、乗り物、ブロック、Mob、Nexus 等のデータを失う可能性がある。SBW 0.8.9.2 の JAR には 0.8.9 にないアイテムモデルやレシピがある。欠落した状態で保存すると後から Mod を戻しても復元できる保証はない。事前に利用中のデータを調査し、損失を許容できない場合は適用を中止する。
+
+本番適用前に Forge を停止し、world・playerdata・mods・config・tacz・管理状態を含む Volume 全体を整合した状態でバックアップして復元を試す。隔離コピーで SBW 0.8.9 単体と Frontline 追加後の起動、依存、既存データ、レシピ、接続、保存・再起動、TPS・MSPT・メモリを確認する。Invasion が存在した場合は削除後の保存データも確認する。0.8.9.2 の SBW 設定 seed と既存 Volume の設定は上書きせず、0.8.9 との互換性を個別確認する。`prepare-forge.sh` は既存設定を上書きしない。
+
+`/data/mods/` では旧 SBW 0.8.9.2 と Invasion の JAR を project/file ID・実体から特定する。Auto CurseForge が旧 JAR を削除する保証は未確認のため、残存時は対象だけを mods 外へ退避し、SBW が重複しないことを確認する。識別不能なら中止する。クライアントも同じ構成へ変更する。ロールバックは停止後、旧リビジョンと変更前の整合した Volume バックアップを一緒に復元する。`CF_FORCE_SYNCHRONIZE` は常設しない。本番操作は未実施。
+
+### 2026-11-14 隔離起動結果
+
+空 Volume・テスト用 secret・外部公開ポートなし、固定イメージの amd64 digest を ARM64 ホスト上でエミュレーションし、ヒープ 4G・メモリ上限 6G で試験した。Auto CurseForge は SBW 0.8.9 と Frontline 1.2.1 を取得し、新規ワールドで `Done` に到達、正常停止後の同じワールドでも再起動した。初回は `prepare-forge.sh` の実行権限不足で停止したため、実行可能にしたコピーで再試行し、Git のファイルモードを修正した。
+
+**受入未完了:** 初回と再起動時に Frontline の `AmmoSupplierItemMixin` が SBW の `use` を見つけられず `InvalidInjectionException` を記録した。サーバーは起動したが、弾薬処理への影響は未特定であり、本番適用前に原因と動作を確認する。SBW の client class 読込警告、Photon の client class 読込エラー、Create Connected の任意連携先 class 不在警告、Torches Become Sunlight の構造物生成中の far chunk エラー等も出た。クライアント接続、実ワールドのダウングレード、レシピ・車両・弾薬の操作、負荷比較は未確認。エミュレーションと縮小ヒープでの試験は本番性能を示さない。試験用サーバーは停止した。
+
 ## Bad Mobs と Cecaelia
 
 [Bad Mobs 19.0.4](https://www.curseforge.com/minecraft/mc-mods/bad-mobs/files/5086469)（Project 233258 / File 5086469）を既存の Auto CurseForge manifest に追加し、`grimoireofgaia:cecaelia` の自然・スポナー・スポーンエッグ・変換によるスポーンを禁止する。JAR の Forge メタデータ上の必須依存は Forge 47 以降のみ。作者はクライアントとサーバー両方への導入を要求し、サーバー単独は非サポートとしているため、提供クライアント Modpack にも同じ版を追加する。制御自体はサーバー側の設定で行われる。既存 Mod や Proxy との実接続は未検証。
@@ -146,6 +162,8 @@ docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IM
 クライアント側でも同じ Gunpack の ZIP や展開版を `tacz/` から退避する。現在は追加Gunpackをすべて退避し、Arcana、TaCZ本体、ほかの設定は維持する。適用後に対象が再取得されず、クライアント接続を確認する。
 
 ## Gucci & VuittonとSuperb Warfareの復活
+
+以下は従来の 0.8.9.2 復活時の記録。現行版の適用手順は上記を優先する。
 
 [Gucci & Vuitton Attachments](https://www.curseforge.com/minecraft/mc-mods/tacz-gucci-vuitton-attachments/files/6062098)（project 1103436 / file 6062098）と [Superb Warfare](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/9019882)（project 1218165 / file 9019882）をmanifestへ戻す。TaCZとArcanaは維持し、LesRaisins Tactical Equipementsは削除したまま。Superb Warfareの共通設定seedは新規Volumeや設定未作成時だけコピーする。既存Volumeの設定は上書きしない。
 
