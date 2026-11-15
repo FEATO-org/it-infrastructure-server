@@ -1,6 +1,6 @@
 # Forge 追加 Mod の調査と受入条件
 
-2026-11-14 時点。`develop` の基準は Bad Mobs を含む manifest 58 件（クライアント専用の除外対象を含む）。Forge 47.4.28、Create 6.0.8、AE2 15.4.12、GuideME 20.1.15、TaCZ 1.2.0、SBW は 0.8.9 に変更する。以下は追加時点の調査記録であり、Zoe Isn't Cyberpunk は現在の manifest から削除した。追加 Mod の、環境と依存関係は隔離試験で受け入れるまで未確定とする。CurseForge の各固定ページと、Curse Maven から取得した同一 project/file ID の JAR の `META-INF/mods.toml` を照合した。JAR の取得成功は Auto CurseForge による取得成功を意味しない。全候補の固定ファイルページは Forge 1.20.1 対応表記。Forge 範囲は JAR の loaderVersion または forge 依存を記す。BOTH は依存の適用側であり、接続要件の実測ではない。
+2026-11-14 時点。`develop` の基準は Bad Mobs を含む manifest 58 件（クライアント専用の除外対象を含む）。Forge 47.4.28、Create 6.0.8、AE2 15.4.12、GuideME 20.1.15、TaCZ 1.2.0、SBW は 0.8.9 に変更する。以下は追加時点の調査記録であり、Zoe Isn't Cyberpunk は現在の manifest から削除した。追加 Mod の環境と依存関係は隔離試験で受け入れるまで未確定とする。CurseForge の各固定ページと、Curse Maven から取得した同一 project/file ID の JAR の `META-INF/mods.toml` を照合した。JAR の取得成功は Auto CurseForge による取得成功を意味しない。全候補の固定ファイルページは Forge 1.20.1 対応表記。Forge 範囲は JAR の loaderVersion または forge 依存を記す。BOTH は依存の適用側であり、接続要件の実測ではない。
 
 | 候補（固定配布元） | project / file | JAR メタデータと判断 |
 | --- | --- | --- |
