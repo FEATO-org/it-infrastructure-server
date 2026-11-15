@@ -235,6 +235,7 @@ services:
     environment:
       EULA: "TRUE"
       TYPE: AUTO_CURSEFORGE
+      NETWORK_COMPRESSION_THRESHOLD: "-1"
       ALLOW_FLIGHT: "TRUE"
       CF_SLUG: custom
       CF_MODPACK_MANIFEST: /forge-pack/manifest.json

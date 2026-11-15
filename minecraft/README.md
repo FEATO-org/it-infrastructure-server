@@ -1,5 +1,21 @@
 # Minecraft運用
 
+## Forge と Velocity 間の圧縮
+
+Forge バックエンドのパケット圧縮を無効化し、Proxy での不要な圧縮・展開を減らすため、`deploys/app/compose.yml` の `minecraft-forge` に `NETWORK_COMPRESSION_THRESHOLD: "-1"` を指定します。Velocity とクライアント間の圧縮設定は維持します。バックエンド間の通信量は増える可能性があります。性能や接続への影響は未測定です。
+
+[itzg の設定仕様](https://github.com/itzg/docker-minecraft-server/blob/master/docs/configuration/server-properties.md) では起動時に環境変数から既存の `/data/server.properties` も更新します。現行 Compose は `OVERRIDE_SERVER_PROPERTIES=false` と `SKIP_SERVER_PROPERTIES=true` を指定していません。固定イメージと本番 Volume での反映は未確認です。Volume を初期化しないでください。
+
+1. デプロイ前に Forge の実行ノードと対象コンテナを確認し、次で変更前の実値を控えます。項目がない場合はその状態を記録し、戻す値を運用者が確認します。ファイル全体や秘密情報を表示しません。
+
+   ```bash
+   docker exec <forge-container> sh -c 'grep "^network-compression-threshold=" /data/server.properties || true'
+   ```
+
+2. 先に本番と分離した環境で固定イメージと既存構成の接続を検証し、通常の [Swarm 運用手順](../deploys/README.md) に従い変更を適用します。Forge の正常停止と再作成を伴います。
+3. 起動後に上記コマンドで `network-compression-threshold=-1` を確認し、Forge・Velocity のログ、Java ログイン、Mod ハンドシェイク、UUID・転送情報、チャンク読み込み、操作、切断・再接続を確認します。既存の Ambassador・Proxy Compatible Forge との接続も確認します。必要なら同条件で CPU、ネットワーク転送量、接続時間を比較します。
+4. 不具合時は Forge を正常停止し、Compose の値を記録した変更前の実値に明示的に設定して再デプロイします。起動後に値とログ、Velocity 経由の接続を確認します。環境変数を単に削除しても既存ファイルの `-1` は残るため、削除だけでは復旧しません。実値が不明なら 256 と決めつけず、バックアップ等から確認します。元値の反映確認後、必要に応じ環境変数を削除できます。
+
 ## Forge 1.20.1 切替
 
 現在の構成は Java 1.20.1 Forge 専用です。`minecraft.feato.jp:25565` → nginx → Velocity 4.2.0 → `minecraft-forge:25565`。クライアントには提供 Modpack が必要です。Bedrock は利用できません。Geyser JAR は起動時に Proxy Volume の `disabled-plugins` に退避し、nginx の Bedrock TCP/UDP 公開ポートを閉じます。Floodgate・設定・鍵と Paper の Volume は保持します。Forge と Paper のワールド・プレイヤーデータは独立しています。
