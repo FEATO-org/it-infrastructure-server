@@ -2,6 +2,14 @@
 
 提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と追加 Mod 10 件を含む 68 組の CurseForge project ID / file ID を固定する。追加分の依存・保留理由・未検証事項は [調査と受入条件](ADDITIONAL_MODS.md) を参照。`modlist.html` も同じ除外を反映した一覧。Zoe Isn't Cyberpunk は manifest と一覧から削除済み。共有 URL は取得元に使わない。
 
+## Zoe Isn't Cyberpunk の削除
+
+Project ID 896842 / File ID 7253085 をサーバー・クライアント共通 manifest から除外した。削除後の起動や既存ワールド互換性は未検証。既存ワールドやプレイヤーの所持品に同 Mod のデータがある場合、削除後に保存すると失われる可能性がある。
+
+適用前に Forge を停止し、world・playerdata・mods・config を含む Volume 全体をバックアップして復元可能性を確認する。停止時バックアップの隔離コピーで削除後の起動・保存・再起動と対象データを確認する。既存 Volume に JAR が残る可能性があるため、`/data/mods/` で実体と project/file ID を確認し、残っていれば対象だけを mods 外へ退避する。識別できない場合は中止する。クライアントにも更新後の Modpack を配布し、旧 JAR が残らないことを確認する。
+
+ロールバックする場合は停止し、以前の構成と整合した削除前の Volume バックアップを一緒に復元する。本番操作は未実施。
+
 ## SBW の版変更と Frontline の追加・Invasion の削除
 
 [SBW 0.8.9 final](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/8104849)（1218165 / 8104849）と [Frontline Combat Pack 1.2.1](https://www.curseforge.com/minecraft/mc-mods/frontline-combat-pack/files/8650627)（1465874 / 8650627）を固定し、Invasion Mod（1628663 / 8844167）を外す。SBW JAR の申告版は `0.8.9` で Frontline の必須範囲 `[0.8.9]` に一致する。SBW は Forge 47+、Kotlin for Forge 4.11.0+、Curios 5.4.0+、GeckoLib 4.4.6+ を要求し、既存版は宣言範囲内。起動・ゲーム内動作・クライアント接続・性能は未検証。[調査と試験](ADDITIONAL_MODS.md) を参照する。
