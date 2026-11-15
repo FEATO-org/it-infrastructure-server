@@ -43,8 +43,8 @@ services:
     environment:
       TYPE: VELOCITY
       DISABLE_GEYSER: "true"
-      VELOCITY_VERSION: "4.2.0"
-      VELOCITY_BUILD_ID: "30"
+      VELOCITY_VERSION: "4.3.1"
+      VELOCITY_BUILD_ID: "45"
       MINECRAFT_VERSION: ${MINECRAFT_VERSION:-26.2}
       MEMORY: 1G
       REPLACE_ENV_VARIABLES: "TRUE"
@@ -235,6 +235,7 @@ services:
     environment:
       EULA: "TRUE"
       TYPE: AUTO_CURSEFORGE
+      NETWORK_COMPRESSION_THRESHOLD: "-1"
       ALLOW_FLIGHT: "TRUE"
       CF_SLUG: custom
       CF_MODPACK_MANIFEST: /forge-pack/manifest.json
