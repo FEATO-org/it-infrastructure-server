@@ -25,6 +25,9 @@ Proxyを4.2.0 build 30から、[PaperMC公式配布](https://papermc.io/download
 | Proxy Compatible Forge | 1.3.1 / [固定ファイル](https://cdn.modrinth.com/data/vDyrHl8l/versions/qiZ49HIW/proxy-compatible-forge-1.3.1.jar) | Forge 初期化確認、Forwarding 接続未検証 |
 | Bad Mobs | 19.0.4 / [CurseForge 233258:5086469](https://www.curseforge.com/minecraft/mc-mods/bad-mobs/files/5086469) | Forge 1.20.1、JARの必須依存は Forge 47 以降。Cecaeliaのスポーンを制限。JAR取得・メタデータ確認済み、サーバーでの取得・起動・ゲーム内動作未確認 |
 | Chunky | 1.3.146 / [CurseForge 485681:5320028](https://www.curseforge.com/minecraft/mc-mods/chunky-pregenerator-forge/files/5320028) | Forge 1.20.1 対応表記、サーバーへの取得・起動・接続未確認 |
+| Radium Re-Reforged | 0.15.0 / [CurseForge 1649038:9434151](https://www.curseforge.com/minecraft/mc-mods/radium-re-reforged/files/9434151) | Forge 1.20.1、JAR の mod ID は radium。サーバーでの取得・起動・互換性未確認 |
+| AegisNetworking | 0.1.2 / [CurseForge 1773519:9380443](https://www.curseforge.com/minecraft/mc-mods/aegisnetworking/files/9380443) | Forge 1.20.1、JAR の表示名・mod ID は RatNetworking / ratnetworking。サーバーでの取得・起動・接続未確認 |
+| AllTheLeaks | 1.1.6 / [CurseForge 1091339:9640602](https://www.curseforge.com/minecraft/mc-mods/alltheleaks/files/9640602) | Forge 1.20.1、Forge 47.2.0 以降。サーバーでの取得・起動・互換性未確認 |
 
 Mod の固定 ID と配布元一覧、除外と更新は [Modpack](../minecraft/forge/modpack/README.md) を参照。本番での起動・接続は未確認。
 
