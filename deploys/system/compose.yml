@@ -105,6 +105,40 @@ services:
           memory: 256M
     logging: *default-logging
 
+  forge-jvm-metrics:
+    image: cr.fluentbit.io/fluent/fluent-bit:5.1.2
+    command: ["/fluent-bit/bin/fluent-bit", "-c", "/fluent-bit/etc/forge-jvm.conf"]
+    configs:
+      - source: forge_jvm_config
+        target: /fluent-bit/etc/forge-jvm.conf
+    environment:
+      PROM_USER_ID: ${PROM_USER_ID}
+      PROMETHEUS_REMOTE_WRITE_HOST: ${PROMETHEUS_REMOTE_WRITE_HOST:-prometheus-prod-18-prod-ap-southeast-0.grafana.net}
+      FORGE_JVM_SCRAPE_INTERVAL: ${FORGE_JVM_SCRAPE_INTERVAL:-60s}
+      GRAFANA_API_KEY: ${GRAFANA_API_KEY}
+      APP_MODE: ${APP_MODE}
+    networks:
+      - forge-jvm-monitoring-network
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.minecraft-data == true
+      update_config:
+        order: stop-first
+        failure_action: rollback
+      restart_policy:
+        condition: any
+        delay: 5s
+      resources:
+        reservations:
+          cpus: "0.05"
+          memory: 32M
+        limits:
+          cpus: "0.5"
+          memory: 128M
+    logging: *default-logging
+
   cadvisor:
     image: ghcr.io/google/cadvisor:v0.60.5
     command:
@@ -245,6 +279,8 @@ networks:
     external: true
   minecraft-backend-network:
     external: true
+  forge-jvm-monitoring-network:
+    external: true
 
 volumes:
   mariadb_data:
@@ -257,6 +293,9 @@ volumes:
     name: app_minecraft_forge_data
 
 configs:
+  forge_jvm_config:
+    name: system_forge_jvm_config_${CONFIG_VERSION:-v1}
+    file: ../../fluentbit/forge-jvm.conf
   fluent_bit_config:
     name: system_fluent_bit_config_${CONFIG_VERSION:-v1}
     file: ../../fluentbit/fluent-bit.conf

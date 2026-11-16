@@ -28,6 +28,7 @@ if [[ -z "${CONFIG_VERSION:-}" ]]; then
   CONFIG_VERSION="$(
     sha256sum \
       "${REPO_ROOT}/fluentbit/fluent-bit.conf" \
+      "${REPO_ROOT}/fluentbit/forge-jvm.conf" \
       "${REPO_ROOT}/fluentbit/parsers.conf" \
       "${REPO_ROOT}/fluentbit/discord.lua" \
       "${REPO_ROOT}/nginx/nginx.conf" \
@@ -70,15 +71,16 @@ external_networks=(
   web-ingress-network
   minecraft-ingress-network
   minecraft-backend-network
+  forge-jvm-monitoring-network
 )
 
 for network_name in "${external_networks[@]}"; do
   if ! docker network inspect "${network_name}" >/dev/null 2>&1; then
-    docker network create \
-      --driver overlay \
-      --attachable \
-      --opt encrypted \
-      "${network_name}" >/dev/null
+    network_options=(--driver overlay --opt encrypted)
+    if [[ "${network_name}" != forge-jvm-monitoring-network ]]; then
+      network_options+=(--attachable)
+    fi
+    docker network create "${network_options[@]}" "${network_name}" >/dev/null
     echo "Created overlay network: ${network_name}"
   fi
 done

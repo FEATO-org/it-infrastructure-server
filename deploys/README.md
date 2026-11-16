@@ -234,3 +234,7 @@ systemctl list-timers swarm-certbot-renew.timer
 
 2台以上のedgeノードで、片方を`docker node update --availability drain <NODE>`に
 してもHTTPSが応答することを本番公開前に確認してください。
+
+### Forge JVM 監視
+
+Forge の Agent と単一 `system_forge-jvm-metrics` collector は暗号化外部 overlay `forge-jvm-monitoring-network` を共有する。`deploy_swarm.sh` は stack より先に作成し、専用 Fluent Bit config を `CONFIG_VERSION` に含める。新規ネットワークは attachable にしない。既存の同名ネットワークがある場合、スクリプトは設定を変更しないため、事前に overlay・暗号化・接続先を確認する。9404 は host/ingress に公開しない。Forge は専用ネットワークの IP のみに bind するため、alias の DNS と経路解決に失敗すると起動を拒否する。手順、Grafana 確認、容量とロールバックは [Forge 性能運用](../minecraft/forge/PERFORMANCE.md#forge-jvm-監視) を参照。実環境で overlay DNS、到達性、Grafana Cloud 受信を確認するまで動作確認済みとはしない。

@@ -1,0 +1,10 @@
+# The agent's built-in JVM metrics cover heap, pools, GC, threads and classes.
+# Keep the separate JMX collector bounded; do not export arbitrary Mod MBeans.
+includeObjectNames:
+  - 'java.lang:type=Memory'
+  - 'java.lang:type=MemoryPool,name=*'
+  - 'java.lang:type=GarbageCollector,name=*'
+  - 'java.lang:type=Threading'
+  - 'java.lang:type=ClassLoading'
+rules:
+  - pattern: 'a^'

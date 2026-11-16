@@ -453,3 +453,7 @@ Better HorsesはProtocolLibなしでも起動しますが一部機能を無効�
 Forge Create アドオンの固定版と検証状況は [Modpack](../minecraft/forge/modpack/README.md#追加予定の-create-アドオン隔離検証待ち) を参照。
 
 TaCZの追加Gunpack退避と Arcana 1.4.2 hotfix の取得元・固定ハッシュ・未検証事項は [Modpack](../minecraft/forge/modpack/README.md#taczディレクトリの退避) を参照。
+
+### Forge JVM Agent
+
+JMX Exporter [1.7.0 公式 Java Agent](https://github.com/prometheus/jmx_exporter/releases/download/1.7.0/jmx_prometheus_javaagent-1.7.0.jar)、SHA-256 `0ad843261c567d1924a017d542e14c40f2afff523d940c25ee000742fde4b3a9`。Forge 1.20.1 / Java 17 のみ、起動時 `-javaagent`。公式 Release 掲載値と実ダウンロードを照合し、固定イメージの Java 17 隔離プロセスで Agent と主要メトリクスを確認。本番 Forge、Swarm overlay と Grafana Cloud 受信は未確認。

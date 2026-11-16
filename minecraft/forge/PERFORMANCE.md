@@ -58,3 +58,34 @@ Chunky を戻す場合は生成を中止し、停止・バックアップ後に 
 本番適用前に Forge を正常停止し、world、playerdata、mods、config、tacz と同期管理状態を含む Volume 全体をバックアップして復元可能性を確認する。Auto CurseForge の管理対象と手動配置を区別し、3件の重複 JAR がないか確認する。本番 Volume をマウントしない隔離環境で取得・起動・Mod 認識・停止・再起動を試し、新規 Mod の Mixin / クラスロードエラーと既知の Frontline の Mixin エラーを区別する。FerriteCore の互換性制御、Aegis と AllTheLeaks の初期化を確認する。Velocity 経由の Forge ハンドシェイク、ログイン・切断・再接続、大きな Mod パケット、チャンク送信と Entity Tracking を確認する。圧縮設定 `-1` は維持する。起動・接続・性能効果は未検証で、同条件の spark による TPS・MSPT・CPU・メモリ比較も未測定。
 
 障害時は停止・バックアップ後、3件の project:file 指定だけを外して Chunky を維持し、管理対象からの削除を確認する。自動削除は未検証のため、残存 JAR を実体と ID で特定して対象だけを `/data/mods/` 外へ退避する。他 Mod やワールドを一括削除しない。必要なら更新前の整合した Volume バックアップと旧 revision を復元する。
+
+## Forge JVM 監視
+
+JMX Exporter 1.7.0 Java Agent を `content.lock` の公式 URL と SHA-256 で `/data/monitoring/` に同期する。`prepare-forge.sh` は Forge の `run.sh` 実行前に同期し、専用 overlay の alias `forge-jvm-target` の経路から自タスクの送信元 IP を求め、生成済み `user_jvm_args.txt` の Agent 待受先に設定する。IP を決められなければ起動を中止する。固定イメージでは JVM flags と Xms/Xmx の生成後に pre-start を実行し、Forge の `run.sh` が同ファイルを読む。専用 collector は1 replica、stop-first、60秒間隔（`FORGE_JVM_SCRAPE_INTERVAL=120s` で変更可）で remote write する。既存監視の2分間隔は変えない。60秒は初期観測用であり契約上の許容量を保証しない。
+
+Agent 組み込み JVM メトリクスと exporter 自身の状態を出力する。別の JMX collector は対象 ObjectName を限定し、任意の Mod MBean を出力しない。Java 17 の隔離確認で以下を観測した。単位は bytes、GC count は回数、GC sum は秒。その他に JVM thread、class、buffer、process と exporter の状態系列がある。
+
+- `jvm_memory_used_bytes` / `jvm_memory_committed_bytes` / `jvm_memory_max_bytes`（`area="heap"` または `area="nonheap"`）
+- `jvm_memory_pool_used_bytes`、`jvm_memory_pool_collection_used_bytes`（`pool` 別、Metaspace を含む）
+- `jvm_gc_collection_seconds_count`、`jvm_gc_collection_seconds_sum`（`gc` 別の累積回数と累積秒）
+
+Grafana Explore の Prometheus データソースで `{monitor="forge-jvm",app_mode="<環境>"}` を各式に付ける。例（環境を実値に置換）:
+
+```promql
+jvm_memory_used_bytes{monitor="forge-jvm",app_mode="<環境>",area="heap"}
+jvm_memory_committed_bytes{monitor="forge-jvm",app_mode="<環境>",area="heap"}
+jvm_memory_max_bytes{monitor="forge-jvm",app_mode="<環境>",area="heap"}
+jvm_memory_used_bytes{monitor="forge-jvm",app_mode="<環境>",area="heap"} / jvm_memory_max_bytes{monitor="forge-jvm",app_mode="<環境>",area="heap"}
+rate(jvm_gc_collection_seconds_count{monitor="forge-jvm",app_mode="<環境>"}[10m])
+rate(jvm_gc_collection_seconds_sum{monitor="forge-jvm",app_mode="<環境>"}[10m])
+jvm_memory_pool_used_bytes{monitor="forge-jvm",app_mode="<環境>"}
+jvm_memory_used_bytes{monitor="forge-jvm",app_mode="<環境>",area="nonheap"}
+```
+
+Heap 比率はその時点の使用量 / 最大値であり GC 後の生存量ではない。Pool の collection 値は JVM がその Pool の GC 後に更新した値で、未対応の Pool は存在しない場合がある。G1 の Young/Old ごとに更新条件が異なり、全 Heap の同時点の生存量とは限らない。GC sum は累積時間であり停止時間分布や P95/P99 ではない。最大値の `-1` は未定義を示す。cAdvisor のコンテナメモリと比較する際は Forge のコンテナを既存ラベルで特定し、Heap に加え native、Non-Heap、ページキャッシュ等を含む差に注意する。
+
+Explore で `count({monitor="forge-jvm",app_mode="<環境>"})` を確認し、概算 DPM は系列数 × 60 / scrape秒数。Grafana Cloud の使用量画面で実際の Active Series / DPM と契約枠を確認し、超過が懸念される場合は120秒に変更する。Agent 自身の `jmx_scrape_duration_seconds` / `jmx_scrape_error` と Forge の CPU・メモリ、および collector の CPU・メモリを導入前後の同条件で比較する。scrape 時間は全オーバーヘッドではない。
+
+起動失敗時は Forge service logs の同期失敗、ハッシュ不一致、DNS/route、Agent YAML、ポート bind を順に調査する。改変済み・管理外ファイルは上書きされず、手動削除もしない。Minecraft が起動済みで系列がない場合は collector logs の scrape DNS/接続、`jmx_scrape_error`、remote write の TLS・認証・応答を切り分ける。認証値を表示・共有しない。通信障害と JVM 起動障害は別に扱う。
+
+ロールバックは Forge の `JVM_OPTS` の Agent 指定をまず削除して通常のデプロイ手順で再起動する（設定の除去だけでは既存プロセスに反映されない）。Agent の取得自体が障害の場合は同時に `content.lock` の Agent 行も外し、同期失敗で起動が止まらないようにする。必要に応じて専用 collector、両 Compose の overlay 参照と config 宣言、config ハッシュ対象と外部ネットワーク作成を戻し、対応スタックを再デプロイする。既存 global Fluent Bit は停止しない。未使用 config/network は参照を確認して運用者が整理する。管理済み JAR は Volume から削除しない。本作業では本番適用を行っていない。
