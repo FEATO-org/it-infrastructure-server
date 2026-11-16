@@ -47,4 +47,14 @@ Manifest には spark 361579 / 4738952 が登録されている。明示除外�
 
 [公式コマンド](https://github.com/pop4959/Chunky/wiki/Commands)（ゲーム内では先頭に `/`）で対象を確認する。`chunky world <world>` でディメンション、`chunky shape square`、`chunky center <x> <z>`、`chunky radius <blocks>` で範囲を選択し、`chunky selection` で確認する。対象数は形状とブロック範囲から事前に見積もる（正方形なら概算 `(2 × 半径 / 16)²`、境界の端数や既存チャンクを含む）。`chunky start` で開始し、`chunky progress` とコンソールで進捗・完了を確認、`chunky pause` で一時停止、`chunky continue` で再開、`chunky cancel` で中止する。`trim` はチャンク削除なので使用しない。生成済みワールドは Mod の削除では元に戻らない。
 
-Chunky を戻す場合は生成を中止し、停止・バックアップ後に `CURSEFORGE_FILES` を空文字にして管理対象の削除を確認する。固定イメージでの自動削除は未検証のため、残った JAR は実体を特定して `/data/mods/` の外に退避する。設定・タスクデータはバックアップし、再導入時に意図せず再開しないよう個別に確認する。ほかの Mod やワールドは削除しない。
+Chunky を戻す場合は生成を中止し、停止・バックアップ後に `CURSEFORGE_FILES` から `485681:5320028` だけを外し、他の指定を維持して管理対象の削除を確認する。固定イメージでの自動削除は未検証のため、残った JAR は実体を特定して `/data/mods/` の外に退避する。設定・タスクデータはバックアップし、再導入時に意図せず再開しないよう個別に確認する。ほかの Mod やワールドは削除しない。
+
+## サーバー専用の最適化 Mod 3件
+
+`CURSEFORGE_FILES` に [Radium Re-Reforged 0.15.0](https://www.curseforge.com/minecraft/mc-mods/radium-re-reforged/files/9434151)（1649038:9434151）、[AegisNetworking 0.1.2](https://www.curseforge.com/minecraft/mc-mods/aegisnetworking/files/9380443)（1773519:9380443）、[AllTheLeaks 1.1.6](https://www.curseforge.com/minecraft/mc-mods/alltheleaks/files/9640602)（1091339:9640602）を固定する。Chunky と Proxy Compatible Forge は維持し、共通 manifest に追加しない。取得した JAR のメタデータでは Radium の ID は `radium`、AegisNetworking の表示名と ID は `RatNetworking` / `ratnetworking`。Aegis の JAR は通常の通信では片側導入可能とする一方、バニラ上限を超えるパケットの受信側には RatNetworking または Packet Fixer が必要と記載する。
+
+固定 JAR を Curse Maven から取得して依存宣言を確認した。Aegis は Forge 47 以降、AllTheLeaks は Forge 47.2.0 以降と Minecraft 1.20.1 を要求し、現行 Forge 47.4.28 は範囲内。AllTheLeaks は GeckoLib 4.4.8 以降を任意依存として宣言し、manifest の [4.8.4](https://www.curseforge.com/minecraft/mc-mods/geckolib/files/8285794) は範囲内。Radium の loader 宣言は `*` で、Minecraft / Forge のバージョン範囲は明示されていない。AllTheLeaks の JAR には ModernFix 関連コードが含まれるが、競合の有無は未確認。既存 manifest と管理対象の追加取得先に旧 Radium、Krypton 系、VMP、Packet Fixer、Connectivity の登録は見当たらない。永続 Volume の手動配置分は別途確認する。FerriteCore と Radium の自動互換性制御、および ModernFix・AllTheLeaks・Aegis 間の Mixin 共存は実行時に確認する。推測による設定変更は行わない。
+
+本番適用前に Forge を正常停止し、world、playerdata、mods、config、tacz と同期管理状態を含む Volume 全体をバックアップして復元可能性を確認する。Auto CurseForge の管理対象と手動配置を区別し、3件の重複 JAR がないか確認する。本番 Volume をマウントしない隔離環境で取得・起動・Mod 認識・停止・再起動を試し、新規 Mod の Mixin / クラスロードエラーと既知の Frontline の Mixin エラーを区別する。FerriteCore の互換性制御、Aegis と AllTheLeaks の初期化を確認する。Velocity 経由の Forge ハンドシェイク、ログイン・切断・再接続、大きな Mod パケット、チャンク送信と Entity Tracking を確認する。圧縮設定 `-1` は維持する。起動・接続・性能効果は未検証で、同条件の spark による TPS・MSPT・CPU・メモリ比較も未測定。
+
+障害時は停止・バックアップ後、3件の project:file 指定だけを外して Chunky を維持し、管理対象からの削除を確認する。自動削除は未検証のため、残存 JAR を実体と ID で特定して対象だけを `/data/mods/` 外へ退避する。他 Mod やワールドを一括削除しない。必要なら更新前の整合した Volume バックアップと旧 revision を復元する。
