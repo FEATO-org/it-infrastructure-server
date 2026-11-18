@@ -4,7 +4,7 @@ Forge の起動・Mod 間互換性・実機操作と性能効果は未確認。�
 
 ## JVM
 
-固定 Java 17 HotSpot イメージで MeowIce の G1 フラグを有効にし、Aikar・GraalVM・ZGC 用は無効にする。Forge の JVM_OPTS / JVM_XX_OPTS は別途指定しない。ヒープは 1G〜8G のまま、Swarm 上限は 9G から 10G に変更する。固定イメージのスクリプトは G1、AlwaysPreTouch、文字列重複排除、400M コードキャッシュ、Large Pages と Transparent Huge Pages を指定する。SoftMaxHeapSize は ZGC 用の分岐だけで設定される。Large Pages の実際の利用はホスト設定に依存する。ネイティブメモリやコードキャッシュも上限内に必要であり、メモリ削減を保証しない。
+固定 Java 17 HotSpot イメージで MeowIce の G1 フラグを有効にし、Aikar・GraalVM・ZGC 用は無効にする。Forge の JVM_OPTS は JMX Agent のみに使い、JVM_XX_OPTS は別途指定しない。ヒープは 1G〜8G のまま、Swarm 上限は 9G から 10G に変更する。固定イメージのスクリプトは G1、AlwaysPreTouch、文字列重複排除、400M コードキャッシュ、Large Pages と Transparent Huge Pages を指定する。SoftMaxHeapSize は ZGC 用の分岐だけで設定される。Large Pages の実際の利用はホスト設定に依存する。ネイティブメモリやコードキャッシュも上限内に必要であり、メモリ削減を保証しない。
 
 同イメージの Temurin 17.0.15 で生成フラグと 1G〜8G ヒープによる Java 起動を arm64 の隔離コンテナで確認した。対象ノードの CPU と Huge Pages の状態、Forge の実負荷での OOM・GC は別途確認する。戻す場合は Compose の `USE_MEOWICE_FLAGS` を `FALSE` にし、通常のデプロイ手順を使う。
 
@@ -61,7 +61,7 @@ Chunky を戻す場合は生成を中止し、停止・バックアップ後に 
 
 ## Forge JVM 監視
 
-JMX Exporter 1.7.0 Java Agent を `content.lock` の公式 URL と SHA-256 で `/data/monitoring/` に同期する。`prepare-forge.sh` は Forge の `run.sh` 実行前に同期し、専用 overlay の alias `forge-jvm-target` の経路から自タスクの送信元 IP を求め、生成済み `user_jvm_args.txt` の Agent 待受先に設定する。IP を決められなければ起動を中止する。固定イメージでは JVM flags と Xms/Xmx の生成後に pre-start を実行し、Forge の `run.sh` が同ファイルを読む。専用 collector は1 replica、stop-first、60秒間隔（`FORGE_JVM_SCRAPE_INTERVAL=120s` で変更可）で remote write する。既存監視の2分間隔は変えない。60秒は初期観測用であり契約上の許容量を保証しない。
+JMX Exporter 1.7.0 Java Agent を `content.lock` の公式 URL と SHA-256 で `/data/monitoring/` に同期する。`prepare-forge.sh` は Forge の `run.sh` 実行前に同期し、専用 overlay の alias `forge-jvm-target` の経路から自タスクの送信元 IP を求め、生成済み `user_jvm_args.txt` の Agent 待受先に設定する。IP を決められなければ起動を中止する。固定イメージでは JVM flags と Xms/Xmx の生成後に pre-start を実行し、Forge の `run.sh` が同ファイルを読む。既存の global Fluent Bit に専用 overlay を追加し、Swarm の templated config で選択ノードだけ JVM の input/output を有効にする。`deploy_swarm.sh` は `minecraft-data=true` が1台ならその node ID を選ぶ。複数台なら `FORGE_JVM_SCRAPE_NODE_ID` に対象の完全な node ID を指定する。60秒間隔（`FORGE_JVM_SCRAPE_INTERVAL=120s` で変更可）で remote write する。既存監視の2分間隔は変えない。60秒は初期観測用であり契約上の許容量を保証しない。
 
 Agent 組み込み JVM メトリクスと exporter 自身の状態を出力する。別の JMX collector は対象 ObjectName を限定し、任意の Mod MBean を出力しない。Java 17 の隔離確認で以下を観測した。単位は bytes、GC count は回数、GC sum は秒。その他に JVM thread、class、buffer、process と exporter の状態系列がある。
 
@@ -84,8 +84,10 @@ jvm_memory_used_bytes{monitor="forge-jvm",app_mode="<環境>",area="nonheap"}
 
 Heap 比率はその時点の使用量 / 最大値であり GC 後の生存量ではない。Pool の collection 値は JVM がその Pool の GC 後に更新した値で、未対応の Pool は存在しない場合がある。G1 の Young/Old ごとに更新条件が異なり、全 Heap の同時点の生存量とは限らない。GC sum は累積時間であり停止時間分布や P95/P99 ではない。最大値の `-1` は未定義を示す。cAdvisor のコンテナメモリと比較する際は Forge のコンテナを既存ラベルで特定し、Heap に加え native、Non-Heap、ページキャッシュ等を含む差に注意する。
 
-Explore で `count({monitor="forge-jvm",app_mode="<環境>"})` を確認し、概算 DPM は系列数 × 60 / scrape秒数。Grafana Cloud の使用量画面で実際の Active Series / DPM と契約枠を確認し、超過が懸念される場合は120秒に変更する。Agent 自身の `jmx_scrape_duration_seconds` / `jmx_scrape_error` と Forge の CPU・メモリ、および collector の CPU・メモリを導入前後の同条件で比較する。scrape 時間は全オーバーヘッドではない。
+Explore で `count({monitor="forge-jvm",app_mode="<環境>"})` を確認し、概算 DPM は系列数 × 60 / scrape秒数。Grafana Cloud の使用量画面で実際の Active Series / DPM と契約枠を確認し、超過が懸念される場合は120秒に変更する。Agent 自身の `jmx_scrape_duration_seconds` / `jmx_scrape_error` と Forge の CPU・メモリ、および Fluent Bit の CPU・メモリを導入前後の同条件で比較する。scrape 時間は全オーバーヘッドではない。
 
-起動失敗時は Forge service logs の同期失敗、ハッシュ不一致、DNS/route、Agent YAML、ポート bind を順に調査する。改変済み・管理外ファイルは上書きされず、手動削除もしない。Minecraft が起動済みで系列がない場合は collector logs の scrape DNS/接続、`jmx_scrape_error`、remote write の TLS・認証・応答を切り分ける。認証値を表示・共有しない。通信障害と JVM 起動障害は別に扱う。
+起動失敗時は Forge service logs の同期失敗、ハッシュ不一致、DNS/route、Agent YAML、ポート bind を順に調査する。改変済み・管理外ファイルは上書きされず、手動削除もしない。Minecraft が起動済みで系列がない場合は `system_fluent-bit` の選択ノードの logs で scrape DNS/接続、`jmx_scrape_error`、remote write の TLS・認証・応答を切り分ける。認証値を表示・共有しない。通信障害と JVM 起動障害は別に扱う。
 
-ロールバックは Forge の `JVM_OPTS` の Agent 指定をまず削除して通常のデプロイ手順で再起動する（設定の除去だけでは既存プロセスに反映されない）。Agent の取得自体が障害の場合は同時に `content.lock` の Agent 行も外し、同期失敗で起動が止まらないようにする。必要に応じて専用 collector、両 Compose の overlay 参照と config 宣言、config ハッシュ対象と外部ネットワーク作成を戻し、対応スタックを再デプロイする。既存 global Fluent Bit は停止しない。未使用 config/network は参照を確認して運用者が整理する。管理済み JAR は Volume から削除しない。本作業では本番適用を行っていない。
+ロールバックは Forge の `JVM_OPTS` の Agent 指定をまず削除して通常のデプロイ手順で再起動する（設定の除去だけでは既存プロセスに反映されない）。Agent の取得自体が障害の場合は同時に `content.lock` の Agent 行も外し、同期失敗で起動が止まらないようにする。必要に応じて JVM 用 include、両 Compose の overlay 参照と config 宣言、config ハッシュ対象と外部ネットワーク作成を戻し、対応スタックを再デプロイする。既存 global Fluent Bit のログ・他メトリクス設定は維持する。未使用 config/network は参照を確認して運用者が整理する。管理済み JAR は Volume から削除しない。本作業では本番適用を行っていない。
+
+複数ノード運用では選択ノードの障害時に自動切替しないため、監視欠落を確認し `FORGE_JVM_SCRAPE_NODE_ID` を別の `minecraft-data=true` ノードへ切り替えて再デプロイする。切替時に旧・新ノードの Scrape が重ならないよう、先に `FORGE_JVM_SCRAPE_NODE_ID=disabled` でデプロイし、全 `system_fluent-bit` タスクの更新完了と JVM 収集停止を確認してから新 ID を指定して再デプロイする。未選択ノードでは他の収集は継続する。テンプレート config の選択と実際の Remote Write は Swarm 実機で要確認。
