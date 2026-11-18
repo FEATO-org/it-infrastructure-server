@@ -9,10 +9,11 @@ mkdir -p "$state_dir"
 
 # Retire only ZIPs that match both the former pin and the active management record.
 retire_gunpack() {
-  local filename=$1 expected=$2 archive_name=$3
+  local filename=$1 expected=$2 archive_path=$3
   local target="$data_dir/tacz/$filename"
   local state="$state_dir/tacz_${filename}.sha256"
-  local archive="$state_dir/retired/$archive_name"
+  local archive="$state_dir/$archive_path"
+  local archive_dir="${archive%/*}"
 
   if [[ -e "$target" || -L "$target" ]]; then
     if [[ -L "$target" || ! -f "$target" || -L "$state" || ! -f "$state" ]] || \
@@ -20,12 +21,14 @@ retire_gunpack() {
       echo "Refusing to retire unmanaged or modified content: $target" >&2
       exit 1
     fi
-    if [[ -L "$state_dir/retired" || -e "$archive" || -L "$archive" ]]; then
+    if [[ -L "$archive_dir" || -e "$archive" || -L "$archive" ]]; then
       echo "Refusing to overwrite or redirect retired content: $archive" >&2
       exit 1
     fi
-    mkdir -p "$state_dir/retired"
-    mv -nT -- "$target" "$archive"
+    if ! mkdir -p -- "$archive_dir" || ! mv -nT -- "$target" "$archive"; then
+      echo "Could not retire $target to $archive as UID $EUID. Check the source and destination directory permissions." >&2
+      exit 1
+    fi
     if [[ -e "$target" || -L "$target" ]]; then
       echo "Could not retire content without overwriting: $archive" >&2
       exit 1
@@ -39,10 +42,12 @@ retire_gunpack() {
 
 retire_gunpack feato-weapons-and-tactics.zip \
   e9983776641a5ffa95fef55198d91ff595faff1630934cb4bfa7d6a8c4666c10 \
-  feato-weapons-and-tactics.zip
+  retired/feato-weapons-and-tactics.zip
+
+# Older root-run maintenance may have left the shared retired directory unwritable.
 retire_gunpack feato-classics-reborn.zip \
   2d0c082c234c7c30b40055225b518481d13fad9401c4c442f65fb5b04664f8df \
-  feato-classics-reborn-1.1.4.zip
+  retired-classics/feato-classics-reborn-1.1.4.zip
 
 while IFS=$'\t' read -r relative expected url fallback; do
   [[ -z "$relative" || "$relative" == \#* ]] && continue
