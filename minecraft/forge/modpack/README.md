@@ -164,8 +164,10 @@ docker run --rm --user 0:0 --entrypoint bash \
 
 1. Forge を停止し、Volume 全体と対応クライアントをバックアップして復元可能性を確認する。Classics 由来の銃器などがある場合は、停止時バックアップの隔離コピーで所持品と保存・再起動への影響を確認する。欠落した状態で保存すると、ZIP を戻してもデータを復元できない場合がある。
 2. `/data/tacz/` の別名 ZIP、展開フォルダ、旧 Classics/CCRP 統合版、管理記録を確認する。別名や展開版があれば、対象を特定して `/data/tacz/` の外へ退避する。クライアント側も Classics と重複する旧版を `tacz/` の外へ退避する。
-3. 同じリビジョンの `content.lock` と `sync-content.sh` をデータノードへ配布する。起動前同期は `tacz/feato-classics-reborn.zip` と管理記録が共に 1.1.4 の SHA-256 `2d0c082c234c7c30b40055225b518481d13fad9401c4c442f65fb5b04664f8df` に一致する場合に、ZIP を `/data/.feato-content/retired/feato-classics-reborn-1.1.4.zip` に移し、現用の管理記録を除く。ZIP がなければ同期を続行する。不一致、対象 ZIP・管理記録・退避先のシンボリックリンク、退避先ファイルの競合時は起動を停止して調査する。
+3. 同じリビジョンの `content.lock` と `sync-content.sh` をデータノードへ配布する。起動前同期は `tacz/feato-classics-reborn.zip` と管理記録が共に 1.1.4 の SHA-256 `2d0c082c234c7c30b40055225b518481d13fad9401c4c442f65fb5b04664f8df` に一致する場合に、ZIP を `/data/.feato-content/retired-classics/feato-classics-reborn-1.1.4.zip` に移し、現用の管理記録を除く。ZIP がなければ同期を続行する。不一致、対象 ZIP・管理記録・退避先のシンボリックリンク、退避先ファイルの競合時は起動を停止して調査する。
 4. 起動ログで Classics の読み込みがなく、RABasya と標準 Gunpack が読み込まれ、`Done` に到達することを確認する。クライアント接続、銃器と所持品、保存後の再起動を確認する。
+
+Classics 専用の退避ディレクトリは、起動時に Forge の UID/GID 1000:1000 で作成する。旧手順で root が作成した共用の `/data/.feato-content/retired/` と、そこに既に退避した ZIP はその場所で保管する。権限エラーが続く場合は、停止・バックアップ後に `stat -c '%u:%g %a %n'` で `/data/tacz`、`/data/.feato-content`、存在する場合は `/data/.feato-content/retired-classics` を確認する。必要な修正は UID 1000 の書き込み・通過を妨げているディレクトリに限定する。
 
 切り戻しは Forge を停止して更新後データを別途保全し、旧リビジョンの lock・同期スクリプトと整合した停止時 Volume バックアップを揃えて復元する。クライアントの構成も合わせる。障害版を含む構成へ戻す場合は、先に隔離コピーで起動可否を確認する。
 
