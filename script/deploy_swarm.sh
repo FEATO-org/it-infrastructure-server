@@ -68,10 +68,14 @@ done
 
 # Select exactly one eligible node for the JVM scrape. Other global tasks keep
 # their existing inputs but receive an empty JVM config from the Swarm template.
+if ! forge_jvm_node_list=$(docker node ls --filter node.label=minecraft-data=true --format '{{.ID}}'); then
+  echo 'Failed to list Swarm nodes for the Forge JVM scraper.' >&2
+  exit 1
+fi
 forge_jvm_nodes=()
 while IFS= read -r node_id; do
   [[ -z "$node_id" ]] || forge_jvm_nodes+=("$node_id")
-done < <(docker node ls --no-trunc --filter node.label=minecraft-data=true --format '{{.ID}}')
+done <<< "$forge_jvm_node_list"
 if [[ ${#forge_jvm_nodes[@]} -eq 0 ]]; then
   echo 'No node has minecraft-data=true; cannot select the Forge JVM scraper.' >&2
   exit 1

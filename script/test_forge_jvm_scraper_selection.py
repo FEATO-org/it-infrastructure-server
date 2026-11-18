@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class ScraperSelectionTest(unittest.TestCase):
-    def run_deploy(self, nodes, selected=None, existing_config=None):
+    def run_deploy(self, nodes, selected=None, existing_config=None, node_list_fails=False):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp)
             docker = path / 'docker'
@@ -17,7 +17,11 @@ class ScraperSelectionTest(unittest.TestCase):
 set -eu
 case "$1 $2" in
   "info --format") echo true ;;
-  "node ls") printf '%s' "${TEST_NODES}" ;;
+  "node ls")
+    [[ $# -eq 6 && "$3" == --filter && "$4" == node.label=minecraft-data=true && "$5" == --format && "$6" == '{{.ID}}' ]] || exit 2
+    [[ "${TEST_NODE_LIST_FAIL:-}" != 1 ]] || exit 1
+    printf '%s' "${TEST_NODES}" ;;
+
   "config inspect")
     [[ -n "${TEST_CONFIG_B64:-}" ]] || exit 1
     if [[ "${3:-}" == --format ]]; then
@@ -49,6 +53,7 @@ esac
                 env['TEST_CONFIG_B64'] = base64.b64encode(existing_config).decode()
             else:
                 env.pop('TEST_CONFIG_B64', None)
+            env['TEST_NODE_LIST_FAIL'] = '1' if node_list_fails else '0'
             env.pop('FORGE_JVM_SCRAPE_NODE_ID', None)
             if selected is not None:
                 env['FORGE_JVM_SCRAPE_NODE_ID'] = selected
@@ -80,6 +85,13 @@ esac
         self.assertEqual(trace, ['node-a'] * 3)
         result, trace = self.run_deploy('node-a\n', existing_config=b'different')
         self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(trace, [])
+
+    def test_node_list_failure_reports_the_actual_error(self):
+        result, trace = self.run_deploy('', node_list_fails=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Failed to list Swarm nodes', result.stderr)
+        self.assertNotIn('No node has minecraft-data=true', result.stderr)
         self.assertEqual(trace, [])
 
     def test_invalid_or_missing_nodes_fail_closed(self):
