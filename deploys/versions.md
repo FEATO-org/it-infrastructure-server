@@ -21,6 +21,7 @@ Ammo Box 追加前の68件版: Bad Mobs を含む58件に追加 Mod 10件を固�
 | --- | --- | --- |
 | itzg/minecraft-server | `java17` / digest `sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287` / [公式](https://docker-minecraft-server.readthedocs.io/) | 隔離起動試験に使用 |
 | Minecraft / Forge | 1.20.1 / 47.4.28、提供 manifest と [Auto CurseForge](https://docker-minecraft-server.readthedocs.io/en/latest/types-and-platforms/mod-platforms/auto-curseforge/) | 隔離 Forge で起動、Mod エラーあり |
+| ShinColle-kai | 1.1.0 / [CurseForge 1683061:9591104](https://www.curseforge.com/minecraft/mc-mods/shincolle-kai/files/9591104) | Forge 1.20.1、公式では前提 Mod なし。今回の取得・起動・接続・既存ワールド互換性は未確認 |
 | Ambassador | 1.4.5 / [固定ファイル](https://cdn.modrinth.com/data/cOj6YqJM/versions/YeQbhgna/Ambassador-Velocity-1.4.5-all.jar) | Velocity 4.3.1 build 45で隔離ロード確認、Forge接続未検証 |
 | Proxy Compatible Forge | 1.3.1 / [固定ファイル](https://cdn.modrinth.com/data/vDyrHl8l/versions/qiZ49HIW/proxy-compatible-forge-1.3.1.jar) | Forge 初期化確認、Forwarding 接続未検証 |
 | Bad Mobs | 19.0.4 / [CurseForge 233258:5086469](https://www.curseforge.com/minecraft/mc-mods/bad-mobs/files/5086469) | Forge 1.20.1、JARの必須依存は Forge 47 以降。Cecaeliaのスポーンを制限。JAR取得・メタデータ確認済み、サーバーでの取得・起動・ゲーム内動作未確認 |
