@@ -7,28 +7,47 @@ lock_file=${2:-/forge-pack/content.lock}
 state_dir="$data_dir/.feato-content"
 mkdir -p "$state_dir"
 
-# Retire only the previously pinned and recorded Weapons and Tactics ZIP.
-legacy="$data_dir/tacz/feato-weapons-and-tactics.zip"
-legacy_state="$state_dir/tacz_feato-weapons-and-tactics.zip.sha256"
-legacy_hash=e9983776641a5ffa95fef55198d91ff595faff1630934cb4bfa7d6a8c4666c10
-archive="$state_dir/retired/feato-weapons-and-tactics.zip"
-if [[ -e "$legacy" || -L "$legacy" ]]; then
-  if [[ -L "$legacy" || ! -f "$legacy" || -L "$legacy_state" || ! -f "$legacy_state" ]] || \
-     [[ "$(cat "$legacy_state")" != "$legacy_hash" || "$(sha256sum "$legacy" | cut -d ' ' -f 1)" != "$legacy_hash" ]]; then
-    echo "Refusing to retire unmanaged or modified content: $legacy" >&2
-    exit 1
+# Retire only ZIPs that match both the former pin and the active management record.
+retire_gunpack() {
+  local filename=$1 expected=$2 archive_path=$3
+  local target="$data_dir/tacz/$filename"
+  local state="$state_dir/tacz_${filename}.sha256"
+  local archive="$state_dir/$archive_path"
+  local archive_dir="${archive%/*}"
+
+  if [[ -e "$target" || -L "$target" ]]; then
+    if [[ -L "$target" || ! -f "$target" || -L "$state" || ! -f "$state" ]] || \
+       [[ "$(cat "$state")" != "$expected" || "$(sha256sum "$target" | cut -d ' ' -f 1)" != "$expected" ]]; then
+      echo "Refusing to retire unmanaged or modified content: $target" >&2
+      exit 1
+    fi
+    if [[ -L "$archive_dir" || -e "$archive" || -L "$archive" ]]; then
+      echo "Refusing to overwrite or redirect retired content: $archive" >&2
+      exit 1
+    fi
+    if ! mkdir -p -- "$archive_dir" || ! mv -nT -- "$target" "$archive"; then
+      echo "Could not retire $target to $archive as UID $EUID. Check the source and destination directory permissions." >&2
+      exit 1
+    fi
+    if [[ -e "$target" || -L "$target" ]]; then
+      echo "Could not retire content without overwriting: $archive" >&2
+      exit 1
+    fi
+    echo "Retired $target to $archive"
   fi
-  mkdir -p "$state_dir/retired"
-  if [[ -e "$archive" || -L "$archive" ]]; then
-    echo "Refusing to overwrite retired content: $archive" >&2
-    exit 1
+  if [[ -f "$state" && ! -L "$state" && "$(cat "$state")" == "$expected" ]]; then
+    rm -f -- "$state"
   fi
-  mv -- "$legacy" "$archive"
-fi
-if [[ ! -e "$legacy" && ! -L "$legacy" && -f "$legacy_state" && ! -L "$legacy_state" ]] && \
-   [[ "$(cat "$legacy_state")" == "$legacy_hash" ]]; then
-  rm -- "$legacy_state"
-fi
+}
+
+retire_gunpack feato-weapons-and-tactics.zip \
+  e9983776641a5ffa95fef55198d91ff595faff1630934cb4bfa7d6a8c4666c10 \
+  retired/feato-weapons-and-tactics.zip
+
+# Older root-run maintenance may have left the shared retired directory unwritable.
+retire_gunpack feato-classics-reborn.zip \
+  2d0c082c234c7c30b40055225b518481d13fad9401c4c442f65fb5b04664f8df \
+  retired-classics/feato-classics-reborn-1.1.4.zip
 
 while IFS=$'\t' read -r relative expected url fallback; do
   [[ -z "$relative" || "$relative" == \#* ]] && continue
@@ -45,11 +64,6 @@ while IFS=$'\t' read -r relative expected url fallback; do
   fi
   current=''
   [[ ! -f "$target" ]] || current=$(sha256sum "$target" | cut -d ' ' -f 1)
-  # The old combined Classics/CCRP pack must be preserved, even if managed.
-  if [[ "$relative" == tacz/feato-classics-reborn.zip && -n "$current" && "$current" != "$expected" ]]; then
-    echo "Retire the existing different Classics ZIP and its record outside /data/tacz before starting: $target" >&2
-    exit 1
-  fi
   if [[ "$current" != "$expected" ]]; then
     if [[ -n "$current" && ( ! -f "$state" || "$(cat "$state")" != "$current" ) ]]; then
       echo "Refusing to replace unmanaged or modified file: $target" >&2

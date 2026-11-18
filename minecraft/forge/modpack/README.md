@@ -2,6 +2,14 @@
 
 提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と追加 Mod と Curios For Ammo Box を含む 69 組の CurseForge project ID / file ID を固定する。追加分の依存・保留理由・未検証事項は [調査と受入条件](ADDITIONAL_MODS.md) を参照。`modlist.html` は従来の一覧で、Ammo Box 追加分は含まない。Zoe Isn't Cyberpunk は manifest と一覧から削除済み。共有 URL は取得元に使わない。
 
+## ShinColle-kai 1.1.0 への更新
+
+[公式 Release](https://github.com/halkirisame/ShinColle-kai/releases/tag/v1.20.1-1.1.0) と [CurseForge](https://www.curseforge.com/minecraft/mc-mods/shincolle-kai/files/9591104) は Minecraft 1.20.1 / Forge 向け 1.1.0（1683061 / 9591104）に前提 Mod はなく、GeckoLib は同梱とする。1.0.0（file 9470212）から艦の能力・艦隊画面・宝箱を変更し、保存艦や装備の消失などを修正する。追加設定は既定値で従来の挙動を保つとされ、追跡中の `shincolle_kai-*` 設定は変更しない。既存設定への不足項目の補完や保存データ互換性は未検証。
+
+適用前に Forge を停止し、world・playerdata・保存艦の卵・mods・config を含む Volume 全体を整合した状態でバックアップし、復元を確認する。停止時バックアップの隔離コピーで取得、起動、保存艦と装備、保存・再起動、クライアント接続を確認し、互換性に問題があれば適用を中止する。サーバーと全クライアントを同じ 1.1.0 に揃える。
+
+Auto CurseForge の更新後も旧 JAR が残る可能性がある。`/data/mods/` とクライアントの mods で旧版と新版の実体を識別し、同時にロードしない。旧版が残れば停止・バックアップ後に対象だけを mods 外へ安全に退避し、識別できなければ中止する。既存設定を削除・再生成・上書きしない。切り戻す場合は停止し、更新後データを別途保全してから旧 manifest と更新前の整合した Volume バックアップを一緒に復元し、クライアントも旧版に戻す。今回の取得・起動・接続・ゲーム内動作・既存ワールド互換性は未確認。本番操作は未実施。
+
 ## Zoe Isn't Cyberpunk の削除
 
 Project ID 896842 / File ID 7253085 をサーバー・クライアント共通 manifest から除外した。削除後の起動や既存ワールド互換性は未検証。既存ワールドやプレイヤーの所持品に同 Mod のデータがある場合、削除後に保存すると失われる可能性がある。
@@ -100,23 +108,17 @@ Create Crafts & Additions 1.3.3 は既存のため変更しない。Steam 'n' Ra
 
 以下の58件版への更新・復旧手順を優先する。
 
-## Classics Reborn・RABasya・Ammo Box の追加
+## RABasya・Ammo Box
 
-[Classics Reborn 1.1.4](https://www.curseforge.com/minecraft/customization/tacz-classics-reborn/files/9629350) (1079169 / 9629350) と [RABasya Firepower Pack 1.1.2](https://www.curseforge.com/minecraft/customization/tacz-rabasya-firepower-pack/files/9454179) (1126780 / 9454179) は ZIP のまま `content.lock` で固定し、起動前に `/data/tacz/` へ同期する。公式 CDN から取得した ZIP の整合性と SHA-256 を確認済み。両方とも Minecraft 1.20.1 向けで、Classics のファイル名は Forge / TaCZ 1.2.0 / Arcana 1.4.2 を明示する。RABasya の当該ファイルページは TaCZ 1.2.0 や Arcana との組合せを明示しておらず実機確認が必要。
-
-Classics 1.1.4 は旧 ClassicR & CCRP 統合版から CCRP 部分を除去したと配布元が明記する。旧版由来の CCRP 銃器・機能はこの ZIP では保証されず、個々の欠落や保存済みアイテムの挙動は未調査。配布元には別の CCRP ファイルもあるが、Forge 1.20.1 で使える別配布版の確認はできていないため追加しない。新旧で同じ銃器 ID が再導入・変更される影響を確認する。
+[RABasya Firepower Pack 1.1.2](https://www.curseforge.com/minecraft/customization/tacz-rabasya-firepower-pack/files/9454179) (1126780 / 9454179) は `content.lock` で固定し、起動前に `/data/tacz/` へ同期する。配布 ZIP の SHA-256 を確認し、Forge 47.4.28、TaCZ 1.2.0、Arcana 1.4.2 hotfix、Gucci & Vuitton、Curios For Ammo Box を含む隔離環境で、Classics 退避相当の構成が `Done` に到達した。本番構成、クライアント接続とゲーム内動作は未確認。
 
 [Curios For Ammo Box 1.2.2](https://www.curseforge.com/minecraft/mc-mods/curios-for-ammo-box/files/9527336) (1339813 / 9527336) は共通 manifest に追加し、クライアントとサーバーで揃える。JAR は Forge 47+、Minecraft [1.20.1,1.21)、TaCZ 1.2.0+ を必須と宣言。配布元は Curios API も必須とするが JAR メタデータにはその版範囲がない。既存 Curios 5.14.1 と TaCZ 1.2.0 は維持する。1.2.2 の配布元は TACZ-addon 1.2.0 とのクラッシュと HUD 二重計数の修正を記載するが、他の Ammo Box 関連 Mod との競合や動作は未確認。
 
-2 ZIP は各々 gunpack.meta.json と assets / data を含む。両者に共通する `data/tacz/tacz_tags/attachments/` の8ファイルがあり、結合・上書き挙動は未検証。モデル・音声・弾薬・銃器 ID と Weapons and Tactics など他 Mod の競合も未検証。隔離環境で Auto CurseForge による Ammo Box JAR 取得を確認した。Forge 47.4.28 でのロード、クライアント同期・射撃・リロード・Ammo Box 操作は未実施。隔離環境で確認してから適用する。
-
-適用時は停止して Forge Volume 全体と対応クライアントをバックアップし復元を確認する。`/data/tacz/` の ZIP・展開フォルダと `.feato-content` の記録・退避先を点検し、Classics / CCRP と RABasya の旧版・別名の重複を `/data/tacz/` 外へ、上書きせず記録と共に退避する。旧管理名 `feato-classics-reborn.zip` に固定版と異なるファイルがあると同期スクリプトは停止する。改変・未管理ファイルや退避先の競合は自動削除せず調査する。退避済みファイルを自動復元しない。更新済み manifest、lock、スクリプトを配布し、クライアントにも同版 Mod と両 ZIP を配布してから起動し、ログ、接続、銃器とアイテムの保存・再起動を確認する。既存 Volume の Auto CurseForge 同期状況を確認し、必要ならバックアップ後に `CF_FORCE_SYNCHRONIZE=true` を一時使用して検証後に外す。
-
-切り戻しは停止して更新後データを別途保全し、更新前の manifest・lock・スクリプトと整合した停止時 Volume バックアップを一緒に復元し、クライアントも旧構成に戻す。新アイテムを含むワールドを旧構成で保存しない。今回本番操作は行っていない。
+適用・切り戻しは [Classics Reborn の退避](#classics-reborn-の退避) を参照する。クライアントとサーバーには同版の RABasya と共通 Modpack を用意する。
 
 ## TaCZディレクトリの退避
 
-TaCZ本体、Weapons and Tacticsなどの関連Modと Arcana は維持する。`content.lock` から Charge into Battle、EOS Lab、Alex Kim の Gunpack ZIP を外したため、再起動時に自動再取得しない。Classics Reborn は当時同期対象から外した。現在は上記の版を再導入する。
+TaCZ本体、Weapons and Tacticsなどの関連Modと Arcana は維持する。`content.lock` から Charge into Battle、EOS Lab、Alex Kim の Gunpack ZIP を外したため、再起動時に自動再取得しない。Classics Reborn だけを退避する場合は [専用手順](#classics-reborn-の退避) を参照する。
 
 本番のForgeを停止してVolume全体をバックアップする。`/data/tacz/` には Gunpack のほか利用者が置いたZIP・展開済みフォルダ・設定・その他のファイルが含まれる可能性がある。対象全体を確認し、以下のコマンドでディレクトリを `/data/.feato-content/retired/tacz-directory/tacz/` へまとめて移動する。既知のGunpackの管理記録も同じ退避先の `records/` へ移す。ModのJARと `/data/config/`、ワールドは操作しない。
 
@@ -132,7 +134,7 @@ docker run --rm --user 0:0 --entrypoint bash \
   "$FORGE_IMAGE" /retire-tacz-directory.sh /data
 ```
 
-適用後、TaCZは起動時に新しい `/data/tacz/` や既定コンテンツを生成する可能性がある。ディレクトリを永続的に存在させない設定ではない。現在の lock では Classics と RABasya が再取得される。プレイヤーのクライアントに追加Gunpackがある場合は同様に退避し、接続・ゲーム内動作を検証する。削除したGunpack由来の銃器・アイテムは利用できなくなる可能性があり、削除後にワールドを保存すると復元できない場合がある。戻す際は停止して整合した更新前Volumeのバックアップと旧lockを復元する。
+適用後、TaCZは起動時に新しい `/data/tacz/` や既定コンテンツを生成する可能性がある。ディレクトリを永続的に存在させない設定ではない。現行の lock では RABasya が再取得される。プレイヤーのクライアントに追加Gunpackがある場合は同様に退避し、接続・ゲーム内動作を検証する。削除したGunpack由来の銃器・アイテムは利用できなくなる可能性があり、削除後にワールドを保存すると復元できない場合がある。戻す際は停止して整合した更新前Volumeのバックアップと旧lockを復元する。
 
 ## 58件版への更新と復旧
 
@@ -158,30 +160,16 @@ docker run --rm --user 0:0 --entrypoint bash \
 
 ## Classics Reborn の退避
 
-当時 Classics Reborn ZIP は同期対象から削除した。現在は上記の手順で再導入する。既存Volume上の ZIP は自動削除されないため、更新した lock を配布する前に Forge を停止して Volume 全体をバックアップし、対象の `tacz/feato-classics-reborn.zip` と管理記録を確認して `/data/tacz/` の外へ退避する。対象Gunpackの銃器やアイテムの保存データが失われるおそれがあり、削除後にワールドを保存すると戻せない場合がある。必要な場合は停止時の旧Volumeと旧lockを揃えて復元する。
+[Classics Reborn 1.1.4](https://www.curseforge.com/minecraft/customization/tacz-classics-reborn/files/9629350)（1079169 / 9629350）は、同梱されていない CCRP 弾薬を参照する。Arcana 1.4.2 hotfix の銃器インデックス読み込みで起動停止を再現したため、Classics を `content.lock` から外す。Arcana、TaCZ、RABasya、Gucci & Vuitton、Weapons and Tactics、Curios For Ammo Box は維持する。
 
-以下はデータノードで実行する例。Volume名を確認して指定する。既知のSHA-256と管理記録が両方一致する通常ファイルだけを退避し、不一致や退避先の競合があれば停止する。ZIPが存在しない場合は何も変更しない。別名ZIPや展開済みGunpackは自動で対象にならないため個別に確認する。
+1. Forge を停止し、Volume 全体と対応クライアントをバックアップして復元可能性を確認する。Classics 由来の銃器などがある場合は、停止時バックアップの隔離コピーで所持品と保存・再起動への影響を確認する。欠落した状態で保存すると、ZIP を戻してもデータを復元できない場合がある。
+2. `/data/tacz/` の別名 ZIP、展開フォルダ、旧 Classics/CCRP 統合版、管理記録を確認する。別名や展開版があれば、対象を特定して `/data/tacz/` の外へ退避する。クライアント側も Classics と重複する旧版を `tacz/` の外へ退避する。
+3. 同じリビジョンの `content.lock` と `sync-content.sh` をデータノードへ配布する。起動前同期は `tacz/feato-classics-reborn.zip` と管理記録が共に 1.1.4 の SHA-256 `2d0c082c234c7c30b40055225b518481d13fad9401c4c442f65fb5b04664f8df` に一致する場合に、ZIP を `/data/.feato-content/retired-classics/feato-classics-reborn-1.1.4.zip` に移し、現用の管理記録を除く。ZIP がなければ同期を続行する。不一致、対象 ZIP・管理記録・退避先のシンボリックリンク、退避先ファイルの競合時は起動を停止して調査する。
+4. 起動ログで Classics の読み込みがなく、RABasya と標準 Gunpack が読み込まれ、`Done` に到達することを確認する。クライアント接続、銃器と所持品、保存後の再起動を確認する。
 
-```bash
-FORGE_VOLUME='実際のForge Volume名'
-FORGE_IMAGE='itzg/minecraft-server:java17@sha256:632741e7e7fce0fa2730c428ffdd8f6fb346355d2568548d56b5a313020e1287'
-docker run --rm --user 0:0 --entrypoint bash -v "$FORGE_VOLUME:/data" "$FORGE_IMAGE" -euc '
-  src=/data/tacz/feato-classics-reborn.zip
-  state=/data/.feato-content/tacz_feato-classics-reborn.zip.sha256
-  dst=/data/.feato-content/retired/feato-classics-reborn.zip
-  hash=6aa04aa13b87969b4a4f9edceb6ca69dc226f439d9fdbe82ec02b4620d4c1981
-  if [[ ! -e "$src" && ! -L "$src" ]]; then echo "対象ZIPは存在しません。管理記録は変更していません。"; exit 0; fi
-  [[ ! -L "$src" && -f "$src" && ! -L "$state" && -f "$state" ]] || { echo "ZIPまたは管理記録を確認してください" >&2; exit 1; }
-  [[ "$(cat "$state")" == "$hash" && "$(sha256sum "$src" | cut -d " " -f 1)" == "$hash" ]] || { echo "SHA-256または管理記録が不一致です" >&2; exit 1; }
-  mkdir -p "$(dirname "$dst")"
-  [[ ! -e "$dst" && ! -L "$dst" && ! -e "$dst.sha256" && ! -L "$dst.sha256" ]] || { echo "退避先が存在します" >&2; exit 1; }
-  mv -- "$src" "$dst"
-  mv -- "$state" "$dst.sha256"
-  echo "対象ZIPと管理記録を退避しました"
-'
-```
+Classics 専用の退避ディレクトリは、起動時に Forge の UID/GID 1000:1000 で作成する。旧手順で root が作成した共用の `/data/.feato-content/retired/` と、そこに既に退避した ZIP はその場所で保管する。権限エラーが続く場合は、停止・バックアップ後に `stat -c '%u:%g %a %n'` で `/data/tacz`、`/data/.feato-content`、存在する場合は `/data/.feato-content/retired-classics` を確認する。必要な修正は UID 1000 の書き込み・通過を妨げているディレクトリに限定する。
 
-クライアント側でも同じ Gunpack の ZIP や展開版を `tacz/` から退避する。当時は追加Gunpackをすべて退避し、Arcana、TaCZ本体、ほかの設定は維持する。現在の lock では Classics は再取得される。クライアント接続を確認する。
+切り戻しは Forge を停止して更新後データを別途保全し、旧リビジョンの lock・同期スクリプトと整合した停止時 Volume バックアップを揃えて復元する。クライアントの構成も合わせる。障害版を含む構成へ戻す場合は、先に隔離コピーで起動可否を確認する。
 
 ## Gucci & VuittonとSuperb Warfareの復活
 
