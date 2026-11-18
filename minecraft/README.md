@@ -798,4 +798,4 @@ Forge 58件版の適用前には [更新・バックアップ・旧JARの確認�
 
 Superb Warfare は現行の Modpack に維持する。
 
-TaCZの追加Gunpackは [ディレクトリ退避手順](forge/modpack/README.md#taczディレクトリの退避) に従う。TaCZ本体とArcanaは維持する。
+TaCZの追加Gunpackは [再導入・退避手順](forge/modpack/README.md#classics-rebornrabasyaammo-box-の追加) に従う。TaCZ本体とArcanaは維持する。

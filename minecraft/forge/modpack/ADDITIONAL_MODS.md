@@ -27,3 +27,7 @@
 今回、対象構成の隔離起動・再起動では Frontline の Mixin 失敗を確認した。[試験結果](README.md#2026-11-14-隔離起動結果) を参照。基準および各段階の性能、クライアント接続・ゲーム内動作は未測定。ARM64 上のエミュレーションは本番性能の代用にしない。新設定 seed は追加していない。`prepare-forge.sh` は存在しない `/data/config` のファイルだけを seed するため、将来設定を追加する場合は新規 Volume と既存 Volume を区別し、既存設定を停止・バックアップ後に個別比較して反映する。ワールド単位の serverconfig も実物を確認する。
 
 適用時は [既存の更新・復旧手順](README.md#58件版への更新と復旧) に従い停止し、world、playerdata、mods、tacz、config、管理状態を含む Volume 全体をバックアップして復元可能性を確認する。クライアントにも対応 pack を配布する。`CF_FORCE_SYNCHRONIZE` は常設しない。残存 JAR を除去する必要があれば実体と ID を確認し対象だけを退避する。ロールバックは停止して旧 revision と整合した停止時 Volume バックアップを一緒に復元し、新 Mod のデータを欠いたワールドを保存しない。本番操作は今回実施していない。
+
+## TaCZ 追加コンテンツ
+
+Classics Reborn 1.1.4、RABasya Firepower Pack 1.1.2、Curios For Ammo Box 1.2.2 の依存・衝突・受入条件と適用・復旧は [Modpack 手順](README.md#classics-rebornrabasyaammo-box-の追加) を参照。既存 Mod の更新は行わない。

@@ -32,7 +32,7 @@ fi
 
 while IFS=$'\t' read -r relative expected url fallback; do
   [[ -z "$relative" || "$relative" == \#* ]] && continue
-  if [[ ! "$relative" =~ ^(tacz/feato-[a-z0-9-]+\.zip|mods/feato-[a-z0-9-]+\.jar)$ || ! "$expected" =~ ^[0-9a-f]{64}$ || -z "$url" ]]; then
+  if [[ ! "$relative" =~ ^(tacz/feato-[a-z0-9-]+\.zip|mods/feato-[a-z0-9-]+\.jar|monitoring/jmx_prometheus_javaagent-1\.7\.0\.jar)$ || ! "$expected" =~ ^[0-9a-f]{64}$ || -z "$url" ]]; then
     echo "Invalid content lock entry: $relative" >&2
     exit 1
   fi
@@ -45,6 +45,11 @@ while IFS=$'\t' read -r relative expected url fallback; do
   fi
   current=''
   [[ ! -f "$target" ]] || current=$(sha256sum "$target" | cut -d ' ' -f 1)
+  # The old combined Classics/CCRP pack must be preserved, even if managed.
+  if [[ "$relative" == tacz/feato-classics-reborn.zip && -n "$current" && "$current" != "$expected" ]]; then
+    echo "Retire the existing different Classics ZIP and its record outside /data/tacz before starting: $target" >&2
+    exit 1
+  fi
   if [[ "$current" != "$expected" ]]; then
     if [[ -n "$current" && ( ! -f "$state" || "$(cat "$state")" != "$current" ) ]]; then
       echo "Refusing to replace unmanaged or modified file: $target" >&2
