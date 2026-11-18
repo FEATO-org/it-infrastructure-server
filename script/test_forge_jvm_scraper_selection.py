@@ -1,3 +1,4 @@
+import base64
 import os
 from pathlib import Path
 import subprocess
@@ -8,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class ScraperSelectionTest(unittest.TestCase):
-    def run_deploy(self, nodes, selected=None):
+    def run_deploy(self, nodes, selected=None, existing_config=None):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp)
             docker = path / 'docker'
@@ -17,7 +18,16 @@ set -eu
 case "$1 $2" in
   "info --format") echo true ;;
   "node ls") printf '%s' "${TEST_NODES}" ;;
-  "config inspect") exit 1 ;;
+  "config inspect")
+    [[ -n "${TEST_CONFIG_B64:-}" ]] || exit 1
+    if [[ "${3:-}" == --format ]]; then
+      case "$4" in
+        *Templating*) printf '%s\n' golang ;;
+        *Data*) printf '"%s"\n' "$TEST_CONFIG_B64" ;;
+        *) exit 2 ;;
+      esac
+    fi ;;
+
   "config create") [[ "$3" == --template-driver && "$4" == golang ]] ;;
   "network inspect"|"secret inspect") exit 0 ;;
   "compose --file"|"stack config"|"stack services") exit 0 ;;
@@ -35,6 +45,10 @@ esac
             env.update(PATH=str(path) + os.pathsep + env['PATH'], TEST_NODES=nodes,
                        TEST_TRACE=str(path / 'trace'), ENV_FILE=str(path / 'missing'),
                        TLS_STATE_FILE=str(path / 'missing'))
+            if existing_config is not None:
+                env['TEST_CONFIG_B64'] = base64.b64encode(existing_config).decode()
+            else:
+                env.pop('TEST_CONFIG_B64', None)
             env.pop('FORGE_JVM_SCRAPE_NODE_ID', None)
             if selected is not None:
                 env['FORGE_JVM_SCRAPE_NODE_ID'] = selected
@@ -58,6 +72,15 @@ esac
             result, trace = self.run_deploy('node-a\nnode-b\n', selected)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(trace, [selected] * 3)
+
+    def test_existing_template_is_reused_only_when_contents_match(self):
+        contents = (ROOT / 'fluentbit/forge-jvm.conf').read_bytes()
+        result, trace = self.run_deploy('node-a\n', existing_config=contents)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(trace, ['node-a'] * 3)
+        result, trace = self.run_deploy('node-a\n', existing_config=b'different')
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(trace, [])
 
     def test_invalid_or_missing_nodes_fail_closed(self):
         for nodes, selected in (('', None), ('node-a\n', 'node-b')):

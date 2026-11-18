@@ -90,4 +90,4 @@ Explore で `count({monitor="forge-jvm",app_mode="<環境>"})` を確認し、�
 
 ロールバックは Forge の `JVM_OPTS` の Agent 指定をまず削除して通常のデプロイ手順で再起動する（設定の除去だけでは既存プロセスに反映されない）。Agent の取得自体が障害の場合は同時に `content.lock` の Agent 行も外し、同期失敗で起動が止まらないようにする。必要に応じて JVM 用 include、両 Compose の overlay 参照と config 宣言、config ハッシュ対象と外部ネットワーク作成を戻し、対応スタックを再デプロイする。既存 global Fluent Bit のログ・他メトリクス設定は維持する。未使用 config/network は参照を確認して運用者が整理する。管理済み JAR は Volume から削除しない。本作業では本番適用を行っていない。
 
-複数ノード運用では選択ノードの障害時に自動切替しないため、監視欠落を確認し `FORGE_JVM_SCRAPE_NODE_ID` を別の `minecraft-data=true` ノードへ切り替えて再デプロイする。切替時に旧・新ノードの Scrape が重ならないよう、先に `FORGE_JVM_SCRAPE_NODE_ID=disabled` でデプロイし、全 `system_fluent-bit` タスクの更新完了と JVM 収集停止を確認してから新 ID を指定して再デプロイする。未選択ノードでは他の収集は継続する。テンプレート config の選択と実際の Remote Write は Swarm 実機で要確認。
+複数ノード運用では選択ノードの障害時に自動切替しないため、監視欠落を確認し `FORGE_JVM_SCRAPE_NODE_ID` を別の `minecraft-data=true` ノードへ切り替えて再デプロイする。切替時に旧・新ノードの Scrape が重ならないよう、先に `FORGE_JVM_SCRAPE_NODE_ID=disabled` でデプロイし、全 `system_fluent-bit` タスクの更新完了と JVM 収集停止を確認してから新 ID を指定して再デプロイする。未選択ノードでは他の収集は継続する。隔離単一ノード Swarm ではテンプレートの選択・非選択の展開と、仮サーバーを使った監視側からの接続・バックエンド側からの接続拒否を確認した。実 Forge、複数ノード、Remote Write は未確認。

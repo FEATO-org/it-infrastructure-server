@@ -92,7 +92,7 @@ export FORGE_JVM_SCRAPE_NODE_ID
 forge_jvm_config="system_forge_jvm_template_${CONFIG_VERSION}"
 if docker config inspect "$forge_jvm_config" >/dev/null 2>&1; then
   existing_driver=$(docker config inspect --format '{{.Spec.Templating.Name}}' "$forge_jvm_config")
-  existing_hash=$(docker config inspect --format '{{.Spec.Data}}' "$forge_jvm_config" | base64 -d | sha256sum | awk '{print $1}')
+  existing_hash=$(docker config inspect --format '{{json .Spec.Data}}' "$forge_jvm_config" | tr -d '"' | base64 -d | sha256sum | awk '{print $1}')
   expected_hash=$(sha256sum "${REPO_ROOT}/fluentbit/forge-jvm.conf" | awk '{print $1}')
   if [[ "$existing_driver" != golang || "$existing_hash" != "$expected_hash" ]]; then
     echo "Existing config does not match template: $forge_jvm_config" >&2
