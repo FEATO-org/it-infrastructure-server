@@ -15,7 +15,7 @@ Proxyを4.2.0 build 30から、[PaperMC公式配布](https://papermc.io/download
 
 # Forge 1.20.1 切替の取得元
 
-現行68件版: Bad Mobs を含む58件に追加 Mod 10件を固定し、SBW を [0.8.9 final](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/8104849) に変更し、[Frontline 1.2.1](https://www.curseforge.com/minecraft/mc-mods/frontline-combat-pack/files/8650627) を追加、Invasion と Zoe Isn't Cyberpunk を削除する。Zoe 削除後の起動・既存ワールド互換性は未検証。JAR 依存は照合済み。隔離起動・再起動は完了したが Frontline の Mixin が失敗し、接続・実動作は未確認。[適用・復旧](../minecraft/forge/modpack/README.md#sbw-の版変更と-frontline-の追加invasion-の削除) を参照。[追加 Mod の調査](../minecraft/forge/modpack/ADDITIONAL_MODS.md) を参照。追加構成の起動・既存ワールド互換性は未確認。従来57件版は提供58件版から LesRaisins Tactical Equipements (1273094 / 8652673) を除き、Superb Warfare (1218165 / 9019882) と Gucci & Vuitton Attachments (1103436 / 6062098) を復活。[manifest](../minecraft/forge/modpack/manifest.json) と [復活手順](../minecraft/forge/modpack/README.md#gucci--vuittonとsuperb-warfareの復活) を参照。従来57件版では Forge 47.4.28 / Java 17、x86_64エミュレーションの隔離環境でArcanaを含む起動を確認。実ワールド・クライアント接続は未確認。ARM64ではArcanaネイティブライブラリのGLIBC不足で起動失敗。
+Ammo Box 追加前の68件版: Bad Mobs を含む58件に追加 Mod 10件を固定し、SBW を [0.8.9 final](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/8104849) に変更し、[Frontline 1.2.1](https://www.curseforge.com/minecraft/mc-mods/frontline-combat-pack/files/8650627) を追加、Invasion と Zoe Isn't Cyberpunk を削除する。Zoe 削除後の起動・既存ワールド互換性は未検証。JAR 依存は照合済み。隔離起動・再起動は完了したが Frontline の Mixin が失敗し、接続・実動作は未確認。[適用・復旧](../minecraft/forge/modpack/README.md#sbw-の版変更と-frontline-の追加invasion-の削除) を参照。[追加 Mod の調査](../minecraft/forge/modpack/ADDITIONAL_MODS.md) を参照。追加構成の起動・既存ワールド互換性は未確認。従来57件版は提供58件版から LesRaisins Tactical Equipements (1273094 / 8652673) を除き、Superb Warfare (1218165 / 9019882) と Gucci & Vuitton Attachments (1103436 / 6062098) を復活。[manifest](../minecraft/forge/modpack/manifest.json) と [復活手順](../minecraft/forge/modpack/README.md#gucci--vuittonとsuperb-warfareの復活) を参照。従来57件版では Forge 47.4.28 / Java 17、x86_64エミュレーションの隔離環境でArcanaを含む起動を確認。実ワールド・クライアント接続は未確認。ARM64ではArcanaネイティブライブラリのGLIBC不足で起動失敗。
 
 | 対象 | 固定版 / 取得元 | 検証状況 |
 | --- | --- | --- |
@@ -28,6 +28,9 @@ Proxyを4.2.0 build 30から、[PaperMC公式配布](https://papermc.io/download
 | Radium Re-Reforged | 0.15.0 / [CurseForge 1649038:9434151](https://www.curseforge.com/minecraft/mc-mods/radium-re-reforged/files/9434151) | Forge 1.20.1、JAR の mod ID は radium。サーバーでの取得・起動・互換性未確認 |
 | AegisNetworking | 0.1.2 / [CurseForge 1773519:9380443](https://www.curseforge.com/minecraft/mc-mods/aegisnetworking/files/9380443) | Forge 1.20.1、JAR の表示名・mod ID は RatNetworking / ratnetworking。サーバーでの取得・起動・接続未確認 |
 | AllTheLeaks | 1.1.6 / [CurseForge 1091339:9640602](https://www.curseforge.com/minecraft/mc-mods/alltheleaks/files/9640602) | Forge 1.20.1、Forge 47.2.0 以降。サーバーでの取得・起動・互換性未確認 |
+| Classics Reborn | 1.1.4 / [1079169:9629350](https://www.curseforge.com/minecraft/customization/tacz-classics-reborn/files/9629350) | Forge 1.20.1 / TaCZ 1.2.0 / Arcana 1.4.2 向け ZIP、`/data/tacz/`。CCRP 部分を除去。ZIP・SHA-256 確認、起動未確認 |
+| RABasya Firepower Pack | 1.1.2 / [1126780:9454179](https://www.curseforge.com/minecraft/customization/tacz-rabasya-firepower-pack/files/9454179) | 1.20.1 向け TaCZ ZIP、`/data/tacz/`。ZIP・SHA-256 確認、起動・互換性未確認 |
+| Curios For Ammo Box | 1.2.2 / [1339813:9527336](https://www.curseforge.com/minecraft/mc-mods/curios-for-ammo-box/files/9527336) | Forge 1.20.1、共通 manifest。TaCZ 1.2.0+ と Curios が必要。公式 CDN で JAR 取得・依存確認済み、隔離環境で Auto CurseForge 取得確認、起動・接続未検証 |
 
 Mod の固定 ID と配布元一覧、除外と更新は [Modpack](../minecraft/forge/modpack/README.md) を参照。本番での起動・接続は未確認。
 
@@ -452,7 +455,7 @@ Better HorsesはProtocolLibなしでも起動しますが一部機能を無効�
 
 Forge Create アドオンの固定版と検証状況は [Modpack](../minecraft/forge/modpack/README.md#追加予定の-create-アドオン隔離検証待ち) を参照。
 
-TaCZの追加Gunpack退避と Arcana 1.4.2 hotfix の取得元・固定ハッシュ・未検証事項は [Modpack](../minecraft/forge/modpack/README.md#taczディレクトリの退避) を参照。
+TaCZ Gunpack 再導入と Arcana 1.4.2 hotfix の運用は [Modpack](../minecraft/forge/modpack/README.md#classics-rebornrabasyaammo-box-の追加) を参照。
 
 ### Forge JVM Agent
 
