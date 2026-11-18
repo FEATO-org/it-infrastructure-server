@@ -2,6 +2,14 @@
 
 提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と追加 Mod と Curios For Ammo Box を含む 69 組の CurseForge project ID / file ID を固定する。追加分の依存・保留理由・未検証事項は [調査と受入条件](ADDITIONAL_MODS.md) を参照。`modlist.html` は従来の一覧で、Ammo Box 追加分は含まない。Zoe Isn't Cyberpunk は manifest と一覧から削除済み。共有 URL は取得元に使わない。
 
+## ShinColle-kai 1.1.0 への更新
+
+[公式 Release](https://github.com/halkirisame/ShinColle-kai/releases/tag/v1.20.1-1.1.0) と [CurseForge](https://www.curseforge.com/minecraft/mc-mods/shincolle-kai/files/9591104) は Minecraft 1.20.1 / Forge 向け 1.1.0（1683061 / 9591104）に前提 Mod はなく、GeckoLib は同梱とする。1.0.0（file 9470212）から艦の能力・艦隊画面・宝箱を変更し、保存艦や装備の消失などを修正する。追加設定は既定値で従来の挙動を保つとされ、追跡中の `shincolle_kai-*` 設定は変更しない。既存設定への不足項目の補完や保存データ互換性は未検証。
+
+適用前に Forge を停止し、world・playerdata・保存艦の卵・mods・config を含む Volume 全体を整合した状態でバックアップし、復元を確認する。停止時バックアップの隔離コピーで取得、起動、保存艦と装備、保存・再起動、クライアント接続を確認し、互換性に問題があれば適用を中止する。サーバーと全クライアントを同じ 1.1.0 に揃える。
+
+Auto CurseForge の更新後も旧 JAR が残る可能性がある。`/data/mods/` とクライアントの mods で旧版と新版の実体を識別し、同時にロードしない。旧版が残れば停止・バックアップ後に対象だけを mods 外へ安全に退避し、識別できなければ中止する。既存設定を削除・再生成・上書きしない。切り戻す場合は停止し、更新後データを別途保全してから旧 manifest と更新前の整合した Volume バックアップを一緒に復元し、クライアントも旧版に戻す。今回の取得・起動・接続・ゲーム内動作・既存ワールド互換性は未確認。本番操作は未実施。
+
 ## Zoe Isn't Cyberpunk の削除
 
 Project ID 896842 / File ID 7253085 をサーバー・クライアント共通 manifest から除外した。削除後の起動や既存ワールド互換性は未検証。既存ワールドやプレイヤーの所持品に同 Mod のデータがある場合、削除後に保存すると失われる可能性がある。
