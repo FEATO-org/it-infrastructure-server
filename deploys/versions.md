@@ -28,8 +28,8 @@ Ammo Box 追加前の68件版: Bad Mobs を含む58件に追加 Mod 10件を固�
 | Radium Re-Reforged | 0.15.0 / [CurseForge 1649038:9434151](https://www.curseforge.com/minecraft/mc-mods/radium-re-reforged/files/9434151) | Forge 1.20.1、JAR の mod ID は radium。サーバーでの取得・起動・互換性未確認 |
 | AegisNetworking | 0.1.2 / [CurseForge 1773519:9380443](https://www.curseforge.com/minecraft/mc-mods/aegisnetworking/files/9380443) | Forge 1.20.1、JAR の表示名・mod ID は RatNetworking / ratnetworking。サーバーでの取得・起動・接続未確認 |
 | AllTheLeaks | 1.1.6 / [CurseForge 1091339:9640602](https://www.curseforge.com/minecraft/mc-mods/alltheleaks/files/9640602) | Forge 1.20.1、Forge 47.2.0 以降。サーバーでの取得・起動・互換性未確認 |
-| Classics Reborn | 1.1.4 / [1079169:9629350](https://www.curseforge.com/minecraft/customization/tacz-classics-reborn/files/9629350) | Forge 1.20.1 / TaCZ 1.2.0 / Arcana 1.4.2 向け ZIP、`/data/tacz/`。CCRP 部分を除去。ZIP・SHA-256 確認、起動未確認 |
-| RABasya Firepower Pack | 1.1.2 / [1126780:9454179](https://www.curseforge.com/minecraft/customization/tacz-rabasya-firepower-pack/files/9454179) | 1.20.1 向け TaCZ ZIP、`/data/tacz/`。ZIP・SHA-256 確認、起動・互換性未確認 |
+| Classics Reborn | 1.1.4 / [1079169:9629350](https://www.curseforge.com/minecraft/customization/tacz-classics-reborn/files/9629350) | 同期対象から退避。未収録の CCRP 弾薬参照による起動停止を隔離環境で再現 |
+| RABasya Firepower Pack | 1.1.2 / [1126780:9454179](https://www.curseforge.com/minecraft/customization/tacz-rabasya-firepower-pack/files/9454179) | 1.20.1 向け TaCZ ZIP、`/data/tacz/`。SHA-256 一致、Classics 無効・Arcana 有効の隔離環境で起動確認。本番・ゲーム内動作未確認 |
 | Curios For Ammo Box | 1.2.2 / [1339813:9527336](https://www.curseforge.com/minecraft/mc-mods/curios-for-ammo-box/files/9527336) | Forge 1.20.1、共通 manifest。TaCZ 1.2.0+ と Curios が必要。公式 CDN で JAR 取得・依存確認済み、隔離環境で Auto CurseForge 取得確認、起動・接続未検証 |
 
 Mod の固定 ID と配布元一覧、除外と更新は [Modpack](../minecraft/forge/modpack/README.md) を参照。本番での起動・接続は未確認。
@@ -455,7 +455,7 @@ Better HorsesはProtocolLibなしでも起動しますが一部機能を無効�
 
 Forge Create アドオンの固定版と検証状況は [Modpack](../minecraft/forge/modpack/README.md#追加予定の-create-アドオン隔離検証待ち) を参照。
 
-TaCZ Gunpack 再導入と Arcana 1.4.2 hotfix の運用は [Modpack](../minecraft/forge/modpack/README.md#classics-rebornrabasyaammo-box-の追加) を参照。
+Classics Reborn の適用・復旧は [退避手順](../minecraft/forge/modpack/README.md#classics-reborn-の退避) を参照。
 
 ### Forge JVM Agent
 
