@@ -244,6 +244,7 @@ services:
       CURSEFORGE_FILES: "485681:5320028,1649038:9434151,1773519:9380443,1091339:9640602"
       MODS: https://cdn.modrinth.com/data/vDyrHl8l/versions/qiZ49HIW/proxy-compatible-forge-1.3.1.jar
       PRE_START_SCRIPT: /forge-pack/prepare-forge.sh
+      JVM_OPTS: "-javaagent:/data/monitoring/jmx_prometheus_javaagent-1.7.0.jar=FORGE_JMX_BIND:9404:/forge-jmx/config.yml"
       ONLINE_MODE: "FALSE"
       USE_MEOWICE_FLAGS: "TRUE"
       USE_MEOWICE_GRAALVM_FLAGS: "FALSE"
@@ -259,13 +260,17 @@ services:
       - forwarding_secret
     volumes:
       - minecraft_forge_data:/data
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/jmx-exporter.yml:/forge-jmx/config.yml:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/modpack/manifest.json:/forge-pack/manifest.json:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/prepare-forge.sh:/forge-pack/prepare-forge.sh:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/sync-content.sh:/forge-pack/sync-content.sh:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/content.lock:/forge-pack/content.lock:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/config:/forge-config:ro
     networks:
-      - minecraft-backend-network
+      minecraft-backend-network: {}
+      forge-jvm-monitoring-network:
+        aliases:
+          - forge-jvm-target
     stop_grace_period: 2m
     deploy:
       replicas: 1
@@ -298,6 +303,8 @@ networks:
   minecraft-ingress-network:
     external: true
   minecraft-backend-network:
+    external: true
+  forge-jvm-monitoring-network:
     external: true
   web-ingress-network:
     external: true

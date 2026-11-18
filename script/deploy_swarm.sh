@@ -28,6 +28,7 @@ if [[ -z "${CONFIG_VERSION:-}" ]]; then
   CONFIG_VERSION="$(
     sha256sum \
       "${REPO_ROOT}/fluentbit/fluent-bit.conf" \
+      "${REPO_ROOT}/fluentbit/forge-jvm.conf" \
       "${REPO_ROOT}/fluentbit/parsers.conf" \
       "${REPO_ROOT}/fluentbit/discord.lua" \
       "${REPO_ROOT}/nginx/nginx.conf" \
@@ -65,20 +66,57 @@ for variable_name in "${required_variables[@]}"; do
   fi
 done
 
+# Select exactly one eligible node for the JVM scrape. Other global tasks keep
+# their existing inputs but receive an empty JVM config from the Swarm template.
+forge_jvm_nodes=()
+while IFS= read -r node_id; do
+  [[ -z "$node_id" ]] || forge_jvm_nodes+=("$node_id")
+done < <(docker node ls --no-trunc --filter node.label=minecraft-data=true --format '{{.ID}}')
+if [[ ${#forge_jvm_nodes[@]} -eq 0 ]]; then
+  echo 'No node has minecraft-data=true; cannot select the Forge JVM scraper.' >&2
+  exit 1
+fi
+if [[ -z "${FORGE_JVM_SCRAPE_NODE_ID:-}" ]]; then
+  if [[ ${#forge_jvm_nodes[@]} -ne 1 ]]; then
+    echo 'Multiple minecraft-data nodes: set FORGE_JVM_SCRAPE_NODE_ID to one eligible node ID.' >&2
+    exit 1
+  fi
+  FORGE_JVM_SCRAPE_NODE_ID=${forge_jvm_nodes[0]}
+fi
+if [[ "$FORGE_JVM_SCRAPE_NODE_ID" != disabled && ! " ${forge_jvm_nodes[*]} " == *" ${FORGE_JVM_SCRAPE_NODE_ID} "* ]]; then
+  echo 'FORGE_JVM_SCRAPE_NODE_ID must be the full ID of a minecraft-data=true node or disabled.' >&2
+  exit 1
+fi
+export FORGE_JVM_SCRAPE_NODE_ID
+
+forge_jvm_config="system_forge_jvm_template_${CONFIG_VERSION}"
+if docker config inspect "$forge_jvm_config" >/dev/null 2>&1; then
+  existing_driver=$(docker config inspect --format '{{.Spec.Templating.Name}}' "$forge_jvm_config")
+  existing_hash=$(docker config inspect --format '{{json .Spec.Data}}' "$forge_jvm_config" | tr -d '"' | base64 -d | sha256sum | awk '{print $1}')
+  expected_hash=$(sha256sum "${REPO_ROOT}/fluentbit/forge-jvm.conf" | awk '{print $1}')
+  if [[ "$existing_driver" != golang || "$existing_hash" != "$expected_hash" ]]; then
+    echo "Existing config does not match template: $forge_jvm_config" >&2
+    exit 1
+  fi
+else
+  docker config create --template-driver golang "$forge_jvm_config" "${REPO_ROOT}/fluentbit/forge-jvm.conf" >/dev/null
+fi
+
 external_networks=(
   database-network
   web-ingress-network
   minecraft-ingress-network
   minecraft-backend-network
+  forge-jvm-monitoring-network
 )
 
 for network_name in "${external_networks[@]}"; do
   if ! docker network inspect "${network_name}" >/dev/null 2>&1; then
-    docker network create \
-      --driver overlay \
-      --attachable \
-      --opt encrypted \
-      "${network_name}" >/dev/null
+    network_options=(--driver overlay --opt encrypted)
+    if [[ "${network_name}" != forge-jvm-monitoring-network ]]; then
+      network_options+=(--attachable)
+    fi
+    docker network create "${network_options[@]}" "${network_name}" >/dev/null
     echo "Created overlay network: ${network_name}"
   fi
 done
