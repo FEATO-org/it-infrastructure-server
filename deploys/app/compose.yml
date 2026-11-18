@@ -250,6 +250,7 @@ services:
       USE_MEOWICE_GRAALVM_FLAGS: "FALSE"
       USE_MEOWICE_ZGC_FLAGS: "FALSE"
       USE_AIKAR_FLAGS: "FALSE"
+      JVM_DD_OPTS: "forge.readTimeout=120"
       INIT_MEMORY: 1G
       MAX_MEMORY: 8G
       TZ: Asia/Tokyo
