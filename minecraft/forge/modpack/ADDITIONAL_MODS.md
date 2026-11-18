@@ -30,4 +30,4 @@
 
 ## TaCZ 追加コンテンツ
 
-Classics Reborn 1.1.4、RABasya Firepower Pack 1.1.2、Curios For Ammo Box 1.2.2 の依存・衝突・受入条件と適用・復旧は [Modpack 手順](README.md#classics-rebornrabasyaammo-box-の追加) を参照。既存 Mod の更新は行わない。
+[Classics Reborn 1.1.4 を退避](README.md#classics-reborn-の退避) する。[RABasya Firepower Pack 1.1.2 と Curios For Ammo Box 1.2.2](README.md#rabasyaammo-box) は維持する。
