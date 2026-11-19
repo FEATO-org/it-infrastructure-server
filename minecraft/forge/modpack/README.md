@@ -1,6 +1,18 @@
 # イワシコ寄生虫 Modpack
 
-提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と追加 Mod と Curios For Ammo Box を含む 69 組の CurseForge project ID / file ID を固定する。追加分の依存・保留理由・未検証事項は [調査と受入条件](ADDITIONAL_MODS.md) を参照。`modlist.html` は従来の一覧で、Ammo Box 追加分は含まない。Zoe Isn't Cyberpunk は manifest と一覧から削除済み。共有 URL は取得元に使わない。
+提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と追加 Mod と Curios For Ammo Box を含む CurseForge project ID / file ID を固定する。Frontline 2.0.0 は CurseForge manifest 外で固定する。追加分の依存・保留理由・未検証事項は [調査と受入条件](ADDITIONAL_MODS.md) を参照。`modlist.html` は従来の一覧で、Ammo Box 追加分は含まない。Zoe Isn't Cyberpunk は manifest と一覧から削除済み。共有 URL は取得元に使わない。
+
+## 2026-11-19 SBW・TaCZ 更新と CCRP 追加
+
+Minecraft 1.20.1 / Forge 47.4.28 と Java 17 を維持し、共通 manifest は [SBW 0.8.9.2](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/9019882) (1218165 / 9019882)、[SuperbWarfare Addon 1.0.1](https://www.curseforge.com/minecraft/mc-mods/superbwarfare-addon/files/8793995) (1580826 / 8793995)、[TaCZ 1.2.0-hotfix](https://www.curseforge.com/minecraft/mc-mods/timeless-and-classics-zero/files/9623132) (1028108 / 9623132) を固定する。Addon は従来の manifest にないため新規追加。Addon JAR は SBW 0.8.9.1 以上と GeckoLib 4.4.6 以上を要求し、配布ページは 0.8.9.1 への対応を記載する。0.8.9.2 との実動作は未確認。 SBW JAR は必須の SimpleBedrockModel 2.5.1 を jar-in-jar で同梱する。SBW、Addon、TaCZ の取得 JAR の SHA-256 はそれぞれ `559930003f638080de648a8621821d785158768c3f69a762094ef4c8d3c4cc12`、`86fee0a858bcc85d27330ca80eb96aa24587b098b174b02ec1a1a0119b6f682a`、`6b26506e73cfbc8ad56c39d4da09b9463dfa7e23b8b13389b80354e526548f5d`。SBW は公式 Modrinth の SHA-512 と一致、Addon・TaCZ は取得物の算出値であり配布元の独立したハッシュ照合は未実施。
+
+[Frontline 2.0.0](https://modrinth.com/mod/frontline-combat-pack/version/2.0.0) は Modrinth `TnzHcrvV / skviTkFg` の `fcp-2.0.0.jar` を `content.lock` 経由で `/data/mods/feato-frontline-combat-pack.jar` に配置する。CurseForge の旧版は manifest から外した。取得 JAR の SHA-256 は `8bcfd35d393c28812dc5fbb426b4b0691ce280644174b458dbf7ae3687c0c105`、配布元 SHA-512 と一致。JAR は Forge 47+、Minecraft 1.20.1、SBW 0.8.9.1+、GeckoLib 4.7.2+ を要求し、固定 GeckoLib 4.8.4 は範囲内。一方 Modrinth API の必須 SBW 指定は 1.21.1 NeoForge 版 `izD7dnxq` を指す。配布メタデータと JAR の不一致は未解決であり、導入前に作者の確認と隔離起動が必要。旧 1.2.1 の Mixin 失敗が解消したとは確認していない。
+
+[CCRP 1.1.7_hotfix4](https://www.curseforge.com/minecraft/customization/tacz-classics-reborn/files/9629324) (1079169 / 9629324) は一覧上 1.20.1 Forge 版。配布表示名は `[1.20.1Forge][TACZ1.2.0+Arcana1.4.2]CCRP_1.1.7_hotfix4.zip`、実ファイル名は `1.20.1Forge-TACZ1.2.0-Arcana1.4.2-CCRP_1.1.7_hotfix4.zip`。1.21.1 NeoForge 版 9629304 とは異なる。ZIP 検査と SHA-256 を確認し、`content.lock` が展開せず `/data/tacz/feato-ccrp.zip` に配置する。ZIP の `gunpack.meta.json` の namespace は `ccrp`、内部 `gunpack_info.json` の version は `1.1.8` で配布表示と異なる。依存チェック宣言はなく、名前の Arcana 1.4.2 表記だけでは必須か判断できない。既存 Arcana 1.4.2 hotfix は維持する。以前の Classics 1.1.4 は起動障害のため撤去済みで、今回復活しない。CCRP と RABasya、既存 TaCZ アドオンの実行時競合は未確認。
+
+**適用条件:** 停止した Forge Volume 全体とクライアントの設定・セーブをバックアップし復元を確認する。Auto CurseForge が旧 JAR を削除する保証はない。`/data/mods/` とクライアントで旧 SBW、旧 TaCZ、旧 Frontline 1.2.1、および同じ Mod ID の JAR を実体・ID で特定し、残存する旧版だけを mods 外へ退避する。識別できなければ適用を中止する。旧 CCRP や統合版・展開版も特定して `tacz/` 外へ退避し、他の Gunpack は維持する。設定は自動上書きされないため既存設定と新バージョンを比較する。隔離コピーで依存・Mixin・Gunpack ログ、クライアント接続、銃器・車両、既存ワールドの保存と再起動を確認してから適用する。クライアントにも同じ Mod バージョンと CCRP ZIP を配布する。
+
+切り戻しは停止後、更新後データを別途保全し、旧 revision と更新前の整合した Volume バックアップを一緒に復元し、クライアントも旧構成へ戻す。今回の起動・ゲーム内動作・既存ワールド互換性は未確認。本番操作は行っていない。
 
 ## ShinColle-kai 1.1.0 への更新
 
