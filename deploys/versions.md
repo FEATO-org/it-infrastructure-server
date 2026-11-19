@@ -1,3 +1,5 @@
+> 2026-11-19 更新: SBW 0.8.9.2 (1218165:9019882)、SuperbWarfare Addon 1.0.1 (1580826:8793995)、TaCZ 1.2.0-hotfix (1028108:9623132) を manifest に固定。Frontline 2.0.0 (Modrinth `skviTkFg`) と CCRP 1.1.7_hotfix4 (CurseForge 1079169:9629324、Forge 1.20.1) は `content.lock` に固定。Frontline の配布メタデータの不一致、CCRP の内部版表記、適用・復旧と未検証事項は [手順](../minecraft/forge/modpack/README.md#2026-11-19-sbw-tacz-更新と-ccrp-追加) を参照。起動・本番動作は未確認。以下の過去版の記録は履歴。
+
 # Velocity 4.3.1 build 45 更新（2026-11-14）
 
 Proxyを4.2.0 build 30から、[PaperMC公式配布](https://papermc.io/downloads/velocity)の4.3.1 build 45 stable releaseへ固定更新する。Proxyのバージョン更新が目的。公式FAQでは[4.0以降はJava 25以上](https://docs.papermc.io/velocity/faq/)が必要で、既存のJava 25を維持する。公式配布JARのSHA-256は `0844bcabdcdb4f5b875906fd4c3365bc1bb76918e42bc595ed88ad195258dd75`。config、JVM設定、Plugin指定、Secret、Volumeは変更しない。
