@@ -105,7 +105,7 @@ services:
         reservations:
           memory: 512M
         limits:
-          memory: 1536M
+          memory: 2G
     logging: *default-logging
 
   minecraft-server:
@@ -292,7 +292,7 @@ services:
         reservations:
           memory: 2G
         limits:
-          memory: 10G
+          memory: 9728M
     logging: *default-logging
 
 networks:
