@@ -16,6 +16,8 @@ fi
 mkdir -p /data/config
 # The ZIP settings seed new volumes only; operator changes are not overwritten.
 cp -rn /forge-config/config/. /data/config/
+mkdir -p /data/defaultconfigs
+cp -rn /forge-config/defaultconfigs/. /data/defaultconfigs/
 if [[ -e "$config_file" && ! -L "$config_file" ]]; then
   echo 'Refusing to replace existing Proxy Compatible Forge configuration' >&2
   exit 1

@@ -1,0 +1,13 @@
+# New worlds only; existing world serverconfig files are not overwritten.
+[explosion]
+explosion_destroy = false
+extra_explosion_effect = false
+
+[projectile]
+allow_projectile_destroy_blocks = false
+
+[vehicle.collision]
+collision_destroy_soft_blocks = false
+collision_destroy_normal_blocks = false
+collision_destroy_hard_blocks = false
+collision_destroy_blocks_beastly = false
