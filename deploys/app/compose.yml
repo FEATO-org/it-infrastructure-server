@@ -263,6 +263,7 @@ services:
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/jmx-exporter.yml:/forge-jmx/config.yml:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/modpack/manifest.json:/forge-pack/manifest.json:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/prepare-forge.sh:/forge-pack/prepare-forge.sh:ro
+      - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/configure-jmx.sh:/forge-pack/configure-jmx.sh:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/sync-content.sh:/forge-pack/sync-content.sh:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/content.lock:/forge-pack/content.lock:ro
       - ${DEPLOY_ROOT:-/opt/it-infrastructure-server}/minecraft/forge/config:/forge-config:ro
