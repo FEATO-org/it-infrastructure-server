@@ -1,3 +1,7 @@
+> 現行変更: SuperbWarfare Addon 1.0.1 (1580826:8793995) を共通 manifest から削除し、SBW 0.8.9.2 の新規ワールド向け地形破壊設定を追加。既存 Volume の手動適用、復旧と未検証事項は [手順](../minecraft/forge/modpack/README.md#superbwarfare-addon-削除と地形破壊設定) を参照。起動・ゲーム内動作・本番動作は未確認。
+
+> 2026-11-19 時点の履歴: SBW 0.8.9.2 (1218165:9019882)、SuperbWarfare Addon 1.0.1 (1580826:8793995)、TaCZ 1.2.0-hotfix (1028108:9623132) を manifest に固定。Frontline 2.0.0 (Modrinth `skviTkFg`) と CCRP 1.1.7_hotfix4 (CurseForge 1079169:9629324、Forge 1.20.1) は `content.lock` に固定。Frontline の配布メタデータの不一致、CCRP の内部版表記、適用・復旧と未検証事項は [手順](../minecraft/forge/modpack/README.md#2026-11-19-sbw-tacz-更新と-ccrp-追加) を参照。起動・本番動作は未確認。以下の過去版の記録は履歴。
+
 # Velocity 4.3.1 build 45 更新（2026-11-14）
 
 Proxyを4.2.0 build 30から、[PaperMC公式配布](https://papermc.io/downloads/velocity)の4.3.1 build 45 stable releaseへ固定更新する。Proxyのバージョン更新が目的。公式FAQでは[4.0以降はJava 25以上](https://docs.papermc.io/velocity/faq/)が必要で、既存のJava 25を維持する。公式配布JARのSHA-256は `0844bcabdcdb4f5b875906fd4c3365bc1bb76918e42bc595ed88ad195258dd75`。config、JVM設定、Plugin指定、Secret、Volumeは変更しない。
@@ -240,7 +244,7 @@ https://raw.githubusercontent.com/itzg/docker-minecraft-server/master/images.jso
 プロキシはこれらの変数をサポートしないため、`JVM_XX_OPTS`でG1GC、並列参照処理、
 ヒープの事前確保、明示的GCの抑制、GC停止時間の目標200msを指定します。
 小さい1Gヒープには本体用の16Mリージョン設定を流用せず、JVMの自動調整を使います。
-本体は最大ヒープ8G・コンテナ上限9G、プロキシはヒープ1G・コンテナ上限1536Mです。
+本体は最大ヒープ8G・コンテナ上限9G、プロキシはヒープ1G・コンテナ上限2Gです。
 本体の初期ヒープは1Gに抑え、更新時はstop-firstで旧タスク停止後に起動します。
 https://docker-minecraft-server.readthedocs.io/en/latest/configuration/jvm-options/#enable-meowices-flags
 https://github.com/itzg/docker-mc-proxy/blob/main/README.md

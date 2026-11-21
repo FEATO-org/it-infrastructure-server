@@ -1,6 +1,38 @@
 # イワシコ寄生虫 Modpack
 
-提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と追加 Mod と Curios For Ammo Box を含む 69 組の CurseForge project ID / file ID を固定する。追加分の依存・保留理由・未検証事項は [調査と受入条件](ADDITIONAL_MODS.md) を参照。`modlist.html` は従来の一覧で、Ammo Box 追加分は含まない。Zoe Isn't Cyberpunk は manifest と一覧から削除済み。共有 URL は取得元に使わない。
+提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と追加 Mod と Curios For Ammo Box を含む CurseForge project ID / file ID を固定する。Frontline 2.0.0 は CurseForge manifest 外で固定する。追加分の依存・保留理由・未検証事項は [調査と受入条件](ADDITIONAL_MODS.md) を参照。`modlist.html` は従来の一覧で、Ammo Box 追加分は含まない。Zoe Isn't Cyberpunk は manifest と一覧から削除済み。共有 URL は取得元に使わない。
+
+## SuperbWarfare Addon 削除と地形破壊設定
+
+共通 manifest から [SuperbWarfare Addon 1.0.1](https://www.curseforge.com/minecraft/mc-mods/superbwarfare-addon/files/8793995)（project 1580826 / file 8793995）を除外した。SBW 本体 0.8.9.2（1218165 / 9019882）と Frontline 2.0.0 は維持する。`modlist.html` は従来一覧で Addon は含まれていなかった。クライアントにも更新後の共通 manifest を使った Modpack を配布する。
+
+Addon の [配布元](https://www.curseforge.com/minecraft/mc-mods/superbwarfare-addon) によれば排莢・薬莢アイテム、排莢ルール、コンテンツや車両レシピ・鉱石生成の制御、任意の MTS 連携などが失われる。既存設定やデータパックの Addon 用ルールは機能しなくなる。所持品・コンテナ・ワールド内の Addon アイテム等は欠落し、削除状態で保存すると復元できない可能性がある。実際の対象データ、レシピ、既存ワールドの互換性は未確認。
+
+`config/defaultconfigs/superbwarfare-server.toml` は爆発の `explosion_destroy` と `extra_explosion_effect`、投射物の `allow_projectile_destroy_blocks`、車両衝突の `collision_destroy_soft_blocks`、`collision_destroy_normal_blocks`、`collision_destroy_hard_blocks`、`collision_destroy_blocks_beastly` を `false` にする。その他の設定値は指定しない。[0.8.9.2 Forge 1.20.1 の配布ソース](https://modrinth.com/mod/superb-warfare/version/81Iyv9ao) の設定定義と爆発、追加破壊、弾丸、車両衝突の処理を確認した。爆発のエンティティダメージは別処理である。SBW 固有の設置・解体や道具によるブロック操作は対象外。ゲーム内での効果は未確認で、既に破壊された地形は戻らない。
+
+Compose は `minecraft/forge/config` を `/forge-config` に mount し、`prepare-forge.sh` が存在しないファイルだけ `/data/defaultconfigs` へ配置する。Forge は新規ワールド作成時に defaultconfigs をワールドの `serverconfig` に取り込む。Compose は `LEVEL` を指定していないため標準では `/data/world/serverconfig/superbwarfare-server.toml` だが、実環境の `/data/server.properties` の `level-name` と実際のワールドパスを必ず確認する。既存の `/data/defaultconfigs` の同名ファイルも上書きしない。既存ワールドの `serverconfig` は更新されない。部分設定からの不足項目補完と実際の読み込みは未検証。
+
+適用担当者向け手順（本番操作は未実施）:
+
+1. メンテナンス中に Forge を正常停止し、world・playerdata・mods・config・defaultconfigs 等を含む Volume 全体とクライアントのセーブ・設定を整合した状態でバックアップし、隔離環境で復元を確認する。Addon のアイテムや独自データの喪失を許容できなければ適用しない。
+2. 停止中に `/data/mods/` と各クライアントの mods を調査する。対象は `superbaddon-1.0.1.jar`（Mod ID `superbaddon`、file 8793995、既取得物の SHA-256 `86fee0a858bcc85d27330ca80eb96aa24587b098b174b02ec1a1a0119b6f682a`）。名称だけで判断せず JAR の `META-INF/mods.toml` とハッシュ・入手元を照合し、残存する対象だけを mods 外へ退避する。Auto CurseForge による自動削除は保証されない。識別できなければ中止し、`superbwarfare` 本体や他の Mod は退避しない。
+3. 将来の新規ワールドにも適用する場合、既存 `/data/defaultconfigs/superbwarfare-server.toml` があれば内容を保全して以下と同じ7キーのみ編集する。存在しない場合は seed が配置される。既存ワールドでは実際の `level-name` に対応する `serverconfig/superbwarfare-server.toml` をバックアップし、既存の各セクション内の7キーだけを上記 seed の値に変更する。キーがなければ該当セクションに追加し、セクションがなければ作る。同名キー・セクションを重複させず、他の値や未知のキーを維持する。設定ファイル自体が存在しない場合は seed を配置し、Forge による補完と値を隔離環境で確認する。
+4. バックアップの隔離コピーで新規・既存ワールドの起動、生成された serverconfig の7値、ログ、Addon データの欠落、保存・再起動、クライアント接続を確認する。爆発・投射物・車両衝突とエンティティへのダメージも試し、異常があれば適用を中止する。
+5. ロールバックは停止後に変更後データを別途保全し、旧 revision と変更前の整合した Volume バックアップを一緒に復元し、クライアントも旧構成に戻す。設定だけ戻す場合はバックアップした各キーの元値を復元する。Addon 欠落状態で保存したデータや既に破壊された地形は設定変更だけでは戻らない。
+
+## 2026-11-19 SBW・TaCZ 更新と CCRP 追加
+
+以下は当時の履歴であり、Addon は上記のとおり削除済み。
+
+Minecraft 1.20.1 / Forge 47.4.28 と Java 17 を維持し、共通 manifest は [SBW 0.8.9.2](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/9019882) (1218165 / 9019882)、[SuperbWarfare Addon 1.0.1](https://www.curseforge.com/minecraft/mc-mods/superbwarfare-addon/files/8793995) (1580826 / 8793995)、[TaCZ 1.2.0-hotfix](https://www.curseforge.com/minecraft/mc-mods/timeless-and-classics-zero/files/9623132) (1028108 / 9623132) を固定する。Addon は従来の manifest にないため新規追加。Addon JAR は SBW 0.8.9.1 以上と GeckoLib 4.4.6 以上を要求し、配布ページは 0.8.9.1 への対応を記載する。0.8.9.2 との実動作は未確認。 SBW JAR は必須の SimpleBedrockModel 2.5.1 を jar-in-jar で同梱する。SBW、Addon、TaCZ の取得 JAR の SHA-256 はそれぞれ `559930003f638080de648a8621821d785158768c3f69a762094ef4c8d3c4cc12`、`86fee0a858bcc85d27330ca80eb96aa24587b098b174b02ec1a1a0119b6f682a`、`6b26506e73cfbc8ad56c39d4da09b9463dfa7e23b8b13389b80354e526548f5d`。SBW は公式 Modrinth の SHA-512 と一致、Addon・TaCZ は取得物の算出値であり配布元の独立したハッシュ照合は未実施。
+
+[Frontline 2.0.0](https://modrinth.com/mod/frontline-combat-pack/version/2.0.0) は Modrinth `TnzHcrvV / skviTkFg` の `fcp-2.0.0.jar` を `content.lock` 経由で `/data/mods/feato-frontline-combat-pack.jar` に配置する。CurseForge の旧版は manifest から外した。取得 JAR の SHA-256 は `8bcfd35d393c28812dc5fbb426b4b0691ce280644174b458dbf7ae3687c0c105`、配布元 SHA-512 と一致。JAR は Forge 47+、Minecraft 1.20.1、SBW 0.8.9.1+、GeckoLib 4.7.2+ を要求し、固定 GeckoLib 4.8.4 は範囲内。一方 Modrinth API の必須 SBW 指定は 1.21.1 NeoForge 版 `izD7dnxq` を指す。配布メタデータと JAR の不一致は未解決であり、導入前に作者の確認と隔離起動が必要。旧 1.2.1 の Mixin 失敗が解消したとは確認していない。
+
+[CCRP 1.1.7_hotfix4](https://www.curseforge.com/minecraft/customization/tacz-classics-reborn/files/9629324) (1079169 / 9629324) は一覧上 1.20.1 Forge 版。配布表示名は `[1.20.1Forge][TACZ1.2.0+Arcana1.4.2]CCRP_1.1.7_hotfix4.zip`、実ファイル名は `1.20.1Forge-TACZ1.2.0-Arcana1.4.2-CCRP_1.1.7_hotfix4.zip`。1.21.1 NeoForge 版 9629304 とは異なる。ZIP 検査と SHA-256 を確認し、`content.lock` が展開せず `/data/tacz/feato-ccrp.zip` に配置する。ZIP の `gunpack.meta.json` の namespace は `ccrp`、内部 `gunpack_info.json` の version は `1.1.8` で配布表示と異なる。依存チェック宣言はなく、名前の Arcana 1.4.2 表記だけでは必須か判断できない。既存 Arcana 1.4.2 hotfix は維持する。以前の Classics 1.1.4 は起動障害のため撤去済みで、今回復活しない。CCRP と RABasya、既存 TaCZ アドオンの実行時競合は未確認。
+
+**適用条件:** 停止した Forge Volume 全体とクライアントの設定・セーブをバックアップし復元を確認する。Auto CurseForge が旧 JAR を削除する保証はない。`/data/mods/` とクライアントで旧 SBW、旧 TaCZ、旧 Frontline 1.2.1、および同じ Mod ID の JAR を実体・ID で特定し、残存する旧版だけを mods 外へ退避する。識別できなければ適用を中止する。旧 CCRP や統合版・展開版も特定して `tacz/` 外へ退避し、他の Gunpack は維持する。設定は自動上書きされないため既存設定と新バージョンを比較する。隔離コピーで依存・Mixin・Gunpack ログ、クライアント接続、銃器・車両、既存ワールドの保存と再起動を確認してから適用する。クライアントにも同じ Mod バージョンと CCRP ZIP を配布する。
+
+切り戻しは停止後、更新後データを別途保全し、旧 revision と更新前の整合した Volume バックアップを一緒に復元し、クライアントも旧構成へ戻す。今回の起動・ゲーム内動作・既存ワールド互換性は未確認。本番操作は行っていない。
 
 ## ShinColle-kai 1.1.0 への更新
 

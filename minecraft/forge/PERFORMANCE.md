@@ -61,7 +61,7 @@ Chunky を戻す場合は生成を中止し、停止・バックアップ後に 
 
 ## Forge JVM 監視
 
-JMX Exporter 1.7.0 Java Agent を `content.lock` の公式 URL と SHA-256 で `/data/monitoring/` に同期する。`prepare-forge.sh` は Forge の `run.sh` 実行前に同期し、専用 overlay の alias `forge-jvm-target` の経路から自タスクの送信元 IP を求め、生成済み `user_jvm_args.txt` の Agent 待受先に設定する。IP を決められなければ起動を中止する。固定イメージでは JVM flags と Xms/Xmx の生成後に pre-start を実行し、Forge の `run.sh` が同ファイルを読む。既存の global Fluent Bit に専用 overlay を追加し、Swarm の templated config で選択ノードだけ JVM の input/output を有効にする。`deploy_swarm.sh` は `minecraft-data=true` が1台ならその node ID を選ぶ。複数台なら `FORGE_JVM_SCRAPE_NODE_ID` に対象の完全な node ID を指定する。60秒間隔（`FORGE_JVM_SCRAPE_INTERVAL=120s` で変更可）で remote write する。既存監視の2分間隔は変えない。60秒は初期観測用であり契約上の許容量を保証しない。
+JMX Exporter 1.7.0 Java Agent を `content.lock` の公式 URL と SHA-256 で `/data/monitoring/` に同期する。`prepare-forge.sh` は Forge の `run.sh` 実行前に同期し、`configure-jmx.sh` が `system_fluent-bit` の DNS と経路から監視 overlay の送信元 IP を求め、生成済み `user_jvm_args.txt` の Agent 待受先に設定する。両サービスは監視 overlay のみを共有することが前提で、デフォルト経路のインターフェースは拒否する。DNS、経路、IP を安全に確定できない場合は Agent だけを除去し WARN を出して起動を続行する。引数ファイルを安全に変更できない場合は起動を中止する。Fluent Bit の収集先は `forge-jvm-target:9404`。Fluent Bit の DNS が Forge 起動時に利用できなかった場合、監視は自動再有効化されないため、原因を解消してから通常手順で Forge を再起動する。固定イメージでは JVM flags と Xms/Xmx の生成後に pre-start を実行し、Forge の `run.sh` が同ファイルを読む。既存の global Fluent Bit に専用 overlay を追加し、Swarm の templated config で選択ノードだけ JVM の input/output を有効にする。`deploy_swarm.sh` は `minecraft-data=true` が1台ならその node ID を選ぶ。複数台なら `FORGE_JVM_SCRAPE_NODE_ID` に対象の完全な node ID を指定する。60秒間隔（`FORGE_JVM_SCRAPE_INTERVAL=120s` で変更可）で remote write する。既存監視の2分間隔は変えない。60秒は初期観測用であり契約上の許容量を保証しない。
 
 Agent 組み込み JVM メトリクスと exporter 自身の状態を出力する。別の JMX collector は対象 ObjectName を限定し、任意の Mod MBean を出力しない。Java 17 の隔離確認で以下を観測した。単位は bytes、GC count は回数、GC sum は秒。その他に JVM thread、class、buffer、process と exporter の状態系列がある。
 
@@ -85,6 +85,18 @@ jvm_memory_used_bytes{monitor="forge-jvm",app_mode="<環境>",area="nonheap"}
 Heap 比率はその時点の使用量 / 最大値であり GC 後の生存量ではない。Pool の collection 値は JVM がその Pool の GC 後に更新した値で、未対応の Pool は存在しない場合がある。G1 の Young/Old ごとに更新条件が異なり、全 Heap の同時点の生存量とは限らない。GC sum は累積時間であり停止時間分布や P95/P99 ではない。最大値の `-1` は未定義を示す。cAdvisor のコンテナメモリと比較する際は Forge のコンテナを既存ラベルで特定し、Heap に加え native、Non-Heap、ページキャッシュ等を含む差に注意する。
 
 Explore で `count({monitor="forge-jvm",app_mode="<環境>"})` を確認し、概算 DPM は系列数 × 60 / scrape秒数。Grafana Cloud の使用量画面で実際の Active Series / DPM と契約枠を確認し、超過が懸念される場合は120秒に変更する。Agent 自身の `jmx_scrape_duration_seconds` / `jmx_scrape_error` と Forge の CPU・メモリ、および Fluent Bit の CPU・メモリを導入前後の同条件で比較する。scrape 時間は全オーバーヘッドではない。
+
+調査済みの本番ログでは新タスクの pre-start が失敗し、稼働中 Forge のサービス仕様には監視 overlay がなく、Fluent Bit 側にはあった。更新の自動ロールバックは未確認であり、旧方式の DNS・経路・引数のどれが失敗したかも不明。以下は manager での読み取り専用診断（仕様と実タスクを区別する）:
+
+```bash
+docker service ps app_minecraft-forge --no-trunc
+docker service inspect app_minecraft-forge --format '{{json .UpdateStatus}}'
+docker service inspect app_minecraft-forge --format '{{json .Spec.TaskTemplate.Networks}}'
+docker service inspect system_fluent-bit --format '{{json .Spec.TaskTemplate.Networks}}'
+docker network inspect forge-jvm-monitoring-network --format '{{json .IPAM.Config}}'
+```
+
+適用後は Forge の WARN とサービス・タスクのネットワーク接続を確認し、監視 overlay 内で `forge-jvm-target:9404/metrics` と主要 JVM メトリクスを確認する。バックエンドから 9404 へ到達できないこと、選択された Fluent Bit の scrape と remote write、最後に Explore の `jvm_memory_used_bytes{monitor="forge-jvm",area="heap"}` と `count({monitor="forge-jvm"})` を順に確認する。実 Forge と Grafana Cloud への到達は今回未検証。
 
 起動失敗時は Forge service logs の同期失敗、ハッシュ不一致、DNS/route、Agent YAML、ポート bind を順に調査する。改変済み・管理外ファイルは上書きされず、手動削除もしない。Minecraft が起動済みで系列がない場合は `system_fluent-bit` の選択ノードの logs で scrape DNS/接続、`jmx_scrape_error`、remote write の TLS・認証・応答を切り分ける。認証値を表示・共有しない。通信障害と JVM 起動障害は別に扱う。
 

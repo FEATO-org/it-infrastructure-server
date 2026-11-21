@@ -185,7 +185,7 @@ node入力の初期化・収集エラーとremote writeの接続エラー・HTTP
 ### Minecraftのメモリ予算
 
 Paperの最大ヒープを6Gから8Gへ、コンテナ上限を7Gから9Gへ増やしています。
-初期ヒープは1G、Velocityはヒープ1G・コンテナ上限1536Mを維持します。
+初期ヒープは1G、Velocityはヒープ1G・コンテナ上限2Gです。
 最大ヒープは常時使用量ではなく上限です。Paperのヒープ外領域用に1Gを残し、
 両サービスの更新は`stop-first`で旧・新タスクの同時実行を避けます。
 
@@ -237,4 +237,4 @@ systemctl list-timers swarm-certbot-renew.timer
 
 ### Forge JVM 監視
 
-Forge の Agent と既存 global `system_fluent-bit` は暗号化外部 overlay `forge-jvm-monitoring-network` を共有する。`deploy_swarm.sh` は stack より先にネットワークを作成し、`minecraft-data=true` のノードから JVM 収集ノードを一つ選ぶ。1台の場合は自動選択し、複数の場合は `FORGE_JVM_SCRAPE_NODE_ID` に完全な node ID を指定する。Swarm templated config を `CONFIG_VERSION` で管理し、選択ノードの Fluent Bit だけが JVM を Scrape する。他ノードも従来の収集を継続する。新規ネットワークは attachable にしない。既存の同名ネットワークがある場合、スクリプトは設定を変更しないため、事前に overlay・暗号化・接続先を確認する。9404 は host/ingress に公開しない。Forge は専用ネットワークの IP のみに bind するため、alias の DNS と経路解決に失敗すると起動を拒否する。手順、Grafana 確認、容量とロールバックは [Forge 性能運用](../minecraft/forge/PERFORMANCE.md#forge-jvm-監視) を参照。隔離単一ノード Swarm の仮サーバーでは overlay DNS とネットワーク別到達性を確認した。実 Forge、複数ノード、Grafana Cloud 受信は未確認。
+Forge の Agent と既存 global `system_fluent-bit` は暗号化外部 overlay `forge-jvm-monitoring-network` を共有する。`deploy_swarm.sh` は stack より先にネットワークを作成し、`minecraft-data=true` のノードから JVM 収集ノードを一つ選ぶ。1台の場合は自動選択し、複数の場合は `FORGE_JVM_SCRAPE_NODE_ID` に完全な node ID を指定する。Swarm templated config を `CONFIG_VERSION` で管理し、選択ノードの Fluent Bit だけが JVM を Scrape する。他ノードも従来の収集を継続する。新規ネットワークは attachable にしない。既存の同名ネットワークがある場合、スクリプトは設定を変更しないため、事前に overlay・暗号化・接続先を確認する。9404 は host/ingress に公開しない。Forge は Fluent Bit の DNS と経路から専用ネットワークの IP を特定して bind する。特定できない場合は JMX Agent を無効にして起動を続行し、引数を安全に修正できない場合は起動を中止する。手順、Grafana 確認、容量とロールバックは [Forge 性能運用](../minecraft/forge/PERFORMANCE.md#forge-jvm-監視) を参照。隔離単一ノード Swarm の仮サーバーでは overlay DNS とネットワーク別到達性を確認した。実 Forge、複数ノード、Grafana Cloud 受信は未確認。
