@@ -1,4 +1,62 @@
-> 現行変更: SuperbWarfare Addon 1.0.1 (1580826:8793995) を共通 manifest から削除し、SBW 0.8.9.2 の新規ワールド向け地形破壊設定を追加。既存 Volume の手動適用、復旧と未検証事項は [手順](../minecraft/forge/modpack/README.md#superbwarfare-addon-削除と地形破壊設定) を参照。起動・ゲーム内動作・本番動作は未確認。
+# Swarm コンテナイメージ更新（2026-11-25）
+
+事前調査基準は 2026-11-25 22:44 JST（13:44 UTC）。同日23時台の実装時も公式情報を再照合した。表の時刻は2026年の UTC。正式リリースと対象 Digest のレジストリ公開がともに120時間以上前であることを確認した。基準時点で最も新しい採用イメージの公開から約155時間53分が経過していた。Docker Hub は `tag_last_pushed`、GHCR は対象パッケージの公開日時を使用した。全採用イメージの公式 Index は `linux/amd64` と `linux/arm64` を含む。
+
+| 公式イメージとタグ | 更新前 → 更新後 | 正式リリース UTC | イメージ公開 UTC | Image Index Digest |
+| --- | --- | --- | --- | --- |
+| [portainer/portainer-ee:2.45.4](https://hub.docker.com/r/portainer/portainer-ee/tags?name=2.45.4) | 2.45.1 → 2.45.4 LTS | [11-18 20:13:36](https://github.com/portainer/portainer/releases/tag/2.45.4) | 11-18 20:20:33 | `sha256:273e2d4ca3394c20cc6b2e2f3696ebe7dd4f6bb98e7fc15f1d8ba90d8476dae4` |
+| [portainer/agent:2.45.4](https://hub.docker.com/r/portainer/agent/tags?name=2.45.4) | 2.45.1 → 2.45.4 LTS | [11-18 20:13:36](https://github.com/portainer/portainer/releases/tag/2.45.4) | 11-18 20:20:21 | `sha256:481254e877ca278b8d6e4ffd37e352ee221fbf712dfb4635edf93c6378ae8c35` |
+| [cloudflare/cloudflared:2026.11.1](https://hub.docker.com/r/cloudflare/cloudflared/tags?name=2026.11.1) | 2026.9.1 → 2026.11.1 | [11-17 15:11:01](https://github.com/cloudflare/cloudflared/releases/tag/2026.11.1) | 11-17 15:20:48 | `sha256:e613aadbc2d9511785d2e67a86b0c8ac18dd63a3f9af0d06faf04cbfdcb35f2d` |
+| `cr.fluentbit.io/fluent/fluent-bit:5.2.0` | 5.1.2 → 5.2.0 | [11-09 04:04:12](https://github.com/fluent/fluent-bit/releases/tag/v5.2.0) | [11-17 18:54:10](https://hub.docker.com/r/fluent/fluent-bit/tags?name=5.2.0) | `sha256:e2718c47aaab7d99587fdffe78818549bdd09dee5e30a9199d2ff3da6e2c7628` |
+| [ghcr.io/google/cadvisor:v0.61.1](https://github.com/orgs/google/packages/container/cadvisor/1592560693?tag=v0.61.1) | v0.60.5 → v0.61.1 | [11-18 20:46:56](https://github.com/google/cadvisor/releases/tag/v0.61.1) | 11-18 21:00:51 | `sha256:4929b70e82079d001d0028b85d6a4dd25ad4666b719455c9542b983489963916` |
+| [nginx:1.30.7](https://hub.docker.com/_/nginx/tags?name=1.30.7) | 1.30.5 → 1.30.7 Stable | [11-18 15:56:40](https://github.com/nginx/nginx/releases/tag/release-1.30.7) | 11-19 01:50:51 | `sha256:7fad6c0dff97965adbddf28027d934b111fc0221a554315dc274712f3fba24d3` |
+| [certbot/dns-cloudflare:v5.10.0](https://hub.docker.com/r/certbot/dns-cloudflare/tags?name=v5.10.0) | v5.8.0 → v5.10.0 | [11-10 23:27:52](https://github.com/certbot/certbot/releases/tag/v5.10.0) | 11-10 23:04:14 | `sha256:6d5e1e84f687ce81786c97cbeccb9dda94d86bbb29a81dbb85527bd68008d77d` |
+| [itzg/mc-monitor:0.18.1](https://hub.docker.com/r/itzg/mc-monitor/tags?name=0.18.1) | 0.17.1 → 0.18.1 | [09-19 12:48:56](https://github.com/itzg/mc-monitor/releases/tag/0.18.1) | 09-19 12:50:14 | `sha256:6e38245c074f5d15e28131657f48b41eaaac08d18a24131c545cc607345f92bb` |
+
+cloudflared 2026.11.2（リリース 11-23 13:10:20、イメージ 11-23 13:18:34）、Fluent Bit 5.2.1（11-25 02:19:15、11-24 17:26:04）、nginx 1.30.8（11-23 15:37:37、11-25 10:50:46）は120時間未満のため直前の安定版を採用した。Fluent Bit は Docker Hub と公式 `cr.fluentbit.io` で同一 Digest を確認した。上流が同一バージョンのイメージを再ビルドするため、検証した Index を Compose に固定した。
+
+## 互換性と適用・復旧
+
+- **Portainer** は Server EE と Agent を同一の LTS 版に揃える。2.45.4 はアクセス権のないネットワークへの接続、他環境のスタック情報の列挙、`use_api_socket` による制限回避、GitOps 接続テスト権限を修正する。非管理者による共有ネットワークを使うスタックの手動・自動更新と GitOps 接続テストは、必要な権限を事前に確認する。kubectl shell の新規イメージから `curl` が削除された。既存の Swarm Agent 接続方式、ライセンスと Tunnel 経路は既存構成を使用する。公式検証表は Docker Engine 28.5.1 / 29.10.0。適用前に対象ノードの実版を照合し、`portainer_data` をバックアップする。起動時に DB 更新があり得る。復旧時は Server と Agent をともに 2.45.1 へ戻し、必要に応じ更新前の DB または Volume を復元する。[対応表](https://docs.portainer.io/start/requirements-and-prerequisites) · [Swarm 更新](https://docs.portainer.io/start/upgrade/swarm) · [DB 復旧](https://docs.portainer.io/faqs/upgrading/how-can-i-roll-back-to-a-previous-version-of-portainer)
+- **cloudflared** は Access のパス照合とメトリクスのデバッグエンドポイントを強化し、HTTP/2 の同時ストリームの回帰を修正した。2026.11.1 の HTTP/2 フォールバック修正は Quick Tunnel 向け。TCP のみの経路で QUIC を試行し続ける 2026.11.0 の報告があるため、既存の自動選択で各 Tunnel タスクの QUIC/HTTP/2 登録と Access 経由の到達を確認する。タスク配置、Token Secret、Public Hostname と Access の設定は既存のものを使う。永続 Volume はない。障害時は同じ Secret で 2026.9.1 に戻す。2026.11.2 の `x/net` と `x/crypto` 更新は今回の版に含まれない。[変更履歴](https://github.com/cloudflare/cloudflared/blob/2026.11.1/RELEASE_NOTES) · [TCP のみの経路の報告](https://github.com/cloudflare/cloudflared/issues/1798) · [2026.11.2 の変更履歴](https://github.com/cloudflare/cloudflared/blob/2026.11.2/RELEASE_NOTES)
+- **Fluent Bit** 5.2.0 は Tail の復旧、ファイルバッファと出力の再試行・待機、HTTP/TLS 処理を改善する。既存 Classic 設定、Docker Parser、Discord Lua、3つの Prometheus scrape（選択ノードの Forge JVM を含む）、Node Exporter、Remote Write の指定を維持する。上流の Forward 出力と Prometheus Remote Write **入力**のアドバイザリに該当するプラグインは現行パイプラインで使っていない。適用前に各ノードの `fluent_bit_state` を一貫した状態で退避する。旧版と新しいチャンクの相互互換性は未確認。障害時は 5.1.2 に戻し、必要に応じ更新前の状態を復元する。復元区間の欠落・重複と送信先の系列数を確認する。[5.2.0 リリースノート](https://fluentbit.io/announcements/v5.2.0/) · [セキュリティ情報](https://github.com/fluent/fluent-bit/security)
+- **cAdvisor** は cgroups ライブラリ更新とキャッシュ・メモリ統計の変更を含む。公式差分で Docker クライアント実装と Prometheus エクスポーターの名前・ラベル定義に変更は見つからなかった。既存の Docker 限定フラグ、CPU/メモリ/ネットワーク/OOM の範囲、マウント・権限を使用する。適用前に Docker Engine 25 以降という運用前提と各ノードの cgroups/ストレージドライバーを照合し、適用直後に Fluent Bit 側で4分類の実系列を確認する。永続データの書き込みは設定していない。障害時は v0.60.5 に戻す。[公式差分](https://github.com/google/cadvisor/compare/v0.60.5...v0.61.1)
+- **nginx** 1.30.6/1.30.7 は resolver、HTTP/2、HTTP/3、TLS 1.3 などの脆弱性を修正する。1.30.8 で修正された CVE-2026-132779 はバイナリに残る。成立条件の `ssl_early_data` は追跡設定に指定がなく公式既定値は `off` のため、現行設定では該当機能が無効。HTTP/TLS、Docker DNS（`127.0.0.11`）と stream の Java TCP、Bedrock 用 TCP/UDP 定義は既存のものを使う。現行 Swarm は Bedrock のポートを公開していない。TLS Secret と永続データに移行処理はない。障害時はイメージを 1.30.5 に戻せるが、その版の修正済み CVE が再び残る。[上流セキュリティ情報](https://nginx.org/en/security_advisories.html) · [TLS early data の既定値](https://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_early_data)
+- **Certbot** 5.10.0 は無効な ARI 更新ウィンドウを拒否し、別経路の webroot の競合を修正する。Cloudflare DNS-01 プラグインと API Token の指定方式、`CERTBOT_IMAGE` の上書き、既存証明書を使用する `--keep-until-expiring`、Secret 切替、daily systemd timer を維持する。適用前に `/var/lib/swarm-certbot` を退避する。障害時は `CERTBOT_IMAGE=certbot/dns-cloudflare:v5.8.0` に戻し、必要に応じ状態ファイルと保存済み TLS Secret の組を復元する。[DNS Cloudflare 公式ドキュメント](https://certbot-dns-cloudflare.readthedocs.io/en/stable/) · [TLS 運用](README.md#3-tls証明書)
+- **Minecraft Monitor** は 0.x 系列の最新 0.18.1。1.21.0 は別メジャーのため今回の対象外。0.18.0 の NetherNet 対応は既存 Java 監視を維持したまま未使用。0.18.1 は Prometheus exporter の SIGTERM 停止を改善する。永続 Volume はない。障害時は 0.17.1 に戻す。[0.18.0 リリース](https://github.com/itzg/mc-monitor/releases/tag/0.18.0) · [1.21.0 リリース](https://github.com/itzg/mc-monitor/releases/tag/1.21.0)
+
+## 据え置き・保留
+
+- **MariaDB 13.0.2** を継続。13.1.2 は異なるリリース系列で、正式リリースの 11-21 17:19:10 UTC から120時間未満。公式 Docker Hub の `13.1.2` は確認時点で取得先が 404。13.1.1 は RC。DB 移行と永続形式は系列移行を行う際の検証対象とする。[13.1.2](https://github.com/MariaDB/server/releases/tag/mariadb-13.1.2) · [公式イメージ](https://hub.docker.com/_/mariadb/tags?name=13.1)
+- **SFS Discord Server** は `ghcr.io/feato-org/support-feato-system:main` を継続。可変タグのため、再取得時に同一イメージを再現するには事前に稼働中 Digest を控える必要がある。
+- **Minecraft Proxy / Paper / Forge** は CVE-2026-114938 の修正済み Java とイメージの120時間条件を同時に満たす候補がないため保留。Velocity 4.3.1 build 45、Paper 26.2 と `replicas: 0`、Forge 1.20.1 / 47.4.28、Plugin・Mod・JVM と接続設定は現行を使用する。Java の確認結果を以下に記録する。[Adoptium の修正案内](https://adoptium.net/news/2026/11/temurin-november-2026-cspu-java4shell/) · [Oracle のアドバイザリ](https://www.oracle.com/security-alerts/cspunov2026.html#AppendixJAVA) · [Oracle GraalVM 25 の更新情報](https://docs.oracle.com/en/graalvm/jdk/25/docs/release-notes/)
+
+| 対象 | 120時間経過済みの検証候補と Java 実測 | 新しい候補と判断 |
+| --- | --- | --- |
+| Proxy `itzg/mc-proxy:java25` | `2026.11.1-java25`、Eclipse Temurin HotSpot `25.0.5+8-LTS`、修正前 | `2026.11.2-java25` は Temurin `25.0.5.1+2-LTS`。イメージ公開 11-22 20:31:29 UTC、120時間未満 |
+| Paper `itzg/minecraft-server:java25-graalvm` | `2026.11.0-java25-graalvm`、Oracle GraalVM `25.0.5.0.3+1-LTS-jvmci-b01`、修正前 | `2026.11.1-java25-graalvm` は Oracle GraalVM `25.0.5.1+4-LTS-jvmci-b01`。公開 11-23 14:17:38 UTC、120時間未満 |
+| Forge `itzg/minecraft-server:java17`（既存 Digest 固定） | `2026.11.0-java17`、Eclipse Temurin HotSpot `17.0.15+6`。現行 Digest の arm64 も同じ修正前ビルド | `2026.11.1-java17` も Temurin `17.0.15+6` のまま。公開 11-23 14:11:09 UTC、120時間未満。Adoptium の修正版は `17.0.21.1+2` |
+
+可変タグの Proxy / Paper は本番実行中の Digest と Java が未確認。公式レジストリで確認時にタグが指していた Index から実体を取得し、以下を確認した。どちらの Index も公開から120時間未満。Forge では修正前のランタイムが固定されている。修正版の公開から120時間経過後に、固定する候補の Java を再確認する。[Proxy リリース](https://github.com/itzg/docker-mc-proxy/releases) · [Server リリース](https://github.com/itzg/docker-minecraft-server/releases)
+
+| 現行の可変タグ | 確認時のレジストリ公開 UTC | 確認時の Index Digest | 取得したイメージの Java |
+| --- | --- | --- | --- |
+| `itzg/mc-proxy:java25` | 11-24 20:08:04 | `sha256:21afbfa8d23e88ec92d78c9ab02011d78608c17decde1528eaba576e0ce73f5c` | Temurin `25.0.5.1+2-LTS` |
+| `itzg/minecraft-server:java25-graalvm` | 11-21 14:22:00 | `sha256:ef78050eb75dd8cb038a56211098ef109890a099bce4152878d4bea15e95a555` | Oracle GraalVM `25.0.5.1+4.1`（JDK build `25.0.5.1+4-LTS-jvmci-b01`） |
+
+## 検証結果
+
+- Docker Desktop 29.9.3、Linux/amd64 コンテナで、採用8イメージの実体を取得。cAdvisor は Docker Desktop からの直接 pull が拒否されたため、公式 GHCR API で amd64 の全 blob を取得し、Index・Manifest・blob の SHA-256 を照合して隔離 Docker に読み込んだ。残る7イメージは Docker pull の Digest を公式 Index と照合した。
+- Portainer EE 2.45.4 の新規一時データでの起動と終了コード 0、Agent の CLI、cloudflared 2026.11.1 のバージョンと `--token-file`、cAdvisor v0.61.1 のバージョンと既存 CLI フラグ、Certbot 5.10.0 と DNS Cloudflare プラグインの登録を確認した。Monitor 0.18.1 は隔離環境で Java 対象の `minecraft_status_healthy` 出力と終了コード 0 を確認した。
+- nginx は一時自己署名証明書と追跡設定で `nginx -t`、stream/TLS モジュール、HTTP health、HTTPS 応答と終了コード 0 を確認。内部 Docker ネットワーク上の模擬バックエンドで DNS、HTTPS リバースプロキシ、Java TCP、Bedrock TCP/UDP、NetherNet UDP の双方向転送を確認した。Fluent Bit は追跡設定、Parser、Lua、レンダリング相当の Forge JVM include を使用し、`--dry-run` と空の一時状態での起動・停止を確認。Node Exporter の procfs/sysfs パスと Remote Write worker の初期化を確認した。
+- 人工ログと一時 SQLite DB で Fluent Bit 5.1.2 → 5.2.0 → 5.1.2 の各切り替え後に Docker Tail の offset が引き継がれ、新規行の末尾まで進むことを確認した。実データのファイルバッファ再送と互換性は未確認。
+- Compose 3スタックの `docker compose config --quiet` と `docker stack config`、`bash -n`、`git diff --check`、パッチノート検証と関連既存テスト51件が通過した。
+- 本番の Engine・CPU、複数ノード Swarm の更新、Portainer 既存 DB/ライセンス移行と Agent 接続、実 Tunnel、cAdvisor の実 Docker コンテナ系列、Fluent Bit の本番状態と外部送信、実証明書の更新・Secret 切替、Minecraft のクライアント接続は未確認。本番適用前に対象ノードの CPU・Engine と旧版 Digest を控え、上記の状態退避と各サービスの確認を行う。cAdvisor は対象ノードから公式 GHCR を pull できることも事前に確認する。今回の作業は本番環境に接続していない。
+
+> Forge の既存変更: SuperbWarfare Addon 1.0.1 (1580826:8793995) を共通 manifest から削除し、SBW 0.8.9.2 の新規ワールド向け地形破壊設定を追加。既存 Volume の手動適用、復旧と未検証事項は [手順](../minecraft/forge/modpack/README.md#superbwarfare-addon-削除と地形破壊設定) を参照。起動・ゲーム内動作・本番動作は未確認。
+
+> 2026-11-25: Forge 共通 manifest に Botany Pots Ore Planting 15.40.0 (872868:7755193)、Bookshelf 20.2.15 (228525:7612389)、Botany Pots 13.0.43 (353928:7612402)、Energy Meter 1.0.1 (532169:7676339) を追加。Minecraft 1.20.1 / Forge 対応表記、公式 CDN からの取得と JAR の必須依存範囲を確認。ARM64 の限定的な隔離新規ワールドで起動したが、他 Mod のエラーも記録した。取得元、依存、検証・復旧条件は [Modpack](../minecraft/forge/modpack/README.md#2026-11-25-botany-pots-系と-energy-meter-の追加) を参照。ゲーム内動作・接続・本番動作は未確認。
+
 
 > 2026-11-19 時点の履歴: SBW 0.8.9.2 (1218165:9019882)、SuperbWarfare Addon 1.0.1 (1580826:8793995)、TaCZ 1.2.0-hotfix (1028108:9623132) を manifest に固定。Frontline 2.0.0 (Modrinth `skviTkFg`) と CCRP 1.1.7_hotfix4 (CurseForge 1079169:9629324、Forge 1.20.1) は `content.lock` に固定。Frontline の配布メタデータの不一致、CCRP の内部版表記、適用・復旧と未検証事項は [手順](../minecraft/forge/modpack/README.md#2026-11-19-sbw-tacz-更新と-ccrp-追加) を参照。起動・本番動作は未確認。以下の過去版の記録は履歴。
 
@@ -189,7 +247,7 @@ GETした公式JARのSHA-512はmetadataと一致:
 Paper、権限設定、外部DBは変更していません。詳細と手動確認は
 [BreweryX運用手順](../minecraft/java/plugins/BreweryX/README.md)を参照してください。
 
-## 既存構成（2026-09-22確認）
+## 既存構成の履歴（2026-09-22確認）
 
 公式リリース一覧・APIで安定版を確認し、Minecraft本体・プロキシ以外のコンテナは固定タグを指定しています。
 nginxはMainlineではなくStable系列です。

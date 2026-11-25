@@ -55,7 +55,7 @@ services:
     logging: *default-logging
 
   fluent-bit:
-    image: cr.fluentbit.io/fluent/fluent-bit:5.1.2
+    image: cr.fluentbit.io/fluent/fluent-bit:5.2.0@sha256:e2718c47aaab7d99587fdffe78818549bdd09dee5e30a9199d2ff3da6e2c7628
     command:
       - /fluent-bit/bin/fluent-bit
       - -c
@@ -113,7 +113,7 @@ services:
     logging: *default-logging
 
   cadvisor:
-    image: ghcr.io/google/cadvisor:v0.60.5
+    image: ghcr.io/google/cadvisor:v0.61.1
     command:
       - --docker_only=true
       - --housekeeping_interval=30s
@@ -146,7 +146,7 @@ services:
     logging: *default-logging
 
   minecraft-monitor:
-    image: itzg/mc-monitor:0.17.1
+    image: itzg/mc-monitor:0.18.1
     command:
       - export-for-prometheus
     environment:
@@ -176,7 +176,7 @@ services:
     logging: *default-logging
 
   nginx:
-    image: nginx:1.30.5
+    image: nginx:1.30.7
     ports:
       - target: 80
         published: 80
