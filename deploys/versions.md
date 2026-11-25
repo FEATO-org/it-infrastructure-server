@@ -1,6 +1,6 @@
 > 現行変更: SuperbWarfare Addon 1.0.1 (1580826:8793995) を共通 manifest から削除し、SBW 0.8.9.2 の新規ワールド向け地形破壊設定を追加。既存 Volume の手動適用、復旧と未検証事項は [手順](../minecraft/forge/modpack/README.md#superbwarfare-addon-削除と地形破壊設定) を参照。起動・ゲーム内動作・本番動作は未確認。
 
-> 2026-11-25: Forge 共通 manifest に Botany Pots Ore Planting 15.40.0 (872868:7755193)、Bookshelf 20.2.15 (228525:7612389)、Botany Pots 13.0.43 (353928:7612402)、Energy Meter 1.0.1 (532169:7676339) を追加。Minecraft 1.20.1 / Forge 対応表記、公式 CDN からの取得と JAR の必須依存範囲を確認。取得元、依存、検証・復旧条件は [Modpack](../minecraft/forge/modpack/README.md#2026-11-25-botany-pots-系と-energy-meter-の追加) を参照。実行時互換性・接続・本番動作は未確認。
+> 2026-11-25: Forge 共通 manifest に Botany Pots Ore Planting 15.40.0 (872868:7755193)、Bookshelf 20.2.15 (228525:7612389)、Botany Pots 13.0.43 (353928:7612402)、Energy Meter 1.0.1 (532169:7676339) を追加。Minecraft 1.20.1 / Forge 対応表記、公式 CDN からの取得と JAR の必須依存範囲を確認。ARM64 の限定的な隔離新規ワールドで起動したが、他 Mod のエラーも記録した。取得元、依存、検証・復旧条件は [Modpack](../minecraft/forge/modpack/README.md#2026-11-25-botany-pots-系と-energy-meter-の追加) を参照。ゲーム内動作・接続・本番動作は未確認。
 
 
 > 2026-11-19 時点の履歴: SBW 0.8.9.2 (1218165:9019882)、SuperbWarfare Addon 1.0.1 (1580826:8793995)、TaCZ 1.2.0-hotfix (1028108:9623132) を manifest に固定。Frontline 2.0.0 (Modrinth `skviTkFg`) と CCRP 1.1.7_hotfix4 (CurseForge 1079169:9629324、Forge 1.20.1) は `content.lock` に固定。Frontline の配布メタデータの不一致、CCRP の内部版表記、適用・復旧と未検証事項は [手順](../minecraft/forge/modpack/README.md#2026-11-19-sbw-tacz-更新と-ccrp-追加) を参照。起動・本番動作は未確認。以下の過去版の記録は履歴。
