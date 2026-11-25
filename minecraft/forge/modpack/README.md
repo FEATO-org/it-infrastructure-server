@@ -2,6 +2,25 @@
 
 提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と追加 Mod と Curios For Ammo Box を含む CurseForge project ID / file ID を固定する。Frontline 2.0.0 は CurseForge manifest 外で固定する。追加分の依存・保留理由・未検証事項は [調査と受入条件](ADDITIONAL_MODS.md) を参照。`modlist.html` は従来の一覧で、Ammo Box 追加分は含まない。Zoe Isn't Cyberpunk は manifest と一覧から削除済み。共有 URL は取得元に使わない。
 
+## 2026-11-25 Botany Pots 系と Energy Meter の追加
+
+Minecraft 1.20.1 / Forge 47.4.28 / Java 17 を維持し、クライアントとサーバーの共通 manifest に次の4件を固定する。
+
+| Mod | バージョン | CurseForge project:file |
+| --- | --- | --- |
+| Botany Pots Ore Planting | 15.40.0+1.18.2-1.20.4 | [872868:7755193](https://www.curseforge.com/minecraft/mc-mods/botany-pots-ore-planting/files/7755193) |
+| Bookshelf | 20.2.15 | [228525:7612389](https://www.curseforge.com/minecraft/mc-mods/bookshelf/files/7612389) |
+| Botany Pots | 13.0.43 | [353928:7612402](https://www.curseforge.com/minecraft/mc-mods/botany-pots/files/7612402) |
+| Energy Meter | 1.0.1 | [532169:7676339](https://www.curseforge.com/minecraft/mc-mods/energymeter/files/7676339) |
+
+各ファイルは CurseForge の Forge / Minecraft 1.20.1 対応表記と Release 区分を確認した。Botany Pots Ore Planting 15.40.0 は 1.18.2–1.20.4 対応で、Botany Pots と Bookshelf を必須とする。取得した JAR の `META-INF/mods.toml` では、それぞれ Botany Pots `[8.0.0,17.0.0)`、Bookshelf `[13.0.0,24.0.0)`、loader 40 以上を要求する。Botany Pots は Forge 47 以上と Bookshelf 20 以上、Bookshelf は Forge 47 以上、Energy Meter は Forge 47.1.3 以上を要求し、固定版は宣言範囲内。Energy Meter の ComputerCraft は任意依存で、追加の必須 Mod はない。依存の side は BOTH だが、接続互換性の実測ではない。
+
+Energy Meter 1.0.1 は 1.20.1 向け Release で、配布元は重大な不具合修正を除き更新を終了すると記載する。4 JAR は公式 CurseForge CDN と、ARM64 の隔離環境の Auto CurseForge から取得でき、両取得物の SHA-256 は一致した。値は順に `d2c8e64860c84babf5c18fb6ffdb8f2de700f11987976ee3d1d6309c6d289f1c`、`7980d4a0beed1dcd2c283cf65f3c93f6b0085833f3ac490014979c95f1dfaf67`、`55c0a1457d4ca107d5b1b005310df32672dad59b2ce0c4ca150c525848eed474`、`699da7c48989f07632ca569ff6bbe93220f4d4c8972a6133c74d7e53e96e9817`。これらは取得物の算出値で、独立した配布元ハッシュとの照合ではない。実行時互換性は別途確認する。既存 Mod や設定、Compose、content.lock は変更しない。modlist.html は従来一覧で今回の追加分を含まない。
+
+固定 Java 17 イメージの ARM64 隔離環境で、共通 manifest と Compose の除外・包含条件を使った新規ワールドは Forge 47.4.28 の `Done` に到達した。本番の `content.lock` 配布物、設定、Velocity、既存ワールドは含まない。必須依存不足や Mixin の ERROR は確認されなかったが、クラス不在の Mixin 警告、Photon の専用サーバーでのクライアントクラス読込エラー、他 Mod のタグ・戦利品・レシピのエラーが出たため、構成全体の正常性は保証できない。クライアント接続、ゲーム内動作、保存後の再起動と本番は未検証。
+
+適用前に停止時の Forge Volume とクライアントのセーブ・設定をバックアップし、隔離コピーで指定 JAR の取得と依存関係、起動・接続・鉢の栽培と鉱石生成・エネルギー計測・保存再起動を確認する。クライアントは更新後の共通 manifest を使う Modpack に更新するか、上記固定ページから同じ4版を取得して既存の mods に追加し、同一 Mod の重複を避ける。鉱石の自動生産による資源バランスと多数の鉢の負荷は未評価。問題があれば本番適用を中止し、旧 revision と変更前の整合した Volume バックアップを復元し、クライアントも旧構成へ戻す。既存ワールドに追加 Mod のブロックやアイテムを保存した後は単純な JAR 削除で安全に戻せるとは限らない。
+
 ## SuperbWarfare Addon 削除と地形破壊設定
 
 共通 manifest から [SuperbWarfare Addon 1.0.1](https://www.curseforge.com/minecraft/mc-mods/superbwarfare-addon/files/8793995)（project 1580826 / file 8793995）を除外した。SBW 本体 0.8.9.2（1218165 / 9019882）と Frontline 2.0.0 は維持する。`modlist.html` は従来一覧で Addon は含まれていなかった。クライアントにも更新後の共通 manifest を使った Modpack を配布する。
