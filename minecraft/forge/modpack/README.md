@@ -2,6 +2,21 @@
 
 提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と追加 Mod と Curios For Ammo Box を含む CurseForge project ID / file ID を固定する。Frontline 2.0.0 は CurseForge manifest 外で固定する。追加分の依存・保留理由・未検証事項は [調査と受入条件](ADDITIONAL_MODS.md) を参照。`modlist.html` は従来の一覧で、Ammo Box 追加分は含まない。Zoe Isn't Cyberpunk は manifest と一覧から削除済み。共有 URL は取得元に使わない。
 
+## 2026-11-25 Botany Pots 系と Energy Meter の追加
+
+Minecraft 1.20.1 / Forge 47.4.28 / Java 17 を維持し、クライアントとサーバーの共通 manifest に次の4件を固定する。
+
+| Mod | バージョン | CurseForge project:file |
+| --- | --- | --- |
+| Botany Pots Ore Planting | 15.40.0+1.18.2-1.20.4 | [872868:7755193](https://www.curseforge.com/minecraft/mc-mods/botany-pots-ore-planting/files/7755193) |
+| Bookshelf | 20.2.15 | [228525:7612389](https://www.curseforge.com/minecraft/mc-mods/bookshelf/files/7612389) |
+| Botany Pots | 13.0.43 | [353928:7612402](https://www.curseforge.com/minecraft/mc-mods/botany-pots/files/7612402) |
+| Energy Meter | 1.0.1 | [532169:7676339](https://www.curseforge.com/minecraft/mc-mods/energymeter/files/7676339) |
+
+各ファイルは CurseForge の Forge / Minecraft 1.20.1 対応表記と Release 区分を確認した。Botany Pots Ore Planting は 1.18.2–1.20.4 対応の 15.40.0 を選択し、作者の説明にある必須依存 Botany Pots と Bookshelf を同時追加する。Energy Meter は 1.20.1 向けの 1.0.1 を固定する（重大な不具合修正を除いて更新終了）。JAR の直接取得は実行環境の DNS 制限で失敗したため、内部の依存バージョン・追加依存・ハッシュ・Auto CurseForge 取得・起動・クライアント接続・既存ワールド互換性は未検証。既存 Mod や設定、Compose、content.lock は変更しない。modlist.html は従来一覧で今回の追加分を含まない。
+
+適用前に停止時の Forge Volume とクライアントのセーブ・設定をバックアップし、隔離コピーで指定 JAR の取得と依存関係、起動・接続・鉢の栽培と鉱石生成・エネルギー計測・保存再起動を確認する。クライアントにも更新後の共通 manifest を配布する。鉱石の自動生産による資源バランスと多数の鉢の負荷は未評価。問題があれば本番適用を中止し、旧 revision と変更前の整合した Volume バックアップを復元し、クライアントも旧構成へ戻す。既存ワールドに追加 Mod のブロックやアイテムを保存した後は単純な JAR 削除で安全に戻せるとは限らない。
+
 ## SuperbWarfare Addon 削除と地形破壊設定
 
 共通 manifest から [SuperbWarfare Addon 1.0.1](https://www.curseforge.com/minecraft/mc-mods/superbwarfare-addon/files/8793995)（project 1580826 / file 8793995）を除外した。SBW 本体 0.8.9.2（1218165 / 9019882）と Frontline 2.0.0 は維持する。`modlist.html` は従来一覧で Addon は含まれていなかった。クライアントにも更新後の共通 manifest を使った Modpack を配布する。
