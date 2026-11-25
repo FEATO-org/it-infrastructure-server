@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 umask 077
 
-CERTBOT_IMAGE="${CERTBOT_IMAGE:-certbot/dns-cloudflare:v5.8.0}"
+CERTBOT_IMAGE="${CERTBOT_IMAGE:-certbot/dns-cloudflare:v5.10.0}"
 CERTBOT_STATE_DIR="${CERTBOT_STATE_DIR:-/var/lib/swarm-certbot}"
 CLOUDFLARE_API_TOKEN_FILE="${CLOUDFLARE_API_TOKEN_FILE:-/etc/swarm/cloudflare-dns-token}"
 TLS_STATE_FILE="${TLS_STATE_FILE:-${CERTBOT_STATE_DIR}/swarm-secrets.env}"
