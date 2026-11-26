@@ -2,6 +2,17 @@
 
 提供された58件版から LesRaisins Tactical Equipements を除き Bad Mobs を追加した `manifest.json` は Minecraft 1.20.1 / Forge 47.4.28 と追加 Mod と Curios For Ammo Box を含む CurseForge project ID / file ID を固定する。Frontline 2.0.0 は CurseForge manifest 外で固定する。追加分の依存・保留理由・未検証事項は [調査と受入条件](ADDITIONAL_MODS.md) を参照。`modlist.html` は従来の一覧で、Ammo Box 追加分は含まない。Zoe Isn't Cyberpunk は manifest と一覧から削除済み。共有 URL は取得元に使わない。
 
+## Youkai's Homecoming × Botany Pots データパック
+
+`content.lock` は配布 ZIP を SHA-256 固定し、`prepare-forge.sh` から Forge 起動前に同期する。固定イメージは先に server.properties を生成・更新し、`PRE_START_SCRIPT` 成功後にサーバーを実行する。同期先はその時点の `/data/server.properties` の `level-name` に対応する `/data/<level-name>/datapacks/feato-yh-botanypots-compat.zip`（指定がなければ `world`）。LEVEL はイメージが同プロパティに反映する。安全のため英数字・ハイフン・アンダースコア以外の名前、曖昧な設定やリンクは同期を中止する。実ワールド名を適用前に確認すること。既存の管理外 ZIP は置換しない。
+
+配布物は format 15 の Botany Pots 用 crop レシピ9件で、Bookshelf の条件と Youkai's Homecoming のアイテム・ブロックを参照する。ロード、全参照の存在、レシピの競合、既存ワールドでの自動有効化と実際の栽培は未検証。新規・既存ワールドの隔離コピーで起動ログと管理者の `/datapack list enabled`、対象9種の栽培・収穫、保存・再起動を確認する。クライアント追加物は ZIP 内にないが、既存 Modpack との接続と表示は未検証。異常時は適用を中止する。
+
+1. 適用前に Forge を正常停止し、Volume 全体とワールドの整合したバックアップを取得し、隔離環境で復元を確認する。実際の `level-name`、同名ファイル、既存の無効化設定を調べる。更新 revision の配置と起動は通常の承認済み運用に従う。
+2. 更新時は共有 URL から実 ZIP を取得し、ZIP 構造・安全性・内容・依存・format・互換性を再検査して SHA-256 を再計算し、同じ安定ファイル名の lock 値と versions 記録を更新する。配布元の中身だけが変わった場合、ハッシュ不一致で起動を止める。検証せずハッシュだけを更新しない。
+3. 無効化は管理者が隔離環境で `/datapack disable "file/feato-yh-botanypots-compat.zip"` を試し、`/datapack list` と再起動後の状態を確認する。lock に残す限りファイルは再配置される。削除する場合は lock の行を削除し、次回起動時に記録と実体のハッシュが一致する管理対象だけ `.feato-content/retired-datapacks/` に退避される。変更済み・管理外・退避先重複は中止する。別のデータパックは削除しない。ワールド名変更時も旧ワールドの記録済みファイルを同様に退避する。
+4. ロールバックはサーバーを停止して変更後の Volume を別途保全し、旧 revision と適用前の整合した Volume バックアップを一緒に復元する。レシピ除去後の鉢の状態や保存データは未検証で、ZIP を削除するだけではワールドを元に戻せない。運用中の `/reload` や有効化操作は今回実施していない。
+
 ## 2026-11-25 Botany Pots 系と Energy Meter の追加
 
 Minecraft 1.20.1 / Forge 47.4.28 / Java 17 を維持し、クライアントとサーバーの共通 manifest に次の4件を固定する。
