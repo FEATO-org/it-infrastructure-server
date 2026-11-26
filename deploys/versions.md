@@ -75,6 +75,12 @@ Proxyを4.2.0 build 30から、[PaperMC公式配布](https://papermc.io/download
 
 障害時はProxyを停止し、更新後Volumeを調査用に別途保全する。Composeの `VELOCITY_VERSION` / `VELOCITY_BUILD_ID` を `4.2.0` / `30` に戻し、必要に応じ更新前の `/server` バックアップと配布設定revisionを復元する。既存Secret・鍵は再生成せず同じものを使用し、設定同期で上書きされる配布元も復元対象に含める。旧版JARの取得可能性と設定・Plugin・RCON認証・Forge接続・UUID転送を確認してから復旧完了とする。番号の変更だけではVolume内の変更を戻せない。Paper復帰は別手順を使用する。
 
+### Forge データパック: Youkai's Homecoming × Botany Pots Compatibility
+
+- 版番号の記載なし。配布名 `yh_botanypots_compat_1.20.1.zip`、4,323 bytes。[取得 URL](https://storage.feato.jp/index.php/s/GLHcY9pAygoRZbd/download) は HTTPS 303 後に ZIP を返す。取得物 SHA-256 `23cdc91067799c5ab854a3f2973d25e48964018c496bffb14bf974789d0a6547`（独立した配布元ハッシュとの照合ではない）。
+- `pack.mcmeta` は Minecraft 1.20.1 向け format 15、namespace `yh_botanypots`。9 crop レシピのみで loot、function、tag、advancement、worldgen、dimension は含まない。tick/load function はない。必須参照は Botany Pots、Bookshelf、Youkai's Homecoming。Bookshelf と Botany Pots は既存 manifest に収録され、従来 modlist に Youkai's Homecoming の記載がある。個別 registry ID・読み込みの成功は未確認。
+- `/data/<level-name>/datapacks/feato-yh-botanypots-compat.zip` へ同期。ZIP 整合性、全 JSON 構文、パス・symlink・展開サイズを静的確認。Forge 読み込み、既存ワールド自動有効化、ゲーム内動作、クライアント、GitHub Actions・本番コンテナからの取得は未確認。[導入・更新・無効化・復旧](../minecraft/forge/modpack/README.md#youkais-homecoming--botany-pots-データパック) を参照。
+
 # Forge 1.20.1 切替の取得元
 
 Ammo Box 追加前の68件版: Bad Mobs を含む58件に追加 Mod 10件を固定し、SBW を [0.8.9 final](https://www.curseforge.com/minecraft/mc-mods/superb-warfare/files/8104849) に変更し、[Frontline 1.2.1](https://www.curseforge.com/minecraft/mc-mods/frontline-combat-pack/files/8650627) を追加、Invasion と Zoe Isn't Cyberpunk を削除する。Zoe 削除後の起動・既存ワールド互換性は未検証。JAR 依存は照合済み。隔離起動・再起動は完了したが Frontline の Mixin が失敗し、接続・実動作は未確認。[適用・復旧](../minecraft/forge/modpack/README.md#sbw-の版変更と-frontline-の追加invasion-の削除) を参照。[追加 Mod の調査](../minecraft/forge/modpack/ADDITIONAL_MODS.md) を参照。追加構成の起動・既存ワールド互換性は未確認。従来57件版は提供58件版から LesRaisins Tactical Equipements (1273094 / 8652673) を除き、Superb Warfare (1218165 / 9019882) と Gucci & Vuitton Attachments (1103436 / 6062098) を復活。[manifest](../minecraft/forge/modpack/manifest.json) と [復活手順](../minecraft/forge/modpack/README.md#gucci--vuittonとsuperb-warfareの復活) を参照。従来57件版では Forge 47.4.28 / Java 17、x86_64エミュレーションの隔離環境でArcanaを含む起動を確認。実ワールド・クライアント接続は未確認。ARM64ではArcanaネイティブライブラリのGLIBC不足で起動失敗。
