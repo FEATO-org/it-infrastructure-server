@@ -13,6 +13,27 @@
 3. 無効化は管理者が隔離環境で `/datapack disable "file/feato-yh-botanypots-compat.zip"` を試し、`/datapack list` と再起動後の状態を確認する。lock に残す限りファイルは再配置される。削除する場合は lock の行を削除し、次回起動時に記録と実体のハッシュが一致する管理対象だけ `.feato-content/retired-datapacks/` に退避される。変更済み・管理外・退避先重複は中止する。別のデータパックは削除しない。ワールド名変更時も旧ワールドの記録済みファイルを同様に退避する。
 4. ロールバックはサーバーを停止して変更後の Volume を別途保全し、旧 revision と適用前の整合した Volume バックアップを一緒に復元する。レシピ除去後の鉢の状態や保存データは未検証で、ZIP を削除するだけではワールドを元に戻せない。運用中の `/reload` や有効化操作は今回実施していない。
 
+## 2026-11-27 Compact Machines・Compact Expansion
+
+Minecraft 1.20.1 / Forge 47.4.28 / Java 17 を維持し、クライアント・サーバー共通 manifest に次の Release を固定する。`modlist.html` は従来一覧のままで今回の追加を含まない。
+
+| Mod | バージョン | CurseForge project:file |
+| --- | --- | --- |
+| Compact Machines | 6.0.3 | [224218:6000230](https://www.curseforge.com/minecraft/mc-mods/compact-machines/files/6000230) |
+| Compact Expansion | 1.3.2 | [895781:9122087](https://www.curseforge.com/minecraft/mc-mods/compact-expansion/files/9122087) |
+
+両公式一覧は Forge 1.20.1 の Release と記載。取得 JAR の `META-INF/mods.toml` では Machines は Forge `[47.3,48)`、Minecraft `[1.20.1,1.20.2)`、Expansion は Forge `[47,)`、Minecraft `[1.20.1,1.21)`、Machines `[6.0.3,6.1.0)` を必須とし、いずれも BOTH。固定版は宣言範囲内で、他の必須 Mod は宣言されていない。Machines JAR の `META-INF/MANIFEST.MF` は `Minecraft-Version: 1.21.1` と記載し、配布ページおよび `mods.toml` の 1.20.1 指定と食い違う。ビルド情報の原因と実行時互換性は未確認。
+
+両 JAR は公式 CDN から取得し ZIP 整合性とメタデータを確認。Expansion は `mediafilez.forgecdn.net` と `media.forgecdn.net` が 403、`edge.forgecdn.net` で取得した。SHA-256 の算出値は Machines `2661e00951be5e355bf68786fc4ffd573a22d41a86dbb414e954947dc7522f57`、Expansion `86f7deba49774bf8c906d410ccdb2827c51ddc31428dc54bb9a574d4fdf5bf2e`（独立した公式ハッシュとの照合ではない）。Auto CurseForge での取得、起動、Mixin、接続、ゲーム内と本番は未検証。
+
+Expansion の[公式説明](https://www.curseforge.com/minecraft/mc-mods/compact-expansion)では 1.20.1 の既存サイズを 7、15、31、63、127、255 の立方サイズに置換し、大型生成に時間がかかる。最大空間の初回生成は TPS・MSPT、ヒープとディスクを圧迫し得る。省スペース化は負荷低減を保証しない。適用前に隔離環境で小型から段階的に生成し、空きディスク、TPS・MSPT・ヒープ・Volume 容量を監視する。
+
+Machines 6.0.3 の[ソース](https://github.com/CompactMods/CompactMachines/tree/v6.0.3)では、トンネルのある機械の室内チャンクを強制ロードする処理とチャンクロード用アップグレードがある。大型室内の全チャンクや外部側の継続ロードは保証できず、無人時の稼働・アンロード・再起動後の挙動を検証する。アイテム等のトンネル、流体・エネルギー、Create の回転動力と連携、室内の機械・ネスト、破壊後の室内保持は実測していない。破壊中にプレイヤーが室内にいる場合はソース上の標準設定で破壊不可。Personal Shrinking Device の出入り、復帰位置と障害時の救出を隔離環境で確認し、復帰位置を塞がない。追加設定・レシピ・制限は導入しない。
+
+適用前に対象ノードと実 Volume を確認し、Forge を正常停止して world・playerdata・mods・config 等を含む Volume 全体をバックアップし、復元を確認する。クライアントもセーブ・設定を保全し、更新後の共通 manifest を使う Modpack に更新するか、上記固定版を両方追加して重複を避ける。隔離コピーで Auto CurseForge の取得、依存・Mixin エラー、Forge の正常起動と停止、クライアント接続、生成・出入り、Create 設備と輸送、無人時、破壊・再設置、保存後の再起動を確認する。取得できない、動作や負荷に問題がある場合は本番適用を中止する。
+
+切り戻し時は Forge を停止し変更後データを別途保全して、変更前の repository revision と整合した Forge Volume 全体のバックアップを一緒に復元し、クライアントも変更前の Modpack に戻す。内部空間や関連データが生成された後の単純な Mod 削除では安全に復旧できる保証はない。本番操作は未実施。
+
 ## 2026-11-25 Botany Pots 系と Energy Meter の追加
 
 Minecraft 1.20.1 / Forge 47.4.28 / Java 17 を維持し、クライアントとサーバーの共通 manifest に次の4件を固定する。

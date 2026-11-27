@@ -55,6 +55,8 @@ cloudflared 2026.11.2（リリース 11-23 13:10:20、イメージ 11-23 13:18:3
 
 > Forge の既存変更: SuperbWarfare Addon 1.0.1 (1580826:8793995) を共通 manifest から削除し、SBW 0.8.9.2 の新規ワールド向け地形破壊設定を追加。既存 Volume の手動適用、復旧と未検証事項は [手順](../minecraft/forge/modpack/README.md#superbwarfare-addon-削除と地形破壊設定) を参照。起動・ゲーム内動作・本番動作は未確認。
 
+> 2026-11-27: Forge 共通 manifest に Compact Machines 6.0.3 ([224218:6000230](https://www.curseforge.com/minecraft/mc-mods/compact-machines/files/6000230)) と Compact Expansion 1.3.2 ([895781:9122087](https://www.curseforge.com/minecraft/mc-mods/compact-expansion/files/9122087)) を追加。公式 CDN の JAR と依存範囲を確認。Auto CurseForge 取得・起動・接続・ゲーム内・本番動作は未確認。[適用・負荷・復旧手順](../minecraft/forge/modpack/README.md#2026-11-27-compact-machinescompact-expansion) を参照。
+
 > 2026-11-25: Forge 共通 manifest に Botany Pots Ore Planting 15.40.0 (872868:7755193)、Bookshelf 20.2.15 (228525:7612389)、Botany Pots 13.0.43 (353928:7612402)、Energy Meter 1.0.1 (532169:7676339) を追加。Minecraft 1.20.1 / Forge 対応表記、公式 CDN からの取得と JAR の必須依存範囲を確認。ARM64 の限定的な隔離新規ワールドで起動したが、他 Mod のエラーも記録した。取得元、依存、検証・復旧条件は [Modpack](../minecraft/forge/modpack/README.md#2026-11-25-botany-pots-系と-energy-meter-の追加) を参照。ゲーム内動作・接続・本番動作は未確認。
 
 
